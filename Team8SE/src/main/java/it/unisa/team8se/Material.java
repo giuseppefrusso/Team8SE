@@ -26,7 +26,6 @@ public class Material {
     public String getDescription() {
         return Description;
     }
-    // ciao
 	
         
         
