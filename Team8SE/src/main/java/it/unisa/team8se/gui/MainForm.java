@@ -5,6 +5,7 @@
  */
 package it.unisa.team8se.gui;
 
+import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
 import it.unisa.team8se.Activity;
 import it.unisa.team8se.Area;
 import java.awt.CardLayout;
@@ -28,84 +29,7 @@ public class MainForm extends javax.swing.JFrame {
      * Creates new form ActivityList
      */
 
-    class ActivityTableDataModel extends AbstractTableModel {
-
-        @Override
-        public String getColumnName(int column) {
-            switch (column) {
-                case 0:
-                    return "ID";
-                case 1:
-                    return "AREA";
-                case 2:
-                    return "TYPOLOGY";
-                case 3:
-                    return "E.I.T.";
-                default:
-                    return "";
-            }
-        }
-        
-        @Override
-        public int getRowCount() {
-            return activities.size(); 
-        }
-
-        @Override
-        public int getColumnCount() {
-            return 4;
-        }
-
-        @Override
-        public Object getValueAt(int rowIndex, int columnIndex) {
-               switch (columnIndex) {
-                case 0:
-                    return activities.get(rowIndex).getID();
-                case 1:
-                    return activities.get(rowIndex).getArea();
-                case 2:
-                    return activities.get(rowIndex).getTipology();
-                case 3:
-                    return activities.get(rowIndex).getEIT();
-                default:
-                    return null;
-            }
-        }
-    }   
-    class MaintainerAvailabilityDataModel extends AbstractTableModel{
-        
-        @Override
-        public String getColumnName(int column){
-            switch(column) {
-                case 0:
-                    return "MAINTAINER";
-                case 1:
-                    return "SKILL";
-                case 2:
-                    return "KNOWLEDGE";
-                default:
-                    return "";
-            }
-        }
-        @Override
-        public int getRowCount() {
-           return activities.size();
-        }
-
-        @Override
-        public int getColumnCount() {
-            return 4;
-        }
-
-        @Override
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            switch(columnIndex) {
-                case 0:
-                    
-            }
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-    }
+   
 
     public MainForm() {
         initComponents();
@@ -147,7 +71,7 @@ public class MainForm extends javax.swing.JFrame {
     }
     
     private void setupActivityTable(){
-        activityTable.setModel(new ActivityTableDataModel());
+        activityTable.setModel(new ActivityTableDataModel(activities));
         ListSelectionModel selectionModel = activityTable.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         selectionModel.setValueIsAdjusting(false);
