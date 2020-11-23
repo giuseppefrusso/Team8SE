@@ -15,6 +15,12 @@ public class Area {
 
     }
 
+    public Area(String Sector, String Location) {
+        this.Sector = Sector;
+        this.Location = Location;
+    }
+
+    
     public void finalize() throws Throwable {
 
     }
@@ -25,6 +31,11 @@ public class Area {
 
     public String getLocation() {
         return Location;
+    }
+
+    @Override
+    public String toString() {
+        return Sector + " - "+ Location;
     }
 	
 }//end Area

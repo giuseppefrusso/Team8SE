@@ -30,6 +30,42 @@ public class Activity {
         return ID;
     }
 
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public void setArea(Area Area) {
+        this.Area = Area;
+    }
+
+    public void setTipology(String Tipology) {
+        this.Tipology = Tipology;
+    }
+
+    public void setEIT(int EIT) {
+        this.EIT = EIT;
+    }
+
+    public void setWeekNumber(int WeekNumber) {
+        this.WeekNumber = WeekNumber;
+    }
+
+    public void setWorkspaceNotes(int WorkspaceNotes) {
+        this.WorkspaceNotes = WorkspaceNotes;
+    }
+
+    public void setInterventionDescription(int InterventionDescription) {
+        this.InterventionDescription = InterventionDescription;
+    }
+
+    public void setSMP(int SMP) {
+        this.SMP = SMP;
+    }
+
+    public void setInterruptible(boolean Interruptible) {
+        this.Interruptible = Interruptible;
+    }
+
     public Area getArea() {
         return Area;
     }

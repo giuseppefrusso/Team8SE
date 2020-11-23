@@ -5,8 +5,18 @@
  */
 package it.unisa.team8se.gui;
 
+import it.unisa.team8se.Activity;
+import it.unisa.team8se.Area;
 import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
@@ -17,14 +27,107 @@ public class MainForm extends javax.swing.JFrame {
     /**
      * Creates new form ActivityList
      */
+
+    class ActivityTableDataModel extends AbstractTableModel {
+
+        @Override
+        public String getColumnName(int column) {
+            switch (column) {
+                case 0:
+                    return "ID";
+                case 1:
+                    return "AREA";
+                case 2:
+                    return "TYPOLOGY";
+                case 3:
+                    return "E.I.T.";
+                default:
+                    return "";
+            }
+        }
+
+        @Override
+        public int getRowCount() {
+            return activities.size(); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public int getColumnCount() {
+            return 4; //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+
+            switch (columnIndex) {
+                case 0:
+                    return activities.get(rowIndex).getID();
+                case 1:
+                    return activities.get(rowIndex).getArea();
+                case 2:
+                    return activities.get(rowIndex).getTipology();
+                case 3:
+                    return activities.get(rowIndex).getEIT();
+                default:
+                    return null;
+            }
+        }
+    }
+
     public MainForm() {
         initComponents();
+
+        activities = new LinkedList<Activity>();
+
+        Activity a0 = new Activity();
+        a0.setID(0);
+        a0.setTipology("Hydraulic");
+        a0.setArea(new Area("fisciano", "plumbing"));
+        a0.setEIT(120);
+        Activity a1 = new Activity();
+        a1.setID(1);
+        a1.setTipology("Hydraulic");
+        a1.setArea(new Area("fisciano", "plumbing"));
+        a1.setEIT(90);
+        Activity a2 = new Activity();
+        a2.setID(2);
+        a2.setTipology("Hydraulic");
+        a2.setArea(new Area("fisciano", "plumbing"));
+        a2.setEIT(100);
+        Activity a3 = new Activity();
+        a3.setID(3);
+        a3.setTipology("Hydraulic");
+        a3.setArea(new Area("fisciano", "plumbing"));
+        a3.setEIT(122);
+
+        activities.add(a0);
+        activities.add(a1);
+        activities.add(a2);
+        activities.add(a3);
+
         layout = new CardLayout();
         layout.addLayoutComponent(activityList, "activityList");
         layout.addLayoutComponent(activitySummary, "activitySummary");
+
+        setupActivityTable();
+
         container.setLayout(layout);
     }
-
+    
+    private void setupActivityTable(){
+        activityTable.setModel(new ActivityTableDataModel());
+        ListSelectionModel selectionModel = activityTable.getSelectionModel();
+        selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        selectionModel.setValueIsAdjusting(false);
+        selectionModel.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int selectedRow = activityTable.getSelectedRow();
+                System.out.println("Selected index " + selectedRow);
+            }
+        });
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,6 +142,8 @@ public class MainForm extends javax.swing.JFrame {
         activitySummaryLabel = new javax.swing.JLabel();
         activityList = new javax.swing.JPanel();
         activityListLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        activityTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -51,17 +156,31 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(activitySummaryLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(activitySummaryLabel)
-                .addContainerGap(295, Short.MAX_VALUE))
+                .addContainerGap(675, Short.MAX_VALUE))
         );
         activitySummaryLayout.setVerticalGroup(
             activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(activitySummaryLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(activitySummaryLabel)
-                .addContainerGap(275, Short.MAX_VALUE))
+                .addContainerGap(553, Short.MAX_VALUE))
         );
 
         activityListLabel.setText("ACTIVITYLIST");
+
+        activityTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        activityTable.setColumnSelectionAllowed(true);
+        jScrollPane1.setViewportView(activityTable);
 
         javax.swing.GroupLayout activityListLayout = new javax.swing.GroupLayout(activityList);
         activityList.setLayout(activityListLayout);
@@ -69,22 +188,28 @@ public class MainForm extends javax.swing.JFrame {
             activityListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(activityListLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(activityListLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(activityListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(activityListLayout.createSequentialGroup()
+                        .addComponent(activityListLabel)
+                        .addGap(0, 693, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 760, Short.MAX_VALUE))
+                .addContainerGap())
         );
         activityListLayout.setVerticalGroup(
             activityListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(activityListLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(activityListLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(133, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout containerLayout = new javax.swing.GroupLayout(container);
         container.setLayout(containerLayout);
         containerLayout.setHorizontalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 420, Short.MAX_VALUE)
+            .addGap(0, 800, Short.MAX_VALUE)
             .addGroup(containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(containerLayout.createSequentialGroup()
                     .addContainerGap()
@@ -95,7 +220,7 @@ public class MainForm extends javax.swing.JFrame {
         );
         containerLayout.setVerticalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 322, Short.MAX_VALUE)
+            .addGap(0, 600, Short.MAX_VALUE)
             .addGroup(containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(containerLayout.createSequentialGroup()
                     .addContainerGap()
@@ -109,20 +234,15 @@ public class MainForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(container, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(container, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(container, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(container, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -157,6 +277,7 @@ public class MainForm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 mf.setVisible(true);
+                mf.layout.show(mf.container, "activityList");
             }
         });
         /*
@@ -166,7 +287,7 @@ public class MainForm extends javax.swing.JFrame {
             mf.layout.show(mf.container, "activitySummary");
         } catch (InterruptedException e) {
         }
-        */
+         */
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -174,7 +295,10 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel activityListLabel;
     private javax.swing.JPanel activitySummary;
     private javax.swing.JLabel activitySummaryLabel;
+    private javax.swing.JTable activityTable;
     private javax.swing.JPanel container;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
     private CardLayout layout;
+    private LinkedList<Activity> activities;
 }
