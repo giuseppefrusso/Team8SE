@@ -8,6 +8,7 @@ package it.unisa.team8se.gui;
 import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
 import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Area;
+import it.unisa.team8se.models.Competence;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -61,6 +62,10 @@ public class MainForm extends javax.swing.JFrame {
         activities.add(a1);
         activities.add(a2);
         activities.add(a3);
+        
+        LinkedList<Competence> competencies = new LinkedList<Competence>();
+        Competence c0= new Competence();
+        
 
         layout = new CardLayout();
         layout.addLayoutComponent(activityList, "activityList");
