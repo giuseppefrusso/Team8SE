@@ -6,6 +6,7 @@
 package it.unisa.team8se.gui.datamodels;
 
 import it.unisa.team8se.models.Activity;
+import it.unisa.team8se.models.Competence;
 import java.util.LinkedList;
 import javax.swing.table.AbstractTableModel;
 
@@ -15,10 +16,10 @@ import javax.swing.table.AbstractTableModel;
  */
 class MaintainerAvailabilityDataModel extends AbstractTableModel {
 
-    private LinkedList<Activity> activities;
+    private LinkedList<Competence> competencies;
 
-    public MaintainerAvailabilityDataModel(LinkedList<Activity> acitivities) {
-        this.activities = acitivities;
+    public MaintainerAvailabilityDataModel(LinkedList<Competence> competencies ) {
+        this.competencies = competencies;
     }
 
     @Override
@@ -37,7 +38,7 @@ class MaintainerAvailabilityDataModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return activities.size();
+        return competencies.size();
     }
 
     @Override
@@ -49,6 +50,7 @@ class MaintainerAvailabilityDataModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
+                return competencies.get(rowIndex).getcompentencies
 
         }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
