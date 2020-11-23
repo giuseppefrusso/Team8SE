@@ -1,4 +1,4 @@
-package it.unisa.team8se;
+package it.unisa.team8se.models;
 
 import it.unisa.team8se.enumerations.TicketState;
 import it.unisa.team8se.enumerations.MaintainerFlag;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.unisa.team8se;
+package it.unisa.team8se.models;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

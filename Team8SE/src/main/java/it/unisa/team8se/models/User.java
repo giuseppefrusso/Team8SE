@@ -1,4 +1,4 @@
-package it.unisa.team8se;
+package it.unisa.team8se.models;
 
 
 /**
@@ -9,7 +9,7 @@ package it.unisa.team8se;
 public class User {
 
     private String UserName;
-    private String Password;
+    private String Password; // TODO: Considerare di rimuovere l'attributo password
     private String Name;
     private String LastName;
 
@@ -32,6 +32,4 @@ public class User {
     public String getLastName() {
         return LastName;
     }
-    
-    
 }//end User

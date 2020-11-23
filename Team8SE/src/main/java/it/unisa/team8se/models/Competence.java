@@ -1,4 +1,4 @@
-package it.unisa.team8se;
+package it.unisa.team8se.models;
 
 
 /**
@@ -15,6 +15,11 @@ public class Competence {
 
     }
 
+    public Competence(int ID, String Descrizione) {
+        this.ID = ID;
+        this.Descrizione = Descrizione;
+    }
+
     public void finalize() throws Throwable {
 
     }
@@ -26,5 +31,12 @@ public class Competence {
     public String getDescrizione() {
         return Descrizione;
     }
-    
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public void setDescrizione(String Descrizione) {
+        this.Descrizione = Descrizione;
+    }
 }//end Competence

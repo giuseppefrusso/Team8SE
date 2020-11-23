@@ -5,7 +5,7 @@
  */
 package it.unisa.team8se.gui.datamodels;
 
-import it.unisa.team8se.Activity;
+import it.unisa.team8se.models.Activity;
 import java.util.LinkedList;
 import javax.swing.table.AbstractTableModel;
 

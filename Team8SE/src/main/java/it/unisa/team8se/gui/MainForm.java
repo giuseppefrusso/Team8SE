@@ -6,8 +6,8 @@
 package it.unisa.team8se.gui;
 
 import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
-import it.unisa.team8se.Activity;
-import it.unisa.team8se.Area;
+import it.unisa.team8se.models.Activity;
+import it.unisa.team8se.models.Area;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
