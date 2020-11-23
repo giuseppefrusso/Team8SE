@@ -9,6 +9,7 @@ import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
 import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Area;
 import java.awt.CardLayout;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
@@ -28,9 +29,6 @@ public class MainForm extends javax.swing.JFrame {
     /**
      * Creates new form ActivityList
      */
-
-   
-
     public MainForm() {
         initComponents();
 
@@ -67,10 +65,10 @@ public class MainForm extends javax.swing.JFrame {
         layout.addLayoutComponent(activitySummary, "activitySummary");
 
         setupActivityTable();
-        container.setLayout(layout);    
+        container.setLayout(layout);
     }
-    
-    private void setupActivityTable(){
+
+    private void setupActivityTable() {
         activityTable.setModel(new ActivityTableDataModel(activities));
         ListSelectionModel selectionModel = activityTable.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -83,7 +81,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -93,12 +91,18 @@ public class MainForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
         jLabel1 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         container = new javax.swing.JPanel();
         activitySummary = new javax.swing.JPanel();
         activitySummaryLabel = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
+        interventionDescLabel = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTextPane2 = new javax.swing.JTextPane();
         activityList = new javax.swing.JPanel();
         activityListLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -123,21 +127,47 @@ public class MainForm extends javax.swing.JFrame {
 
         activitySummaryLabel.setText("ACTIVITYSUMMARY");
 
+        jScrollPane4.setViewportView(jTextPane1);
+
+        interventionDescLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        interventionDescLabel.setText("Intervention Description");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel5.setText("WorkSpace Notes");
+
+        jScrollPane5.setViewportView(jTextPane2);
+
         javax.swing.GroupLayout activitySummaryLayout = new javax.swing.GroupLayout(activitySummary);
         activitySummary.setLayout(activitySummaryLayout);
         activitySummaryLayout.setHorizontalGroup(
             activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(activitySummaryLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(activitySummaryLabel)
-                .addContainerGap(675, Short.MAX_VALUE))
+                .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4)
+                    .addComponent(jScrollPane5)
+                    .addGroup(activitySummaryLayout.createSequentialGroup()
+                        .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(activitySummaryLabel)
+                            .addComponent(interventionDescLabel)
+                            .addComponent(jLabel5))
+                        .addGap(0, 537, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         activitySummaryLayout.setVerticalGroup(
             activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(activitySummaryLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(activitySummaryLabel)
-                .addContainerGap(553, Short.MAX_VALUE))
+                .addGap(32, 32, 32)
+                .addComponent(interventionDescLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(210, Short.MAX_VALUE))
         );
 
         activityListLabel.setText("ACTIVITYLIST");
@@ -213,7 +243,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(maintainerListLayout.createSequentialGroup()
                 .addGap(104, 104, 104)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(122, Short.MAX_VALUE))
+                .addContainerGap(502, Short.MAX_VALUE))
             .addGroup(maintainerListLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -229,7 +259,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(maintainerListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 336, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -324,14 +354,6 @@ public class MainForm extends javax.swing.JFrame {
                 mf.layout.show(mf.container, "activityList");
             }
         });
-        /*
-        try {
-            mf.layout.show(mf.container, "activityList");
-            Thread.sleep(3000);
-            mf.layout.show(mf.container, "activitySummary");
-        } catch (InterruptedException e) {
-        }
-         */
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -341,14 +363,21 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel activitySummaryLabel;
     private javax.swing.JTable activityTable;
     private javax.swing.JPanel container;
+    private javax.swing.JLabel interventionDescLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JTextPane jTextPane2;
     private javax.swing.JPanel maintainerList;
     // End of variables declaration//GEN-END:variables
     private CardLayout layout;
