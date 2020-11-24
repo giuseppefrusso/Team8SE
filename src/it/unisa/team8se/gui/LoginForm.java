@@ -60,6 +60,7 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
+        jPasswordField1.setEditable(false);
         jPasswordField1.setText("jPasswordField1");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
