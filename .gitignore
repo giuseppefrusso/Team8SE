@@ -1,2 +1,11 @@
+<<<<<<< Updated upstream
 /Team8SE/target/
 *.class
+=======
+*.xml
+*.properties
+*.mf
+nbproject/*
+nbproject/
+/build/
+>>>>>>> Stashed changes
