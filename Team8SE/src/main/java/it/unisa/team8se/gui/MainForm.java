@@ -11,6 +11,7 @@ import it.unisa.team8se.models.Area;
 import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
 import java.awt.CardLayout;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
@@ -30,9 +31,6 @@ public class MainForm extends javax.swing.JFrame {
     /**
      * Creates new form ActivityList
      */
-
-   
-
     public MainForm() {
         initComponents();
 
@@ -91,10 +89,10 @@ public class MainForm extends javax.swing.JFrame {
         layout.addLayoutComponent(activitySummary, "activitySummary");
 
         setupActivityTable();
-        container.setLayout(layout);    
+        container.setLayout(layout);
     }
-    
-    private void setupActivityTable(){
+
+    private void setupActivityTable() {
         activityTable.setModel(new ActivityTableDataModel(activities));
         ListSelectionModel selectionModel = activityTable.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -107,7 +105,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -117,12 +115,19 @@ public class MainForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
         jLabel1 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         container = new javax.swing.JPanel();
         activitySummary = new javax.swing.JPanel();
-        activitySummaryLabel = new javax.swing.JLabel();
+        interventionDescScrollPane = new javax.swing.JScrollPane();
+        interventionDescText = new javax.swing.JTextPane();
+        interventionDescLabel = new javax.swing.JLabel();
+        workspaceNotesLabel = new javax.swing.JLabel();
+        workspaceNotesScrollPane = new javax.swing.JScrollPane();
+        workspaceNotesText = new javax.swing.JTextPane();
+        workspaceNotesEditButton = new javax.swing.JButton();
+        interventionDescriptionEditButton = new javax.swing.JButton();
         activityList = new javax.swing.JPanel();
         activityListLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -145,7 +150,19 @@ public class MainForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        activitySummaryLabel.setText("ACTIVITYSUMMARY");
+        interventionDescScrollPane.setViewportView(interventionDescText);
+
+        interventionDescLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        interventionDescLabel.setText("Intervention Description");
+
+        workspaceNotesLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        workspaceNotesLabel.setText("WorkSpace Notes");
+
+        workspaceNotesScrollPane.setViewportView(workspaceNotesText);
+
+        workspaceNotesEditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/edit.png"))); // NOI18N
+
+        interventionDescriptionEditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/edit.png"))); // NOI18N
 
         javax.swing.GroupLayout activitySummaryLayout = new javax.swing.GroupLayout(activitySummary);
         activitySummary.setLayout(activitySummaryLayout);
@@ -153,15 +170,40 @@ public class MainForm extends javax.swing.JFrame {
             activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(activitySummaryLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(activitySummaryLabel)
-                .addContainerGap(675, Short.MAX_VALUE))
+                .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(interventionDescScrollPane)
+                    .addComponent(workspaceNotesScrollPane)
+                    .addGroup(activitySummaryLayout.createSequentialGroup()
+                        .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(activitySummaryLayout.createSequentialGroup()
+                                .addComponent(workspaceNotesLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(workspaceNotesEditButton))
+                            .addGroup(activitySummaryLayout.createSequentialGroup()
+                                .addComponent(interventionDescLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(interventionDescriptionEditButton)))
+                        .addGap(0, 929, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         activitySummaryLayout.setVerticalGroup(
             activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(activitySummaryLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(activitySummaryLabel)
-                .addContainerGap(553, Short.MAX_VALUE))
+                .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(interventionDescLabel)
+                    .addComponent(interventionDescriptionEditButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(interventionDescScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(workspaceNotesEditButton)
+                    .addGroup(activitySummaryLayout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(workspaceNotesLabel)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(workspaceNotesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(518, Short.MAX_VALUE))
         );
 
         activityListLabel.setText("ACTIVITYLIST");
@@ -200,7 +242,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(activityListLabel)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(133, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -237,7 +279,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(maintainerListLayout.createSequentialGroup()
                 .addGap(104, 104, 104)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(122, Short.MAX_VALUE))
+                .addContainerGap(961, Short.MAX_VALUE))
             .addGroup(maintainerListLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -253,7 +295,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(maintainerListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 602, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -263,7 +305,7 @@ public class MainForm extends javax.swing.JFrame {
         container.setLayout(containerLayout);
         containerLayout.setHorizontalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGap(0, 1259, Short.MAX_VALUE)
             .addGroup(containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(containerLayout.createSequentialGroup()
                     .addContainerGap()
@@ -276,7 +318,7 @@ public class MainForm extends javax.swing.JFrame {
         );
         containerLayout.setVerticalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
+            .addGap(0, 891, Short.MAX_VALUE)
             .addGroup(containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(containerLayout.createSequentialGroup()
                     .addContainerGap()
@@ -348,23 +390,18 @@ public class MainForm extends javax.swing.JFrame {
                 mf.layout.show(mf.container, "activityList");
             }
         });
-        /*
-        try {
-            mf.layout.show(mf.container, "activityList");
-            Thread.sleep(3000);
-            mf.layout.show(mf.container, "activitySummary");
-        } catch (InterruptedException e) {
-        }
-         */
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel activityList;
     private javax.swing.JLabel activityListLabel;
     private javax.swing.JPanel activitySummary;
-    private javax.swing.JLabel activitySummaryLabel;
     private javax.swing.JTable activityTable;
     private javax.swing.JPanel container;
+    private javax.swing.JLabel interventionDescLabel;
+    private javax.swing.JScrollPane interventionDescScrollPane;
+    private javax.swing.JTextPane interventionDescText;
+    private javax.swing.JButton interventionDescriptionEditButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -372,8 +409,13 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JPanel maintainerList;
+    private javax.swing.JButton workspaceNotesEditButton;
+    private javax.swing.JLabel workspaceNotesLabel;
+    private javax.swing.JScrollPane workspaceNotesScrollPane;
+    private javax.swing.JTextPane workspaceNotesText;
     // End of variables declaration//GEN-END:variables
     private CardLayout layout;
     private LinkedList<Activity> activities;
