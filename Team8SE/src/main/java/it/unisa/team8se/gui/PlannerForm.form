@@ -119,7 +119,7 @@
                                       <Component id="interventionDescriptionEditButton" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace min="0" pref="929" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="953" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -139,14 +139,11 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="workspaceNotesEditButton" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="11" pref="11" max="-2" attributes="0"/>
-                              <Component id="workspaceNotesLabel" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="workspaceNotesLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="workspaceNotesScrollPane" min="-2" pref="117" max="-2" attributes="0"/>
-                      <EmptySpace pref="518" max="32767" attributes="0"/>
+                      <EmptySpace pref="540" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -191,18 +188,8 @@
               </SubComponents>
             </Container>
             <Component class="javax.swing.JButton" name="workspaceNotesEditButton">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/it/unisa/team8se/assets/icons/edit.png"/>
-                </Property>
-              </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="interventionDescriptionEditButton">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/it/unisa/team8se/assets/icons/edit.png"/>
-                </Property>
-              </Properties>
             </Component>
           </SubComponents>
         </Container>

@@ -26,12 +26,12 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author cptso
  */
-public class MainForm extends javax.swing.JFrame {
+public class PlannerForm extends javax.swing.JFrame {
 
     /**
      * Creates new form ActivityList
      */
-    public MainForm() {
+    public PlannerForm() {
         initComponents();
 
         activities = new LinkedList<Activity>();
@@ -79,6 +79,7 @@ public class MainForm extends javax.swing.JFrame {
         LinkedList<Competence> competencies3= new LinkedList<>();
         m3.setCompetencies(competencies3);
         m3.addCompetence(new Competence (4,"Creativity"));
+        
         Manutentore.add(m0);
         Manutentore.add(m1);
         Manutentore.add(m2);
@@ -87,6 +88,7 @@ public class MainForm extends javax.swing.JFrame {
         layout = new CardLayout();
         layout.addLayoutComponent(activityList, "activityList");
         layout.addLayoutComponent(activitySummary, "activitySummary");
+        layout.addLayoutComponent(maintainerList, "maintainerList");
 
         setupActivityTable();
         container.setLayout(layout);
@@ -160,10 +162,6 @@ public class MainForm extends javax.swing.JFrame {
 
         workspaceNotesScrollPane.setViewportView(workspaceNotesText);
 
-        workspaceNotesEditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/edit.png"))); // NOI18N
-
-        interventionDescriptionEditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/edit.png"))); // NOI18N
-
         javax.swing.GroupLayout activitySummaryLayout = new javax.swing.GroupLayout(activitySummary);
         activitySummary.setLayout(activitySummaryLayout);
         activitySummaryLayout.setHorizontalGroup(
@@ -183,7 +181,7 @@ public class MainForm extends javax.swing.JFrame {
                                 .addComponent(interventionDescLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(interventionDescriptionEditButton)))
-                        .addGap(0, 929, Short.MAX_VALUE)))
+                        .addGap(0, 953, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         activitySummaryLayout.setVerticalGroup(
@@ -198,12 +196,10 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(workspaceNotesEditButton)
-                    .addGroup(activitySummaryLayout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(workspaceNotesLabel)))
+                    .addComponent(workspaceNotesLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(workspaceNotesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(518, Short.MAX_VALUE))
+                .addContainerGap(540, Short.MAX_VALUE))
         );
 
         activityListLabel.setText("ACTIVITYLIST");
@@ -372,17 +368,17 @@ public class MainForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PlannerForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PlannerForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PlannerForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PlannerForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
-        MainForm mf = new MainForm();
+        PlannerForm mf = new PlannerForm();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

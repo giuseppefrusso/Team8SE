@@ -5,7 +5,6 @@
  */
 package it.unisa.team8se.gui.datamodels;
 
-import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
 import java.util.LinkedList;
 import javax.swing.table.AbstractTableModel;
@@ -49,10 +48,8 @@ class MaintainerAvailabilityDataModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
-           
-            case 1:
-                return competencies.get(rowIndex).getDescrizione();
-
+            default:
+                return null;
         }
     }
 }
