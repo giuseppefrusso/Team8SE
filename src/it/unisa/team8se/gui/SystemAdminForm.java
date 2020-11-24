@@ -74,6 +74,11 @@ public class SystemAdminForm extends javax.swing.JFrame {
         });
 
         removeButton.setText("Rimuovi");
+        removeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeButtonActionPerformed(evt);
+            }
+        });
 
         modifyButton.setText("Modifica");
         modifyButton.addActionListener(new java.awt.event.ActionListener() {
@@ -226,6 +231,10 @@ public class SystemAdminForm extends javax.swing.JFrame {
         tableModel.setValueAt(newField, selectedRow, selectedColumn);
         //modificare in db
     }//GEN-LAST:event_modifyButtonActionPerformed
+
+    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
+        //rimuovere in db
+    }//GEN-LAST:event_removeButtonActionPerformed
 
     /**
      * @param args the command line arguments
