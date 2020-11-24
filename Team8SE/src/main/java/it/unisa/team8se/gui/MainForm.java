@@ -9,6 +9,7 @@ import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
 import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Area;
 import it.unisa.team8se.models.Competence;
+import it.unisa.team8se.models.Maintainer;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -63,9 +64,27 @@ public class MainForm extends javax.swing.JFrame {
         activities.add(a2);
         activities.add(a3);
         
-        LinkedList<Competence> competencies = new LinkedList<Competence>();
-        Competence c0= new Competence();
-        
+        LinkedList<Maintainer> Manutentore = new LinkedList<>();
+        LinkedList<Competence> competencies= new LinkedList<>();
+        Maintainer m0=new Maintainer();
+        m0.setCompetencies(competencies);
+        m0.addCompetence(new Competence (1,"Team Leader"));
+        Maintainer m1= new Maintainer();
+        LinkedList<Competence> competencies1= new LinkedList<>();
+        m1.setCompetencies(competencies1);
+        m1.addCompetence(new Competence (2,"Problem Solving"));
+        Maintainer m2= new Maintainer();
+        LinkedList<Competence> competencies2= new LinkedList<>();
+        m2.setCompetencies(competencies2);
+        m2.addCompetence(new Competence (3,"Lateral Thinking"));
+        Maintainer m3= new Maintainer();
+        LinkedList<Competence> competencies3= new LinkedList<>();
+        m3.setCompetencies(competencies3);
+        m3.addCompetence(new Competence (4,"Creativity"));
+        Manutentore.add(m0);
+        Manutentore.add(m1);
+        Manutentore.add(m2);
+        Manutentore.add(m3);
 
         layout = new CardLayout();
         layout.addLayoutComponent(activityList, "activityList");

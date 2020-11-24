@@ -49,8 +49,9 @@ class MaintainerAvailabilityDataModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
-            case 0:
-                return competencies.get(rowIndex).getcompentencies
+           
+            case 1:
+                return competencies.get(rowIndex).getDescrizione();
 
         }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
