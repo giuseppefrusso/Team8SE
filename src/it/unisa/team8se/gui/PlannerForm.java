@@ -217,6 +217,7 @@ public class PlannerForm extends javax.swing.JFrame {
         ));
         activityTable.setColumnSelectionAllowed(true);
         jScrollPane1.setViewportView(activityTable);
+        activityTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout activityListLayout = new javax.swing.GroupLayout(activityList);
         activityList.setLayout(activityListLayout);

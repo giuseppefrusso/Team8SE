@@ -5,17 +5,28 @@
  */
 package it.unisa.team8se.gui;
 
+import java.awt.Toolkit;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author cptso
  */
 public class SystemAdminForm extends javax.swing.JFrame {
-
+    DefaultTableModel tableModel;
+        
     /**
      * Creates new form SystemAdminForm
      */
     public SystemAdminForm() {
-        initComponents();
+        tableModel = new DefaultTableModel();
+        tableModel.addColumn("Cognome");
+        tableModel.addColumn("Nome");
+        tableModel.addColumn("Username");
+        tableModel.addColumn("Password");
+        initComponents(); 
     }
 
     /**
@@ -27,21 +38,194 @@ public class SystemAdminForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        usernameField = new javax.swing.JTextField();
+        passwordField = new javax.swing.JTextField();
+        insertButton = new javax.swing.JButton();
+        removeButton = new javax.swing.JButton();
+        modifyButton = new javax.swing.JButton();
+        nameField = new javax.swing.JTextField();
+        surnameField = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tableUsers = new javax.swing.JTable();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("System Admistrator View\n");
+        setBackground(new java.awt.Color(0, 51, 204));
+
+        usernameField.setText("Username");
+        usernameField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                usernameFieldMouseClicked(evt);
+            }
+        });
+
+        passwordField.setText("Password");
+        passwordField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                passwordFieldMouseClicked(evt);
+            }
+        });
+
+        insertButton.setText("Inserisci");
+        insertButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertButtonActionPerformed(evt);
+            }
+        });
+
+        removeButton.setText("Rimuovi");
+
+        modifyButton.setText("Modifica");
+        modifyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modifyButtonActionPerformed(evt);
+            }
+        });
+
+        nameField.setText("Nome");
+        nameField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                nameFieldMouseClicked(evt);
+            }
+        });
+
+        surnameField.setText("Cognome");
+        surnameField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                surnameFieldMouseClicked(evt);
+            }
+        });
+
+        tableUsers.setModel(tableModel);
+        tableUsers.setRowSelectionAllowed(false);
+        tableUsers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tableUsers.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(tableUsers);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(modifyButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(surnameField, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(37, 37, 37)
+                                .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(insertButton))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(surnameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(insertButton)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(removeButton)
+                    .addComponent(modifyButton))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private boolean containsUsername(DefaultTableModel model, String username) {
+        for(int i=0; i<model.getRowCount(); i++) {
+            String value = (String)model.getValueAt(i, 2);
+            if(value.equalsIgnoreCase(username))
+                return true;
+        }
+        return false;
+    }
+    
+    private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
+        String surname = surnameField.getText();
+        String name = nameField.getText();
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        if(containsUsername(tableModel, username)) {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(this, "Username già presente!", "Errore", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if(surname.equals("") || name.equals("") || username.equals("") || password.equals("")){
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(this, "Inserire tutti i campi!", "Errore", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String[] row = {surname, name, username, password};
+        tableModel.addRow(row);
+        //inserire in db
+    }//GEN-LAST:event_insertButtonActionPerformed
+
+    private void surnameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_surnameFieldMouseClicked
+        surnameField.setText("");
+    }//GEN-LAST:event_surnameFieldMouseClicked
+
+    private void nameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nameFieldMouseClicked
+        nameField.setText("");
+    }//GEN-LAST:event_nameFieldMouseClicked
+
+    private void passwordFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passwordFieldMouseClicked
+        passwordField.setText("");
+    }//GEN-LAST:event_passwordFieldMouseClicked
+
+    private void usernameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usernameFieldMouseClicked
+        usernameField.setText("");
+    }//GEN-LAST:event_usernameFieldMouseClicked
+
+    private void modifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyButtonActionPerformed
+        int selectedRow = tableUsers.getSelectedRow();
+        int selectedColumn = tableUsers.getSelectedColumn();
+        String field = new String(); 
+        switch(selectedColumn) {
+            case -1:
+                JOptionPane.showMessageDialog(this, "Selezionare una cella!", "Errore", JOptionPane.ERROR_MESSAGE);
+                return;
+            case 2:
+                field = "username";
+                break;
+            case 3: 
+                field = "password";
+                break;
+            case 0:
+                field = "surname";
+                break;
+            case 1: 
+                field = "name";
+                break;    
+        }
+        String newField = JOptionPane.showInputDialog(this, "Modifica "+field, "Modifica", JOptionPane.INFORMATION_MESSAGE);
+        tableModel.setValueAt(newField, selectedRow, selectedColumn);
+        //modificare in db
+    }//GEN-LAST:event_modifyButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,5 +263,14 @@ public class SystemAdminForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton insertButton;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton modifyButton;
+    private javax.swing.JTextField nameField;
+    private javax.swing.JTextField passwordField;
+    private javax.swing.JButton removeButton;
+    private javax.swing.JTextField surnameField;
+    private javax.swing.JTable tableUsers;
+    private javax.swing.JTextField usernameField;
     // End of variables declaration//GEN-END:variables
 }
