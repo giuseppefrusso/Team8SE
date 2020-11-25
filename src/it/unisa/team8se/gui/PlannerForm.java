@@ -11,17 +11,10 @@ import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Area;
 import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
-import java.awt.CardLayout;
-import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.LinkedList;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
 
 /**
  *
@@ -35,7 +28,7 @@ public class PlannerForm extends javax.swing.JFrame {
     public PlannerForm() {
         initComponents();
 
-        activities = new LinkedList<Activity>();
+        activities = new LinkedList<>();
 
         Activity a0 = new Activity();
         a0.setID(0);
@@ -92,11 +85,10 @@ public class PlannerForm extends javax.swing.JFrame {
         panelManager.addPanel("activitySummary", activitySummary);
         panelManager.addPanel("maintainerList", maintainerList);
     
-        panelManager.showPanel("maintainerList");
+        panelManager.showPanel("activityList");
     }
     
     private void setupMantainerTable(){
-        
     }
     
     private void setupActivityTable() {
@@ -140,8 +132,8 @@ public class PlannerForm extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         activityTable = new javax.swing.JTable();
         maintainerList = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        maintainerScrollPane = new javax.swing.JScrollPane();
+        maintainerTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -169,7 +161,6 @@ public class PlannerForm extends javax.swing.JFrame {
 
         workspaceNotesEditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/edit.png"))); // NOI18N
         workspaceNotesEditButton.setBorder(null);
-        workspaceNotesEditButton.setPreferredSize(new java.awt.Dimension(25, 25));
 
         interventionDescriptionEditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/edit.png"))); // NOI18N
         interventionDescriptionEditButton.setBorder(null);
@@ -189,7 +180,7 @@ public class PlannerForm extends javax.swing.JFrame {
                             .addGroup(activitySummaryLayout.createSequentialGroup()
                                 .addComponent(workspaceNotesLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(workspaceNotesEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(workspaceNotesEditButton))
                             .addGroup(activitySummaryLayout.createSequentialGroup()
                                 .addComponent(interventionDescLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -208,7 +199,7 @@ public class PlannerForm extends javax.swing.JFrame {
                 .addComponent(interventionDescScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(workspaceNotesEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(workspaceNotesEditButton)
                     .addComponent(workspaceNotesLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(workspaceNotesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -228,7 +219,8 @@ public class PlannerForm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        activityTable.setColumnSelectionAllowed(true);
+        activityTable.setCellSelectionEnabled(false);
+        activityTable.setIntercellSpacing(new java.awt.Dimension(2, 1));
         jScrollPane1.setViewportView(activityTable);
         activityTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
@@ -255,7 +247,7 @@ public class PlannerForm extends javax.swing.JFrame {
                 .addContainerGap(421, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        maintainerTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -266,7 +258,7 @@ public class PlannerForm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        maintainerScrollPane.setViewportView(maintainerTable);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Maintainer Availability");
@@ -296,7 +288,7 @@ public class PlannerForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(26, 26, 26))
-            .addComponent(jScrollPane2)
+            .addComponent(maintainerScrollPane)
         );
         maintainerListLayout.setVerticalGroup(
             maintainerListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -308,7 +300,7 @@ public class PlannerForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(maintainerScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout containerLayout = new javax.swing.GroupLayout(container);
@@ -401,10 +393,10 @@ public class PlannerForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JPanel maintainerList;
+    private javax.swing.JScrollPane maintainerScrollPane;
+    private javax.swing.JTable maintainerTable;
     private javax.swing.JButton workspaceNotesEditButton;
     private javax.swing.JLabel workspaceNotesLabel;
     private javax.swing.JScrollPane workspaceNotesScrollPane;

@@ -8,6 +8,7 @@ package it.unisa.team8se;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -17,12 +18,13 @@ import java.util.Properties;
  */
 public class DatabaseContext {
 
-    private final String databaseURL = "jdbc:postgresql://localhost/";
-    private final String databaseName = "";
+    private static final String databaseURL = "jdbc:postgresql://localhost/";
+    private static final String databaseName = "";
 
-    private Connection db;
+    private static Connection db;
 
-    public void connectDatabase(String username, String password) {
+    public static void connectDatabase(String username, String password) {
+        
         try {
             Properties info = new Properties();
             info.setProperty("user", username);
@@ -34,7 +36,11 @@ public class DatabaseContext {
         }
     }
     
-    public PreparedStatement getStatement(){
+    public static PreparedStatement getStatement(){
+        return null;
+    }
+    
+    public static ResultSet executeQuery(String Query){
         return null;
     }
 }
