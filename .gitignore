@@ -11,3 +11,4 @@ nbproject/
 >>>>>>> Stashed changes
 *.xml
 /dist/
+*.properties
