@@ -5,7 +5,9 @@
  */
 package it.unisa.team8se.gui;
 
+import it.unisa.team8se.DatabaseContext;
 import java.awt.EventQueue;
+import java.sql.Connection;
 
 /**
  *
@@ -13,9 +15,11 @@ import java.awt.EventQueue;
  */
 public class LoginForm extends javax.swing.JFrame {
 
-    /**
-     * Creates new form LoginForm
-     */
+    private String url = "jdbc:postgresql://localhost";
+    private String user;
+    private String pwd;
+    private Connection con;
+
     public LoginForm() {
         initComponents();
     }
@@ -30,6 +34,10 @@ public class LoginForm extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         main = new javax.swing.JPanel();
         loginLabel = new javax.swing.JLabel();
         utenteLabel = new javax.swing.JLabel();
@@ -39,6 +47,15 @@ public class LoginForm extends javax.swing.JFrame {
         ruoloLabel = new javax.swing.JLabel();
         roleSelector = new javax.swing.JComboBox<>();
         loginButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+
+        jLabel2.setText("jLabel2");
+
+        jLabel3.setText("jLabel3");
+
+        jLabel4.setText("jLabel4");
+
+        jLabel5.setText("Errore");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Programma - Login");
@@ -117,6 +134,7 @@ public class LoginForm extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.ipady = 20;
         main.add(loginButton, gridBagConstraints);
+        main.add(jLabel1, new java.awt.GridBagConstraints());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -133,8 +151,27 @@ public class LoginForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        String item = (String)roleSelector.getSelectedItem();
+        String item = (String) roleSelector.getSelectedItem();
         System.out.println(item);
+        user = usernameField.getText();
+        pwd = passwordField.getText();
+
+        if ("Gruppo8".equals(pwd) && "Gruppo8".equals(user)) {
+            if ("Maintainer".equals(item)) {
+                EventQueue.invokeLater(()->{ new MaintainerForm().setVisible(true);});    
+            }
+            if ("Planner".equals(item)) {
+                EventQueue.invokeLater(()->{new PlannerForm().setVisible(true);});
+            }
+            if ("Administrator".equals(item)) {
+                EventQueue.invokeLater(()->{new SystemAdminForm().setVisible(true);});
+            }
+            //DatabaseContext.connectDatabase(user, pwd);
+            jLabel1.setText("LOGIN ESEGUITO");
+            usernameField.setText("");
+            passwordField.setText("");
+        } else
+            jLabel1.setText("USER O PASSWORD ERRATI");
     }//GEN-LAST:event_loginButtonActionPerformed
 
     /**
@@ -174,6 +211,11 @@ public class LoginForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JButton loginButton;
     private javax.swing.JLabel loginLabel;
     private javax.swing.JPanel main;
