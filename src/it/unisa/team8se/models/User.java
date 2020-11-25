@@ -17,6 +17,14 @@ public class User {
 
     }
 
+    public void setName(String Name) {
+        this.Name = Name;
+    }
+
+    public void setLastName(String LastName) {
+        this.LastName = LastName;
+    }
+    
     public String getUserName() {
         return UserName;
     }

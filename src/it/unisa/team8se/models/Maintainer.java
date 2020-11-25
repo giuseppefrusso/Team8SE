@@ -16,6 +16,7 @@ public class Maintainer extends User{
     private LinkedList<Competence> competencies;
 
     public Maintainer() {
+        competencies = new LinkedList<>();
     }
 
     public LinkedList<Competence> getCompetencies() {

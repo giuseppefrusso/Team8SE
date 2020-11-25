@@ -7,6 +7,7 @@ package it.unisa.team8se.gui;
 
 import it.unisa.team8se.MultiPanelManager;
 import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
+import it.unisa.team8se.gui.datamodels.MaintainerAvailabilityDataModel;
 import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Area;
 import it.unisa.team8se.models.Competence;
@@ -56,39 +57,40 @@ public class PlannerForm extends javax.swing.JFrame {
         activities.add(a2);
         activities.add(a3);
         
-        LinkedList<Maintainer> mantainers = new LinkedList<>();
-        LinkedList<Competence> competencies= new LinkedList<>();
-        Maintainer m0=new Maintainer();
-        m0.setCompetencies(competencies);
-        m0.addCompetence(new Competence (1,"Team Leader"));
-        Maintainer m1= new Maintainer();
-        LinkedList<Competence> competencies1= new LinkedList<>();
-        m1.setCompetencies(competencies1);
-        m1.addCompetence(new Competence (2,"Problem Solving"));
-        Maintainer m2= new Maintainer();
-        LinkedList<Competence> competencies2= new LinkedList<>();
-        m2.setCompetencies(competencies2);
-        m2.addCompetence(new Competence (3,"Lateral Thinking"));
-        Maintainer m3= new Maintainer();
-        LinkedList<Competence> competencies3= new LinkedList<>();
-        m3.setCompetencies(competencies3);
-        m3.addCompetence(new Competence (4,"Creativity"));
         
-        mantainers.add(m0);
-        mantainers.add(m1);
-        mantainers.add(m2);
-        mantainers.add(m3);
-            
         setupActivityTable();
+        setupMaintainerTable();
+        
         panelManager = new MultiPanelManager();
         panelManager.addPanel("activityList", activityList);
         panelManager.addPanel("activitySummary", activitySummary);
         panelManager.addPanel("maintainerList", maintainerList);
     
-        panelManager.showPanel("activityList");
+        panelManager.showPanel("maintainerList");
     }
     
-    private void setupMantainerTable(){
+    private void setupMaintainerTable(){
+        LinkedList<Maintainer> maintainers = new LinkedList<>();
+        
+        Maintainer m0=new Maintainer();
+        m0.setName("Marco");
+        m0.addCompetence(new Competence (1,"Team Leader"));
+        Maintainer m1= new Maintainer();
+        m1.setName("Manuel");
+        m1.addCompetence(new Competence (2,"Problem Solving"));
+        Maintainer m2= new Maintainer();
+        m2.setName("Giuseppe");
+        m2.addCompetence(new Competence (3,"Lateral Thinking"));
+        Maintainer m3= new Maintainer();
+        m3.setName("Gerardo");
+        m3.addCompetence(new Competence (4,"Creativity"));
+        
+        maintainers.add(m0);
+        maintainers.add(m1);
+        maintainers.add(m2);
+        maintainers.add(m3);
+        
+        maintainerTable.setModel(new MaintainerAvailabilityDataModel(maintainers));
     }
     
     private void setupActivityTable() {

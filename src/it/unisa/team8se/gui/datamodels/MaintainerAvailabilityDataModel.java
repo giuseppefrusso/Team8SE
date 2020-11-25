@@ -13,7 +13,7 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author cptso
  */
-class MaintainerAvailabilityDataModel extends AbstractTableModel {
+public class MaintainerAvailabilityDataModel extends AbstractTableModel {
 
     private LinkedList<Maintainer> maintainers;
 
@@ -27,9 +27,7 @@ class MaintainerAvailabilityDataModel extends AbstractTableModel {
             case 0:
                 return "MAINTAINER";
             case 1:
-                return "SKILL";
-            case 2:
-                return "KNOWLEDGE";
+                return "SKILLS";
             default:
                 return "";
         }
@@ -48,6 +46,10 @@ class MaintainerAvailabilityDataModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
+            case 0:
+                return maintainers.get(rowIndex).getName();
+            case 1:
+                return "3/5"; //TODO: Implementare contatore delle skill in base all'attività;
             default:
                 return null;
         }

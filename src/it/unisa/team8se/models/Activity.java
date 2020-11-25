@@ -1,5 +1,5 @@
 package it.unisa.team8se.models;
-import java.sql.*;
+import java.util.LinkedList;
 
 /**
  * @author cptso
@@ -17,15 +17,12 @@ public class Activity {
     private int InterventionDescription;
     private int SMP;
     private boolean Interruptible;
+    private LinkedList<Competence> requiredCompetencies;
 
     public Activity(){
 
     }
-
-    public void finalize() throws Throwable {
-
-    }
-
+    
     public int getID() {
         return ID;
     }
