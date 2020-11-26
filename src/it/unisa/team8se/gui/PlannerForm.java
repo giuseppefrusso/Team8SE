@@ -38,8 +38,9 @@ public class PlannerForm extends javax.swing.JFrame {
     }
 
     private void setupActivityTable() {
-        activities = new LinkedList<>();
-
+        activities = Activity.getAllDatabaseInstances();
+        
+        /*
         Activity a0 = new Activity();
         a0.setID(0);
         a0.setTipology("Hydraulic");
@@ -65,7 +66,8 @@ public class PlannerForm extends javax.swing.JFrame {
         activities.add(a1);
         activities.add(a2);
         activities.add(a3);
-
+        */
+        
         activityTable.setModel(new ActivityTableDataModel(activities));
         ListSelectionModel selectionModel = activityTable.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -84,7 +86,7 @@ public class PlannerForm extends javax.swing.JFrame {
     }
     
     private void setupMaintainerTable(){
-        LinkedList<Maintainer> maintainers = new LinkedList<>();
+        maintainers = new LinkedList<>();
         
         Maintainer m0=new Maintainer("Mannara","Marco","marco","xxx");
         //m0.setName("Marco");
@@ -107,8 +109,6 @@ public class PlannerForm extends javax.swing.JFrame {
         maintainerTable.setModel(new MaintainerAvailabilityDataModel(maintainers));
     }
     
-
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -461,6 +461,7 @@ public class PlannerForm extends javax.swing.JFrame {
     private void activityTableRowSelected(int index) {
         selectedActivity = activities.get(index);
         tabbedPane.setSelectedIndex(1);
+        interventionDescText.setText(selectedActivity.getInterventionDescription());
     }
 
     private void interventionDescriptionEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interventionDescriptionEditButtonActionPerformed

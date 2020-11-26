@@ -26,7 +26,17 @@ public class Material {
     public String getDescription() {
         return Description;
     }
-	
-        
-        
+	    
+    public static Material[] getAllDatabaseInstances() {
+        return null;
+    }
+
+    
+    public static Material getInstanceWithPK(Object... pk) {
+        return null;
+    }
+
+    public void saveToDatabase() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    } 
 }//end Material

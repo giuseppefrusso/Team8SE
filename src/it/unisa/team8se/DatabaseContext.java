@@ -19,7 +19,7 @@ import java.util.Properties;
 public class DatabaseContext {
 
     private static final String databaseURL = "jdbc:postgresql://localhost/";
-    private static final String databaseName = "postgres";
+    private static final String databaseName = "ProgettoSE";
 
     private static Connection db;
 
@@ -36,11 +36,7 @@ public class DatabaseContext {
         }
     }
     
-    public static PreparedStatement getStatement(){
-        return null;
-    }
-    
-    public static ResultSet executeQuery(String Query){
-        return null;
+    public static Connection getConnection(){
+        return db;
     }
 }
