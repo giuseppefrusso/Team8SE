@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import it.unisa.team8se.models.User;
 
 /**
  *
@@ -266,13 +267,17 @@ public class SystemAdminForm extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, message, "Errore", JOptionPane.ERROR_MESSAGE);
     }
     
+    protected void insert(User user) {
+        
+    }
+    
     private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
         //mettere tendina per scegliere ruolo
         String surname = surnameField.getText();
         String name = nameField.getText();
         String username = usernameField.getText();
         String password = passwordField.getText();
-        String ruolo = new String();
+        String role = new String();
         if (containsUsername(tableModel, username)) {
             raiseError("Username già presente!");
             return;
@@ -283,23 +288,24 @@ public class SystemAdminForm extends javax.swing.JFrame {
         }
         
         if (plannerRadioButton.isSelected()) {
-            ruolo = "Planner";
+            role = "Planner";
             
         }
         else if (maintainerRadioButton.isSelected()){
-            ruolo = "Maintainer";
+            role = "Maintainer";
             
         }
         else if (adminRadioButton.isSelected()){
-            ruolo = "System Admin";
+            role = "System Admin";
         }
         else{
             raiseError("Inserire un ruolo!");
             return;
         }
             
-        String[] row = {surname, name, username, password, ruolo};
-        tableModel.addRow(row);
+        User u = new User(surname, name, username, password, role);
+
+        tableModel.addRow(u.toArray());
         //inserire in db
     }//GEN-LAST:event_insertButtonActionPerformed
 
@@ -349,6 +355,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
                 field = "la password";
                 break;
             case 4:
+                field = "il ruolo";
                 modifyingRole = true;
                 break;
         }
@@ -376,8 +383,9 @@ public class SystemAdminForm extends javax.swing.JFrame {
                 return;
             }
         }
-        if() {
-            
+        if(field.equals("lo username") && containsUsername(tableModel, newField)) {
+            raiseError("Username già presente!");
+            return;
         }
         tableModel.setValueAt(newField, selectedRow, selectedColumn);
         //modificare in db usando selectedUser come chiave
