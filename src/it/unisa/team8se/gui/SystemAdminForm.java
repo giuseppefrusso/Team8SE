@@ -252,9 +252,10 @@ public class SystemAdminForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private boolean containsUsername(DefaultTableModel model, String username) {
-        for (int i = 0; i < model.getRowCount(); i++) {
-            String value = (String) model.getValueAt(i, 2);
+    protected boolean containsUsername(String username) {
+        
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            String value = (String) tableModel.getValueAt(i, 2);
             if (value.equalsIgnoreCase(username)) {
                 return true;
             }
@@ -267,6 +268,23 @@ public class SystemAdminForm extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, message, "Errore", JOptionPane.ERROR_MESSAGE);
     }
     
+    protected boolean insertUser(String surname, String name, String username, String password, String role) {
+        if (containsUsername(username)) {
+            raiseError("Username già presente!");
+            return false;
+        }
+        if (surname.equals("") || name.equals("") || username.equals("") || password.equals("")) {
+            raiseError("Inserire tutti i campi!");
+            return false;
+        }
+        
+        User u = new User(surname, name, username, password, role);
+        tableModel.addRow(u.toArray());
+        return true;
+        
+        //inserire in db
+    }
+    
     private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
         //mettere tendina per scegliere ruolo
         String surname = surnameField.getText();
@@ -274,14 +292,6 @@ public class SystemAdminForm extends javax.swing.JFrame {
         String username = usernameField.getText();
         String password = passwordField.getText();
         String role = new String();
-        if (containsUsername(tableModel, username)) {
-            raiseError("Username già presente!");
-            return;
-        }
-        if (surname.equals("") || name.equals("") || username.equals("") || password.equals("")) {
-            raiseError("Inserire tutti i campi!");
-            return;
-        }
         
         if (plannerRadioButton.isSelected()) {
             role = "Planner";
@@ -298,10 +308,8 @@ public class SystemAdminForm extends javax.swing.JFrame {
             raiseError("Inserire un ruolo!");
             return;
         }
-            
-        User u = new User(surname, name, username, password, role);
-        tableModel.addRow(u.toArray());
-        //inserire in db
+        
+        insertUser(surname, name, username, password, role);
     }//GEN-LAST:event_insertButtonActionPerformed
 
     private void surnameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_surnameFieldMouseClicked
@@ -320,6 +328,19 @@ public class SystemAdminForm extends javax.swing.JFrame {
         usernameField.setText("");
     }//GEN-LAST:event_usernameFieldMouseClicked
 
+    protected boolean modifyUser(String newValue, int selectedRow, int selectedColumn) {
+        String selectedUsername = (String)tableModel.getValueAt(selectedRow, 3);
+        
+        if(selectedColumn==2 && containsUsername(newValue)) {
+            raiseError("Username già presente!");
+            return false;
+        }
+        
+        tableModel.setValueAt(newValue, selectedRow, selectedColumn);
+        //modificare in db usando selectedUser come chiave
+        return true;
+    }
+    
     private void modifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyButtonActionPerformed
         //chiedere a madison delucidazioni su SELECTION MODEL
 
@@ -330,8 +351,6 @@ public class SystemAdminForm extends javax.swing.JFrame {
             raiseError("Selezionare una cella");
             return;
         }
-        
-        String selectedUsername = (String)tableModel.getValueAt(selectedRow, 3);
         
         boolean modifyingRole = false;
         String field = tableModel.getColumnName(selectedColumn);
@@ -360,14 +379,15 @@ public class SystemAdminForm extends javax.swing.JFrame {
                 return;
             }
         }
-        if(field.equals("lo username") && containsUsername(tableModel, newValue)) {
-            raiseError("Username già presente!");
-            return;
-        }
-        tableModel.setValueAt(newValue, selectedRow, selectedColumn);
-        //modificare in db usando selectedUser come chiave
+        
+        modifyUser(newValue, selectedRow, selectedColumn);
     }//GEN-LAST:event_modifyButtonActionPerformed
 
+    protected void removeUser(String selectedUsername, int selectedRow) {
+        tableModel.removeRow(selectedRow);
+        //rimuovere dal db con l'username calcolato
+    }
+    
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         int selectedRow = tableUsers.getSelectedRow();
         
@@ -380,7 +400,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         
         int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di rimuovere l'utente con username '"+selectedUsername+"' ?", "Rimozione", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if(reply == JOptionPane.YES_OPTION) {
-            tableModel.removeRow(selectedRow);
+            removeUser(selectedUsername, selectedRow);
         }
     }//GEN-LAST:event_removeButtonActionPerformed
 
