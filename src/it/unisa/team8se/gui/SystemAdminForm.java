@@ -267,10 +267,6 @@ public class SystemAdminForm extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, message, "Errore", JOptionPane.ERROR_MESSAGE);
     }
     
-    protected void insert(User user) {
-        
-    }
-    
     private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
         //mettere tendina per scegliere ruolo
         String surname = surnameField.getText();
@@ -304,7 +300,6 @@ public class SystemAdminForm extends javax.swing.JFrame {
         }
             
         User u = new User(surname, name, username, password, role);
-
         tableModel.addRow(u.toArray());
         //inserire in db
     }//GEN-LAST:event_insertButtonActionPerformed
