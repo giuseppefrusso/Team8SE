@@ -21,7 +21,7 @@ public class EWO extends Activity {
         return Ticket;
     }
     
-    public static LinkedList<EWO> getAllDatabaseInstances() {
+    public static EWO[] getAllDatabaseInstances() {
         return null;
     }
 

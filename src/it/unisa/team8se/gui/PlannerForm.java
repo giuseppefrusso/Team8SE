@@ -12,6 +12,7 @@ import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Area;
 import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
+import java.util.Collections;
 import java.util.LinkedList;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -38,7 +39,8 @@ public class PlannerForm extends javax.swing.JFrame {
     }
 
     private void setupActivityTable() {
-        activities = Activity.getAllDatabaseInstances();
+        activities = new LinkedList<>();
+        Collections.addAll(activities, Activity.getAllDatabaseInstances());
         
         /*
         Activity a0 = new Activity();

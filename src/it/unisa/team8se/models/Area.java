@@ -46,7 +46,7 @@ public class Area{
         return Sector + " - "+ Location;
     }
     
-    public static LinkedList<Area> getAllDatabaseInstances() {
+    public static Area[] getAllDatabaseInstances() {
         String sql = "select * from attivita_pianificata";
         LinkedList<Area> areas = new LinkedList<>();
         try {
@@ -55,7 +55,7 @@ public class Area{
             while (results.next()) {
                 areas.add(Area.getFromResultSet(results));
             }
-            return areas;
+            return (Area[])areas.toArray();
         } catch (SQLException ex) {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         }

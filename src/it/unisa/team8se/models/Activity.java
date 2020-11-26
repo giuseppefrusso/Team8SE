@@ -110,7 +110,7 @@ public class Activity {
         requiredCompetencies.add(c);
     }
 
-    public static LinkedList<Activity> getAllDatabaseInstances() {
+    public static Activity[] getAllDatabaseInstances() {
         String sql = "select * from attivita_pianificata";
         LinkedList<Activity> activities = new LinkedList<>();
         try {
@@ -119,7 +119,7 @@ public class Activity {
             while (results.next()) {
                 activities.add(Activity.getActivityFromResultSet(results));
             }
-            return activities;
+            return (Activity[])activities.toArray();
         } catch (SQLException ex) {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         }
