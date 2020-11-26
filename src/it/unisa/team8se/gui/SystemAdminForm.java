@@ -76,6 +76,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         plannerRadioButton = new javax.swing.JRadioButton();
         maintainerRadioButton = new javax.swing.JRadioButton();
         adminRadioButton = new javax.swing.JRadioButton();
+        competenceButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("System Admistrator View\n");
@@ -162,6 +163,13 @@ public class SystemAdminForm extends javax.swing.JFrame {
             }
         });
 
+        competenceButton.setText("Competenze");
+        competenceButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                competenceButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -169,6 +177,12 @@ public class SystemAdminForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(76, 76, 76)
+                        .addComponent(competenceButton))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -202,10 +216,6 @@ public class SystemAdminForm extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(9, 9, 9)
                                 .addComponent(insertButton))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(57, 57, 57))
         );
@@ -245,7 +255,8 @@ public class SystemAdminForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(removeButton)
-                    .addComponent(modifyButton))
+                    .addComponent(modifyButton)
+                    .addComponent(competenceButton))
                 .addContainerGap())
         );
 
@@ -422,6 +433,13 @@ public class SystemAdminForm extends javax.swing.JFrame {
         maintainerRadioButton.setSelected(false);
     }//GEN-LAST:event_adminRadioButtonActionPerformed
 
+    private void competenceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_competenceButtonActionPerformed
+        // TODO add your handling code here:
+        CompetenceView competence = new CompetenceView();
+        competence.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_competenceButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -459,6 +477,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton adminRadioButton;
+    private javax.swing.JButton competenceButton;
     private javax.swing.JButton insertButton;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JRadioButton maintainerRadioButton;
