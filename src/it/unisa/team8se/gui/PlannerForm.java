@@ -72,17 +72,17 @@ public class PlannerForm extends javax.swing.JFrame {
     private void setupMaintainerTable(){
         LinkedList<Maintainer> maintainers = new LinkedList<>();
         
-        Maintainer m0=new Maintainer();
-        m0.setName("Marco");
+        Maintainer m0=new Maintainer("Mannara","Marco","marco","xxx");
+        //m0.setName("Marco");
         m0.addCompetence(new Competence (1,"Team Leader"));
-        Maintainer m1= new Maintainer();
-        m1.setName("Manuel");
+        Maintainer m1= new Maintainer("Lambiase","Manuel","manuel","xxx");
+        //m1.setName("Manuel");
         m1.addCompetence(new Competence (2,"Problem Solving"));
-        Maintainer m2= new Maintainer();
-        m2.setName("Giuseppe");
+        Maintainer m2= new Maintainer("Russo","Giuseppe Felice","giuseppe","xxx");
+        //m2.setName("Giuseppe");
         m2.addCompetence(new Competence (3,"Lateral Thinking"));
-        Maintainer m3= new Maintainer();
-        m3.setName("Gerardo");
+        Maintainer m3= new Maintainer("Landino","Gerardo","gerardo","xxx");
+        //m3.setName("Gerardo");
         m3.addCompetence(new Competence (4,"Creativity"));
         
         maintainers.add(m0);
