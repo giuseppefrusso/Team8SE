@@ -28,7 +28,40 @@ public class PlannerForm extends javax.swing.JFrame {
      */
     public PlannerForm() {
         initComponents();
+        setupActivityTable();
+        setupMaintainerTable();
 
+        panelManager = new MultiPanelManager();
+        panelManager.addPanel("ActivityList", activityList);
+        panelManager.addPanel("ActivitySummary", activitySummary);
+        panelManager.addPanel("MaintainerList", maintainerList);
+    }
+
+    private void setupMaintainerTable() {
+        LinkedList<Maintainer> maintainers = new LinkedList<>();
+
+        Maintainer m0 = new Maintainer();
+        m0.setName("Marco");
+        m0.addCompetence(new Competence(1, "Team Leader"));
+        Maintainer m1 = new Maintainer();
+        m1.setName("Manuel");
+        m1.addCompetence(new Competence(2, "Problem Solving"));
+        Maintainer m2 = new Maintainer();
+        m2.setName("Giuseppe");
+        m2.addCompetence(new Competence(3, "Lateral Thinking"));
+        Maintainer m3 = new Maintainer();
+        m3.setName("Gerardo");
+        m3.addCompetence(new Competence(4, "Creativity"));
+
+        maintainers.add(m0);
+        maintainers.add(m1);
+        maintainers.add(m2);
+        maintainers.add(m3);
+
+        maintainerTable.setModel(new MaintainerAvailabilityDataModel(maintainers));
+    }
+
+    private void setupActivityTable() {
         activities = new LinkedList<>();
 
         Activity a0 = new Activity();
@@ -56,44 +89,7 @@ public class PlannerForm extends javax.swing.JFrame {
         activities.add(a1);
         activities.add(a2);
         activities.add(a3);
-        
-        
-        setupActivityTable();
-        setupMaintainerTable();
-        
-        panelManager = new MultiPanelManager();
-        panelManager.addPanel("activityList", activityList);
-        panelManager.addPanel("activitySummary", activitySummary);
-        panelManager.addPanel("maintainerList", maintainerList);
-    
-        panelManager.showPanel("maintainerList");
-    }
-    
-    private void setupMaintainerTable(){
-        LinkedList<Maintainer> maintainers = new LinkedList<>();
-        
-        Maintainer m0=new Maintainer();
-        m0.setName("Marco");
-        m0.addCompetence(new Competence (1,"Team Leader"));
-        Maintainer m1= new Maintainer();
-        m1.setName("Manuel");
-        m1.addCompetence(new Competence (2,"Problem Solving"));
-        Maintainer m2= new Maintainer();
-        m2.setName("Giuseppe");
-        m2.addCompetence(new Competence (3,"Lateral Thinking"));
-        Maintainer m3= new Maintainer();
-        m3.setName("Gerardo");
-        m3.addCompetence(new Competence (4,"Creativity"));
-        
-        maintainers.add(m0);
-        maintainers.add(m1);
-        maintainers.add(m2);
-        maintainers.add(m3);
-        
-        maintainerTable.setModel(new MaintainerAvailabilityDataModel(maintainers));
-    }
-    
-    private void setupActivityTable() {
+
         activityTable.setModel(new ActivityTableDataModel(activities));
         ListSelectionModel selectionModel = activityTable.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -102,7 +98,11 @@ public class PlannerForm extends javax.swing.JFrame {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 int selectedRow = activityTable.getSelectedRow();
-                System.out.println("Selected index " + selectedRow);
+                if (selectedRow >= 0) {
+                    System.out.println("Selected index " + selectedRow);
+                    activityTableRowSelected(selectedRow);
+                    activityTable.clearSelection();
+                }
             }
         });
     }
@@ -141,6 +141,7 @@ public class PlannerForm extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         maintainerList = new javax.swing.JPanel();
         maintainerScrollPane = new javax.swing.JScrollPane();
         maintainerTable = new javax.swing.JTable();
@@ -214,7 +215,7 @@ public class PlannerForm extends javax.swing.JFrame {
 
         activitySummary.setBackground(new java.awt.Color(255, 204, 153));
         java.awt.GridBagLayout activitySummaryLayout = new java.awt.GridBagLayout();
-        activitySummaryLayout.columnWidths = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
+        activitySummaryLayout.columnWidths = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
         activitySummaryLayout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
         activitySummary.setLayout(activitySummaryLayout);
 
@@ -372,6 +373,14 @@ public class PlannerForm extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 3;
         activitySummary.add(jLabel8, gridBagConstraints);
 
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButton2.setText("Go to Mantainers");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.ipady = 20;
+        activitySummary.add(jButton2, gridBagConstraints);
+
         tabbedPane.addTab("ActivitySummary", activitySummary);
 
         java.awt.GridBagLayout maintainerListLayout = new java.awt.GridBagLayout();
@@ -447,6 +456,11 @@ public class PlannerForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void activityTableRowSelected(int index) {
+        selectedActivity = activities.get(index);
+        tabbedPane.setSelectedIndex(1);
+    }
+
     private void interventionDescriptionEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interventionDescriptionEditButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_interventionDescriptionEditButtonActionPerformed
@@ -501,6 +515,7 @@ public class PlannerForm extends javax.swing.JFrame {
     private javax.swing.JTextPane interventionDescText;
     private javax.swing.JButton interventionDescriptionEditButton;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -525,5 +540,8 @@ public class PlannerForm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private LinkedList<Activity> activities;
+    private LinkedList<Maintainer> maintainers;
+    private Activity selectedActivity;
+    
     private MultiPanelManager panelManager;
 }

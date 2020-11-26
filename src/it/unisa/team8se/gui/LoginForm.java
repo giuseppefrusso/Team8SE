@@ -47,7 +47,7 @@ public class LoginForm extends javax.swing.JFrame {
         ruoloLabel = new javax.swing.JLabel();
         roleSelector = new javax.swing.JComboBox<>();
         loginButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        loginMessageLabel = new javax.swing.JLabel();
 
         jLabel2.setText("jLabel2");
 
@@ -134,7 +134,12 @@ public class LoginForm extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.ipady = 20;
         main.add(loginButton, gridBagConstraints);
-        main.add(jLabel1, new java.awt.GridBagConstraints());
+
+        loginMessageLabel.setForeground(new java.awt.Color(204, 0, 51));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 20;
+        main.add(loginMessageLabel, gridBagConstraints);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -152,31 +157,38 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         String item = (String) roleSelector.getSelectedItem();
-        System.out.println(item);
+        String TEST_PASSWORD = "test";
+        String TEST_USERNAME = TEST_PASSWORD;
+
         user = usernameField.getText();
         pwd = passwordField.getText();
 
-        if ("Gruppo8".equals(pwd) && "Gruppo8".equals(user)) {
+        if (TEST_PASSWORD.equals(pwd) && TEST_USERNAME.equals(user)) {
+            
             if ("Maintainer".equals(item)) {
-                EventQueue.invokeLater(()->{ new MaintainerForm().setVisible(true);});    
+                EventQueue.invokeLater(() -> {
+                    new MaintainerForm().setVisible(true);
+                });
             }
             if ("Planner".equals(item)) {
-                EventQueue.invokeLater(()->{new PlannerForm().setVisible(true);});
+                EventQueue.invokeLater(() -> {
+                    new PlannerForm().setVisible(true);
+                });
             }
             if ("Administrator".equals(item)) {
-                EventQueue.invokeLater(()->{new SystemAdminForm().setVisible(true);});
+                EventQueue.invokeLater(() -> {
+                    new SystemAdminForm().setVisible(true);
+                });
             }
-            //DatabaseContext.connectDatabase(user, pwd);
-            jLabel1.setText("LOGIN ESEGUITO");
-            usernameField.setText("");
-            passwordField.setText("");
-        } else
-            jLabel1.setText("USER O PASSWORD ERRATI");
+            loginMessageLabel.setText("LOGIN ESEGUITO");
+            dispose();
+        } else{
+            loginMessageLabel.setText("USER O PASSWORD ERRATI");
+        }
+        usernameField.setText("");
+        passwordField.setText("");
     }//GEN-LAST:event_loginButtonActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
+        
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -208,16 +220,19 @@ public class LoginForm extends javax.swing.JFrame {
                 lf.setVisible(true);
             }
         });
+
+        //CONNESSIONE AL DB
+        DatabaseContext.connectDatabase("", "");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JButton loginButton;
     private javax.swing.JLabel loginLabel;
+    private javax.swing.JLabel loginMessageLabel;
     private javax.swing.JPanel main;
     private javax.swing.JPasswordField passwordField;
     private javax.swing.JLabel passwordLabel;
