@@ -8,36 +8,62 @@ package it.unisa.team8se.models;
  */
 public class User {
 
-    private String UserName;
-    private String Password; // TODO: Considerare di rimuovere l'attributo password
-    private String Name;
-    private String LastName;
+    private String surname;    
+    private String name;
+    private String username;
+    private String password;
+    private String role;
 
-    public User(){
-
-    }
-
-    public void setName(String Name) {
-        this.Name = Name;
-    }
-
-    public void setLastName(String LastName) {
-        this.LastName = LastName;
+    public User(String surname, String name, String username, String password, String role) {
+        this.surname = surname;
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
     
-    public String getUserName() {
-        return UserName;
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
-    public String getName() {
-        return Name;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getLastName() {
-        return LastName;
+    public String getSurname() {
+        return surname;
     }
-}//end User
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String[] toArray() {
+        String[] array = {surname, name, username, password, role};
+        return array;
+    }
+}

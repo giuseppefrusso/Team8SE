@@ -6,28 +6,49 @@
 package it.unisa.team8se.gui;
 
 import java.awt.Toolkit;
+import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+import it.unisa.team8se.models.User;
 
 /**
  *
  * @author cptso
  */
 public class SystemAdminForm extends javax.swing.JFrame {
+
     DefaultTableModel tableModel;
-        
-    /**
-     * Creates new form SystemAdminForm
-     */
-    public SystemAdminForm() {
-        tableModel = new DefaultTableModel();
+    ButtonGroup buttonGroup; 
+    
+    private void initTableModel() {
+        tableModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         tableModel.addColumn("Cognome");
         tableModel.addColumn("Nome");
         tableModel.addColumn("Username");
         tableModel.addColumn("Password");
+        tableModel.addColumn("Ruolo");   
+    }
+    
+    private void initButtonGroup() {
+        buttonGroup = new ButtonGroup();
+        buttonGroup.add(plannerRadioButton);
+        buttonGroup.add(maintainerRadioButton);
+        buttonGroup.add(adminRadioButton);
+    }
+    
+    /**
+     * Creates new form SystemAdminForm
+     */
+    public SystemAdminForm() {
+        initTableModel();
+        initButtonGroup();
         //caricare dati dal db
-        initComponents(); 
+        initComponents();
     }
 
     /**
@@ -48,10 +69,13 @@ public class SystemAdminForm extends javax.swing.JFrame {
         surnameField = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableUsers = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        surnameLabel = new javax.swing.JLabel();
+        nameLabel = new javax.swing.JLabel();
+        passwordLabel = new javax.swing.JLabel();
+        usernameLabel = new javax.swing.JLabel();
+        plannerRadioButton = new javax.swing.JRadioButton();
+        maintainerRadioButton = new javax.swing.JRadioButton();
+        adminRadioButton = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("System Admistrator View\n");
@@ -102,19 +126,41 @@ public class SystemAdminForm extends javax.swing.JFrame {
             }
         });
 
+        tableUsers.setAutoCreateRowSorter(true);
         tableUsers.setModel(tableModel);
         tableUsers.setRowSelectionAllowed(false);
         tableUsers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tableUsers.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tableUsers);
 
-        jLabel1.setText("Cognome");
+        surnameLabel.setText("Cognome");
 
-        jLabel2.setText("Nome");
+        nameLabel.setText("Nome");
 
-        jLabel3.setText("Password");
+        passwordLabel.setText("Password");
 
-        jLabel4.setText("Username");
+        usernameLabel.setText("Username");
+
+        plannerRadioButton.setText("Planner");
+        plannerRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                plannerRadioButtonActionPerformed(evt);
+            }
+        });
+
+        maintainerRadioButton.setText("Maintainer");
+        maintainerRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                maintainerRadioButtonActionPerformed(evt);
+            }
+        });
+
+        adminRadioButton.setText("System Admin");
+        adminRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adminRadioButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -122,57 +168,80 @@ public class SystemAdminForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(modifyButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(surnameField, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(37, 37, 37)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(surnameField, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(99, 99, 99)
+                                        .addComponent(surnameLabel)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(passwordField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(insertButton)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(114, 114, 114)
+                                        .addComponent(nameLabel))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(96, 96, 96)
+                                        .addComponent(usernameLabel)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(passwordLabel)
+                                        .addGap(10, 10, 10)))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(plannerRadioButton)
+                            .addComponent(maintainerRadioButton)
+                            .addComponent(adminRadioButton)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(9, 9, 9)
+                                .addComponent(insertButton))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(57, 57, 57))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(surnameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(surnameLabel)
+                            .addComponent(nameLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(surnameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(25, 25, 25))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(plannerRadioButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel4))
+                        .addComponent(maintainerRadioButton)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 2, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(adminRadioButton)
+                        .addGap(16, 16, 16))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(usernameLabel)
+                            .addComponent(passwordLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(insertButton)
                     .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(insertButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                    .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(removeButton)
@@ -184,12 +253,18 @@ public class SystemAdminForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private boolean containsUsername(DefaultTableModel model, String username) {
-        for(int i=0; i<model.getRowCount(); i++) {
-            String value = (String)model.getValueAt(i, 2);
-            if(value.equalsIgnoreCase(username))
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String value = (String) model.getValueAt(i, 2);
+            if (value.equalsIgnoreCase(username)) {
                 return true;
+            }
         }
         return false;
+    }
+
+    private void raiseError(String message) {
+        Toolkit.getDefaultToolkit().beep();
+        JOptionPane.showMessageDialog(this, message, "Errore", JOptionPane.ERROR_MESSAGE);
     }
     
     private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
@@ -198,18 +273,34 @@ public class SystemAdminForm extends javax.swing.JFrame {
         String name = nameField.getText();
         String username = usernameField.getText();
         String password = passwordField.getText();
-        if(containsUsername(tableModel, username)) {
-            Toolkit.getDefaultToolkit().beep();
-            JOptionPane.showMessageDialog(this, "Username già presente!", "Errore", JOptionPane.ERROR_MESSAGE);
+        String role = new String();
+        if (containsUsername(tableModel, username)) {
+            raiseError("Username già presente!");
             return;
         }
-        if(surname.equals("") || name.equals("") || username.equals("") || password.equals("")){
-            Toolkit.getDefaultToolkit().beep();
-            JOptionPane.showMessageDialog(this, "Inserire tutti i campi!", "Errore", JOptionPane.ERROR_MESSAGE);
+        if (surname.equals("") || name.equals("") || username.equals("") || password.equals("")) {
+            raiseError("Inserire tutti i campi!");
             return;
         }
-        String[] row = {surname, name, username, password};
-        tableModel.addRow(row);
+        
+        if (plannerRadioButton.isSelected()) {
+            role = "Planner";
+            
+        }
+        else if (maintainerRadioButton.isSelected()){
+            role = "Maintainer";
+            
+        }
+        else if (adminRadioButton.isSelected()){
+            role = "System Admin";
+        }
+        else{
+            raiseError("Inserire un ruolo!");
+            return;
+        }
+            
+        User u = new User(surname, name, username, password, role);
+        tableModel.addRow(u.toArray());
         //inserire in db
     }//GEN-LAST:event_insertButtonActionPerformed
 
@@ -231,43 +322,85 @@ public class SystemAdminForm extends javax.swing.JFrame {
 
     private void modifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyButtonActionPerformed
         //chiedere a madison delucidazioni su SELECTION MODEL
-        /*
-        quando si preme modifica la table diventa ENABLED e non si seleziona la riga intera e 
-        ci si può scrivere dentro; fare la modifica stando attenti a evitare conflitti e 
-        premere salva quando si è finito (un altro bottone che fino a quel momento era DISABLED)
-        */
-        
+
         int selectedRow = tableUsers.getSelectedRow();
         int selectedColumn = tableUsers.getSelectedColumn();
-        String field = new String(); 
-        switch(selectedColumn) {
-            case -1:
-                JOptionPane.showMessageDialog(this, "Selezionare una cella!", "Errore", JOptionPane.ERROR_MESSAGE);
-                return;
-            case 2:
-                field = "username";
-                break;
-            case 3: 
-                field = "password";
-                break;
-            case 0:
-                field = "surname";
-                break;
-            case 1: 
-                field = "name";
-                break;    
-        }
-        String newField = JOptionPane.showInputDialog(this, "Modifica "+field, "Modifica", JOptionPane.INFORMATION_MESSAGE);
-        if(newField.equals("")) {
+        
+        if(selectedRow == -1 || selectedColumn == -1) {
+            raiseError("Selezionare una cella");
             return;
         }
-        tableModel.setValueAt(newField, selectedRow, selectedColumn);
-        //modificare in db
+        
+        String selectedUsername = (String)tableModel.getValueAt(selectedRow, 3);
+        
+        boolean modifyingRole = false;
+        String field = tableModel.getColumnName(selectedColumn);
+        String newValue = new String();
+        if(field.equals("Ruolo")) {
+            String[] options = {"Planner", "Maintainer", "System Admin"};
+            int choice = JOptionPane.showOptionDialog(this, "Modifica " + field, "Modifica", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+            System.out.println(choice);
+            switch (choice) {
+                case -1:
+                    newValue = (String)tableModel.getValueAt(selectedRow, selectedColumn);
+                    break;
+                case 0:
+                    newValue = "Planner";
+                    break;
+                case 1:
+                    newValue = "Maintainer";
+                    break;
+                case 2:
+                    newValue = "System Admin";
+                    break;
+            }
+        }else {
+            newValue = JOptionPane.showInputDialog(this, "Modifica " + field, "Modifica", JOptionPane.INFORMATION_MESSAGE);
+            if (newValue == null || newValue.equals("")) {
+                return;
+            }
+        }
+        if(field.equals("lo username") && containsUsername(tableModel, newValue)) {
+            raiseError("Username già presente!");
+            return;
+        }
+        tableModel.setValueAt(newValue, selectedRow, selectedColumn);
+        //modificare in db usando selectedUser come chiave
     }//GEN-LAST:event_modifyButtonActionPerformed
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-        //rimuovere in db
+        int selectedRow = tableUsers.getSelectedRow();
+        
+        if(selectedRow == -1) {
+            raiseError("Selezionare una riga!");
+            return;
+        }
+        
+        String selectedUsername = (String)tableModel.getValueAt(selectedRow, 3);
+        
+        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di rimuovere l'utente con username '"+selectedUsername+"' ?", "Rimozione", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if(reply == JOptionPane.YES_OPTION) {
+            tableModel.removeRow(selectedRow);
+        }
     }//GEN-LAST:event_removeButtonActionPerformed
+
+    private void plannerRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plannerRadioButtonActionPerformed
+        
+        maintainerRadioButton.setSelected(false);
+        adminRadioButton.setSelected(false);
+    }//GEN-LAST:event_plannerRadioButtonActionPerformed
+
+    private void maintainerRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maintainerRadioButtonActionPerformed
+
+        plannerRadioButton.setSelected(false);
+        adminRadioButton.setSelected(false);
+    }//GEN-LAST:event_maintainerRadioButtonActionPerformed
+
+    private void adminRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminRadioButtonActionPerformed
+
+        plannerRadioButton.setSelected(false);
+        maintainerRadioButton.setSelected(false);
+    }//GEN-LAST:event_adminRadioButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -305,18 +438,21 @@ public class SystemAdminForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton adminRadioButton;
     private javax.swing.JButton insertButton;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JRadioButton maintainerRadioButton;
     private javax.swing.JButton modifyButton;
     private javax.swing.JTextField nameField;
+    private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField passwordField;
+    private javax.swing.JLabel passwordLabel;
+    private javax.swing.JRadioButton plannerRadioButton;
     private javax.swing.JButton removeButton;
     private javax.swing.JTextField surnameField;
+    private javax.swing.JLabel surnameLabel;
     private javax.swing.JTable tableUsers;
     private javax.swing.JTextField usernameField;
+    private javax.swing.JLabel usernameLabel;
     // End of variables declaration//GEN-END:variables
 }
