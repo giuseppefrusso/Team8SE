@@ -334,55 +334,37 @@ public class SystemAdminForm extends javax.swing.JFrame {
         String selectedUsername = (String)tableModel.getValueAt(selectedRow, 3);
         
         boolean modifyingRole = false;
-        String field = new String();
-        String newField = new String();
-        switch (selectedColumn) {
-            case 0:
-                field = "il cognome";
-                break;
-            case 1:
-                field = "il nome";
-                break;
-            case 2:
-                field = "lo username";
-                break;
-            case 3:
-                field = "la password";
-                break;
-            case 4:
-                field = "il ruolo";
-                modifyingRole = true;
-                break;
-        }
-        if(modifyingRole) {
+        String field = tableModel.getColumnName(selectedColumn);
+        String newValue = new String();
+        if(field.equals("Ruolo")) {
             String[] options = {"Planner", "Maintainer", "System Admin"};
-            int choice = JOptionPane.showOptionDialog(this, "Modifica il ruolo", "Modifica", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+            int choice = JOptionPane.showOptionDialog(this, "Modifica " + field, "Modifica", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
             System.out.println(choice);
             switch (choice) {
                 case -1:
-                    newField = (String)tableModel.getValueAt(selectedRow, selectedColumn);
+                    newValue = (String)tableModel.getValueAt(selectedRow, selectedColumn);
                     break;
                 case 0:
-                    newField = "Planner";
+                    newValue = "Planner";
                     break;
                 case 1:
-                    newField = "Maintainer";
+                    newValue = "Maintainer";
                     break;
                 case 2:
-                    newField = "System Admin";
+                    newValue = "System Admin";
                     break;
             }
         }else {
-            newField = JOptionPane.showInputDialog(this, "Modifica " + field, "Modifica", JOptionPane.INFORMATION_MESSAGE);
-            if (newField == null || newField.equals("")) {
+            newValue = JOptionPane.showInputDialog(this, "Modifica " + field, "Modifica", JOptionPane.INFORMATION_MESSAGE);
+            if (newValue == null || newValue.equals("")) {
                 return;
             }
         }
-        if(field.equals("lo username") && containsUsername(tableModel, newField)) {
+        if(field.equals("lo username") && containsUsername(tableModel, newValue)) {
             raiseError("Username già presente!");
             return;
         }
-        tableModel.setValueAt(newField, selectedRow, selectedColumn);
+        tableModel.setValueAt(newValue, selectedRow, selectedColumn);
         //modificare in db usando selectedUser come chiave
     }//GEN-LAST:event_modifyButtonActionPerformed
 
