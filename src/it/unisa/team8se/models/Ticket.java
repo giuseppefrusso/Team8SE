@@ -35,5 +35,4 @@ public class Ticket {
     public TicketState getState() {
         return State;
     }
-        
 }//end Ticket

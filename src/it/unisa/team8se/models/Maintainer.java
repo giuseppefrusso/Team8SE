@@ -35,4 +35,20 @@ public class Maintainer extends User{
     public void removeCompetence(int ID){
         
     }
+    
+        
+    public static Maintainer[] getAllDatabaseInstances() {
+        return null;
+    }
+
+    
+    public static Maintainer getInstanceWithPK(Object... pk) {
+        return null;
+    }
+
+    
+    public void saveToDatabase() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

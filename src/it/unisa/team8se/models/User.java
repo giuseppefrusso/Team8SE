@@ -66,4 +66,19 @@ public class User {
         String[] array = {surname, name, username, password, role};
         return array;
     }
+    
+        
+    public static User[] getAllDatabaseInstances() {
+        return null;
+    }
+
+    
+    public static User getInstanceWithPK(Object... pk) {
+        return null;
+    }
+
+    
+    public void saveToDatabase() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }   
 }
