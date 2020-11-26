@@ -17,8 +17,8 @@ import it.unisa.team8se.models.User;
  */
 public class SystemAdminForm extends javax.swing.JFrame {
 
-    DefaultTableModel tableModel;
-    ButtonGroup buttonGroup; 
+    protected DefaultTableModel tableModel;
+    private ButtonGroup buttonGroup; 
     
     private void initTableModel() {
         tableModel = new DefaultTableModel(){
