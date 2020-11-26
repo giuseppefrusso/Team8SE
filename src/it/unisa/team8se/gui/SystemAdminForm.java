@@ -376,6 +376,9 @@ public class SystemAdminForm extends javax.swing.JFrame {
                 return;
             }
         }
+        if() {
+            
+        }
         tableModel.setValueAt(newField, selectedRow, selectedColumn);
         //modificare in db usando selectedUser come chiave
     }//GEN-LAST:event_modifyButtonActionPerformed

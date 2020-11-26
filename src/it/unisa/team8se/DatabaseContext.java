@@ -19,7 +19,7 @@ import java.util.Properties;
 public class DatabaseContext {
 
     private static final String databaseURL = "jdbc:postgresql://localhost/";
-    private static final String databaseName = "";
+    private static final String databaseName = "postgres";
 
     private static Connection db;
 
