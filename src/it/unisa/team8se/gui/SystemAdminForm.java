@@ -17,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -27,7 +28,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
     protected DefaultTableModel tableModel;
     private ButtonGroup buttonGroup; 
     private final String username = "postgres";
-    private final String password = "strike98";
+    private final String password = "admin";
     
     private void initTableModel() {
         tableModel = new DefaultTableModel(){
@@ -41,7 +42,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         tableModel.addColumn("Username");
         tableModel.addColumn("Password");
         tableModel.addColumn("Ruolo");   
-        refreshUsers();
+        
     }
     
     private void initButtonGroup() {
@@ -57,6 +58,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
     public SystemAdminForm() {
         DatabaseContext.connectDatabase(username, password);
         initTableModel();
+        refreshUsers();
         initButtonGroup();
         //caricare dati dal db
         initComponents();
@@ -276,27 +278,29 @@ public class SystemAdminForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
         protected boolean refreshUsers() {
-        try {
-            Connection connection = DatabaseContext.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("select * from maintainer order by username");
+            tableModel.setRowCount(0);
             
-            while(rs.next()) {
-                tableModel.addRow(User.toArray(rs.getString("surname"), rs.getString("name"), rs.getString("username"), rs.getString("password"), "maintainer"));
-            }
-            
-            rs = statement.executeQuery("select * from planner order by username");
-            while(rs.next()){
-                tableModel.addRow(User.toArray(rs.getString("surname"), rs.getString("name"), rs.getString("username"), rs.getString("password"), "planner"));
-            }
-            
-            rs=statement.executeQuery("select * from system_administrator order by username");
-            while(rs.next()){
-                tableModel.addRow(User.toArray(rs.getString("surname"), rs.getString("name"), rs.getString("username"), rs.getString("password"), "system admin"));
-            }
-            
-            rs.close();
-            statement.close();
+            try {
+                Connection connection = DatabaseContext.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery("select * from maintainer order by username");
+
+                while(rs.next()) {
+                    tableModel.addRow(User.toArray(rs.getString("cognome"), rs.getString("nome"), rs.getString("username"), rs.getString("password"), "maintainer"));
+                }
+
+                rs = statement.executeQuery("select * from planner order by username");
+                while(rs.next()){
+                    tableModel.addRow(User.toArray(rs.getString("cognome"), rs.getString("nome"), rs.getString("username"), rs.getString("password"), "planner"));
+                }
+
+                rs=statement.executeQuery("select * from system_administrator order by username");
+                while(rs.next()){
+                    tableModel.addRow(User.toArray(rs.getString("cognome"), rs.getString("nome"), rs.getString("username"), rs.getString("password"), "system admin"));
+                }
+
+                rs.close();
+                statement.close();
         } catch (SQLException ex) {
             raiseError("Errore nella lettura degli utenti");
             return false;
@@ -333,13 +337,13 @@ public class SystemAdminForm extends javax.swing.JFrame {
        
         try {
             Connection c = DatabaseContext.getConnection();
-            String query = "insert into ?(username,password,surname,name) values(?,?,?,?)";
+            String query = "insert into "+role+"(username,password,cognome,nome) values(?,?,?,?)";
             PreparedStatement ps = c.prepareStatement(query);
-            ps.setString(1, role);
-            ps.setString(2, username);
-            ps.setString(3, password);
-            ps.setString(4, surname);
-            ps.setString(5,name);
+            //ps.setString(1, role);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ps.setString(3, surname);
+            ps.setString(4,name);
             ps.executeUpdate();
         
             
@@ -351,7 +355,6 @@ public class SystemAdminForm extends javax.swing.JFrame {
         
         return true;
         
-        //inserire in db
         
     }
     
