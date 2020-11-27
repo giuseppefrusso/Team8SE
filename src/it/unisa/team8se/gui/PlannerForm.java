@@ -464,6 +464,7 @@ public class PlannerForm extends javax.swing.JFrame {
         selectedActivity = activities.get(index);
         tabbedPane.setSelectedIndex(1);
         interventionDescText.setText(selectedActivity.getInterventionDescription());
+        
     }
 
     private void interventionDescriptionEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interventionDescriptionEditButtonActionPerformed

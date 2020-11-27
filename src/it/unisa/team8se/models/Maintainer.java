@@ -5,7 +5,15 @@
  */
 package it.unisa.team8se.models;
 
+import it.unisa.team8se.DatabaseContext;
+import it.unisa.team8se.models.base.User;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,6 +51,15 @@ public class Maintainer extends User{
     
         
     public static Maintainer[] getAllDatabaseInstances() {
+        String sql = "select * from mantainer";
+        try {
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            ResultSet results = ps.executeQuery();
+            LinkedList<Maintainer> instances = DatabaseContext.fetchAllModels(Maintainer.class, ps);
+            return Arrays.copyOf(instances.toArray(),instances.size(),Maintainer[].class);
+        } catch (SQLException ex) {
+            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
 
@@ -51,9 +68,13 @@ public class Maintainer extends User{
         return null;
     }
 
-    
+    @Override
     public void saveToDatabase() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    @Override
+    public void getFromResultSet(ResultSet rs) throws SQLException{
+        super.getFromResultSet(rs);
+        //TODO: get delle competenze
+    }
 }

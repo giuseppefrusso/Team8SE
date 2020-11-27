@@ -1,4 +1,14 @@
-package it.unisa.team8se.models;
+package it.unisa.team8se.models.base;
+
+import it.unisa.team8se.DatabaseContext;
+import it.unisa.team8se.models.base.DatabaseModel;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -6,7 +16,7 @@ package it.unisa.team8se.models;
  * @version 1.0
  * @created 22-nov-2020 11:33:39
  */
-public class User {
+public abstract class User extends DatabaseModel{
 
     private String surname;    
     private String name;
@@ -72,16 +82,20 @@ public class User {
     
         
     public static User[] getAllDatabaseInstances() {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    
-    public static User getInstanceWithPK(Object... pk) {
-        return null;
-    }
-
-    
+    @Override
     public void saveToDatabase() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }   
+
+    @Override
+    public void getFromResultSet(ResultSet rs) throws SQLException {
+        setName(rs.getString("nome"));
+        setSurname(rs.getString("cognome"));
+        setRole(rs.getString("ruolo"));
+        setUsername(rs.getString("username"));
+        setPassword(rs.getString("password"));
+    }
 }

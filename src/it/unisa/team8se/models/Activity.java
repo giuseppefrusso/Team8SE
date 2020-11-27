@@ -1,9 +1,12 @@
 package it.unisa.team8se.models;
 
+import it.unisa.team8se.models.base.DatabaseModel;
 import it.unisa.team8se.DatabaseContext;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -110,19 +113,14 @@ public class Activity extends DatabaseModel{
         requiredCompetencies.add(c);
     }
 
-    public static Activity[] getAllDatabaseInstances() {
-        String sql = "select * from attivita_pianificata";
     
-        LinkedList<Activity> activities = new LinkedList<>();
-        try {
-            PreparedStatement ps = DatabaseContext.getConnection().prepareStatement(sql);
-            ResultSet results = ps.executeQuery();
-            while (results.next()) {
-                Activity activity = new Activity();
-                activity.getFromResultSet(results);
-                activities.add(activity);
-            }
-            return (Activity[])activities.toArray();
+   
+    public static Activity[] getAllDatabaseInstances() {
+        try {            
+            String sql = "select * from attivita_pianificata";
+            LinkedList<Activity> list = DatabaseContext.fetchAllModels(Activity.class, DatabaseContext.getPreparedStatement(sql));
+            return Arrays.copyOf(list.toArray(),list.size(),Activity[].class);
+            
         } catch (SQLException ex) {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -131,40 +129,35 @@ public class Activity extends DatabaseModel{
 
     public static Activity getInstanceWithPK(int ID) {
         String sql = "select * from attivita_pianificata where id = ?";
-        PreparedStatement ps;
         try {
-            ps = DatabaseContext.getConnection().prepareStatement(sql);
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setInt(1, ID);
-            ResultSet results = ps.executeQuery();
-            if(results.next())
-            {
-                Activity activity = new Activity();
-                activity.getFromResultSet(results);
-                return activity;
-            }
+            LinkedList<Activity> list = DatabaseContext.fetchAllModels(Activity.class, ps);
+            if (list.size() > 0)
+                return (Activity)list.get(0);
+            else
+                return null;
         } catch (SQLException ex) {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
-    public static Activity getInstanceWithWeekNumber(int weekNumber){
+    public static Activity[] getInstancesWithWeekNumber(int weekNumber){
         String sql = "select * from attivita_pianificata where week_number = ?";
-        PreparedStatement ps;
-        Activity curr;
         try {
-            ps = DatabaseContext.getConnection().prepareStatement(sql);
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setInt(1, weekNumber);
-            ResultSet results = ps.executeQuery();
-            
-            if(results.next()){
-                Activity activity = new Activity();
-                activity.getFromResultSet(results);
-                return activity;
-            }
+            LinkedList<Activity> list = DatabaseContext.fetchAllModels(Activity.class, ps);
+            return Arrays.copyOf(list.toArray(),list.size(),Activity[].class);
         } catch (SQLException ex) {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
+    }
+    
+    public static Activity[] getAllInstancesAssignedToMaintainer(Maintainer m)
+    {
         return null;
     }
     
@@ -198,4 +191,21 @@ public class Activity extends DatabaseModel{
        setArea(new Area(rs.getString("area"),rs.getString("luogo_geografico")));
     }
 
-}//end Activity
+}
+
+
+     /*
+    LinkedList<Activity> activities = new LinkedList<>();
+    try {
+    PreparedStatement ps = DatabaseContext.getConnection().prepareStatement(sql);
+    ResultSet results = ps.executeQuery();
+    while (results.next()) {
+    Activity activity = new Activity();
+    activity.getFromResultSet(results);
+    activities.add(activity);
+    }
+    return (Activity[])activities.toArray();
+    } catch (SQLException ex) {
+    Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null;*/

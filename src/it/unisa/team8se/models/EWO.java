@@ -11,11 +11,11 @@ import java.util.LinkedList;
  */
 public class EWO extends Activity {
 
-	private Ticket Ticket;
+    private Ticket Ticket;
 
-	public EWO(){
-            super();
-	}
+    public EWO(){
+        super();
+    }
 
     public Ticket getTicket() {
         return Ticket;
@@ -26,7 +26,7 @@ public class EWO extends Activity {
     }
 
     
-    public static EWO getInstanceWithPK(Object... pk) {
+    public static EWO getInstanceWithPK(int id) {
         return null;
     }
 

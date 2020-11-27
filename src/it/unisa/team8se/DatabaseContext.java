@@ -6,10 +6,13 @@
 package it.unisa.team8se;
 
 import it.unisa.team8se.models.Activity;
-import it.unisa.team8se.models.DatabaseModel;
+import it.unisa.team8se.models.base.DatabaseModel;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -22,7 +25,7 @@ import java.util.logging.Logger;
 public class DatabaseContext {
 
     private static final String databaseURL = "jdbc:postgresql://localhost/";
-    private static final String databaseName = "postgres";
+    private static final String databaseName = "ProgettoSE";
 
     private static Connection db;
 
@@ -43,12 +46,14 @@ public class DatabaseContext {
         return db;
     }
     
-    /*
-    public static <T extends DatabaseModel> T[] fetchAllModels(Class<T> c,String sql) {
-
+    public static PreparedStatement getPreparedStatement(String sql) throws SQLException{
+            return db.prepareStatement(sql);
+    }
+    
+    public static <T extends DatabaseModel> LinkedList<T> fetchAllModels(Class<T> c,PreparedStatement ps) throws SQLException{
         try {
-            PreparedStatement ps = DatabaseContext.getConnection().prepareStatement(sql);
             ResultSet results = ps.executeQuery();
+            
             LinkedList<T> instances = new LinkedList<>();
             
             while (results.next()) {
@@ -56,16 +61,14 @@ public class DatabaseContext {
                 instance.getFromResultSet(results);
                 instances.add(instance);
             }
-            return (T[]) instances.toArray();
-        } catch (SQLException ex) {
-            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
+            return instances;
         } catch (InstantiationException ex) {
             Logger.getLogger(DatabaseContext.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
             Logger.getLogger(DatabaseContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-    }*/
+    }
     public static void closeConnection() {
         try {
             db.close();

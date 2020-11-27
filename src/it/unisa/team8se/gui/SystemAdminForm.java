@@ -9,7 +9,7 @@ import java.awt.Toolkit;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import it.unisa.team8se.models.User;
+import it.unisa.team8se.models.base.User;
 
 /**
  *
