@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 public class DatabaseContext {
 
     private static final String databaseURL = "jdbc:postgresql://localhost/";
-    private static final String databaseName = "postgres";
+    private static final String databaseName = "postgres"; // cambiare in Software Engineering
 
     private static Connection db;
 
