@@ -15,7 +15,8 @@ public class Maintainer extends User{
     
     private LinkedList<Competence> competencies;
 
-    public Maintainer() {
+    public Maintainer(String surname, String name, String username, String password) {
+        super(surname, name, username, password, "Maintainer");
         competencies = new LinkedList<>();
     }
 
