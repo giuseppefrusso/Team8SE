@@ -36,11 +36,7 @@ public class DatabaseContext {
         }
     }
     
-    public static PreparedStatement getStatement(){
-        return null;
-    }
-    
-    public static ResultSet executeQuery(String Query){
-        return null;
+    public static Connection getConnection(){
+        return db;
     }
 }
