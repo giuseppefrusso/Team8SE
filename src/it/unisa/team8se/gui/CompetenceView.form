@@ -69,7 +69,6 @@
                               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                               <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="assignButton" min="-2" max="-2" attributes="0"/>
-                                  <Component id="modifyButton" alignment="1" max="32767" attributes="0"/>
                                   <Component id="removeButton" alignment="1" max="32767" attributes="0"/>
                               </Group>
                           </Group>
@@ -103,10 +102,8 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="comboBox" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
                           <Component id="assignButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="modifyButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="removeButton" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -120,11 +117,6 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="modifyButton">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Modifica"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JComboBox" name="comboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -145,7 +137,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JList" name="jList1">
+            <Component class="javax.swing.JList" name="listCompetence">
               <Properties>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="listModel" type="code"/>
@@ -171,11 +163,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Rimuovi"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="assignButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Assegna"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="assignButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="backButton">
           <Properties>

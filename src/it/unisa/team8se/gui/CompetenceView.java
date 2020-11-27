@@ -23,7 +23,7 @@ import javax.swing.JOptionPane;
 public class CompetenceView extends javax.swing.JFrame {
     
     protected DefaultComboBoxModel comboBoxModel;
-    protected DefaultListModel listModel;
+    protected DefaultListModel<String> listModel;
     
     private final String username = "postgres";
     private final String password = "admin";
@@ -44,7 +44,7 @@ public class CompetenceView extends javax.swing.JFrame {
     }
     
     protected void initListModel() {
-        listModel = new DefaultListModel();
+        listModel = new DefaultListModel<>();
         if(comboBoxModel.getSize()!=0) {
             String defaultUsername = (String) comboBoxModel.getElementAt(0);
             refreshCompetences(defaultUsername);
@@ -74,9 +74,9 @@ public class CompetenceView extends javax.swing.JFrame {
         listModel.clear();
         try {
             Connection connection = DatabaseContext.getConnection();
-            String query = "select C.descrizione as competenza from competenza C join possesso P on C.id = P.id where P.maintainer=? order by competenza";
+            String query = "select C.id as id, C.descrizione as competenza from competenza C join possesso P on C.id = P.id where P.maintainer=? order by competenza";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(0, username);
+            statement.setString(1, username);
             ResultSet rs = statement.executeQuery();
             while(rs.next()) {
                 listModel.addElement(rs.getString("competenza"));
@@ -100,10 +100,9 @@ public class CompetenceView extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        modifyButton = new javax.swing.JButton();
         comboBox = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        listCompetence = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         removeButton = new javax.swing.JButton();
@@ -122,8 +121,6 @@ public class CompetenceView extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 51, 0)));
         jPanel1.setForeground(new java.awt.Color(204, 204, 204));
 
-        modifyButton.setText("Modifica");
-
         comboBox.setModel(comboBoxModel);
         comboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -131,16 +128,26 @@ public class CompetenceView extends javax.swing.JFrame {
             }
         });
 
-        jList1.setModel(listModel);
-        jScrollPane2.setViewportView(jList1);
+        listCompetence.setModel(listModel);
+        jScrollPane2.setViewportView(listCompetence);
 
         jLabel1.setText("Utente");
 
         jLabel2.setText("Competenze");
 
         removeButton.setText("Rimuovi");
+        removeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeButtonActionPerformed(evt);
+            }
+        });
 
         assignButton.setText("Assegna");
+        assignButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                assignButtonActionPerformed(evt);
+            }
+        });
 
         backButton.setText("Utenti");
         backButton.addActionListener(new java.awt.event.ActionListener() {
@@ -162,7 +169,6 @@ public class CompetenceView extends javax.swing.JFrame {
                             .addComponent(jLabel1)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(assignButton)
-                                .addComponent(modifyButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(removeButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,10 +192,8 @@ public class CompetenceView extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(62, 62, 62)
                         .addComponent(assignButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(modifyButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(removeButton))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -235,6 +239,122 @@ public class CompetenceView extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_formWindowClosing
 
+    private String getSelectedUsername() {
+        if(comboBoxModel.getSize()==0) {
+            raiseError("Non c'è alcun manutentore!");
+            return null;
+        }
+        String selectedUsername = (String) comboBox.getSelectedItem();
+        if(selectedUsername==null) {
+            selectedUsername = (String) comboBoxModel.getElementAt(0);
+        }
+        return selectedUsername;
+    }
+    
+    private String getSelectedCompetence() {
+        if(listModel.getSize()==0) {
+            raiseError("Non c'è alcuna competenza!");
+            return null;
+        }
+        String selectedCompetence = listCompetence.getSelectedValue();
+        if(selectedCompetence==null) {
+            raiseError("Non è stata selezionata alcuna competenza!");
+            return null;
+        }
+        return selectedCompetence;
+    }
+    
+    protected boolean assign(String username, String competence) {
+        try{
+            Connection c = DatabaseContext.getConnection();
+            Statement s = c.createStatement();
+            PreparedStatement ps;
+            int id = 0;
+            String query;
+            boolean assignCompetence = true;
+            
+            ResultSet rs = s.executeQuery("select * from competenza order by descrizione");
+            while(rs.next()) {
+                if(rs.getString("descrizione").equalsIgnoreCase(competence)) {
+                    id = rs.getInt("id");
+                    assignCompetence = false;
+                }
+            }
+            if(assignCompetence) {
+                rs = s.executeQuery("select max(id) from competenza");
+                rs.next();
+                int maxId = rs.getInt(1);
+                id = maxId + 1;
+
+                query = "insert into competenza values(?,?)";
+                ps = c.prepareStatement(query);
+                ps.setInt(1, id);
+                ps.setString(2, competence);
+                ps.executeUpdate();
+            }
+            
+            query = "insert into possesso values(?, ?)";
+            ps = c.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.setString(2, username);
+            ps.executeUpdate();
+            
+        } catch(SQLException ex) {
+            raiseError("Errore nell'assegnamento");
+            return false;
+        }
+        refreshCompetences(username);
+        return true;
+    }
+    
+    private void assignButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assignButtonActionPerformed
+        String selectedUsername = getSelectedUsername();
+        if(selectedUsername==null)
+            return;
+        String competence = JOptionPane.showInputDialog(this, "Assegna una competenza a '"+selectedUsername+"'", "Assegnazione", JOptionPane.PLAIN_MESSAGE);
+        assign(selectedUsername, competence);
+    }//GEN-LAST:event_assignButtonActionPerformed
+
+    protected boolean remove(String username, String competence) {
+        try {
+            Connection c = DatabaseContext.getConnection();
+            String query = "select C.id as id from competenza C where C.descrizione=? "
+                    + "intersect "
+                    + "select P.id as id from possesso P where P.maintainer=?";
+            PreparedStatement ps = c.prepareStatement(query);
+            ps.setString(1, competence);
+            ps.setString(2, username);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            int id = rs.getInt("id");
+            
+            query = "delete from possesso where id=? and maintainer=?";
+            ps = c.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.setString(2, username);
+            ps.executeUpdate();
+            
+        } catch(SQLException ex) {
+            raiseError("Errore nella rimozione");
+            return false;
+        }
+        refreshCompetences(username);
+        return true;
+    }
+    
+    
+    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
+        String selectedUsername = getSelectedUsername();
+        String selectedCompetence = getSelectedCompetence();
+        if(selectedUsername==null || selectedCompetence==null)
+            return;
+        
+        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la competenza '"+selectedCompetence+"' di '"+selectedUsername+"' ?", username, JOptionPane.YES_NO_OPTION);
+        if (reply==JOptionPane.YES_OPTION) {
+            remove(selectedUsername, selectedCompetence);
+        }
+    }//GEN-LAST:event_removeButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -276,10 +396,9 @@ public class CompetenceView extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JButton modifyButton;
+    private javax.swing.JList<String> listCompetence;
     private javax.swing.JButton removeButton;
     // End of variables declaration//GEN-END:variables
 }
