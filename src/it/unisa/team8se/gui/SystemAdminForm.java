@@ -6,11 +6,17 @@
 package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
+import it.unisa.team8se.models.Maintainer;
 import java.awt.Toolkit;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import it.unisa.team8se.models.base.User;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -21,7 +27,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
     protected DefaultTableModel tableModel;
     private ButtonGroup buttonGroup; 
     private final String username = "postgres";
-    private final String password = "";
+    private final String password = "strike98";
     
     private void initTableModel() {
         tableModel = new DefaultTableModel(){
@@ -35,6 +41,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         tableModel.addColumn("Username");
         tableModel.addColumn("Password");
         tableModel.addColumn("Ruolo");   
+        refreshUsers();
     }
     
     private void initButtonGroup() {
@@ -268,6 +275,35 @@ public class SystemAdminForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+        protected boolean refreshUsers() {
+        try {
+            Connection connection = DatabaseContext.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("select * from maintainer order by username");
+            
+            while(rs.next()) {
+                tableModel.addRow(User.toArray(rs.getString("surname"), rs.getString("name"), rs.getString("username"), rs.getString("password"), "maintainer"));
+            }
+            
+            rs = statement.executeQuery("select * from planner order by username");
+            while(rs.next()){
+                tableModel.addRow(User.toArray(rs.getString("surname"), rs.getString("name"), rs.getString("username"), rs.getString("password"), "planner"));
+            }
+            
+            rs=statement.executeQuery("select * from system_administrator order by username");
+            while(rs.next()){
+                tableModel.addRow(User.toArray(rs.getString("surname"), rs.getString("name"), rs.getString("username"), rs.getString("password"), "system admin"));
+            }
+            
+            rs.close();
+            statement.close();
+        } catch (SQLException ex) {
+            raiseError("Errore nella lettura degli utenti");
+            return false;
+        }
+        return true;
+    }
+    
     protected boolean containsUsername(String username) {
         
         for (int i = 0; i < tableModel.getRowCount(); i++) {
@@ -295,13 +331,28 @@ public class SystemAdminForm extends javax.swing.JFrame {
         }
         
        
-        tableModel.addRow(User.toArray(surname, name, username, password, role));
+        try {
+            Connection c = DatabaseContext.getConnection();
+            String query = "insert into ?(username,password,surname,name) values(?,?,?,?)";
+            PreparedStatement ps = c.prepareStatement(query);
+            ps.setString(1, role);
+            ps.setString(2, username);
+            ps.setString(3, password);
+            ps.setString(4, surname);
+            ps.setString(5,name);
+            ps.executeUpdate();
+        
+            
+        } catch(SQLException ex) {
+            raiseError("Errore nell'inserimento");
+            return false;
+        }
+        refreshUsers();
+        
         return true;
         
         //inserire in db
-        try{
-            
-        }
+        
     }
     
     private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
@@ -313,15 +364,15 @@ public class SystemAdminForm extends javax.swing.JFrame {
         String role = new String();
         
         if (plannerRadioButton.isSelected()) {
-            role = "Planner";
+            role = "planner";
             
         }
         else if (maintainerRadioButton.isSelected()){
-            role = "Maintainer";
+            role = "maintainer";
             
         }
         else if (adminRadioButton.isSelected()){
-            role = "System Admin";
+            role = "system_administrator";
         }
         else{
             raiseError("Inserire un ruolo!");

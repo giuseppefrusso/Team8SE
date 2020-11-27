@@ -25,13 +25,14 @@ import java.util.logging.Logger;
 public class DatabaseContext {
 
     private static final String databaseURL = "jdbc:postgresql://localhost/";
-    private static final String databaseName = "ProgettoSE";
+    private static final String databaseName = "postgres";
 
     private static Connection db;
 
     public static void connectDatabase(String username, String password) {
 
         try {
+            Class.forName("org.postgresql.Driver");
             Properties info = new Properties();
             info.setProperty("user", username);
             info.setProperty("password", password);
@@ -39,6 +40,8 @@ public class DatabaseContext {
         } catch (SQLException e) {
             System.err.println("CONNESSIONE AL DATABASE FALLITA.");
             System.err.println(e.getMessage());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DatabaseContext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

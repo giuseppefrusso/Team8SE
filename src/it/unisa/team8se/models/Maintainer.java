@@ -92,4 +92,6 @@ public class Maintainer extends User{
         super.getFromResultSet(rs);
         //TODO: get delle competenze
     }
+    
+    
 }
