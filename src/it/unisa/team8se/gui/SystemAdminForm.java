@@ -5,6 +5,7 @@
  */
 package it.unisa.team8se.gui;
 
+import it.unisa.team8se.DatabaseContext;
 import java.awt.Toolkit;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
@@ -19,6 +20,8 @@ public class SystemAdminForm extends javax.swing.JFrame {
 
     protected DefaultTableModel tableModel;
     private ButtonGroup buttonGroup; 
+    private final String username = "postgres";
+    private final String password = "";
     
     private void initTableModel() {
         tableModel = new DefaultTableModel(){
@@ -45,10 +48,12 @@ public class SystemAdminForm extends javax.swing.JFrame {
      * Creates new form SystemAdminForm
      */
     public SystemAdminForm() {
+        DatabaseContext.connectDatabase(username, password);
         initTableModel();
         initButtonGroup();
         //caricare dati dal db
         initComponents();
+        
     }
 
     /**
@@ -289,11 +294,14 @@ public class SystemAdminForm extends javax.swing.JFrame {
             return false;
         }
         
-        User u = new User(surname, name, username, password, role);
-        tableModel.addRow(u.toArray());
+       
+        tableModel.addRow(User.toArray(surname, name, username, password, role));
         return true;
         
         //inserire in db
+        try{
+            
+        }
     }
     
     private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
@@ -321,6 +329,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         }
         
         insertUser(surname, name, username, password, role);
+        
     }//GEN-LAST:event_insertButtonActionPerformed
 
     private void surnameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_surnameFieldMouseClicked

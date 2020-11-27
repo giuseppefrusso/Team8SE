@@ -51,7 +51,7 @@ public class Maintainer extends User{
     
         
     public static Maintainer[] getAllDatabaseInstances() {
-        String sql = "select * from mantainer";
+        String sql = "select * from maintainer";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ResultSet results = ps.executeQuery();
@@ -65,7 +65,7 @@ public class Maintainer extends User{
 
     
     public static Maintainer getInstanceWithPK(String username) {
-        String sql = "select * from mantainer where username = ?";
+        String sql = "select * from maintainer where username = ?";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1, username);
