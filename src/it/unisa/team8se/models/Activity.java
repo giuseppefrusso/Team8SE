@@ -172,7 +172,23 @@ public class Activity extends DatabaseModel{
 
     @Override
     public void saveToDatabase() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            String sql = "insert into attivita_pianificata "
+                     + "(id, area, luogo_geografico, ambito, week_number, interrompibile, workspace_notes, eta)"
+                     + "values(?,?,?,?,?,?,?,?)";
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            ps.setInt(1,getID());
+            ps.setString(2,getArea().getSector());
+            ps.setString(3,getArea().getLocation());
+            ps.setString(4,getTipology());
+            ps.setInt(5, getWeekNumber());
+            ps.setBoolean(6, isInterruptible());
+            ps.setString(7, getWorkspaceNotes());
+            ps.setInt(8, getEIT());
+   
+        } catch (SQLException ex) {
+            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     

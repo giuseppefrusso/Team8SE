@@ -81,6 +81,11 @@ public abstract class User extends DatabaseModel{
     }
 
     @Override
+    public void saveToDatabase(){
+
+    }
+    
+    @Override
     public void getFromResultSet(ResultSet rs) throws SQLException {
         setName(rs.getString("nome"));
         setSurname(rs.getString("cognome"));
