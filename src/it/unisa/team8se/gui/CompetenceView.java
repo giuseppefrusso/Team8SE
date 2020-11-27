@@ -5,23 +5,33 @@
  */
 package it.unisa.team8se.gui;
 
-import javax.swing.ComboBoxModel;
+import it.unisa.team8se.DatabaseContext;
+import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author gerar
  */
 public class CompetenceView extends javax.swing.JFrame {
-
+    
     protected DefaultComboBoxModel comboBoxModel;
     protected DefaultListModel listModel;
+    
+    private final String username = "postgres";
+    private final String password = "admin";
     /**
      * Creates new form CompetenceView
      */
     public CompetenceView() {
+        DatabaseContext.connectDatabase(username, password);
         initComboBoxModel();
         initListModel();
         initComponents();
@@ -30,14 +40,56 @@ public class CompetenceView extends javax.swing.JFrame {
     
     private void initComboBoxModel() {
         comboBoxModel = new DefaultComboBoxModel();
-        comboBoxModel.addElement("Gerardo");
+        refreshUsers();
     }
     
-    private void initListModel() {
+    protected void initListModel() {
         listModel = new DefaultListModel();
-        listModel.addElement("Java");
+        if(comboBoxModel.getSize()!=0) {
+            String defaultUsername = (String) comboBoxModel.getElementAt(0);
+            refreshCompetences(defaultUsername);
+        }
     }
 
+    protected boolean refreshUsers() {
+        try {
+            Connection connection = DatabaseContext.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("select username from maintainer order by username");
+            
+            while(rs.next()) {
+                comboBoxModel.addElement(rs.getString("username"));
+            }
+            
+            rs.close();
+            statement.close();
+        } catch (SQLException ex) {
+            raiseError("Errore nella lettura degli utenti");
+            return false;
+        }
+        return true;
+    }
+    
+    protected boolean refreshCompetences(String username) {
+        listModel.clear();
+        try {
+            Connection connection = DatabaseContext.getConnection();
+            String query = "select C.descrizione as competenza from competenza C join possesso P on C.id = P.id where P.maintainer=? order by competenza";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(0, username);
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()) {
+                listModel.addElement(rs.getString("competenza"));
+            }
+            rs.close();
+            statement.close();
+        } catch(SQLException ex) {
+            raiseError("Errore nella lettura delle competenze");
+            return false;
+        }
+        return true;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -49,7 +101,7 @@ public class CompetenceView extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         modifyButton = new javax.swing.JButton();
-        listMaintainer = new javax.swing.JComboBox<>();
+        comboBox = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
@@ -58,8 +110,13 @@ public class CompetenceView extends javax.swing.JFrame {
         assignButton = new javax.swing.JButton();
         backButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Competence View");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 102, 51));
         jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 51, 0)));
@@ -67,17 +124,17 @@ public class CompetenceView extends javax.swing.JFrame {
 
         modifyButton.setText("Modifica");
 
-        listMaintainer.setModel(comboBoxModel);
-        listMaintainer.addActionListener(new java.awt.event.ActionListener() {
+        comboBox.setModel(comboBoxModel);
+        comboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                listMaintainerActionPerformed(evt);
+                comboBoxActionPerformed(evt);
             }
         });
 
         jList1.setModel(listModel);
         jScrollPane2.setViewportView(jList1);
 
-        jLabel1.setText("Username");
+        jLabel1.setText("Utente");
 
         jLabel2.setText("Competenze");
 
@@ -85,7 +142,7 @@ public class CompetenceView extends javax.swing.JFrame {
 
         assignButton.setText("Assegna");
 
-        backButton.setText("Indietro");
+        backButton.setText("Utenti");
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backButtonActionPerformed(evt);
@@ -101,7 +158,7 @@ public class CompetenceView extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(listMaintainer, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(assignButton)
@@ -128,7 +185,7 @@ public class CompetenceView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(listMaintainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(assignButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -138,32 +195,45 @@ public class CompetenceView extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40)
                 .addComponent(backButton)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void listMaintainerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listMaintainerActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_listMaintainerActionPerformed
+    private void raiseError(String message) {
+        Toolkit.getDefaultToolkit().beep();
+        JOptionPane.showMessageDialog(this, message, "Errore", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    private void comboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxActionPerformed
+        String selectedUsername = (String) comboBox.getSelectedItem();        
+        refreshCompetences(selectedUsername);
+    }//GEN-LAST:event_comboBoxActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         SystemAdminForm form = new SystemAdminForm();
         form.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_backButtonActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        DatabaseContext.closeConnection();
+        System.exit(0);
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -203,12 +273,12 @@ public class CompetenceView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton assignButton;
     private javax.swing.JButton backButton;
+    private javax.swing.JComboBox<String> comboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JComboBox<String> listMaintainer;
     private javax.swing.JButton modifyButton;
     private javax.swing.JButton removeButton;
     // End of variables declaration//GEN-END:variables

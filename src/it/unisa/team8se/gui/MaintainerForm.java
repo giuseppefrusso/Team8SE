@@ -5,6 +5,12 @@
  */
 package it.unisa.team8se.gui;
 
+import it.unisa.team8se.MultiPanelManager;
+import it.unisa.team8se.gui.datamodels.MaintainerAvailabilityDataModel;
+import it.unisa.team8se.models.Activity;
+import it.unisa.team8se.models.Maintainer;
+import java.util.LinkedList;
+
 /**
  *
  * @author cptso
@@ -16,8 +22,40 @@ public class MaintainerForm extends javax.swing.JFrame {
      */
     public MaintainerForm() {
         initComponents();
+        ActivityMaintainer();
+        MultiPanelManager panelManager = new MultiPanelManager();
+        // panelManager.addPanel("ActivityMaintainer",jTable1);
+        
+        
+        
     }
-
+ private void ActivityMaintainer(){
+        LinkedList<Maintainer> maintainers = new LinkedList<>();
+        
+        Maintainer m0=new Maintainer();
+        m0.setName("Marco");
+        Activity a0= new Activity();
+        a0.setTipology("Programmers");
+        Maintainer m1= new Maintainer();
+        m1.setName("Manuel");
+         Activity a1= new Activity();
+        a1.setTipology("Tester");
+        Maintainer m2= new Maintainer();
+        m2.setName("Giuseppe");
+          Activity a2= new Activity();
+        a2.setTipology("Designer");
+        Maintainer m3= new Maintainer();
+        m3.setName("Gerardo");
+          Activity a3= new Activity();
+        a3.setTipology("Architecture");
+        
+        maintainers.add(m0);
+        maintainers.add(m1);
+        maintainers.add(m2);
+        maintainers.add(m3);
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,6 +65,31 @@ public class MaintainerForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setText("Week n# 10");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel2.setText("Activity List");
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -91,6 +154,23 @@ public class MaintainerForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
@@ -137,10 +217,15 @@ public class MaintainerForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
+
 }
