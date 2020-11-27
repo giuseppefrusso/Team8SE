@@ -274,7 +274,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         return false;
     }
 
-    private void raiseError(String message) {
+    protected void raiseError(String message) {
         Toolkit.getDefaultToolkit().beep();
         JOptionPane.showMessageDialog(this, message, "Errore", JOptionPane.ERROR_MESSAGE);
     }

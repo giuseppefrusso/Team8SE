@@ -7,8 +7,6 @@ package it.unisa.team8se;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -38,5 +36,14 @@ public class DatabaseContext {
     
     public static Connection getConnection(){
         return db;
+    }
+    
+    public static void closeConnection() {
+        try {
+            db.close();
+        } catch (SQLException e) {
+            System.err.println("CHIUSURA DEL DATABASE FALLITA.");
+            System.err.println(e.getMessage());
+        }
     }
 }
