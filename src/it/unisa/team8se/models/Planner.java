@@ -5,10 +5,11 @@
  */
 package it.unisa.team8se.models;
 
+import it.unisa.team8se.models.base.User;
+
 /**
  *
  * @author cptso
  */
-public class Planner {
-    
+public class Planner extends User{
 }

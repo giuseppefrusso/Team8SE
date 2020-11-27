@@ -52,10 +52,11 @@ public class Material extends DatabaseModel{
     }
 
     
-    public static Material getInstanceWithPK(String nome) {
+    public static Material getInstanceWithPK(String name) {
         String sql = "select * from materiale where nome = ?";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            ps.setString(1,name);
             ResultSet results = ps.executeQuery();
             LinkedList<Material> instances = DatabaseContext.fetchAllModels(Material.class, ps);
             if(instances.size() > 0){

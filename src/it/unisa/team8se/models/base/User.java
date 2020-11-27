@@ -79,16 +79,6 @@ public abstract class User extends DatabaseModel{
         String[] array = {surname, name, username, password, role};
         return array;
     }
-    
-        
-    public static User[] getAllDatabaseInstances() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void saveToDatabase() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }   
 
     @Override
     public void getFromResultSet(ResultSet rs) throws SQLException {

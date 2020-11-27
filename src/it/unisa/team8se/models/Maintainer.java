@@ -64,7 +64,22 @@ public class Maintainer extends User{
     }
 
     
-    public static Maintainer getInstanceWithPK(Object... pk) {
+    public static Maintainer getInstanceWithPK(String username) {
+        String sql = "select * from mantainer where username = ?";
+        try {
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            ps.setString(1, username);
+            ResultSet results = ps.executeQuery();
+            LinkedList<Maintainer> instances = DatabaseContext.fetchAllModels(Maintainer.class, ps);
+            if(instances.size() > 0 ){
+                return instances.get(0);
+            }
+            else{
+                return null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
 
