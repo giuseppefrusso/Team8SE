@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  * @version 1.0
  * @created 22-nov-2020 11:33:32
  */
-public class Activity {
+public class Activity extends DatabaseModel{
 
     private int ID;
     private Area Area;
@@ -112,12 +112,15 @@ public class Activity {
 
     public static Activity[] getAllDatabaseInstances() {
         String sql = "select * from attivita_pianificata";
+    
         LinkedList<Activity> activities = new LinkedList<>();
         try {
             PreparedStatement ps = DatabaseContext.getConnection().prepareStatement(sql);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
-                activities.add(Activity.getActivityFromResultSet(results));
+                Activity activity = new Activity();
+                activity.getFromResultSet(results);
+                activities.add(activity);
             }
             return (Activity[])activities.toArray();
         } catch (SQLException ex) {
@@ -129,13 +132,16 @@ public class Activity {
     public static Activity getInstanceWithPK(int ID) {
         String sql = "select * from attivita_pianificata where id = ?";
         PreparedStatement ps;
-        Activity curr;
         try {
             ps = DatabaseContext.getConnection().prepareStatement(sql);
             ps.setInt(1, ID);
             ResultSet results = ps.executeQuery();
             if(results.next())
-                return Activity.getActivityFromResultSet(results);
+            {
+                Activity activity = new Activity();
+                activity.getFromResultSet(results);
+                return activity;
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -151,18 +157,18 @@ public class Activity {
             ps.setInt(1, weekNumber);
             ResultSet results = ps.executeQuery();
             
-            if(results.next())
-                return Activity.getActivityFromResultSet(results);
+            if(results.next()){
+                Activity activity = new Activity();
+                activity.getFromResultSet(results);
+                return activity;
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
     
-    public void saveToDatabase() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+   
     @Override
     public String toString() {
         return "Activity{" + "ID=" + ID + ", Area=" + Area + ", Tipology=" + Tipology 
@@ -171,20 +177,25 @@ public class Activity {
                 + Interruptible + ", requiredCompetencies=" + requiredCompetencies + '}';
     }
 
-    private static Activity getActivityFromResultSet(ResultSet rs) throws SQLException{
-        Activity activity = new Activity();
-        activity.setID(rs.getInt("id"));
-        activity.setEIT(rs.getInt("eta"));
-        activity.setWeekNumber(rs.getInt("week_number"));
+    @Override
+    public void saveToDatabase() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
-        activity.setTipology(rs.getString("ambito"));
-        activity.setWorkspaceNotes(rs.getString("workspace_notes"));
-        //activity.setInterventionDescription("intervention_description");
+    
+    @Override
+    public void getFromResultSet(ResultSet rs) throws SQLException {
+       setID(rs.getInt("id"));
+       setEIT(rs.getInt("eta"));
+       setWeekNumber(rs.getInt("week_number"));
 
-        activity.setInterruptible(rs.getBoolean("interrompibile"));
+       setTipology(rs.getString("ambito"));
+       setWorkspaceNotes(rs.getString("workspace_notes"));
+        //setInterventionDescription("intervention_description");
 
-        activity.setArea(new Area(rs.getString("area"),rs.getString("luogo_geografico")));
-        return activity;
+       setInterruptible(rs.getBoolean("interrompibile"));
+
+       setArea(new Area(rs.getString("area"),rs.getString("luogo_geografico")));
     }
 
 }//end Activity
