@@ -20,6 +20,11 @@ public class Maintainer extends User{
         competencies = new LinkedList<>();
     }
 
+    public Maintainer(){
+        super();
+        competencies = new LinkedList<>();
+    }
+    
     public LinkedList<Competence> getCompetencies() {
         return competencies;
     }
