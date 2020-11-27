@@ -299,6 +299,8 @@ public class CompetenceView extends javax.swing.JFrame {
             ps.setString(2, username);
             ps.executeUpdate();
             
+            rs.close();
+            ps.close();
         } catch(SQLException ex) {
             raiseError("Errore nell'assegnamento");
             return false;
@@ -334,6 +336,8 @@ public class CompetenceView extends javax.swing.JFrame {
             ps.setString(2, username);
             ps.executeUpdate();
             
+            rs.close();
+            ps.close();
         } catch(SQLException ex) {
             raiseError("Errore nella rimozione");
             return false;
