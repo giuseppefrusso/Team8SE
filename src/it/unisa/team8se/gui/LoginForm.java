@@ -226,7 +226,7 @@ public class LoginForm extends javax.swing.JFrame {
         });
 
         //CONNESSIONE AL DB
-        DatabaseContext.connectDatabase("ProgettoSE","postgres", "password");
+        DatabaseContext.connectDatabase("SoftwareEngineering","postgres", "Diamante99");
         //out.println(Activity.getInstanceWithWeekNumber(32));
     }
 

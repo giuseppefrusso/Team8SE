@@ -6,8 +6,10 @@
 package it.unisa.team8se.gui;
 
 import it.unisa.team8se.MultiPanelManager;
+import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
 import it.unisa.team8se.gui.datamodels.MaintainerAvailabilityDataModel;
 import it.unisa.team8se.models.Activity;
+import it.unisa.team8se.models.Area;
 import it.unisa.team8se.models.Maintainer;
 import java.util.LinkedList;
 
@@ -23,34 +25,50 @@ public class MaintainerForm extends javax.swing.JFrame {
     public MaintainerForm() {
         initComponents();
         ActivityMaintainer();
+        MultiPanelManager panelManager = new MultiPanelManager();
+        panelManager.addPanel("ActivityList", jPanel1);
         
         
         
     }
  private void ActivityMaintainer(){
-        LinkedList<Maintainer> maintainers = new LinkedList<>();
+        LinkedList<Activity> activities = new LinkedList<>();
         
-        Maintainer m0=new Maintainer();
-        m0.setName("Marco");
+
         Activity a0= new Activity();
         a0.setTipology("Programmers");
-        Maintainer m1= new Maintainer();
-        m1.setName("Manuel");
+        a0.setID(0);
+        a0.setTipology("Hydraulic");
+        a0.setArea(new Area("fisciano", "plumbing"));
+        a0.setEIT(120);
+
          Activity a1= new Activity();
         a1.setTipology("Tester");
-        Maintainer m2= new Maintainer();
-        m2.setName("Giuseppe");
+         a1.setID(1);
+        a1.setTipology("Hydraulic");
+        a1.setArea(new Area("fisciano", "plumbing"));
+        a1.setEIT(90);
+        
           Activity a2= new Activity();
         a2.setTipology("Designer");
-        Maintainer m3= new Maintainer();
-        m3.setName("Gerardo");
+         a2.setID(2);
+        a2.setTipology("Hydraulic");
+        a2.setArea(new Area("fisciano", "plumbing"));
+        a2.setEIT(100);
+        
           Activity a3= new Activity();
         a3.setTipology("Architecture");
+        a3.setID(3);
+        a3.setTipology("Hydraulic");
+        a3.setArea(new Area("fisciano", "plumbing"));
+        a3.setEIT(122);
+
+        activities.add(a0);
+        activities.add(a1);
+        activities.add(a2);
+        activities.add(a3);
         
-        maintainers.add(m0);
-        maintainers.add(m1);
-        maintainers.add(m2);
-        maintainers.add(m3);
+        jTable2.setModel(new ActivityTableDataModel(activities));
         
     }
     
