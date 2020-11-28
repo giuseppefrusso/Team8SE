@@ -22,7 +22,7 @@ public class SystemAdmin extends User {
 
     public static SystemAdmin[] getAllDatabaseInstances() {
         try {
-            String sql = "select * from attivita_pianificata";
+            String sql = "select * from system_administrator";
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             LinkedList<SystemAdmin> list = DatabaseContext.fetchAllModels(SystemAdmin.class, ps);
             return Arrays.copyOf(list.toArray(), list.size(), SystemAdmin[].class);
@@ -34,7 +34,7 @@ public class SystemAdmin extends User {
 
     public static SystemAdmin getInstanceWithPK(String username) {
         try {
-            String sql = "select * from attivita_pianificata where username = ?";
+            String sql = "select * from system_administrator where username = ?";
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1, username);
             LinkedList<SystemAdmin> list = DatabaseContext.fetchAllModels(SystemAdmin.class, ps);

@@ -6,16 +6,22 @@
 package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
+import it.unisa.team8se.models.Maintainer;
+import it.unisa.team8se.models.Planner;
+import it.unisa.team8se.models.base.User;
+import it.unisa.team8se.models.SystemAdmin;
+     
+
 import java.awt.Toolkit;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import it.unisa.team8se.models.base.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.Collections;
+import java.util.LinkedList;
+
 
 /**
  *
@@ -277,10 +283,43 @@ public class SystemAdminForm extends javax.swing.JFrame {
 
     protected boolean refreshUsers() {
         tableModel.setRowCount(0);
-
+        LinkedList<User> allUsers = new LinkedList<>();
+        
+        Maintainer[] ms = Maintainer.getAllDatabaseInstances();
+        if(ms != null){
+            Collections.addAll(allUsers, ms);
+        }
+        else{
+            return false;
+        }
+        
+        Planner[] ps = Planner.getAllDatabaseInstances();
+        if(ps != null){
+            Collections.addAll(allUsers, ps);
+        }
+        else{
+            return false;
+        }
+        
+        SystemAdmin[] sas = SystemAdmin.getAllDatabaseInstances();
+        if(sas != null){
+            Collections.addAll(allUsers, sas);
+        }
+        else{
+            return false;
+        }
+        
+        for(User u : allUsers){
+            tableModel.addRow(u.toArray());
+        }
+        
+        return true;
+        /*
         try {
             Connection connection = DatabaseContext.getConnection();
             Statement statement = connection.createStatement();
+            
+            
             
             ResultSet rs = statement.executeQuery("select * from maintainer order by username");
             while (rs.next()) {
@@ -304,6 +343,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
             return false;
         }
         return true;
+        */
     }
 
     protected boolean containsUsername(String username) {

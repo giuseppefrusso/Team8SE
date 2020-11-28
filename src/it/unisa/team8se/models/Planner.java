@@ -23,7 +23,7 @@ public class Planner extends User {
 
     public static Planner[] getAllDatabaseInstances() {
         try {
-            String sql = "select * from attivita_pianificata";
+            String sql = "select * from planner";
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             LinkedList<Planner> list = DatabaseContext.fetchAllModels(Planner.class, ps);
             return Arrays.copyOf(list.toArray(), list.size(), Planner[].class);
@@ -35,7 +35,7 @@ public class Planner extends User {
 
     public static Planner getInstanceWithPK(String username) {
         try {
-            String sql = "select * from attivita_pianificata where username = ?";
+            String sql = "select * from planner where username = ?";
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1, username);
             LinkedList<Planner> list = DatabaseContext.fetchAllModels(Planner.class, ps);

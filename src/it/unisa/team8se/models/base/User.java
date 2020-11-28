@@ -75,9 +75,14 @@ public abstract class User extends DatabaseModel{
         this.role = role;
     }
 
+   
     public static String[] toArray(String surname, String name, String username, String password, String role) {
         String[] array = {surname, name, username, password, role};
         return array;
+    }
+    
+    public String[] toArray(){
+        return new String[]{getSurname(),getName(),getUsername(),getPassword(),getRole()};
     }
 
     @Override
