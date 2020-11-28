@@ -82,6 +82,6 @@ public class Material extends DatabaseModel{
 
     @Override
     public boolean existsInDatabase() {
-        return Material.getInstanceWithPK(getName()) != nuLL;
+        return Material.getInstanceWithPK(getName()) != null;
     }
 }//end Material

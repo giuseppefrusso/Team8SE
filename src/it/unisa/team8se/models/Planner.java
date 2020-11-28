@@ -50,20 +50,52 @@ public class Planner extends User {
         }
         return null;
     }
-    
+
     @Override
-    public void saveToDatabase(){
-        try
-        {
+    public void saveToDatabase() {
+        try {
             String sql = "insert into planner (username,password,name,surname) values (?,?,?,?)";
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1, getUsername());
             ps.setString(2, getPassword());
             ps.setString(3, getName());
             ps.setString(4, getSurname());
+
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Planner.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void updateToDatabase() {
+        try {
+            String sql = "update planner set password = ?, name = ?, surname = ? where username = ?";
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            
+            ps.setString(1, getPassword());
+            ps.setString(2, getName());
+            ps.setString(3, getSurname());
+            ps.setString(4, getUsername());
             
             ps.executeUpdate();
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
+            Logger.getLogger(Planner.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void updateToDatabase(String newPk) {
+        try {
+            String sql = "update planner set username = ?, password = ?, name = ?, surname = ? where username = ?";
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            
+            ps.setString(1, newPk);
+            ps.setString(2, getPassword());
+            ps.setString(3, getName());
+            ps.setString(4, getSurname());
+            ps.setString(5, getUsername());
+            
+            ps.executeUpdate();
+        } catch (SQLException ex) {
             Logger.getLogger(Planner.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -87,10 +87,21 @@ public class Competence extends DatabaseModel {
         }
         return null;
     }
-
+    
     @Override
     public void saveToDatabase() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            String sql = "insert into competenza (id,descrizione) values (?,?)";
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            
+            ps.setInt(1, getID());
+            ps.setString(2, getDescrizione());
+            
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Competence.class.getName()).log(Level.SEVERE, null, ex);
+        }   
     }
 
     @Override

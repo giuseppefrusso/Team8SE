@@ -27,6 +27,8 @@ public class CompetenceView extends javax.swing.JFrame {
     protected DefaultComboBoxModel comboBoxModel;
     protected DefaultListModel<String> listModel;
 
+    private Maintainer maintainers;
+            
     private final String username = "postgres";
     private final String password = "password";
 
@@ -289,43 +291,50 @@ public class CompetenceView extends javax.swing.JFrame {
         return selectedCompetence;
     }
 
-    protected boolean assign(String username, String competence) {
-        try {
-            Connection c = DatabaseContext.getConnection();
-            Statement s = c.createStatement();
-            PreparedStatement ps;
+    protected boolean assign(String username, String competenceDesc) {
+        try {            
             int id = 0;
-            String query;
             boolean assignCompetence = true;
 
+            /*
             ResultSet rs = s.executeQuery("select * from competenza order by descrizione");
             while (rs.next()) {
-                if (rs.getString("descrizione").equalsIgnoreCase(competence)) {
+                if (rs.getString("descrizione").equalsIgnoreCase(competenceDesc)) {
                     id = rs.getInt("id");
                     assignCompetence = false;
                 }
-            }
-            if (assignCompetence) {
-                rs = s.executeQuery("select max(id) from competenza");
+            }*/
+
+            Competence competence = new Competence();
+            if (!competence.existsInDatabase()) {
+                ResultSet rs = DatabaseContext.getStatement().executeQuery("select max(id) from competenza");
                 rs.next();
                 int maxId = rs.getInt(1);
                 id = maxId + 1;
-
+                rs.close();
+                
+                competence.setID(id);
+                competence.setDescrizione(competenceDesc);
+                competence.saveToDatabase();
+                
+                /*
                 query = "insert into competenza values(?,?)";
                 ps = c.prepareStatement(query);
                 ps.setInt(1, id);
-                ps.setString(2, competence);
+                ps.setString(2, competenceDesc);
                 ps.executeUpdate();
+                */
             }
-
-            query = "insert into possesso values(?, ?)";
-            ps = c.prepareStatement(query);
+            
+            String query = "insert into possesso values(?, ?)";
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
+            
             ps.setInt(1, id);
             ps.setString(2, username);
+            
             ps.executeUpdate();
-
-            rs.close();
             ps.close();
+            
         } catch (SQLException ex) {
             raiseError("Errore nell'assegnamento");
             return false;

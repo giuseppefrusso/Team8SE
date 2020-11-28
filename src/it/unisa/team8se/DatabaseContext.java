@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Properties;
@@ -48,8 +49,17 @@ public class DatabaseContext {
         return db;
     }
     
+    public static Statement getStatement(){
+        try {
+            return db.createStatement();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public static PreparedStatement getPreparedStatement(String sql) throws SQLException{
-            return db.prepareStatement(sql);
+        return db.prepareStatement(sql);
     }
     
     public static <T extends DatabaseModel> LinkedList<T> fetchAllModels(Class<T> c,PreparedStatement ps) throws SQLException{

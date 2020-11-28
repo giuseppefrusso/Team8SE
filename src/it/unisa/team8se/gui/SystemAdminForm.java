@@ -503,6 +503,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         refreshUsers();
         return true;
         */
+        return true;
     }
 
     private void modifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyButtonActionPerformed
