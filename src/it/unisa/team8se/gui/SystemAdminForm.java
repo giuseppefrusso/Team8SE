@@ -6,7 +6,6 @@
 package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
-import it.unisa.team8se.models.Maintainer;
 import java.awt.Toolkit;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
@@ -17,7 +16,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.swing.table.TableModel;
 
 /**
  *
