@@ -24,12 +24,12 @@ import java.sql.Statement;
 public class SystemAdminForm extends javax.swing.JFrame {
 
     protected DefaultTableModel tableModel;
-    private ButtonGroup buttonGroup; 
+    private ButtonGroup buttonGroup;
     private final String username = "postgres";
     private final String password = "admin";
-    
+
     private void initTableModel() {
-        tableModel = new DefaultTableModel(){
+        tableModel = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -39,17 +39,17 @@ public class SystemAdminForm extends javax.swing.JFrame {
         tableModel.addColumn("Nome");
         tableModel.addColumn("Username");
         tableModel.addColumn("Password");
-        tableModel.addColumn("Ruolo");   
-        
+        tableModel.addColumn("Ruolo");
+
     }
-    
+
     private void initButtonGroup() {
         buttonGroup = new ButtonGroup();
         buttonGroup.add(plannerRadioButton);
         buttonGroup.add(maintainerRadioButton);
         buttonGroup.add(adminRadioButton);
     }
-    
+
     /**
      * Creates new form SystemAdminForm
      */
@@ -60,7 +60,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         initButtonGroup();
         //caricare dati dal db
         initComponents();
-        
+
     }
 
     /**
@@ -275,39 +275,39 @@ public class SystemAdminForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-        protected boolean refreshUsers() {
-            tableModel.setRowCount(0);
-            
-            try {
-                Connection connection = DatabaseContext.getConnection();
-                Statement statement = connection.createStatement();
-                ResultSet rs = statement.executeQuery("select * from maintainer order by username");
+    protected boolean refreshUsers() {
+        tableModel.setRowCount(0);
 
-                while(rs.next()) {
-                    tableModel.addRow(User.toArray(rs.getString("cognome"), rs.getString("nome"), rs.getString("username"), rs.getString("password"), "maintainer"));
-                }
+        try {
+            Connection connection = DatabaseContext.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("select * from maintainer order by username");
 
-                rs = statement.executeQuery("select * from planner order by username");
-                while(rs.next()){
-                    tableModel.addRow(User.toArray(rs.getString("cognome"), rs.getString("nome"), rs.getString("username"), rs.getString("password"), "planner"));
-                }
+            while (rs.next()) {
+                tableModel.addRow(User.toArray(rs.getString("cognome"), rs.getString("nome"), rs.getString("username"), rs.getString("password"), "maintainer"));
+            }
 
-                rs=statement.executeQuery("select * from system_administrator order by username");
-                while(rs.next()){
-                    tableModel.addRow(User.toArray(rs.getString("cognome"), rs.getString("nome"), rs.getString("username"), rs.getString("password"), "system admin"));
-                }
+            rs = statement.executeQuery("select * from planner order by username");
+            while (rs.next()) {
+                tableModel.addRow(User.toArray(rs.getString("cognome"), rs.getString("nome"), rs.getString("username"), rs.getString("password"), "planner"));
+            }
 
-                rs.close();
-                statement.close();
+            rs = statement.executeQuery("select * from system_administrator order by username");
+            while (rs.next()) {
+                tableModel.addRow(User.toArray(rs.getString("cognome"), rs.getString("nome"), rs.getString("username"), rs.getString("password"), "system admin"));
+            }
+
+            rs.close();
+            statement.close();
         } catch (SQLException ex) {
             raiseError("Errore nella lettura degli utenti");
             return false;
         }
         return true;
     }
-    
+
     protected boolean containsUsername(String username) {
-        
+
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             String value = (String) tableModel.getValueAt(i, 2);
             if (value.equalsIgnoreCase(username)) {
@@ -321,7 +321,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         Toolkit.getDefaultToolkit().beep();
         JOptionPane.showMessageDialog(this, message, "Errore", JOptionPane.ERROR_MESSAGE);
     }
-    
+
     protected boolean insertUser(String surname, String name, String username, String password, String role) {
         if (containsUsername(username)) {
             raiseError("Username già presente!");
@@ -331,31 +331,29 @@ public class SystemAdminForm extends javax.swing.JFrame {
             raiseError("Inserire tutti i campi!");
             return false;
         }
-        
-       
+
         try {
             Connection c = DatabaseContext.getConnection();
-            String query = "insert into "+role+"(username,password,cognome,nome) values(?,?,?,?)";
+            String query = "insert into " + role + "(username,password,cognome,nome) values(?,?,?,?)";
             PreparedStatement ps = c.prepareStatement(query);
             //ps.setString(1, role);
             ps.setString(1, username);
             ps.setString(2, password);
             ps.setString(3, surname);
-            ps.setString(4,name);
+            ps.setString(4, name);
             ps.executeUpdate();
-        
-            
-        } catch(SQLException ex) {
+            ps.close();
+
+        } catch (SQLException ex) {
             raiseError("Errore nell'inserimento");
             return false;
         }
         refreshUsers();
-        
+
         return true;
-        
-        
+
     }
-    
+
     private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
         //mettere tendina per scegliere ruolo
         String surname = surnameField.getText();
@@ -363,25 +361,22 @@ public class SystemAdminForm extends javax.swing.JFrame {
         String username = usernameField.getText();
         String password = passwordField.getText();
         String role = new String();
-        
+
         if (plannerRadioButton.isSelected()) {
             role = "planner";
-            
-        }
-        else if (maintainerRadioButton.isSelected()){
+
+        } else if (maintainerRadioButton.isSelected()) {
             role = "maintainer";
-            
-        }
-        else if (adminRadioButton.isSelected()){
+
+        } else if (adminRadioButton.isSelected()) {
             role = "system_administrator";
-        }
-        else{
+        } else {
             raiseError("Inserire un ruolo!");
             return;
         }
-        
+
         insertUser(surname, name, username, password, role);
-        
+
     }//GEN-LAST:event_insertButtonActionPerformed
 
     private void surnameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_surnameFieldMouseClicked
@@ -401,39 +396,89 @@ public class SystemAdminForm extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameFieldMouseClicked
 
     protected boolean modifyUser(String newValue, int selectedRow, int selectedColumn) {
-        String selectedUsername = (String)tableModel.getValueAt(selectedRow, 3);
-        
-        if(selectedColumn==2 && containsUsername(newValue)) {
+        String selectedUsername = (String) tableModel.getValueAt(selectedRow, 3);
+
+        if (selectedColumn == 2 && containsUsername(newValue)) {
             raiseError("Username già presente!");
             return false;
         }
-        
+
         tableModel.setValueAt(newValue, selectedRow, selectedColumn);
         //modificare in db usando selectedUser come chiave
+        try {
+            Connection c = DatabaseContext.getConnection();
+            selectedColumn = tableUsers.getSelectedColumn();
+            String field = tableModel.getColumnName(selectedColumn);
+            PreparedStatement ps;
+
+            if (field.equals("Ruolo")) {
+                String query = "insert into " + newValue + "(username,password,cognome,nome) values(?,?,?,?)";
+                ps = c.prepareStatement(query);
+                ps.setString(1, (String) tableModel.getValueAt(selectedRow, 2));
+                ps.setString(2, (String) tableModel.getValueAt(selectedRow, 3));
+                ps.setString(3, (String) tableModel.getValueAt(selectedRow, 0));
+                ps.setString(4, (String) tableModel.getValueAt(selectedRow, 1));
+                ps.executeUpdate();
+                if (((String) tableModel.getValueAt(selectedRow, selectedColumn)).equalsIgnoreCase("planner")) {
+                    String query1 = "delete from planner where username = ?";
+                    ps = c.prepareStatement(query1);
+                    ps.setString(1, (String) tableModel.getValueAt(selectedRow, 2));
+                    ps.executeUpdate();
+
+                }
+                if (((String) tableModel.getValueAt(selectedRow, selectedColumn)).equalsIgnoreCase("maintainer")) {
+                    String query1 = "delete from maintainer where username = ?";
+                    ps = c.prepareStatement(query1);
+                    ps.setString(1, (String) tableModel.getValueAt(selectedRow, 2));
+                    ps.executeUpdate();
+
+                }
+                if (((String) tableModel.getValueAt(selectedRow, selectedColumn)).equalsIgnoreCase("system admin")) {
+                    String query1 = "delete from system_administrator where username = ?";
+                    ps = c.prepareStatement(query1);
+                    ps.setString(1, (String) tableModel.getValueAt(selectedRow, 2));
+                    ps.executeUpdate();
+
+                }
+            } else {
+                String query = "update " + tableModel.getValueAt(selectedRow, 4) + " set " + field +"= ? where username = ?";
+                ps = c.prepareStatement(query);
+                ps.setString(1, newValue);
+                ps.setString(2, (String) tableModel.getValueAt(selectedRow, 2));
+                ps.executeUpdate();
+            }
+            ps.close();
+
+        } catch (SQLException ex) {
+            raiseError("Errore nella modifica");
+            return false;
+        }
+        
+        refreshUsers();
         return true;
     }
-    
+
     private void modifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyButtonActionPerformed
         //chiedere a madison delucidazioni su SELECTION MODEL
 
         int selectedRow = tableUsers.getSelectedRow();
         int selectedColumn = tableUsers.getSelectedColumn();
-        
-        if(selectedRow == -1 || selectedColumn == -1) {
+
+        if (selectedRow == -1 || selectedColumn == -1) {
             raiseError("Selezionare una cella");
             return;
         }
-        
+
         boolean modifyingRole = false;
         String field = tableModel.getColumnName(selectedColumn);
         String newValue = new String();
-        if(field.equals("Ruolo")) {
+        if (field.equals("Ruolo")) {
             String[] options = {"Planner", "Maintainer", "System Admin"};
             int choice = JOptionPane.showOptionDialog(this, "Modifica " + field, "Modifica", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
             System.out.println(choice);
             switch (choice) {
                 case -1:
-                    newValue = (String)tableModel.getValueAt(selectedRow, selectedColumn);
+                    newValue = (String) tableModel.getValueAt(selectedRow, selectedColumn);
                     break;
                 case 0:
                     newValue = "Planner";
@@ -445,39 +490,41 @@ public class SystemAdminForm extends javax.swing.JFrame {
                     newValue = "System Admin";
                     break;
             }
-        }else {
+        } else {
             newValue = JOptionPane.showInputDialog(this, "Modifica " + field, "Modifica", JOptionPane.INFORMATION_MESSAGE);
             if (newValue == null || newValue.equals("")) {
                 return;
             }
         }
-        
+
         modifyUser(newValue, selectedRow, selectedColumn);
+
+
     }//GEN-LAST:event_modifyButtonActionPerformed
 
     protected void removeUser(String selectedUsername, int selectedRow) {
         tableModel.removeRow(selectedRow);
         //rimuovere dal db con l'username calcolato
     }
-    
+
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         int selectedRow = tableUsers.getSelectedRow();
-        
-        if(selectedRow == -1) {
+
+        if (selectedRow == -1) {
             raiseError("Selezionare una riga!");
             return;
         }
-        
-        String selectedUsername = (String)tableModel.getValueAt(selectedRow, 3);
-        
-        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di rimuovere l'utente con username '"+selectedUsername+"' ?", "Rimozione", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if(reply == JOptionPane.YES_OPTION) {
+
+        String selectedUsername = (String) tableModel.getValueAt(selectedRow, 3);
+
+        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di rimuovere l'utente con username '" + selectedUsername + "' ?", "Rimozione", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (reply == JOptionPane.YES_OPTION) {
             removeUser(selectedUsername, selectedRow);
         }
     }//GEN-LAST:event_removeButtonActionPerformed
 
     private void plannerRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plannerRadioButtonActionPerformed
-        
+
         maintainerRadioButton.setSelected(false);
         adminRadioButton.setSelected(false);
     }//GEN-LAST:event_plannerRadioButtonActionPerformed

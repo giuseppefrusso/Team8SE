@@ -40,7 +40,7 @@ public class DatabaseContext {
         } catch (SQLException e) {
             System.err.println("CONNESSIONE AL DATABASE FALLITA.");
             System.err.println(e.getMessage());
-        } catch (ClassNotFoundException ex) {
+        }catch (ClassNotFoundException ex) {
             Logger.getLogger(DatabaseContext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
