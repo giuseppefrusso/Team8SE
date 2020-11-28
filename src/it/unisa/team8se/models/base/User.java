@@ -89,7 +89,6 @@ public abstract class User extends DatabaseModel{
     public void getFromResultSet(ResultSet rs) throws SQLException {
         setName(rs.getString("nome"));
         setSurname(rs.getString("cognome"));
-        setRole(rs.getString("ruolo"));
         setUsername(rs.getString("username"));
         setPassword(rs.getString("password"));
     }

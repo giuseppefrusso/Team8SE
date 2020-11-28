@@ -42,7 +42,6 @@ public class Material extends DatabaseModel{
         String sql = "select * from materiale";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-            ResultSet results = ps.executeQuery();
             LinkedList<Material> instances = DatabaseContext.fetchAllModels(Material.class, ps);
             return Arrays.copyOf(instances.toArray(),instances.size(),Material[].class);
         } catch (SQLException ex) {
@@ -57,7 +56,6 @@ public class Material extends DatabaseModel{
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1,name);
-            ResultSet results = ps.executeQuery();
             LinkedList<Material> instances = DatabaseContext.fetchAllModels(Material.class, ps);
             if(instances.size() > 0){
                 return instances.get(0);

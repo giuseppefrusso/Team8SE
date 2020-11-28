@@ -8,7 +8,6 @@ package it.unisa.team8se.models;
 import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.models.base.User;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -19,26 +18,26 @@ import java.util.logging.Logger;
  *
  * @author cptso
  */
-public class Planner extends User {
+public class SystemAdmin extends User {
 
-    public static Planner[] getAllDatabaseInstances() {
+    public static SystemAdmin[] getAllDatabaseInstances() {
         try {
             String sql = "select * from attivita_pianificata";
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-            LinkedList<Planner> list = DatabaseContext.fetchAllModels(Planner.class, ps);
-            return Arrays.copyOf(list.toArray(), list.size(), Planner[].class);
+            LinkedList<SystemAdmin> list = DatabaseContext.fetchAllModels(SystemAdmin.class, ps);
+            return Arrays.copyOf(list.toArray(), list.size(), SystemAdmin[].class);
         } catch (SQLException ex) {
-            Logger.getLogger(Planner.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SystemAdmin.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
-    public static Planner getInstanceWithPK(String username) {
+    public static SystemAdmin getInstanceWithPK(String username) {
         try {
             String sql = "select * from attivita_pianificata where username = ?";
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1, username);
-            LinkedList<Planner> list = DatabaseContext.fetchAllModels(Planner.class, ps);
+            LinkedList<SystemAdmin> list = DatabaseContext.fetchAllModels(SystemAdmin.class, ps);
 
             if (list.size() > 0) {
                 return list.get(0);
@@ -46,7 +45,7 @@ public class Planner extends User {
                 return null;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Planner.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SystemAdmin.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -54,10 +53,5 @@ public class Planner extends User {
     @Override
     public void saveToDatabase(){
         
-    }
-
-    @Override
-    public void getFromResultSet(ResultSet rs) throws SQLException {
-        super.getFromResultSet(rs);
     }
 }

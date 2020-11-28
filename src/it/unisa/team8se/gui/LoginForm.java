@@ -7,6 +7,7 @@ package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.models.Activity;
+import it.unisa.team8se.models.Area;
 import it.unisa.team8se.models.EWO;
 import java.awt.EventQueue;
 import static java.lang.System.out;
@@ -225,8 +226,7 @@ public class LoginForm extends javax.swing.JFrame {
         });
 
         //CONNESSIONE AL DB
-        DatabaseContext.connectDatabase("postgres", "password");
-        out.println(Activity.getAllDatabaseInstances()[0]);
+        DatabaseContext.connectDatabase("ProgettoSE","postgres", "password");
         //out.println(Activity.getInstanceWithWeekNumber(32));
     }
 

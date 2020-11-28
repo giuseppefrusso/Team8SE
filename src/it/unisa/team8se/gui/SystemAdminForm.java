@@ -26,7 +26,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
     protected DefaultTableModel tableModel;
     private ButtonGroup buttonGroup;
     private final String username = "postgres";
-    private final String password = "admin";
+    private final String password = "password";
 
     private void initTableModel() {
         tableModel = new DefaultTableModel() {
@@ -54,7 +54,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
      * Creates new form SystemAdminForm
      */
     public SystemAdminForm() {
-        DatabaseContext.connectDatabase(username, password);
+        DatabaseContext.connectDatabase("ProgettoSE",username, password);
         initTableModel();
         refreshUsers();
         initButtonGroup();
@@ -281,8 +281,8 @@ public class SystemAdminForm extends javax.swing.JFrame {
         try {
             Connection connection = DatabaseContext.getConnection();
             Statement statement = connection.createStatement();
+            
             ResultSet rs = statement.executeQuery("select * from maintainer order by username");
-
             while (rs.next()) {
                 tableModel.addRow(User.toArray(rs.getString("cognome"), rs.getString("nome"), rs.getString("username"), rs.getString("password"), "maintainer"));
             }

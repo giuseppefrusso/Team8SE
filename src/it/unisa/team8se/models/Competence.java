@@ -10,28 +10,23 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 /**
  * @author cptso
  * @version 1.0
  * @created 22-nov-2020 11:33:35
  */
-public class Competence extends DatabaseModel{
+public class Competence extends DatabaseModel {
 
     private int id;
     private String descrizione;
 
-    public Competence(){
+    public Competence() {
 
     }
-    
+
     public Competence(int ID, String Descrizione) {
         this.id = ID;
         this.descrizione = Descrizione;
-    }
-
-    public void finalize() throws Throwable {
-
     }
 
     public int getID() {
@@ -50,32 +45,41 @@ public class Competence extends DatabaseModel{
         this.descrizione = Descrizione;
     }
 
-    
-    public static Competence[] getAllDatabaseInstances() {
-        String sql = "select * from competenza";
+    public static Competence[] getAllCompetenceOfMaintainer(String username) {
+        String sql = "select C.id as id, C.descrizione as descrizione from competenza C "
+                + "join possesso P on C.id = P.id where P.maintainer=? order by descrizione";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-            ResultSet results = ps.executeQuery();
+            ps.setString(1, username);
             LinkedList<Competence> instances = DatabaseContext.fetchAllModels(Competence.class, ps);
-            return Arrays.copyOf(instances.toArray(),instances.size(),Competence[].class);
+            return Arrays.copyOf(instances.toArray(), instances.size(), Competence[].class);
         } catch (SQLException ex) {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
-    
+    public static Competence[] getAllDatabaseInstances() {
+        String sql = "select * from competenza";
+        try {
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            LinkedList<Competence> instances = DatabaseContext.fetchAllModels(Competence.class, ps);
+            return Arrays.copyOf(instances.toArray(), instances.size(), Competence[].class);
+        } catch (SQLException ex) {
+            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     public static Competence getInstanceWithPK(int id) {
         String sql = "select * from competenza where id = ?";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setInt(1, id);
-            ResultSet results = ps.executeQuery();
             LinkedList<Competence> instances = DatabaseContext.fetchAllModels(Competence.class, ps);
-            if(instances.size() > 0){
+            if (instances.size() > 0) {
                 return instances.get(0);
-            }
-            else{
+            } else {
                 return null;
             }
         } catch (SQLException ex) {
@@ -83,7 +87,7 @@ public class Competence extends DatabaseModel{
         }
         return null;
     }
-    
+
     @Override
     public void saveToDatabase() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
