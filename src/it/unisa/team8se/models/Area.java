@@ -51,7 +51,6 @@ public class Area extends DatabaseModel{
         String sql = "select * from attivita_pianificata";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-            ResultSet results = ps.executeQuery();
             LinkedList<Area> instances = DatabaseContext.fetchAllModels(Area.class, ps);
             return Arrays.copyOf(instances.toArray(),instances.size(),Area[].class);
         } catch (SQLException ex) {
@@ -67,7 +66,6 @@ public class Area extends DatabaseModel{
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1, sector);
             ps.setString(2, location);
-            ResultSet results = ps.executeQuery();
             LinkedList<Area> instances = DatabaseContext.fetchAllModels(Area.class, ps);
             if(instances.size() > 0){
                 return instances.get(0);
@@ -90,5 +88,10 @@ public class Area extends DatabaseModel{
     public void getFromResultSet(ResultSet rs) throws SQLException {
         sector = rs.getString("nome");
         location = rs.getString("luogo_geografico");
+    }
+
+    @Override
+    public boolean existsInDatabase() {
+        return Area.getInstanceWithPK(getSector(), getLocation()) != null;
     }
 }//end Area

@@ -6,6 +6,8 @@
 package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
+import it.unisa.team8se.models.Competence;
+import it.unisa.team8se.models.Maintainer;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,37 +23,48 @@ import javax.swing.JOptionPane;
  * @author gerar
  */
 public class CompetenceView extends javax.swing.JFrame {
-    
+
     protected DefaultComboBoxModel comboBoxModel;
     protected DefaultListModel<String> listModel;
-    
+
     private final String username = "postgres";
-    private final String password = "admin";
+    private final String password = "password";
+
     /**
      * Creates new form CompetenceView
      */
     public CompetenceView() {
-        DatabaseContext.connectDatabase(username, password);
+        DatabaseContext.connectDatabase("ProgettoSE", username, password);
         initComboBoxModel();
         initListModel();
         initComponents();
-        
+
     }
-    
+
     private void initComboBoxModel() {
         comboBoxModel = new DefaultComboBoxModel();
         refreshUsers();
     }
-    
+
     protected void initListModel() {
         listModel = new DefaultListModel<>();
-        if(comboBoxModel.getSize()!=0) {
+        if (comboBoxModel.getSize() != 0) {
             String defaultUsername = (String) comboBoxModel.getElementAt(0);
             refreshCompetences(defaultUsername);
         }
     }
 
     protected boolean refreshUsers() {
+        Maintainer[] maintainers = Maintainer.getAllDatabaseInstances();
+        if (maintainers != null && maintainers.length > 0) {
+            for (Maintainer m : maintainers) {
+                comboBoxModel.addElement(m.getUsername());
+            }
+            return true;
+        }
+        return false;
+
+        /*
         try {
             Connection connection = DatabaseContext.getConnection();
             Statement statement = connection.createStatement();
@@ -63,14 +76,27 @@ public class CompetenceView extends javax.swing.JFrame {
             
             rs.close();
             statement.close();
+            
         } catch (SQLException ex) {
             raiseError("Errore nella lettura degli utenti");
             return false;
         }
         return true;
+         */
     }
-    
+
     protected boolean refreshCompetences(String username) {
+        listModel.clear();
+        Competence[] competences = Competence.getAllCompetenceOfMaintainer(username);
+        if (competences != null) {
+            for (Competence c : competences) {
+                listModel.addElement(c.getDescrizione());
+            }
+            return true;
+        }
+        return false;
+
+        /*
         listModel.clear();
         try {
             Connection connection = DatabaseContext.getConnection();
@@ -78,18 +104,19 @@ public class CompetenceView extends javax.swing.JFrame {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, username);
             ResultSet rs = statement.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 listModel.addElement(rs.getString("competenza"));
             }
             rs.close();
             statement.close();
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             raiseError("Errore nella lettura delle competenze");
             return false;
         }
         return true;
+         */
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -220,9 +247,9 @@ public class CompetenceView extends javax.swing.JFrame {
         Toolkit.getDefaultToolkit().beep();
         JOptionPane.showMessageDialog(this, message, "Errore", JOptionPane.ERROR_MESSAGE);
     }
-    
+
     private void comboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxActionPerformed
-        String selectedUsername = (String) comboBox.getSelectedItem();        
+        String selectedUsername = (String) comboBox.getSelectedItem();
         refreshCompetences(selectedUsername);
     }//GEN-LAST:event_comboBoxActionPerformed
 
@@ -238,47 +265,47 @@ public class CompetenceView extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private String getSelectedUsername() {
-        if(comboBoxModel.getSize()==0) {
+        if (comboBoxModel.getSize() == 0) {
             raiseError("Non c'è alcun manutentore!");
             return null;
         }
         String selectedUsername = (String) comboBox.getSelectedItem();
-        if(selectedUsername==null) {
+        if (selectedUsername == null) {
             selectedUsername = (String) comboBoxModel.getElementAt(0);
         }
         return selectedUsername;
     }
-    
+
     private String getSelectedCompetence() {
-        if(listModel.getSize()==0) {
+        if (listModel.getSize() == 0) {
             raiseError("Non c'è alcuna competenza!");
             return null;
         }
         String selectedCompetence = listCompetence.getSelectedValue();
-        if(selectedCompetence==null) {
+        if (selectedCompetence == null) {
             raiseError("Non è stata selezionata alcuna competenza!");
             return null;
         }
         return selectedCompetence;
     }
-    
+
     protected boolean assign(String username, String competence) {
-        try{
+        try {
             Connection c = DatabaseContext.getConnection();
             Statement s = c.createStatement();
             PreparedStatement ps;
             int id = 0;
             String query;
             boolean assignCompetence = true;
-            
+
             ResultSet rs = s.executeQuery("select * from competenza order by descrizione");
-            while(rs.next()) {
-                if(rs.getString("descrizione").equalsIgnoreCase(competence)) {
+            while (rs.next()) {
+                if (rs.getString("descrizione").equalsIgnoreCase(competence)) {
                     id = rs.getInt("id");
                     assignCompetence = false;
                 }
             }
-            if(assignCompetence) {
+            if (assignCompetence) {
                 rs = s.executeQuery("select max(id) from competenza");
                 rs.next();
                 int maxId = rs.getInt(1);
@@ -290,28 +317,30 @@ public class CompetenceView extends javax.swing.JFrame {
                 ps.setString(2, competence);
                 ps.executeUpdate();
             }
-            
+
             query = "insert into possesso values(?, ?)";
             ps = c.prepareStatement(query);
             ps.setInt(1, id);
             ps.setString(2, username);
             ps.executeUpdate();
-            
+
             rs.close();
             ps.close();
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             raiseError("Errore nell'assegnamento");
             return false;
         }
         refreshCompetences(username);
         return true;
     }
-    
+
     private void assignButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assignButtonActionPerformed
         String selectedUsername = getSelectedUsername();
-        if(selectedUsername==null)
+        if (selectedUsername == null) {
             return;
-        String competence = JOptionPane.showInputDialog(this, "Assegna una competenza a '"+selectedUsername+"'", "Assegnazione", JOptionPane.PLAIN_MESSAGE);
+        }
+        String competence = JOptionPane.showInputDialog(this, "Assegna una competenza a '" + selectedUsername + "'",
+                "Assegnazione", JOptionPane.PLAIN_MESSAGE);
         assign(selectedUsername, competence);
     }//GEN-LAST:event_assignButtonActionPerformed
 
@@ -327,32 +356,33 @@ public class CompetenceView extends javax.swing.JFrame {
             ResultSet rs = ps.executeQuery();
             rs.next();
             int id = rs.getInt("id");
-            
+
             query = "delete from possesso where id=? and maintainer=?";
             ps = c.prepareStatement(query);
             ps.setInt(1, id);
             ps.setString(2, username);
             ps.executeUpdate();
-            
+
             rs.close();
             ps.close();
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             raiseError("Errore nella rimozione");
             return false;
         }
         refreshCompetences(username);
         return true;
     }
-    
-    
+
+
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         String selectedUsername = getSelectedUsername();
         String selectedCompetence = getSelectedCompetence();
-        if(selectedUsername==null || selectedCompetence==null)
+        if (selectedUsername == null || selectedCompetence == null) {
             return;
-        
-        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la competenza '"+selectedCompetence+"' di '"+selectedUsername+"' ?", username, JOptionPane.YES_NO_OPTION);
-        if (reply==JOptionPane.YES_OPTION) {
+        }
+
+        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la competenza '" + selectedCompetence + "' di '" + selectedUsername + "' ?", username, JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
             remove(selectedUsername, selectedCompetence);
         }
     }//GEN-LAST:event_removeButtonActionPerformed

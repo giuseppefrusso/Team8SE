@@ -24,19 +24,18 @@ import java.util.logging.Logger;
  */
 public class DatabaseContext {
 
-    private static final String databaseURL = "jdbc:postgresql://localhost/Software Engineering";
-    private static final String databaseName = "postgres"; // cambiare in Software Engineering
+    private static final String databaseURL = "jdbc:postgresql://localhost/";
 
     private static Connection db;
 
-    public static void connectDatabase(String username, String password) {
+    public static void connectDatabase(String dbName, String username, String password) {
 
         try {
             Class.forName("org.postgresql.Driver");
             Properties info = new Properties();
             info.setProperty("user", username);
             info.setProperty("password", password);
-            db = DriverManager.getConnection(databaseURL + databaseName, info);
+            db = DriverManager.getConnection(databaseURL + dbName, info);
         } catch (SQLException e) {
             System.err.println("CONNESSIONE AL DATABASE FALLITA.");
             System.err.println(e.getMessage());
@@ -56,7 +55,6 @@ public class DatabaseContext {
     public static <T extends DatabaseModel> LinkedList<T> fetchAllModels(Class<T> c,PreparedStatement ps) throws SQLException{
         try {
             ResultSet results = ps.executeQuery();
-            
             LinkedList<T> instances = new LinkedList<>();
             
             while (results.next()) {
@@ -64,6 +62,9 @@ public class DatabaseContext {
                 instance.getFromResultSet(results);
                 instances.add(instance);
             }
+            
+            results.close();
+            ps.close();
             return instances;
         } catch (InstantiationException ex) {
             Logger.getLogger(DatabaseContext.class.getName()).log(Level.SEVERE, null, ex);

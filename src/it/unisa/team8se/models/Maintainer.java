@@ -48,13 +48,11 @@ public class Maintainer extends User{
     public void removeCompetence(int ID){
         
     }
-    
         
     public static Maintainer[] getAllDatabaseInstances() {
-        String sql = "select * from maintainer";
+        String sql = "select * from maintainer order by username";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-            ResultSet results = ps.executeQuery();
             LinkedList<Maintainer> instances = DatabaseContext.fetchAllModels(Maintainer.class, ps);
             return Arrays.copyOf(instances.toArray(),instances.size(),Maintainer[].class);
         } catch (SQLException ex) {
@@ -69,7 +67,6 @@ public class Maintainer extends User{
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1, username);
-            ResultSet results = ps.executeQuery();
             LinkedList<Maintainer> instances = DatabaseContext.fetchAllModels(Maintainer.class, ps);
             if(instances.size() > 0 ){
                 return instances.get(0);
@@ -85,6 +82,7 @@ public class Maintainer extends User{
 
     @Override
     public void saveToDatabase() {
+        
     }
     
     @Override
@@ -92,6 +90,9 @@ public class Maintainer extends User{
         super.getFromResultSet(rs);
         //TODO: get delle competenze
     }
-    
-    
+
+    @Override
+    public boolean existsInDatabase() {
+        return Maintainer.getInstanceWithPK(getUsername()) != null;
+    }
 }

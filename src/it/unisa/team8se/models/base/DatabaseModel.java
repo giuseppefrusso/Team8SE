@@ -15,4 +15,5 @@ import java.sql.SQLException;
 public abstract class DatabaseModel {
     public abstract void getFromResultSet(ResultSet rs) throws SQLException;
     public abstract void saveToDatabase();
+    public abstract boolean existsInDatabase();
 }

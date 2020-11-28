@@ -4,7 +4,6 @@ import it.unisa.team8se.enumerations.TicketState;
 import it.unisa.team8se.enumerations.MaintainerFlag;
 import it.unisa.team8se.enumerations.DepartmentFlag;
 
-
 /**
  * @author cptso
  * @version 1.0
@@ -12,17 +11,13 @@ import it.unisa.team8se.enumerations.DepartmentFlag;
  */
 public class Ticket {
 
-	private DepartmentFlag DepartmentFlag;
-	private MaintainerFlag MaintainerFlag;
-	private TicketState State;
+    private DepartmentFlag DepartmentFlag;
+    private MaintainerFlag MaintainerFlag;
+    private TicketState State;
 
-	public Ticket(){
+    public Ticket() {
 
-	}
-
-	public void finalize() throws Throwable {
-
-	}
+    }
 
     public DepartmentFlag getDepartmentFlag() {
         return DepartmentFlag;
@@ -34,5 +29,17 @@ public class Ticket {
 
     public TicketState getState() {
         return State;
+    }
+
+    public void setDepartmentFlag(DepartmentFlag DepartmentFlag) {
+        this.DepartmentFlag = DepartmentFlag;
+    }
+
+    public void setMaintainerFlag(MaintainerFlag MaintainerFlag) {
+        this.MaintainerFlag = MaintainerFlag;
+    }
+
+    public void setState(TicketState State) {
+        this.State = State;
     }
 }//end Ticket
