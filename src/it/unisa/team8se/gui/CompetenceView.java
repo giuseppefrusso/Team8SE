@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -27,7 +28,7 @@ public class CompetenceView extends javax.swing.JFrame {
     protected DefaultComboBoxModel comboBoxModel;
     protected DefaultListModel<String> listModel;
 
-    private Maintainer maintainers;
+    private LinkedList<Maintainer> maintainers;
             
     private final String username = "postgres";
     private final String password = "password";
@@ -37,6 +38,9 @@ public class CompetenceView extends javax.swing.JFrame {
      */
     public CompetenceView() {
         DatabaseContext.connectDatabase("ProgettoSE", username, password);
+        
+        maintainers = new LinkedList<>();
+        
         initComboBoxModel();
         initListModel();
         initComponents();
@@ -57,10 +61,12 @@ public class CompetenceView extends javax.swing.JFrame {
     }
 
     protected boolean refreshUsers() {
-        Maintainer[] maintainers = Maintainer.getAllDatabaseInstances();
-        if (maintainers != null && maintainers.length > 0) {
-            for (Maintainer m : maintainers) {
+        Maintainer[] ms = Maintainer.getAllDatabaseInstances();
+        if (ms != null && ms.length > 0) {
+            maintainers.clear();
+            for (Maintainer m : ms) {
                 comboBoxModel.addElement(m.getUsername());
+                maintainers.add(m);
             }
             return true;
         }
@@ -266,16 +272,19 @@ public class CompetenceView extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_formWindowClosing
 
-    private String getSelectedUsername() {
+    private Maintainer getSelectedMantainer() {
         if (comboBoxModel.getSize() == 0) {
             raiseError("Non c'è alcun manutentore!");
             return null;
         }
-        String selectedUsername = (String) comboBox.getSelectedItem();
-        if (selectedUsername == null) {
-            selectedUsername = (String) comboBoxModel.getElementAt(0);
+        int index = comboBox.getSelectedIndex();
+        
+        if(index < 0 || index > maintainers.size()){
+            return maintainers.get(0);
         }
-        return selectedUsername;
+        else{
+            return maintainers.get(index);
+        }
     }
 
     private String getSelectedCompetence() {
@@ -291,7 +300,7 @@ public class CompetenceView extends javax.swing.JFrame {
         return selectedCompetence;
     }
 
-    protected boolean assign(String username, String competenceDesc) {
+    protected boolean assign(Maintainer maintainer, String competenceDesc) {
         try {            
             int id = 0;
             boolean assignCompetence = true;
@@ -306,6 +315,7 @@ public class CompetenceView extends javax.swing.JFrame {
             }*/
 
             Competence competence = new Competence();
+            
             if (!competence.existsInDatabase()) {
                 ResultSet rs = DatabaseContext.getStatement().executeQuery("select max(id) from competenza");
                 rs.next();
@@ -344,7 +354,7 @@ public class CompetenceView extends javax.swing.JFrame {
     }
 
     private void assignButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assignButtonActionPerformed
-        String selectedUsername = getSelectedUsername();
+        Maintainer selectedUsername = getSelectedMantainer();
         if (selectedUsername == null) {
             return;
         }
@@ -384,7 +394,7 @@ public class CompetenceView extends javax.swing.JFrame {
 
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-        String selectedUsername = getSelectedUsername();
+        String selectedUsername = getSelectedMantainer().getUsername();
         String selectedCompetence = getSelectedCompetence();
         if (selectedUsername == null || selectedCompetence == null) {
             return;

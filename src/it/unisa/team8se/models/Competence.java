@@ -88,6 +88,23 @@ public class Competence extends DatabaseModel {
         return null;
     }
     
+    public static Competence getInstanceWithDescription(String desc){
+         String sql = "select * from competenza where lower(descrizione) = lower(?)";
+        try {
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            ps.setString(1, desc);
+            LinkedList<Competence> instances = DatabaseContext.fetchAllModels(Competence.class, ps);
+            if (instances.size() > 0) {
+                return instances.get(0);
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     @Override
     public void saveToDatabase() {
         try {
@@ -112,6 +129,6 @@ public class Competence extends DatabaseModel {
 
     @Override
     public boolean existsInDatabase() {
-        return Competence.getInstanceWithPK(getID()) != null;
+        return Competence.getInstanceWithPK(getID()) != null || Competence.getInstanceWithDescription(getDescrizione()) != null;
     }
 }//end Competence
