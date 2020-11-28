@@ -54,4 +54,9 @@ public class SystemAdmin extends User {
     public void saveToDatabase(){
         
     }
+
+    @Override
+    public boolean existsInDatabase() {
+        return SystemAdmin.getInstanceWithPK(getUsername()) != null; //To change body of generated methods, choose Tools | Templates.
+    }
 }

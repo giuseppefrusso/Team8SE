@@ -80,4 +80,9 @@ public class EWO extends Activity {
         super.getFromResultSet(rs);
         ticket = new Ticket();
     }
+
+    @Override
+    public boolean existsInDatabase() {
+        return EWO.getInstanceWithPK(getID()) != null; //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -90,6 +90,9 @@ public class Maintainer extends User{
         super.getFromResultSet(rs);
         //TODO: get delle competenze
     }
-    
-    
+
+    @Override
+    public boolean existsInDatabase() {
+        return Maintainer.getInstanceWithPK(getUsername()) != null;
+    }
 }

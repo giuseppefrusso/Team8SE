@@ -79,4 +79,9 @@ public class Material extends DatabaseModel{
         name = rs.getString("nome");
         description = rs.getString("descrizione");
     }
+
+    @Override
+    public boolean existsInDatabase() {
+        return Material.getInstanceWithPK(getName()) != nuLL;
+    }
 }//end Material

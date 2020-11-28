@@ -444,7 +444,13 @@ public class SystemAdminForm extends javax.swing.JFrame {
         }
 
         tableModel.setValueAt(newValue, selectedRow, selectedColumn);
+        String field = tableModel.getColumnName(selectedColumn);           
         //modificare in db usando selectedUser come chiave
+        if(field.equals("Ruolo")){
+            
+        }
+        
+        /*
         try {
             Connection c = DatabaseContext.getConnection();
             selectedColumn = tableUsers.getSelectedColumn();
@@ -496,6 +502,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         
         refreshUsers();
         return true;
+        */
     }
 
     private void modifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyButtonActionPerformed

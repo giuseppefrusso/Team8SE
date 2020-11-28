@@ -87,7 +87,7 @@ public abstract class User extends DatabaseModel{
 
     @Override
     public void saveToDatabase(){
-
+        
     }
     
     @Override

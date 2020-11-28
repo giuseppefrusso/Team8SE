@@ -53,11 +53,28 @@ public class Planner extends User {
     
     @Override
     public void saveToDatabase(){
-        
+        try
+        {
+            String sql = "insert into planner (username,password,name,surname) values (?,?,?,?)";
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            ps.setString(1, getUsername());
+            ps.setString(2, getPassword());
+            ps.setString(3, getName());
+            ps.setString(4, getSurname());
+            
+            ps.executeUpdate();
+        }catch(SQLException ex){
+            Logger.getLogger(Planner.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void getFromResultSet(ResultSet rs) throws SQLException {
         super.getFromResultSet(rs);
+    }
+
+    @Override
+    public boolean existsInDatabase() {
+        return Planner.getInstanceWithPK(getUsername()) != null; //To change body of generated methods, choose Tools | Templates.
     }
 }

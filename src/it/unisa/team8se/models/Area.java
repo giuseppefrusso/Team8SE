@@ -89,4 +89,9 @@ public class Area extends DatabaseModel{
         sector = rs.getString("nome");
         location = rs.getString("luogo_geografico");
     }
+
+    @Override
+    public boolean existsInDatabase() {
+        return Area.getInstanceWithPK(getSector(), getLocation()) != null;
+    }
 }//end Area

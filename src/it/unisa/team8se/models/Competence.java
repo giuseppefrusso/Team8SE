@@ -98,4 +98,9 @@ public class Competence extends DatabaseModel {
         id = rs.getInt("id");
         descrizione = rs.getString("descrizione");
     }
+
+    @Override
+    public boolean existsInDatabase() {
+        return Competence.getInstanceWithPK(getID()) != null;
+    }
 }//end Competence

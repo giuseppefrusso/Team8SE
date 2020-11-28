@@ -252,6 +252,12 @@ public class Activity extends DatabaseModel{
         }
         return true;
     }
+
+    @Override
+    public boolean existsInDatabase() {
+        return Activity.getInstanceWithPK(getID()) != null;
+    }
+    
 }
 
 
