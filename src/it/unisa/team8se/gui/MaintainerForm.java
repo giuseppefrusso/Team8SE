@@ -328,6 +328,14 @@ public class MaintainerForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void activityTableRowSelected(int index)
+    {
+            selectedActivity = activities.get(index);
+        jTabbedPane1.setSelectedIndex(1);
+        interventionDescText.setText(selectedActivity.getInterventionDescription());
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -389,5 +397,6 @@ public class MaintainerForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane workspaceNotesScrollPane;
     private javax.swing.JTextPane workspaceNotesText;
     // End of variables declaration//GEN-END:variables
-
+private Activity selectedActivity;
+private LinkedList<Activity> activities;
 }
