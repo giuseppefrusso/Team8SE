@@ -86,7 +86,7 @@ public abstract class User extends DatabaseModel{
     }
 
     @Override
-    public void saveToDatabase(){
+    public void saveToDatabase() throws SQLException{
         
     }
     

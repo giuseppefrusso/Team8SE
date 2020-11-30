@@ -31,8 +31,8 @@ public class SystemAdminForm extends javax.swing.JFrame {
 
     protected DefaultTableModel tableModel;
     private ButtonGroup buttonGroup;
-    private final String username = "postgres";
-    private final String password = "password";
+    private final String username = "admin";
+    private final String password = "admin";
 
     private void initTableModel() {
         tableModel = new DefaultTableModel() {
@@ -60,7 +60,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
      * Creates new form SystemAdminForm
      */
     public SystemAdminForm() {
-        DatabaseContext.connectDatabase("ProgettoSE",username, password);
+        DatabaseContext.connectDatabase("postgres",username, password);
         initTableModel();
         refreshUsers();
         initButtonGroup();

@@ -115,10 +115,20 @@ public class Maintainer extends User {
             Logger.getLogger(Planner.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void removeFromDatabase() throws SQLException {
+        String sql = "delete from maintainer where username=?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        
+        ps.setString(1, getUsername());
+        
+        ps.executeUpdate();
+        ps.close();
+    }
 
     @Override
-    public void saveToDatabase() {
-        try {
+    public void saveToDatabase() throws SQLException{
+        
             String sql = "insert into maintainer (username,password,name,surname) values (?,?,?,?)";
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
 
@@ -129,9 +139,7 @@ public class Maintainer extends User {
 
             ps.executeUpdate();
 
-        } catch (SQLException ex) {
-            Logger.getLogger(Planner.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
 
     @Override
