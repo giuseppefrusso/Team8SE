@@ -71,26 +71,6 @@ public class CompetenceView extends javax.swing.JFrame {
             return true;
         }
         return false;
-
-        /*
-        try {
-            Connection connection = DatabaseContext.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("select username from maintainer order by username");
-            
-            while(rs.next()) {
-                comboBoxModel.addElement(rs.getString("username"));
-            }
-            
-            rs.close();
-            statement.close();
-            
-        } catch (SQLException ex) {
-            raiseError("Errore nella lettura degli utenti");
-            return false;
-        }
-        return true;
-         */
     }
 
     protected boolean refreshCompetences(String username) {
@@ -103,26 +83,6 @@ public class CompetenceView extends javax.swing.JFrame {
             return true;
         }
         return false;
-
-        /*
-        listModel.clear();
-        try {
-            Connection connection = DatabaseContext.getConnection();
-            String query = "select C.id as id, C.descrizione as competenza from competenza C join possesso P on C.id = P.id where P.maintainer=? order by competenza";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, username);
-            ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                listModel.addElement(rs.getString("competenza"));
-            }
-            rs.close();
-            statement.close();
-        } catch (SQLException ex) {
-            raiseError("Errore nella lettura delle competenze");
-            return false;
-        }
-        return true;
-         */
     }
 
     /**
@@ -305,15 +265,6 @@ public class CompetenceView extends javax.swing.JFrame {
             int id = 0;
             boolean assignCompetence = true;
 
-            /*
-            ResultSet rs = s.executeQuery("select * from competenza order by descrizione");
-            while (rs.next()) {
-                if (rs.getString("descrizione").equalsIgnoreCase(competenceDesc)) {
-                    id = rs.getInt("id");
-                    assignCompetence = false;
-                }
-            }*/
-
             Competence competence = new Competence();
             
             if (!competence.existsInDatabase()) {
@@ -326,14 +277,6 @@ public class CompetenceView extends javax.swing.JFrame {
                 competence.setID(id);
                 competence.setDescrizione(competenceDesc);
                 competence.saveToDatabase();
-                
-                /*
-                query = "insert into competenza values(?,?)";
-                ps = c.prepareStatement(query);
-                ps.setInt(1, id);
-                ps.setString(2, competenceDesc);
-                ps.executeUpdate();
-                */
             }
             
             String query = "insert into possesso values(?, ?)";

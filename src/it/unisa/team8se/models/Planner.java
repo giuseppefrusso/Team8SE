@@ -109,4 +109,14 @@ public class Planner extends User {
     public boolean existsInDatabase() {
         return Planner.getInstanceWithPK(getUsername()) != null; //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public static Planner authenticate(String username, String password) {
+        Planner p = Planner.getInstanceWithPK(username);
+        if(p != null){
+            if(p.getPassword().equals(password)){
+                return p;
+            }
+        }
+        return null;
+    }
 }

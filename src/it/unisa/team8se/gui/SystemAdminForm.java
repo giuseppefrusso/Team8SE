@@ -314,36 +314,6 @@ public class SystemAdminForm extends javax.swing.JFrame {
         }
         
         return true;
-        /*
-        try {
-            Connection connection = DatabaseContext.getConnection();
-            Statement statement = connection.createStatement();
-            
-            
-            
-            ResultSet rs = statement.executeQuery("select * from maintainer order by username");
-            while (rs.next()) {
-                tableModel.addRow(User.toArray(rs.getString("cognome"), rs.getString("nome"), rs.getString("username"), rs.getString("password"), "maintainer"));
-            }
-
-            rs = statement.executeQuery("select * from planner order by username");
-            while (rs.next()) {
-                tableModel.addRow(User.toArray(rs.getString("cognome"), rs.getString("nome"), rs.getString("username"), rs.getString("password"), "planner"));
-            }
-
-            rs = statement.executeQuery("select * from system_administrator order by username");
-            while (rs.next()) {
-                tableModel.addRow(User.toArray(rs.getString("cognome"), rs.getString("nome"), rs.getString("username"), rs.getString("password"), "system admin"));
-            }
-
-            rs.close();
-            statement.close();
-        } catch (SQLException ex) {
-            raiseError("Errore nella lettura degli utenti");
-            return false;
-        }
-        return true;
-        */
     }
 
     protected boolean containsUsername(String username) {
@@ -546,8 +516,6 @@ public class SystemAdminForm extends javax.swing.JFrame {
         }
 
         modifyUser(newValue, selectedRow, selectedColumn);
-
-
     }//GEN-LAST:event_modifyButtonActionPerformed
 
     protected void removeUser(String selectedUsername, int selectedRow) {

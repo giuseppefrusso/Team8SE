@@ -92,4 +92,14 @@ public class SystemAdmin extends User {
     public boolean existsInDatabase() {
         return SystemAdmin.getInstanceWithPK(getUsername()) != null; //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public static SystemAdmin authenticate(String username, String password) {
+        SystemAdmin sa = SystemAdmin.getInstanceWithPK(username);
+        if(sa != null){
+            if(sa.getPassword().equals(password)){
+                return sa;
+            }
+        }
+        return null;
+    }
 }

@@ -148,4 +148,14 @@ public class Maintainer extends User {
     public boolean existsInDatabase() {
         return Maintainer.getInstanceWithPK(getUsername()) != null;
     }
+    
+    public static Maintainer authenticate(String username, String password) {
+        Maintainer m = Maintainer.getInstanceWithPK(username);
+        if(m != null){
+            if(m.getPassword().equals(password)){
+                return m;
+            }
+        }
+        return null;
+    }
 }

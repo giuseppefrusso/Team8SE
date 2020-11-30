@@ -6,12 +6,12 @@
 package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
-import it.unisa.team8se.models.Activity;
-import it.unisa.team8se.models.Area;
-import it.unisa.team8se.models.EWO;
+import it.unisa.team8se.models.Maintainer;
+import it.unisa.team8se.models.Planner;
+import it.unisa.team8se.models.SystemAdmin;
 import java.awt.EventQueue;
-import static java.lang.System.out;
 import java.sql.Connection;
+
 
 /**
  *
@@ -19,10 +19,9 @@ import java.sql.Connection;
  */
 public class LoginForm extends javax.swing.JFrame {
 
-    private String url = "jdbc:postgresql://localhost";
-    private String user;
-    private String pwd;
-    private Connection con;
+    
+    private final String TEST_PASSWORD = "test";
+    private final String TEST_USERNAME = TEST_PASSWORD;
 
     public LoginForm() {
         initComponents();
@@ -160,26 +159,34 @@ public class LoginForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        String item = (String) roleSelector.getSelectedItem();
-        String TEST_PASSWORD = "test";
-        String TEST_USERNAME = TEST_PASSWORD;
+        
+        String user = usernameField.getText();
+        String pwd = passwordField.getText();
+        String role = (String) roleSelector.getSelectedItem();
 
-        user = usernameField.getText();
-        pwd = passwordField.getText();
-
+        if(role.equals("Maintainer")){
+            Maintainer m = Maintainer.authenticate(user, pwd);
+        }
+        if(role.equals("Planner")){
+            Planner p = Planner.authenticate(user,pwd);
+        }
+        if(role.equals("SystemAdmin")){
+            SystemAdmin sa = SystemAdmin.authenticate(user,pwd);
+        }
+        
         if (TEST_PASSWORD.equals(pwd) && TEST_USERNAME.equals(user)) {
             
-            if ("Maintainer".equals(item)) {
+            if ("Maintainer".equals(role)) {
                 EventQueue.invokeLater(() -> {
                     new MaintainerForm().setVisible(true);
                 });
             }
-            if ("Planner".equals(item)) {
+            if ("Planner".equals(role)) {
                 EventQueue.invokeLater(() -> {
                     new PlannerForm().setVisible(true);
                 });
             }
-            if ("Administrator".equals(item)) {
+            if ("Administrator".equals(role)) {
                 EventQueue.invokeLater(() -> {
                     new SystemAdminForm().setVisible(true);
                 });
@@ -226,7 +233,7 @@ public class LoginForm extends javax.swing.JFrame {
         });
 
         //CONNESSIONE AL DB
-        DatabaseContext.connectDatabase("SoftwareEngineering","postgres", "Diamante99");
+        DatabaseContext.connectDatabase("ProgettoSE","postgres", "Diamante99");
         //out.println(Activity.getInstanceWithWeekNumber(32));
     }
 

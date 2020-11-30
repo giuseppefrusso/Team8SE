@@ -25,11 +25,13 @@ public class DatabaseTest {
     private final String user="postgres";
     private final String pwd="password";
     private Activity activity;
+    
+    
     public DatabaseTest(){
-
+        setup();
     }
     
-    @Before
+    
     public void setup(){
         try {
             con = DriverManager.getConnection(url, user, pwd);

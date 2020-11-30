@@ -97,4 +97,5 @@ public abstract class User extends DatabaseModel{
         setUsername(rs.getString("username"));
         setPassword(rs.getString("password"));
     }
+    
 }
