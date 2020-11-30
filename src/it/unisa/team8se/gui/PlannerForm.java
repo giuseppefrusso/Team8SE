@@ -42,35 +42,6 @@ public class PlannerForm extends javax.swing.JFrame {
     private void setupActivityTable() {
         activities = new LinkedList<>();
         Collections.addAll(activities, Activity.getAllDatabaseInstances());
-        
-        /*
-        Activity a0 = new Activity();
-        a0.setID(0);
-        a0.setTipology("Hydraulic");
-        a0.setArea(new Area("fisciano", "plumbing"));
-        a0.setEIT(120);
-        Activity a1 = new Activity();
-        a1.setID(1);
-        a1.setTipology("Hydraulic");
-        a1.setArea(new Area("fisciano", "plumbing"));
-        a1.setEIT(90);
-        Activity a2 = new Activity();
-        a2.setID(2);
-        a2.setTipology("Hydraulic");
-        a2.setArea(new Area("fisciano", "plumbing"));
-        a2.setEIT(100);
-        Activity a3 = new Activity();
-        a3.setID(3);
-        a3.setTipology("Hydraulic");
-        a3.setArea(new Area("fisciano", "plumbing"));
-        a3.setEIT(122);
-
-        activities.add(a0);
-        activities.add(a1);
-        activities.add(a2);
-        activities.add(a3);
-        */
-        
         activityTable.setModel(new ActivityTableDataModel(activities));
         ListSelectionModel selectionModel = activityTable.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -146,7 +117,7 @@ public class PlannerForm extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        maintainerListButton = new javax.swing.JButton();
         maintainerList = new javax.swing.JPanel();
         maintainerScrollPane = new javax.swing.JScrollPane();
         maintainerTable = new javax.swing.JTable();
@@ -155,6 +126,7 @@ public class PlannerForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Planner View");
 
         tabbedPane.setPreferredSize(new java.awt.Dimension(800, 600));
 
@@ -378,18 +350,13 @@ public class PlannerForm extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 3;
         activitySummary.add(jLabel8, gridBagConstraints);
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton2.setText("Go to Mantainers");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        maintainerListButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        maintainerListButton.setText("Go to Mantainers");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 14;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.ipady = 20;
-        activitySummary.add(jButton2, gridBagConstraints);
+        activitySummary.add(maintainerListButton, gridBagConstraints);
 
         tabbedPane.addTab("ActivitySummary", activitySummary);
 
@@ -474,6 +441,24 @@ public class PlannerForm extends javax.swing.JFrame {
         interventionDescText.setText(selectedActivity.getInterventionDescription());
         
     }
+    
+    private void switchToActivityList(){
+        tabbedPane.setSelectedIndex(1);
+        selectedActivity = null;
+    }
+    
+    private void switchToActivitySummary(){
+        tabbedPane.setSelectedIndex(2);
+        
+        weekNumberLabel.setText(selectedActivity.getWeekNumber().toString());
+        interventionDescText.setText(selectedActivity.getInterventionDescription());
+        workspaceNotesText.setText(selectedActivity.getWorkspaceNotes());
+    }
+    
+    private void switchToMaintainerList(){
+        tabbedPane.setSelectedIndex(3);
+        
+    }
 
     private void interventionDescriptionEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interventionDescriptionEditButtonActionPerformed
         // TODO add your handling code here:
@@ -482,15 +467,6 @@ public class PlannerForm extends javax.swing.JFrame {
     private void workspaceNotesEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workspaceNotesEditButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_workspaceNotesEditButtonActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-      EventQueue.invokeLater(()->{
-          new MaintainerForm().setVisible(true); //se dobbiamo richiamare  MaintainerForm
-      });
-      tabbedPane.setSelectedIndex(2); // se dobbiamo richiamare maintainerList
-      
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -538,7 +514,6 @@ public class PlannerForm extends javax.swing.JFrame {
     private javax.swing.JTextPane interventionDescText;
     private javax.swing.JButton interventionDescriptionEditButton;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -551,6 +526,7 @@ public class PlannerForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JPanel maintainerList;
+    private javax.swing.JButton maintainerListButton;
     private javax.swing.JScrollPane maintainerScrollPane;
     private javax.swing.JTable maintainerTable;
     private javax.swing.JTabbedPane tabbedPane;

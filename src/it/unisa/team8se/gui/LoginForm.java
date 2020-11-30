@@ -61,7 +61,7 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel5.setText("Errore");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Programma - Login");
+        setTitle("Login");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMaximumSize(new java.awt.Dimension(800, 600));
         setPreferredSize(new java.awt.Dimension(400, 400));
@@ -166,36 +166,36 @@ public class LoginForm extends javax.swing.JFrame {
 
         if(role.equals("Maintainer")){
             Maintainer m = Maintainer.authenticate(user, pwd);
-        }
-        if(role.equals("Planner")){
-            Planner p = Planner.authenticate(user,pwd);
-        }
-        if(role.equals("SystemAdmin")){
-            SystemAdmin sa = SystemAdmin.authenticate(user,pwd);
-        }
-        
-        if (TEST_PASSWORD.equals(pwd) && TEST_USERNAME.equals(user)) {
-            
-            if ("Maintainer".equals(role)) {
+            if(m != null){
                 EventQueue.invokeLater(() -> {
                     new MaintainerForm().setVisible(true);
+                    dispose();
                 });
+                return;
             }
-            if ("Planner".equals(role)) {
+        }
+        else if(role.equals("Planner")){
+            Planner p = Planner.authenticate(user,pwd);
+            if(p != null){
                 EventQueue.invokeLater(() -> {
                     new PlannerForm().setVisible(true);
+                    dispose();
                 });
+                return;
             }
-            if ("Administrator".equals(role)) {
+        }
+        else if(role.equals("SystemAdmin")){
+            SystemAdmin sa = SystemAdmin.authenticate(user,pwd);
+            if(sa != null){
                 EventQueue.invokeLater(() -> {
                     new SystemAdminForm().setVisible(true);
+                    dispose();
                 });
+                return;
             }
-            loginMessageLabel.setText("LOGIN ESEGUITO");
-            dispose();
-        } else{
-            loginMessageLabel.setText("USER O PASSWORD ERRATI");
         }
+        
+        loginMessageLabel.setText("USER O PASSWORD ERRATI");
         usernameField.setText("");
         passwordField.setText("");
     }//GEN-LAST:event_loginButtonActionPerformed
@@ -233,7 +233,7 @@ public class LoginForm extends javax.swing.JFrame {
         });
 
         //CONNESSIONE AL DB
-        DatabaseContext.connectDatabase("postgres","admin", "admin");
+        DatabaseContext.connectDatabase("ProgettoSE","postgres", "password");
         //out.println(Activity.getInstanceWithWeekNumber(32));
     }
 
