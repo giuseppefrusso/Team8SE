@@ -5,19 +5,19 @@
  */
 package it.unisa.team8se.gui;
 
+import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.MultiPanelManager;
 import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
 import it.unisa.team8se.gui.datamodels.MaintainerAvailabilityDataModel;
 import it.unisa.team8se.models.Activity;
-import it.unisa.team8se.models.Area;
-import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
-import java.awt.EventQueue;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -29,14 +29,24 @@ public class PlannerForm extends javax.swing.JFrame {
      * Creates new form ActivityList
      */
     public PlannerForm() {
+        if (!DatabaseContext.isConnected()) {
+            DatabaseContext.connectDatabase("ProgettoSE", "postgres", "password");
+        }
         initComponents();
         setupActivityTable();
         setupMaintainerTable();
 
+        interventionDescText.setEditable(false);
+        workspaceNotesText.setEditable(false);
+        
+        
+        switchToActivityList();
+        
+        /*
         panelManager = new MultiPanelManager();
         panelManager.addPanel("ActivityList", activityList);
         panelManager.addPanel("ActivitySummary", activitySummary);
-        panelManager.addPanel("MaintainerList", maintainerList);
+        panelManager.addPanel("MaintainerList", maintainerList);*/
     }
 
     private void setupActivityTable() {
@@ -45,44 +55,22 @@ public class PlannerForm extends javax.swing.JFrame {
         activityTable.setModel(new ActivityTableDataModel(activities));
         ListSelectionModel selectionModel = activityTable.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        selectionModel.setValueIsAdjusting(false);
-        selectionModel.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int selectedRow = activityTable.getSelectedRow();
-                if (selectedRow >= 0) {
-                    System.out.println("Selected index " + selectedRow);
-                    activityTableRowSelected(selectedRow);
-                    activityTable.clearSelection();
-                }
+        selectionModel.setValueIsAdjusting(true);
+        selectionModel.addListSelectionListener((ListSelectionEvent e) -> {
+            int selectedRow = activityTable.getSelectedRow();
+            if (selectedRow >= 0) {
+                activityTableRowSelected(selectedRow);
+                activityTable.clearSelection();
             }
         });
     }
-    
-    private void setupMaintainerTable(){
+
+    private void setupMaintainerTable() {
         maintainers = new LinkedList<>();
-        
-        Maintainer m0=new Maintainer("Mannara","Marco","marco","xxx");
-        //m0.setName("Marco");
-        m0.addCompetence(new Competence (1,"Team Leader"));
-        Maintainer m1= new Maintainer("Lambiase","Manuel","manuel","xxx");
-        //m1.setName("Manuel");
-        m1.addCompetence(new Competence (2,"Problem Solving"));
-        Maintainer m2= new Maintainer("Russo","Giuseppe Felice","giuseppe","xxx");
-        //m2.setName("Giuseppe");
-        m2.addCompetence(new Competence (3,"Lateral Thinking"));
-        Maintainer m3= new Maintainer("Landino","Gerardo","gerardo","xxx");
-        //m3.setName("Gerardo");
-        m3.addCompetence(new Competence (4,"Creativity"));
-        
-        maintainers.add(m0);
-        maintainers.add(m1);
-        maintainers.add(m2);
-        maintainers.add(m3);
-        
+        Collections.addAll(maintainers, Maintainer.getAllDatabaseInstances());
         maintainerTable.setModel(new MaintainerAvailabilityDataModel(maintainers));
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -116,8 +104,10 @@ public class PlannerForm extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        areaLabel = new javax.swing.JLabel();
         maintainerListButton = new javax.swing.JButton();
+        workspaceNotesDoneButton = new javax.swing.JButton();
+        interventionDescDoneButton = new javax.swing.JButton();
         maintainerList = new javax.swing.JPanel();
         maintainerScrollPane = new javax.swing.JScrollPane();
         maintainerTable = new javax.swing.JTable();
@@ -129,6 +119,11 @@ public class PlannerForm extends javax.swing.JFrame {
         setTitle("Planner View");
 
         tabbedPane.setPreferredSize(new java.awt.Dimension(800, 600));
+        tabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabbedPaneStateChanged(evt);
+            }
+        });
 
         activityList.setPreferredSize(new java.awt.Dimension(800, 600));
         java.awt.GridBagLayout activityListLayout = new java.awt.GridBagLayout();
@@ -192,14 +187,19 @@ public class PlannerForm extends javax.swing.JFrame {
 
         activitySummary.setBackground(new java.awt.Color(255, 204, 153));
         java.awt.GridBagLayout activitySummaryLayout = new java.awt.GridBagLayout();
-        activitySummaryLayout.columnWidths = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
-        activitySummaryLayout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
+        activitySummaryLayout.columnWidths = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
+        activitySummaryLayout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
         activitySummary.setLayout(activitySummaryLayout);
 
+        interventionDescText.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                interventionDescTextFocusLost(evt);
+            }
+        });
         interventionDescScrollPane.setViewportView(interventionDescText);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -213,7 +213,7 @@ public class PlannerForm extends javax.swing.JFrame {
         interventionDescLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         interventionDescLabel.setText("Intervention Description");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -222,17 +222,22 @@ public class PlannerForm extends javax.swing.JFrame {
         workspaceNotesLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         workspaceNotesLabel.setText("WorkSpace Notes");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activitySummary.add(workspaceNotesLabel, gridBagConstraints);
 
+        workspaceNotesText.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                workspaceNotesTextFocusLost(evt);
+            }
+        });
         workspaceNotesScrollPane.setViewportView(workspaceNotesText);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.gridwidth = 9;
         gridBagConstraints.gridheight = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -253,8 +258,8 @@ public class PlannerForm extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activitySummary.add(workspaceNotesEditButton, gridBagConstraints);
 
@@ -268,7 +273,7 @@ public class PlannerForm extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridx = 14;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.ipadx = 3;
         gridBagConstraints.ipady = 3;
@@ -279,7 +284,7 @@ public class PlannerForm extends javax.swing.JFrame {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel4.setText("ACTIVITY SUMMARY");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -289,14 +294,14 @@ public class PlannerForm extends javax.swing.JFrame {
         jLabel5.setText("10");
         jLabel5.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 4;
         activitySummary.add(jLabel5, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("Week n#");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activitySummary.add(jLabel6, gridBagConstraints);
@@ -307,8 +312,8 @@ public class PlannerForm extends javax.swing.JFrame {
         jButton1.setOpaque(false);
         jButton1.setPreferredSize(new java.awt.Dimension(70, 70));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
-        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridy = 18;
         activitySummary.add(jButton1, gridBagConstraints);
 
         jScrollPane2.setEnabled(false);
@@ -329,34 +334,65 @@ public class PlannerForm extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTextArea1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridy = 16;
         activitySummary.add(jScrollPane2, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Activity to assign");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 3;
         activitySummary.add(jLabel7, gridBagConstraints);
 
-        jLabel8.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel8.setText("Carpentry - Fisciano");
+        areaLabel.setBackground(new java.awt.Color(204, 204, 204));
+        areaLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        areaLabel.setText("Carpentry - Fisciano");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 3;
-        activitySummary.add(jLabel8, gridBagConstraints);
+        activitySummary.add(areaLabel, gridBagConstraints);
 
         maintainerListButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         maintainerListButton.setText("Go to Mantainers");
+        maintainerListButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                maintainerListButtonActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridx = 16;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.ipady = 20;
         activitySummary.add(maintainerListButton, gridBagConstraints);
+
+        workspaceNotesDoneButton.setText("Done");
+        workspaceNotesDoneButton.setEnabled(false);
+        workspaceNotesDoneButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                workspaceNotesDoneButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridy = 22;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        activitySummary.add(workspaceNotesDoneButton, gridBagConstraints);
+
+        interventionDescDoneButton.setText("Done");
+        interventionDescDoneButton.setEnabled(false);
+        interventionDescDoneButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                interventionDescDoneButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        activitySummary.add(interventionDescDoneButton, gridBagConstraints);
 
         tabbedPane.addTab("ActivitySummary", activitySummary);
 
@@ -436,37 +472,102 @@ public class PlannerForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void activityTableRowSelected(int index) {
-        selectedActivity = activities.get(index);
+        selectedActivity = activities.get(index);        
         tabbedPane.setSelectedIndex(1);
-        interventionDescText.setText(selectedActivity.getInterventionDescription());
-        
     }
-    
-    private void switchToActivityList(){
-        tabbedPane.setSelectedIndex(1);
+
+    private void switchToActivityList() {
+        tabbedPane.setEnabledAt(1, false);
+        tabbedPane.setEnabledAt(2, false);
         selectedActivity = null;
     }
-    
-    private void switchToActivitySummary(){
-        tabbedPane.setSelectedIndex(2);
-        
-        weekNumberLabel.setText(selectedActivity.getWeekNumber().toString());
+
+    private void switchToActivitySummary() {
+        tabbedPane.setEnabledAt(1, true);
+        tabbedPane.setEnabledAt(2, true);
+
+        weekNumberLabel.setText(Integer.toString(selectedActivity.getWeekNumber()));
+        areaLabel.setText(selectedActivity.getArea().toString());
         interventionDescText.setText(selectedActivity.getInterventionDescription());
         workspaceNotesText.setText(selectedActivity.getWorkspaceNotes());
     }
-    
-    private void switchToMaintainerList(){
-        tabbedPane.setSelectedIndex(3);
-        
-    }
 
+    private void switchToMaintainerList() {
+    }
+    
+    private void activityModified(){
+         try {
+            selectedActivity.updateInDatabase();
+        } catch (SQLException ex) {
+            Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void interventionDescriptionEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interventionDescriptionEditButtonActionPerformed
-        // TODO add your handling code here:
+
+        int textLength=interventionDescText.getText().length();
+        interventionDescText.setCaretPosition(textLength);
+        interventionDescText.setEditable(true);
+        interventionDescText.requestFocus();
+        
+        interventionDescDoneButton.setEnabled(true);
     }//GEN-LAST:event_interventionDescriptionEditButtonActionPerformed
 
     private void workspaceNotesEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workspaceNotesEditButtonActionPerformed
-        // TODO add your handling code here:
+
+        int textLength=workspaceNotesText.getText().length();
+        workspaceNotesText.setCaretPosition(textLength);
+        workspaceNotesText.setEditable(true);
+        workspaceNotesText.requestFocus();
+        
+        workspaceNotesDoneButton.setEnabled(true);
     }//GEN-LAST:event_workspaceNotesEditButtonActionPerformed
+
+    private void tabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedPaneStateChanged
+        // TODO add your handling code here:
+        int selectedIndex = tabbedPane.getSelectedIndex();
+        if (tabbedPane.getTabCount() == 3) {
+            switch (selectedIndex) {
+                case 0:
+                    switchToActivityList();
+                    break;
+                case 1:
+                    switchToActivitySummary();
+                    break;
+                case 2:
+                    switchToMaintainerList();
+                    break;
+            }
+        }
+    }//GEN-LAST:event_tabbedPaneStateChanged
+
+    private void maintainerListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maintainerListButtonActionPerformed
+        tabbedPane.setSelectedIndex(2);
+    }//GEN-LAST:event_maintainerListButtonActionPerformed
+
+    private void interventionDescTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_interventionDescTextFocusLost
+        interventionDescText.setEditable(false);
+        activityModified();
+    }//GEN-LAST:event_interventionDescTextFocusLost
+
+    private void workspaceNotesTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_workspaceNotesTextFocusLost
+        workspaceNotesText.setEditable(false);
+        activityModified();
+    }//GEN-LAST:event_workspaceNotesTextFocusLost
+
+    private void interventionDescDoneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interventionDescDoneButtonActionPerformed
+        // TODO add your handling code here:
+        interventionDescText.setEditable(false);
+        interventionDescDoneButton.setEnabled(false);
+        activityModified();
+    }//GEN-LAST:event_interventionDescDoneButtonActionPerformed
+
+    private void workspaceNotesDoneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workspaceNotesDoneButtonActionPerformed
+        // TODO add your handling code here:
+        workspaceNotesText.setEditable(false);
+        workspaceNotesDoneButton.setEnabled(false);
+        activityModified();
+    }//GEN-LAST:event_workspaceNotesDoneButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -509,6 +610,8 @@ public class PlannerForm extends javax.swing.JFrame {
     private javax.swing.JLabel activityListLabel;
     private javax.swing.JPanel activitySummary;
     private javax.swing.JTable activityTable;
+    private javax.swing.JLabel areaLabel;
+    private javax.swing.JButton interventionDescDoneButton;
     private javax.swing.JLabel interventionDescLabel;
     private javax.swing.JScrollPane interventionDescScrollPane;
     private javax.swing.JTextPane interventionDescText;
@@ -521,7 +624,6 @@ public class PlannerForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
@@ -532,6 +634,7 @@ public class PlannerForm extends javax.swing.JFrame {
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JLabel weekNumberLabel;
     private javax.swing.JLabel weeklabel;
+    private javax.swing.JButton workspaceNotesDoneButton;
     private javax.swing.JButton workspaceNotesEditButton;
     private javax.swing.JLabel workspaceNotesLabel;
     private javax.swing.JScrollPane workspaceNotesScrollPane;
@@ -541,6 +644,6 @@ public class PlannerForm extends javax.swing.JFrame {
     private LinkedList<Activity> activities;
     private LinkedList<Maintainer> maintainers;
     private Activity selectedActivity;
-    
+
     private MultiPanelManager panelManager;
 }

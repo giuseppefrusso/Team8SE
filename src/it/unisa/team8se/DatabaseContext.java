@@ -49,6 +49,16 @@ public class DatabaseContext {
         return db;
     }
     
+    public static boolean isConnected(){
+        Connection conn = getConnection();
+        try {
+            return conn != null && conn.isValid(1000);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
     public static Statement getStatement(){
         try {
             return db.createStatement();

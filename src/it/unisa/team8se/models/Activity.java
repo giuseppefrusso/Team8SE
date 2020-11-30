@@ -257,22 +257,9 @@ public class Activity extends DatabaseModel{
     public boolean existsInDatabase() {
         return Activity.getInstanceWithPK(getID()) != null;
     }
-    
+
+    public void updateInDatabase() throws SQLException{
+        String sql = "update attivita_pianificata set ";
+        LinkedList<Activity> list = DatabaseContext.fetchAllModels(Activity.class, DatabaseContext.getPreparedStatement(sql));
+    }
 }
-
-
-     /*
-    LinkedList<Activity> activities = new LinkedList<>();
-    try {
-    PreparedStatement ps = DatabaseContext.getConnection().prepareStatement(sql);
-    ResultSet results = ps.executeQuery();
-    while (results.next()) {
-    Activity activity = new Activity();
-    activity.getFromResultSet(results);
-    activities.add(activity);
-    }
-    return (Activity[])activities.toArray();
-    } catch (SQLException ex) {
-    Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    return null;*/
