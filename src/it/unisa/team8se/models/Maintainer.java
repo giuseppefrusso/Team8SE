@@ -50,109 +50,110 @@ public class Maintainer extends User {
     }
 
     public void removeCompetence(int ID) {
-
+        
     }
 
-    public static Maintainer[] getAllDatabaseInstances() {
+    public static Maintainer[] getAllDatabaseInstances() throws SQLException {
         String sql = "select * from maintainer order by username";
-        try {
-            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-            LinkedList<Maintainer> instances = DatabaseContext.fetchAllModels(Maintainer.class, ps);
-            return Arrays.copyOf(instances.toArray(), instances.size(), Maintainer[].class);
-        } catch (SQLException ex) {
-            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        LinkedList<Maintainer> instances = DatabaseContext.fetchAllModels(Maintainer.class, ps);
+        return Arrays.copyOf(instances.toArray(), instances.size(), Maintainer[].class);
+
     }
 
-    public static Maintainer getInstanceWithPK(String username) {
+    public static Maintainer getInstanceWithPK(String username) throws SQLException {
         String sql = "select * from maintainer where username = ?";
-        try {
-            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-            ps.setString(1, username);
-            LinkedList<Maintainer> instances = DatabaseContext.fetchAllModels(Maintainer.class, ps);
-            if (instances.size() > 0) {
-                return instances.get(0);
-            } else {
-                return null;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
 
-    public void updateToDatabase() {
-        try {
-            String sql = "update maintainer set password = ?, name = ?, surname = ? where username = ?";
-            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-
-            ps.setString(1, getPassword());
-            ps.setString(2, getName());
-            ps.setString(3, getSurname());
-            ps.setString(4, getUsername());
-
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(Planner.class.getName()).log(Level.SEVERE, null, ex);
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setString(1, username);
+        LinkedList<Maintainer> instances = DatabaseContext.fetchAllModels(Maintainer.class, ps);
+        if (instances.size() > 0) {
+            return instances.get(0);
+        } else {
+            return null;
         }
     }
 
-    public void updateToDatabase(String newPk) {
-        try {
-            String sql = "update maintainer set username = ?, password = ?, name = ?, surname = ? where username = ?";
-            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+    public void updateToDatabase() throws SQLException {
 
-            ps.setString(1, newPk);
-            ps.setString(2, getPassword());
-            ps.setString(3, getName());
-            ps.setString(4, getSurname());
-            ps.setString(5, getUsername());
+        String sql = "update maintainer set password = ?, name = ?, surname = ? where username = ?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
 
-            ps.executeUpdate();
-            ps.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Planner.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ps.setString(1, getPassword());
+        ps.setString(2, getName());
+        ps.setString(3, getSurname());
+        ps.setString(4, getUsername());
+
+        ps.executeUpdate();
+        
+    }
+    
+
+    
+
+    
+
+    public void updateToDatabase(String newPk) throws SQLException {
+
+        String sql = "update maintainer set username = ?, password = ?, name = ?, surname = ? where username = ?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+
+        ps.setString(1, newPk);
+        ps.setString(2, getPassword());
+        ps.setString(3, getName());
+        ps.setString(4, getSurname());
+        ps.setString(5, getUsername());
+
+        ps.executeUpdate();
+        ps.close();
+
+    }
+
+    public void removeFromDatabase() throws SQLException {
+        String sql = "delete from maintainer where username=?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+
+        ps.setString(1, getUsername());
+
+        ps.executeUpdate();
+        ps.close();
     }
 
     @Override
-    public void saveToDatabase() {
-        try {
-            String sql = "insert into maintainer (username,password,name,surname) values (?,?,?,?)";
-            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+    public void saveToDatabase() throws SQLException {
 
-            ps.setString(1, getUsername());
-            ps.setString(2, getPassword());
-            ps.setString(3, getName());
-            ps.setString(4, getSurname());
+        String sql = "insert into maintainer (username,password,name,surname) values (?,?,?,?)";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
 
-            ps.executeUpdate();
+        ps.setString(1, getUsername());
+        ps.setString(2, getPassword());
+        ps.setString(3, getName());
+        ps.setString(4, getSurname());
 
-        } catch (SQLException ex) {
-            Logger.getLogger(Planner.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ps.executeUpdate();
+
     }
 
     @Override
     public void getFromResultSet(ResultSet rs) throws SQLException {
         super.getFromResultSet(rs);
-        
+
         Competence[] competences = Competence.getAllCompetenceOfMaintainer(getUsername());
-        if(competences != null){
+        if (competences != null) {
             Collections.addAll(competencies, competences);
         }
     }
 
     @Override
-    public boolean existsInDatabase() {
+    public boolean existsInDatabase() throws SQLException{
         return Maintainer.getInstanceWithPK(getUsername()) != null;
     }
-    
-    public static Maintainer authenticate(String username, String password) {
+
+    public static Maintainer authenticate(String username, String password) throws SQLException {
         Maintainer m = Maintainer.getInstanceWithPK(username);
-        if(m != null){
-            if(m.getPassword().equals(password)){
+        if (m != null) {
+            if (m.getPassword().equals(password)) {
                 return m;
             }
         }

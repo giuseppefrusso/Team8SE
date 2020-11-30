@@ -21,6 +21,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -31,8 +33,6 @@ public class SystemAdminForm extends javax.swing.JFrame {
 
     protected DefaultTableModel tableModel;
     private ButtonGroup buttonGroup;
-    private final String username = "postgres";
-    private final String password = "password";
 
     private void initTableModel() {
         tableModel = new DefaultTableModel() {
@@ -60,7 +60,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
      * Creates new form SystemAdminForm
      */
     public SystemAdminForm() {
-        DatabaseContext.connectDatabase("ProgettoSE",username, password);
+        DatabaseContext.connectDatabase();
         initTableModel();
         refreshUsers();
         initButtonGroup();
@@ -282,37 +282,41 @@ public class SystemAdminForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     protected boolean refreshUsers() {
-        tableModel.setRowCount(0);
-        LinkedList<User> allUsers = new LinkedList<>();
-        
-        Maintainer[] ms = Maintainer.getAllDatabaseInstances();
-        if(ms != null){
-            Collections.addAll(allUsers, ms);
-        }
-        else{
+        try {
+            tableModel.setRowCount(0);
+            LinkedList<User> allUsers = new LinkedList<>();
+            
+            Maintainer[] ms = Maintainer.getAllDatabaseInstances();
+            if(ms != null){
+                Collections.addAll(allUsers, ms);
+            }
+            else{
+                return false;
+            }
+            
+            Planner[] ps = Planner.getAllDatabaseInstances();
+            if(ps != null){
+                Collections.addAll(allUsers, ps);
+            }
+            else{
+                return false;
+            }
+            
+            SystemAdmin[] sas = SystemAdmin.getAllDatabaseInstances();
+            if(sas != null){
+                Collections.addAll(allUsers, sas);
+            }
+            else{
+                return false;
+            }
+            
+            for(User u : allUsers){
+                tableModel.addRow(u.toArray());
+            }
+        } catch (SQLException ex) {
+            raiseError("Errore nel caricamento");
             return false;
         }
-        
-        Planner[] ps = Planner.getAllDatabaseInstances();
-        if(ps != null){
-            Collections.addAll(allUsers, ps);
-        }
-        else{
-            return false;
-        }
-        
-        SystemAdmin[] sas = SystemAdmin.getAllDatabaseInstances();
-        if(sas != null){
-            Collections.addAll(allUsers, sas);
-        }
-        else{
-            return false;
-        }
-        
-        for(User u : allUsers){
-            tableModel.addRow(u.toArray());
-        }
-        
         return true;
     }
 
