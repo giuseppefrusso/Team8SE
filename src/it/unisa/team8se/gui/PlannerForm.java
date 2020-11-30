@@ -12,6 +12,7 @@ import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Area;
 import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
+import java.awt.EventQueue;
 import java.util.Collections;
 import java.util.LinkedList;
 import javax.swing.ListSelectionModel;
@@ -484,10 +485,11 @@ public class PlannerForm extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        if(jButton2.isSelected())
-        {
-        maintainerList.isShowing();
-        }
+      EventQueue.invokeLater(()->{
+          new MaintainerForm().setVisible(true); //se dobbiamo richiamare  MaintainerForm
+      });
+      tabbedPane.setSelectedIndex(2); // se dobbiamo richiamare maintainerList
+      
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
