@@ -108,11 +108,11 @@ public class Competence extends DatabaseModel {
     @Override
     public void saveToDatabase() {
         try {
-            String sql = "insert into competenza (id,descrizione) values (?,?)";
+            String sql = "insert into competenza (descrizione, id) values (?, ?)";
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             
-            ps.setInt(1, getID());
-            ps.setString(2, getDescrizione());
+            ps.setInt(2, getID());
+            ps.setString(1, getDescrizione());
             
             ps.executeUpdate();
             ps.close();
