@@ -546,8 +546,19 @@ public class SystemAdminForm extends javax.swing.JFrame {
     }//GEN-LAST:event_modifyButtonActionPerformed
 
     protected void removeUser(String selectedUsername, int selectedRow) {
-        tableModel.removeRow(selectedRow);
-        //rimuovere dal db con l'username calcolato
+        try{
+            String role = (String) tableModel.getValueAt(selectedRow, 4);
+            if(role.equalsIgnoreCase("Planner")) {
+                Planner.removeFromDatabase(selectedUsername);
+            } if(role.equalsIgnoreCase("Maintainer")) {
+                Maintainer.removeFromDatabase(selectedUsername);
+            } if(role.equalsIgnoreCase("System Admin")) {
+                SystemAdmin.removeFromDatabase(selectedUsername);
+            }
+        }catch(SQLException ex) {
+            raiseError("Errore nella rimozione!");
+        }
+        refreshUsers();
     }
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
