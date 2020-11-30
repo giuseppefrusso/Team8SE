@@ -30,7 +30,7 @@ public class PlannerForm extends javax.swing.JFrame {
      */
     public PlannerForm() {
         if (!DatabaseContext.isConnected()) {
-            DatabaseContext.connectDatabase("ProgettoSE", "postgres", "password");
+            DatabaseContext.connectDatabase();
         }
         initComponents();
         setupActivityTable();
@@ -67,7 +67,11 @@ public class PlannerForm extends javax.swing.JFrame {
 
     private void setupMaintainerTable() {
         maintainers = new LinkedList<>();
-        Collections.addAll(maintainers, Maintainer.getAllDatabaseInstances());
+        try {
+            Collections.addAll(maintainers, Maintainer.getAllDatabaseInstances());
+        } catch (SQLException ex) {
+            Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
         maintainerTable.setModel(new MaintainerAvailabilityDataModel(maintainers));
     }
 

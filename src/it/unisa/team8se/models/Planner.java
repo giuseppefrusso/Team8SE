@@ -21,6 +21,13 @@ import java.util.logging.Logger;
  */
 public class Planner extends User {
 
+    public Planner() {
+    }
+
+    public Planner(String surname, String name, String username, String password) {
+        super(surname, name, username, password, "Planner");
+    }
+    
     public static Planner[] getAllDatabaseInstances() {
         try {
             String sql = "select * from planner";
@@ -54,7 +61,7 @@ public class Planner extends User {
     @Override
     public void saveToDatabase() {
         try {
-            String sql = "insert into planner (username,password,name,surname) values (?,?,?,?)";
+            String sql = "insert into planner (username,password,nome,cognome) values (?,?,?,?)";
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1, getUsername());
             ps.setString(2, getPassword());
@@ -67,9 +74,19 @@ public class Planner extends User {
         }
     }
 
+     public static void removeFromDatabase(String username) throws SQLException {
+        String sql = "delete from planner where username=?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+
+        ps.setString(1, username);
+
+        ps.executeUpdate();
+        ps.close();
+    }
+    
     public void updateToDatabase() {
         try {
-            String sql = "update planner set password = ?, name = ?, surname = ? where username = ?";
+            String sql = "update planner set password = ?, nome = ?, cognome = ? where username = ?";
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             
             ps.setString(1, getPassword());
@@ -85,7 +102,7 @@ public class Planner extends User {
 
     public void updateToDatabase(String newPk) {
         try {
-            String sql = "update planner set username = ?, password = ?, name = ?, surname = ? where username = ?";
+            String sql = "update planner set username = ?, password = ?, nome = ?, cognome = ? where username = ?";
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             
             ps.setString(1, newPk);
@@ -103,6 +120,7 @@ public class Planner extends User {
     @Override
     public void getFromResultSet(ResultSet rs) throws SQLException {
         super.getFromResultSet(rs);
+        setRole("Planner");
     }
 
     @Override

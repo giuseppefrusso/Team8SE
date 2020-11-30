@@ -10,7 +10,6 @@ import it.unisa.team8se.models.Maintainer;
 import it.unisa.team8se.models.Planner;
 import it.unisa.team8se.models.base.User;
 import it.unisa.team8se.models.SystemAdmin;
-     
 
 import java.awt.Toolkit;
 import javax.swing.ButtonGroup;
@@ -24,7 +23,6 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 /**
  *
  * @author cptso
@@ -33,6 +31,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
 
     protected DefaultTableModel tableModel;
     private ButtonGroup buttonGroup;
+    private LinkedList<User> allUsers;
 
     private void initTableModel() {
         tableModel = new DefaultTableModel() {
@@ -60,6 +59,8 @@ public class SystemAdminForm extends javax.swing.JFrame {
      * Creates new form SystemAdminForm
      */
     public SystemAdminForm() {
+        allUsers = new LinkedList<>();
+
         DatabaseContext.connectDatabase();
         initTableModel();
         refreshUsers();
@@ -284,33 +285,30 @@ public class SystemAdminForm extends javax.swing.JFrame {
     protected boolean refreshUsers() {
         try {
             tableModel.setRowCount(0);
-            LinkedList<User> allUsers = new LinkedList<>();
-            
+            allUsers.clear();
+
             Maintainer[] ms = Maintainer.getAllDatabaseInstances();
-            if(ms != null){
+            if (ms != null) {
                 Collections.addAll(allUsers, ms);
-            }
-            else{
+            } else {
                 return false;
             }
-            
+
             Planner[] ps = Planner.getAllDatabaseInstances();
-            if(ps != null){
+            if (ps != null) {
                 Collections.addAll(allUsers, ps);
-            }
-            else{
+            } else {
                 return false;
             }
-            
+
             SystemAdmin[] sas = SystemAdmin.getAllDatabaseInstances();
-            if(sas != null){
+            if (sas != null) {
                 Collections.addAll(allUsers, sas);
-            }
-            else{
+            } else {
                 return false;
             }
-            
-            for(User u : allUsers){
+
+            for (User u : allUsers) {
                 tableModel.addRow(u.toArray());
             }
         } catch (SQLException ex) {
@@ -410,73 +408,98 @@ public class SystemAdminForm extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameFieldMouseClicked
 
     protected boolean modifyUser(String newValue, int selectedRow, int selectedColumn) {
-        String selectedUsername = (String) tableModel.getValueAt(selectedRow, 3);
+        String selectedUsername = (String) tableModel.getValueAt(selectedRow, 2);
+        String selectedRole = (String) tableModel.getValueAt(selectedRow, 4);
+        String field = tableModel.getColumnName(selectedColumn);
 
         if (selectedColumn == 2 && containsUsername(newValue)) {
             raiseError("Username già presente!");
             return false;
         }
 
-        tableModel.setValueAt(newValue, selectedRow, selectedColumn);
-        String field = tableModel.getColumnName(selectedColumn);           
-        //modificare in db usando selectedUser come chiave
-        if(field.equals("Ruolo")){
-            
-        }
-        
-        /*
-        try {
-            Connection c = DatabaseContext.getConnection();
-            selectedColumn = tableUsers.getSelectedColumn();
-            String field = tableModel.getColumnName(selectedColumn);
-            PreparedStatement ps;
-
-            if (field.equals("Ruolo")) {
-                String query = "insert into " + newValue + "(username,password,cognome,nome) values(?,?,?,?)";
-                ps = c.prepareStatement(query);
-                ps.setString(1, (String) tableModel.getValueAt(selectedRow, 2));
-                ps.setString(2, (String) tableModel.getValueAt(selectedRow, 3));
-                ps.setString(3, (String) tableModel.getValueAt(selectedRow, 0));
-                ps.setString(4, (String) tableModel.getValueAt(selectedRow, 1));
-                ps.executeUpdate();
-                if (((String) tableModel.getValueAt(selectedRow, selectedColumn)).equalsIgnoreCase("planner")) {
-                    String query1 = "delete from planner where username = ?";
-                    ps = c.prepareStatement(query1);
-                    ps.setString(1, (String) tableModel.getValueAt(selectedRow, 2));
-                    ps.executeUpdate();
-
+        if (field.equals("Ruolo")) {
+            try {
+                if (selectedRole.equalsIgnoreCase("maintainer")) {
+                    Maintainer.removeFromDatabase(selectedUsername);
                 }
-                if (((String) tableModel.getValueAt(selectedRow, selectedColumn)).equalsIgnoreCase("maintainer")) {
-                    String query1 = "delete from maintainer where username = ?";
-                    ps = c.prepareStatement(query1);
-                    ps.setString(1, (String) tableModel.getValueAt(selectedRow, 2));
-                    ps.executeUpdate();
-
+                if (selectedRole.equalsIgnoreCase("planner")) {
+                    Planner.removeFromDatabase(selectedUsername);
                 }
-                if (((String) tableModel.getValueAt(selectedRow, selectedColumn)).equalsIgnoreCase("system admin")) {
-                    String query1 = "delete from system_administrator where username = ?";
-                    ps = c.prepareStatement(query1);
-                    ps.setString(1, (String) tableModel.getValueAt(selectedRow, 2));
-                    ps.executeUpdate();
-
+                if (selectedRole.equalsIgnoreCase("system admin")) {
+                    SystemAdmin.removeFromDatabase(selectedUsername);
                 }
-            } else {
-                String query = "update " + tableModel.getValueAt(selectedRow, 4) + " set " + field +"= ? where username = ?";
-                ps = c.prepareStatement(query);
-                ps.setString(1, newValue);
-                ps.setString(2, (String) tableModel.getValueAt(selectedRow, 2));
-                ps.executeUpdate();
+
+                if (newValue.equalsIgnoreCase("maintainer")) {
+                    Maintainer m = new Maintainer((String) tableModel.getValueAt(selectedRow, 0),
+                            (String) tableModel.getValueAt(selectedRow, 1),
+                            (String) tableModel.getValueAt(selectedRow, 2),
+                            (String) tableModel.getValueAt(selectedRow, 3));
+
+                    m.saveToDatabase();
+                }
+                if (newValue.equalsIgnoreCase("planner")) {
+                    Planner p = new Planner((String) tableModel.getValueAt(selectedRow, 0),
+                            (String) tableModel.getValueAt(selectedRow, 1),
+                            (String) tableModel.getValueAt(selectedRow, 2),
+                            (String) tableModel.getValueAt(selectedRow, 3));
+                    p.saveToDatabase();
+                }
+                if (newValue.equalsIgnoreCase("system admin")) {
+                    SystemAdmin sa = new SystemAdmin((String) tableModel.getValueAt(selectedRow, 0),
+                            (String) tableModel.getValueAt(selectedRow, 1),
+                            (String) tableModel.getValueAt(selectedRow, 2),
+                            (String) tableModel.getValueAt(selectedRow, 3));
+                    sa.saveToDatabase();
+                }
+            } catch (SQLException e) {
+                raiseError("Errore nella modifica del ruolo.");
+                return false;
             }
-            ps.close();
+        } else if (field.equalsIgnoreCase("username")) {
+            try {
+                if (selectedRole.equalsIgnoreCase("maintainer")) {
+                    Maintainer m = (Maintainer) allUsers.get(selectedRow);
+                    m.updateToDatabase(newValue);
+                } else if (selectedRole.equalsIgnoreCase("planner")) {
+                    Planner p = (Planner) allUsers.get(selectedRow);
+                    p.updateToDatabase(newValue);
+                } else if (selectedRole.equalsIgnoreCase("system admin")) {
+                    SystemAdmin sa = (SystemAdmin) allUsers.get(selectedRow);
+                    sa.updateToDatabase(newValue);
+                }
+            } catch (SQLException e) {
+                raiseError("ERRORE" + e.getMessage());
+                return false;
+            }
+        } else {
+            try {
+                tableModel.setValueAt(newValue, selectedRow, selectedColumn);
 
-        } catch (SQLException ex) {
-            raiseError("Errore nella modifica");
-            return false;
+                if (selectedRole.equalsIgnoreCase("maintainer")) {
+                    Maintainer m = (Maintainer) allUsers.get(selectedRow);
+                    m.setSurname((String) tableModel.getValueAt(selectedRow, 0));
+                    m.setName((String) tableModel.getValueAt(selectedRow, 1));
+                    m.setPassword((String) tableModel.getValueAt(selectedRow, 3));
+                    m.updateToDatabase();
+                } else if (selectedRole.equalsIgnoreCase("planner")) {
+                    Planner p = (Planner) allUsers.get(selectedRow);
+                    p.setSurname((String) tableModel.getValueAt(selectedRow, 0));
+                    p.setName((String) tableModel.getValueAt(selectedRow, 1));
+                    p.setPassword((String) tableModel.getValueAt(selectedRow, 3));
+                    p.updateToDatabase();
+                } else if (selectedRole.equalsIgnoreCase("system admin")) {
+                    SystemAdmin sa = (SystemAdmin) allUsers.get(selectedRow);
+                    sa.setSurname((String) tableModel.getValueAt(selectedRow, 0));
+                    sa.setName((String) tableModel.getValueAt(selectedRow, 1));
+                    sa.setPassword((String) tableModel.getValueAt(selectedRow, 3));
+                    sa.updateToDatabase();
+                }
+            } catch (SQLException e) {
+                raiseError("ERRORE" + e.getMessage());
+                return false;
+            }
         }
-        
         refreshUsers();
-        return true;
-        */
         return true;
     }
 

@@ -13,8 +13,6 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -77,7 +75,7 @@ public class Maintainer extends User {
 
     public void updateToDatabase() throws SQLException {
 
-        String sql = "update maintainer set password = ?, name = ?, surname = ? where username = ?";
+        String sql = "update maintainer set password = ?, nome = ?, cognome = ? where username = ?";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
 
         ps.setString(1, getPassword());
@@ -88,15 +86,10 @@ public class Maintainer extends User {
         ps.executeUpdate();
         
     }
-    
-
-    
-
-    
 
     public void updateToDatabase(String newPk) throws SQLException {
 
-        String sql = "update maintainer set username = ?, password = ?, name = ?, surname = ? where username = ?";
+        String sql = "update maintainer set username = ?, password = ?, nome = ?, cognome = ? where username = ?";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
 
         ps.setString(1, newPk);
@@ -110,11 +103,11 @@ public class Maintainer extends User {
 
     }
 
-    public void removeFromDatabase() throws SQLException {
+    public static void removeFromDatabase(String username) throws SQLException {
         String sql = "delete from maintainer where username=?";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
 
-        ps.setString(1, getUsername());
+        ps.setString(1, username);
 
         ps.executeUpdate();
         ps.close();
@@ -123,7 +116,7 @@ public class Maintainer extends User {
     @Override
     public void saveToDatabase() throws SQLException {
 
-        String sql = "insert into maintainer (username,password,name,surname) values (?,?,?,?)";
+        String sql = "insert into maintainer (username,password,nome,cognome) values (?,?,?,?)";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
 
         ps.setString(1, getUsername());
@@ -138,7 +131,8 @@ public class Maintainer extends User {
     @Override
     public void getFromResultSet(ResultSet rs) throws SQLException {
         super.getFromResultSet(rs);
-
+        setRole("Maintainer");
+        
         Competence[] competences = Competence.getAllCompetenceOfMaintainer(getUsername());
         if (competences != null) {
             Collections.addAll(competencies, competences);
