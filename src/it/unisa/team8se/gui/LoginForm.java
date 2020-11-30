@@ -10,8 +10,9 @@ import it.unisa.team8se.models.Maintainer;
 import it.unisa.team8se.models.Planner;
 import it.unisa.team8se.models.SystemAdmin;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.sql.Connection;
-
+import java.sql.SQLException;
 
 /**
  *
@@ -19,7 +20,6 @@ import java.sql.Connection;
  */
 public class LoginForm extends javax.swing.JFrame {
 
-    
     private final String TEST_PASSWORD = "test";
     private final String TEST_USERNAME = TEST_PASSWORD;
 
@@ -159,47 +159,54 @@ public class LoginForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        
-        String user = usernameField.getText();
-        String pwd = passwordField.getText();
-        String role = (String) roleSelector.getSelectedItem();
+        try {
+            String user = usernameField.getText();
+            String pwd = passwordField.getText();
+            String role = (String) roleSelector.getSelectedItem();
 
-        if(role.equals("Maintainer")){
-            Maintainer m = Maintainer.authenticate(user, pwd);
-            if(m != null){
-                EventQueue.invokeLater(() -> {
-                    new MaintainerForm().setVisible(true);
-                    dispose();
-                });
-                return;
+            if (role.equals("Maintainer")) {
+                Maintainer m = Maintainer.authenticate(user, pwd);
+                if (m != null) {
+                    EventQueue.invokeLater(() -> {
+                        new MaintainerForm().setVisible(true);
+                        dispose();
+                    });
+                    return;
+                }
+            } else if (role.equals("Planner")) {
+                Planner p = Planner.authenticate(user, pwd);
+                if (p != null) {
+                    EventQueue.invokeLater(() -> {
+                        new PlannerForm().setVisible(true);
+                        dispose();
+                    });
+                    return;
+                }
+            } else if (role.equals("SystemAdmin")) {
+                SystemAdmin sa = SystemAdmin.authenticate(user, pwd);
+                if (sa != null) {
+                    EventQueue.invokeLater(() -> {
+                        new SystemAdminForm().setVisible(true);
+                        dispose();
+                    });
+                    return;
+                }
             }
+
+            loginMessageLabel.setText("USER O PASSWORD ERRATI");
+            Toolkit.getDefaultToolkit().beep();
+            usernameField.setText("");
+            passwordField.setText("");
+        } catch (SQLException ex) {
+            loginMessageLabel.setText("ERRORE DI LOGIN");
+            Toolkit.getDefaultToolkit().beep();
+            usernameField.setText("");
+            passwordField.setText("");
         }
-        else if(role.equals("Planner")){
-            Planner p = Planner.authenticate(user,pwd);
-            if(p != null){
-                EventQueue.invokeLater(() -> {
-                    new PlannerForm().setVisible(true);
-                    dispose();
-                });
-                return;
-            }
-        }
-        else if(role.equals("SystemAdmin")){
-            SystemAdmin sa = SystemAdmin.authenticate(user,pwd);
-            if(sa != null){
-                EventQueue.invokeLater(() -> {
-                    new SystemAdminForm().setVisible(true);
-                    dispose();
-                });
-                return;
-            }
-        }
-        
-        loginMessageLabel.setText("USER O PASSWORD ERRATI");
-        usernameField.setText("");
-        passwordField.setText("");
+
+
     }//GEN-LAST:event_loginButtonActionPerformed
-        
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -233,7 +240,7 @@ public class LoginForm extends javax.swing.JFrame {
         });
 
         //CONNESSIONE AL DB
-        DatabaseContext.connectDatabase("postgres","admin", "admin");
+        DatabaseContext.connectDatabase("postgres", "admin", "admin");
         //out.println(Activity.getInstanceWithWeekNumber(32));
     }
 

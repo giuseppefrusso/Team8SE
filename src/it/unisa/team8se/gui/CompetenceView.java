@@ -15,6 +15,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -61,16 +63,21 @@ public class CompetenceView extends javax.swing.JFrame {
     }
 
     protected boolean refreshUsers() {
-        Maintainer[] ms = Maintainer.getAllDatabaseInstances();
-        if (ms != null && ms.length > 0) {
-            maintainers.clear();
-            for (Maintainer m : ms) {
-                comboBoxModel.addElement(m.getUsername());
-                maintainers.add(m);
-            }
-            return true;
+        try {
+            Maintainer[] ms = Maintainer.getAllDatabaseInstances();
+            if (ms != null && ms.length > 0) {
+                maintainers.clear();
+                for (Maintainer m : ms) {
+                    comboBoxModel.addElement(m.getUsername());
+                    maintainers.add(m);
+                }
+                
+            }          
+        } catch (SQLException ex) {
+            raiseError("Errore nel caricamento!");
+            return false;
         }
-        return false;
+        return true;
     }
 
     protected boolean refreshCompetences(String username) {
