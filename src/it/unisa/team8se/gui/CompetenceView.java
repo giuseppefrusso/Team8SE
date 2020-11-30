@@ -13,10 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -32,14 +29,13 @@ public class CompetenceView extends javax.swing.JFrame {
 
     private LinkedList<Maintainer> maintainers;
             
-    private final String username = "postgres";
-    private final String password = "password";
+    
 
     /**
      * Creates new form CompetenceView
      */
     public CompetenceView() {
-        DatabaseContext.connectDatabase("ProgettoSE", username, password);
+        DatabaseContext.connectDatabase();
         
         maintainers = new LinkedList<>();
         
@@ -268,10 +264,10 @@ public class CompetenceView extends javax.swing.JFrame {
     }
 
     protected boolean assign(Maintainer maintainer, String competenceDesc) {
+        String username = maintainer.getUsername();
         try {            
             int id = 0;
-            boolean assignCompetence = true;
-
+            boolean assignCompetence = true;         
             Competence competence = new Competence();
             
             if (!competence.existsInDatabase()) {
@@ -304,13 +300,14 @@ public class CompetenceView extends javax.swing.JFrame {
     }
 
     private void assignButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assignButtonActionPerformed
-        Maintainer selectedUsername = getSelectedMantainer();
-        if (selectedUsername == null) {
+        Maintainer selectedMaintainer = getSelectedMantainer();
+        if (selectedMaintainer == null) {
             return;
         }
+        String selectedUsername = selectedMaintainer.getUsername();
         String competence = JOptionPane.showInputDialog(this, "Assegna una competenza a '" + selectedUsername + "'",
                 "Assegnazione", JOptionPane.PLAIN_MESSAGE);
-        assign(selectedUsername, competence);
+        assign(selectedMaintainer, competence);
     }//GEN-LAST:event_assignButtonActionPerformed
 
     protected boolean remove(String username, String competence) {
@@ -350,7 +347,7 @@ public class CompetenceView extends javax.swing.JFrame {
             return;
         }
 
-        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la competenza '" + selectedCompetence + "' di '" + selectedUsername + "' ?", username, JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la competenza '" + selectedCompetence + "' di '" + selectedUsername + "' ?", "Rimozione", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             remove(selectedUsername, selectedCompetence);
         }

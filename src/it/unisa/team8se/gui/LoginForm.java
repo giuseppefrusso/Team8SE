@@ -240,7 +240,7 @@ public class LoginForm extends javax.swing.JFrame {
         });
 
         //CONNESSIONE AL DB
-        DatabaseContext.connectDatabase("postgres", "admin", "admin");
+        DatabaseContext.connectDatabase();
         //out.println(Activity.getInstanceWithWeekNumber(32));
     }
 

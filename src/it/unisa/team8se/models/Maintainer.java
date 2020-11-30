@@ -50,7 +50,7 @@ public class Maintainer extends User {
     }
 
     public void removeCompetence(int ID) {
-
+        
     }
 
     public static Maintainer[] getAllDatabaseInstances() throws SQLException {
