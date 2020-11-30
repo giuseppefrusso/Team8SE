@@ -531,7 +531,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
             return;
         }
 
-        String selectedUsername = (String) tableModel.getValueAt(selectedRow, 3);
+        String selectedUsername = (String) tableModel.getValueAt(selectedRow, 2);
 
         int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di rimuovere l'utente con username '" + selectedUsername + "' ?", "Rimozione", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (reply == JOptionPane.YES_OPTION) {
