@@ -34,7 +34,7 @@ public class UserSession {
     }
     
     private static Timestamp getCurrentTimestamp() {
-        return Timestamp.from(Instant.now().truncatedTo(ChronoUnit.MINUTES));
+        return Timestamp.from(Instant.now().truncatedTo(ChronoUnit.SECONDS));
     }
     
     public static boolean authenticateAsMaintainer(String username, String password) throws SQLException {
@@ -86,7 +86,7 @@ public class UserSession {
         ps.close();
     }
 
-    public static void close(User u) throws SQLException {
+    public static void close() throws SQLException {
         /*String sql = "update accesso set data_e_ora_logoff = ? "
                 + "where username = ? and data_e_ora_logoff = null";*/
         String sql = "update accesso set data_e_ora_logoff = ? " 

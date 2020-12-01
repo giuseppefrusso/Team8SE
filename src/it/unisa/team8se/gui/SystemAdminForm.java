@@ -6,6 +6,7 @@
 package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
+import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Maintainer;
 import it.unisa.team8se.models.Planner;
 import it.unisa.team8se.models.base.User;
@@ -97,9 +98,14 @@ public class SystemAdminForm extends javax.swing.JFrame {
         adminRadioButton = new javax.swing.JRadioButton();
         competenceButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("System Admistrator View\n");
         setBackground(new java.awt.Color(0, 51, 204));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         usernameField.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -604,6 +610,16 @@ public class SystemAdminForm extends javax.swing.JFrame {
         competence.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_competenceButtonActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            UserSession.close();
+            DatabaseContext.closeConnection();
+            System.exit(0);
+        } catch (SQLException ex) {
+            raiseError("Errore nella chiusura!");
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

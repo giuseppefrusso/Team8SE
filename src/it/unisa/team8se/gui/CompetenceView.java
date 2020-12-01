@@ -6,6 +6,7 @@
 package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
+import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
 import java.awt.Toolkit;
@@ -14,6 +15,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -231,8 +234,13 @@ public class CompetenceView extends javax.swing.JFrame {
     }//GEN-LAST:event_backButtonActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        DatabaseContext.closeConnection();
-        System.exit(0);
+        try {
+            UserSession.close();
+            DatabaseContext.closeConnection();
+            System.exit(0);
+        } catch (SQLException ex) {
+            raiseError("Errore nella chiusura!");
+        }
     }//GEN-LAST:event_formWindowClosing
 
     private Maintainer getSelectedMantainer() {

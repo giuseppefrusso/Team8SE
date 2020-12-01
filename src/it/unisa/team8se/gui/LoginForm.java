@@ -21,9 +21,6 @@ import java.sql.SQLException;
  */
 public class LoginForm extends javax.swing.JFrame {
 
-    private final String TEST_PASSWORD = "test";
-    private final String TEST_USERNAME = TEST_PASSWORD;
-
     public LoginForm() {
         initComponents();
     }
@@ -61,12 +58,17 @@ public class LoginForm extends javax.swing.JFrame {
 
         jLabel5.setText("Errore");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Login");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMaximumSize(new java.awt.Dimension(800, 600));
         setPreferredSize(new java.awt.Dimension(400, 400));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         main.setBackground(new java.awt.Color(255, 198, 139));
         java.awt.GridBagLayout mainLayout = new java.awt.GridBagLayout();
@@ -91,6 +93,13 @@ public class LoginForm extends javax.swing.JFrame {
         gridBagConstraints.gridy = 6;
         gridBagConstraints.ipady = 10;
         main.add(utenteLabel, gridBagConstraints);
+
+        usernameField.setText("Paco");
+        usernameField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                usernameFieldMouseClicked(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -105,6 +114,13 @@ public class LoginForm extends javax.swing.JFrame {
         gridBagConstraints.gridy = 10;
         gridBagConstraints.ipady = 10;
         main.add(passwordLabel, gridBagConstraints);
+
+        passwordField.setText("nothing");
+        passwordField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                passwordFieldMouseClicked(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
@@ -159,6 +175,12 @@ public class LoginForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void raiseError(String message) {
+        loginMessageLabel.setText(message);
+        Toolkit.getDefaultToolkit().beep();
+        clean();
+    }
+
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         try {
             String user = usernameField.getText();
@@ -174,7 +196,7 @@ public class LoginForm extends javax.swing.JFrame {
                     return;
                 }
             } else if (role.equals("Planner")) {
-                if (UserSession.authenticateAsPlanner(user,pwd)) {
+                if (UserSession.authenticateAsPlanner(user, pwd)) {
                     EventQueue.invokeLater(() -> {
                         new PlannerForm().setVisible(true);
                         dispose();
@@ -191,17 +213,29 @@ public class LoginForm extends javax.swing.JFrame {
                 }
             }
 
-            loginMessageLabel.setText("USER O PASSWORD ERRATI");
-            Toolkit.getDefaultToolkit().beep();
-            usernameField.setText("");
-            passwordField.setText("");
+            raiseError("USER O PASSWORD ERRATI");
         } catch (SQLException ex) {
-            loginMessageLabel.setText("ERRORE DI LOGIN");
-            Toolkit.getDefaultToolkit().beep();
-            usernameField.setText("");
-            passwordField.setText("");
+            raiseError("ERRORE DI LOGIN");
         }
     }//GEN-LAST:event_loginButtonActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        DatabaseContext.closeConnection();
+        System.exit(0);
+    }//GEN-LAST:event_formWindowClosing
+
+    private void clean() {
+        usernameField.setText("");
+        passwordField.setText("");
+    }
+
+    private void usernameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usernameFieldMouseClicked
+        clean();
+    }//GEN-LAST:event_usernameFieldMouseClicked
+
+    private void passwordFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passwordFieldMouseClicked
+        clean();
+    }//GEN-LAST:event_passwordFieldMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
