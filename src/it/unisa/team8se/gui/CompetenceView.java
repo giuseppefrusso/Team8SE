@@ -79,7 +79,7 @@ public class CompetenceView extends javax.swing.JFrame {
     protected boolean refreshCompetences(String username) {
         listModel.clear();
         Competence[] competences = Competence.getAllCompetenceOfMaintainer(username);
-        if (competences != null) {
+        if (competences.length!=0) {
             for (Competence c : competences) {
                 listModel.addElement(c.getDescrizione());
             }
@@ -264,6 +264,9 @@ public class CompetenceView extends javax.swing.JFrame {
     }
 
     protected boolean assign(Maintainer maintainer, String competenceDesc) {
+        if(maintainer == null || competenceDesc.equals(""))
+            return false;
+        
         String username = maintainer.getUsername();
         try {            
             int id = 0;

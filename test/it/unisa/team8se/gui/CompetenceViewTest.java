@@ -21,24 +21,19 @@ import static org.junit.Assert.*;
  * @author gerar
  */
 public class CompetenceViewTest {
+    private CompetenceView form;
     
     public CompetenceViewTest() {
     }
     
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
     @Before
     public void setUp() {
+        form = new CompetenceView();
     }
     
     @After
     public void tearDown() {
+        form = null;
     }
 
     /**
@@ -49,7 +44,6 @@ public class CompetenceViewTest {
         System.out.println("initListModel");
         CompetenceView instance = new CompetenceView();
         instance.initListModel();
-        // TODO review the generated test code and remove the default call to fail.
         assertTrue(instance.listModel instanceof DefaultListModel);
     }
 
@@ -60,11 +54,9 @@ public class CompetenceViewTest {
     public void testRefreshUsers() {
         System.out.println("refreshUsers");
         CompetenceView instance = new CompetenceView();
-        boolean expResult = false;
+        boolean expResult = true;
         boolean result = instance.refreshUsers();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -73,13 +65,24 @@ public class CompetenceViewTest {
     @Test
     public void testRefreshCompetences() {
         System.out.println("refreshCompetences");
-        String username = "";
+        String username = "Aug";
+        CompetenceView instance = new CompetenceView();
+        boolean expResult = true;
+        boolean result = instance.refreshCompetences(username);
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of wrog execution of refreshCompetences method, of class CompetenceView.
+     */
+    @Test
+    public void testRefreshCompetencesWrong() {
+        System.out.println("wrong execution of refreshCompetences");
+        String username = "noMaintainer";
         CompetenceView instance = new CompetenceView();
         boolean expResult = false;
         boolean result = instance.refreshCompetences(username);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -94,8 +97,6 @@ public class CompetenceViewTest {
         boolean expResult = false;
         boolean result = instance.assign(maintainer, competenceDesc);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -110,20 +111,5 @@ public class CompetenceViewTest {
         boolean expResult = false;
         boolean result = instance.remove(username, competence);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of main method, of class CompetenceView.
-     */
-    @Test
-    public void testMain() {
-        System.out.println("main");
-        String[] args = null;
-        CompetenceView.main(args);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-    
+    }    
 }
