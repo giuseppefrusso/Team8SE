@@ -6,6 +6,7 @@
 package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
+import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Maintainer;
 import it.unisa.team8se.models.Planner;
 import it.unisa.team8se.models.SystemAdmin;
@@ -165,8 +166,7 @@ public class LoginForm extends javax.swing.JFrame {
             String role = (String) roleSelector.getSelectedItem();
 
             if (role.equals("Maintainer")) {
-                Maintainer m = Maintainer.authenticate(user, pwd);
-                if (m != null) {
+                if (UserSession.authenticateAsMaintainer(user, pwd)) {
                     EventQueue.invokeLater(() -> {
                         new MaintainerForm().setVisible(true);
                         dispose();
@@ -174,8 +174,7 @@ public class LoginForm extends javax.swing.JFrame {
                     return;
                 }
             } else if (role.equals("Planner")) {
-                Planner p = Planner.authenticate(user, pwd);
-                if (p != null) {
+                if (UserSession.authenticateAsPlanner(user,pwd)) {
                     EventQueue.invokeLater(() -> {
                         new PlannerForm().setVisible(true);
                         dispose();
@@ -183,8 +182,7 @@ public class LoginForm extends javax.swing.JFrame {
                     return;
                 }
             } else if (role.equals("SystemAdmin")) {
-                SystemAdmin sa = SystemAdmin.authenticate(user, pwd);
-                if (sa != null) {
+                if (UserSession.authenticateAsSystemAdmin(user, pwd)) {
                     EventQueue.invokeLater(() -> {
                         new SystemAdminForm().setVisible(true);
                         dispose();
@@ -203,8 +201,6 @@ public class LoginForm extends javax.swing.JFrame {
             usernameField.setText("");
             passwordField.setText("");
         }
-
-
     }//GEN-LAST:event_loginButtonActionPerformed
 
     public static void main(String args[]) {
