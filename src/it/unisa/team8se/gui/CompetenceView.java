@@ -319,6 +319,9 @@ public class CompetenceView extends javax.swing.JFrame {
         String selectedUsername = selectedMaintainer.getUsername();
         String competence = JOptionPane.showInputDialog(this, "Assegna una competenza a '" + selectedUsername + "'",
                 "Assegnazione", JOptionPane.PLAIN_MESSAGE);
+        if(competence == null) {
+            return;
+        }
         assign(selectedMaintainer, competence);
     }//GEN-LAST:event_assignButtonActionPerformed
 

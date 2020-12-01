@@ -49,6 +49,7 @@ public class LoginForm extends javax.swing.JFrame {
         roleSelector = new javax.swing.JComboBox<>();
         loginButton = new javax.swing.JButton();
         loginMessageLabel = new javax.swing.JLabel();
+        viewPasswordButton = new javax.swing.JToggleButton();
 
         jLabel2.setText("jLabel2");
 
@@ -161,6 +162,19 @@ public class LoginForm extends javax.swing.JFrame {
         gridBagConstraints.gridy = 20;
         main.add(loginMessageLabel, gridBagConstraints);
 
+        viewPasswordButton.setForeground(new java.awt.Color(255, 255, 255));
+        viewPasswordButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/eye.png"))); // NOI18N
+        viewPasswordButton.setContentAreaFilled(false);
+        viewPasswordButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                viewPasswordButtonMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                viewPasswordButtonMouseReleased(evt);
+            }
+        });
+        main.add(viewPasswordButton, new java.awt.GridBagConstraints());
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -237,6 +251,14 @@ public class LoginForm extends javax.swing.JFrame {
         clean();
     }//GEN-LAST:event_passwordFieldMouseClicked
 
+    private void viewPasswordButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewPasswordButtonMousePressed
+        passwordField.setEchoChar((char)0);
+    }//GEN-LAST:event_viewPasswordButtonMousePressed
+
+    private void viewPasswordButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewPasswordButtonMouseReleased
+        passwordField.setEchoChar('*');
+    }//GEN-LAST:event_viewPasswordButtonMouseReleased
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -289,5 +311,6 @@ public class LoginForm extends javax.swing.JFrame {
     private javax.swing.JLabel ruoloLabel;
     private javax.swing.JTextField usernameField;
     private javax.swing.JLabel utenteLabel;
+    private javax.swing.JToggleButton viewPasswordButton;
     // End of variables declaration//GEN-END:variables
 }
