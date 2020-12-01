@@ -411,7 +411,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         String selectedUsername = (String) tableModel.getValueAt(selectedRow, 2);
         String selectedRole = (String) tableModel.getValueAt(selectedRow, 4);
         String field = tableModel.getColumnName(selectedColumn);
-
+        
         if (selectedColumn == 2 && containsUsername(newValue)) {
             raiseError("Username già presente!");
             return false;
@@ -508,13 +508,13 @@ public class SystemAdminForm extends javax.swing.JFrame {
 
         int selectedRow = tableUsers.getSelectedRow();
         int selectedColumn = tableUsers.getSelectedColumn();
+        String oldValue = (String) tableUsers.getValueAt(selectedRow, selectedColumn);
 
         if (selectedRow == -1 || selectedColumn == -1) {
             raiseError("Selezionare una cella");
             return;
         }
 
-        boolean modifyingRole = false;
         String field = tableModel.getColumnName(selectedColumn);
         String newValue = new String();
         if (field.equals("Ruolo")) {
@@ -523,8 +523,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
             System.out.println(choice);
             switch (choice) {
                 case -1:
-                    newValue = (String) tableModel.getValueAt(selectedRow, selectedColumn);
-                    break;
+                    return;
                 case 0:
                     newValue = "Planner";
                     break;
@@ -542,6 +541,10 @@ public class SystemAdminForm extends javax.swing.JFrame {
             }
         }
 
+        if(newValue.equalsIgnoreCase(oldValue)) {
+            return;
+        }
+        
         modifyUser(newValue, selectedRow, selectedColumn);
     }//GEN-LAST:event_modifyButtonActionPerformed
 
