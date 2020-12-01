@@ -9,9 +9,8 @@ import it.unisa.team8se.models.Maintainer;
 import it.unisa.team8se.models.Planner;
 import it.unisa.team8se.models.SystemAdmin;
 import it.unisa.team8se.models.base.User;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -29,6 +28,12 @@ public class UserSession {
         Maintainer m = Maintainer.authenticate(username, password);
         if (m != null) {
             loggedUser = m;
+            
+            /*
+            String sql = "insert into accesso ()";
+            try(PreparedStatement ps = DatabaseContext.getPreparedStatement("")){
+            }*/
+            
             return true;
         }
         return false;
@@ -38,6 +43,9 @@ public class UserSession {
         Planner p = Planner.authenticate(username, password);
         if (p != null) {
             loggedUser = p;
+            
+            
+            
             return true;
         }
         return false;
@@ -47,6 +55,9 @@ public class UserSession {
         SystemAdmin sa = SystemAdmin.authenticate(username, password);
         if (sa != null) {
             loggedUser = sa;
+            
+            
+            
             return true;
         }
         return false;

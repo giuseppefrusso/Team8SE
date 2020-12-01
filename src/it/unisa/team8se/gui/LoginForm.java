@@ -181,7 +181,7 @@ public class LoginForm extends javax.swing.JFrame {
                     });
                     return;
                 }
-            } else if (role.equals("SystemAdmin")) {
+            } else if (role.equals("Administrator")) {
                 if (UserSession.authenticateAsSystemAdmin(user, pwd)) {
                     EventQueue.invokeLater(() -> {
                         new SystemAdminForm().setVisible(true);

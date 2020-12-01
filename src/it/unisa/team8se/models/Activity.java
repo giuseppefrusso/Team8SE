@@ -2,18 +2,14 @@ package it.unisa.team8se.models;
 
 import it.unisa.team8se.models.base.DatabaseModel;
 import it.unisa.team8se.DatabaseContext;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.LinkedList; 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -158,6 +154,19 @@ public class Activity extends DatabaseModel{
         }
         return null;
     }
+    
+    public static Activity[] getInstancesAssignToMaintainer(Maintainer m){
+        String sql = "select * from attivita_pianificata where maintainer = ?";
+        try {
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            ps.setString(1, m.getUsername());
+            LinkedList<Activity> list = DatabaseContext.fetchAllModels(Activity.class, ps);
+            return Arrays.copyOf(list.toArray(),list.size(),Activity[].class);
+        } catch (SQLException ex) {
+            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     public static Activity[] getInstancesWithWeekNumber(int weekNumber){
         String sql = "select * from attivita_pianificata where week_number = ?";
@@ -257,9 +266,24 @@ public class Activity extends DatabaseModel{
     public boolean existsInDatabase() {
         return Activity.getInstanceWithPK(getID()) != null;
     }
-
-    public void updateInDatabase() throws SQLException{
-        String sql = "update attivita_pianificata set ";
-        LinkedList<Activity> list = DatabaseContext.fetchAllModels(Activity.class, DatabaseContext.getPreparedStatement(sql));
+    
+    public void updateDatabaseInterventionDesc(){
+        
     }
+    
+    public void updateDatabaseWorkspaceNotes(){
+        
+    }    
 }
+
+/*
+id
+area
+luogo_geografico
+data_e_ora
+planner
+maintainer
+descrizione_intervento
+workspace_notes
+smp
+*/

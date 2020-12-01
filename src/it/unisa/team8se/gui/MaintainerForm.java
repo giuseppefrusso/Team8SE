@@ -5,13 +5,14 @@
  */
 package it.unisa.team8se.gui;
 
-import it.unisa.team8se.MultiPanelManager;
+import it.unisa.team8se.UserSession;
 import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
-import it.unisa.team8se.gui.datamodels.MaintainerAvailabilityDataModel;
 import it.unisa.team8se.models.Activity;
-import it.unisa.team8se.models.Area;
 import it.unisa.team8se.models.Maintainer;
+import java.util.Collections;
 import java.util.LinkedList;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
 
 /**
  *
@@ -23,55 +24,57 @@ public class MaintainerForm extends javax.swing.JFrame {
      * Creates new form MaintainerForm
      */
     public MaintainerForm() {
+
         initComponents();
-        ActivityMaintainer();
-        MultiPanelManager panelManager = new MultiPanelManager();
-        panelManager.addPanel("ActivityList", jPanel1);
-        
-        
-        
+        setupActivityTable();
+
+        tabbedPane.setSelectedIndex(0);
+        switchToActivityList();
     }
- private void ActivityMaintainer(){
-        LinkedList<Activity> activities = new LinkedList<>();
-        
 
-        Activity a0= new Activity();
-        a0.setTipology("Programmers");
-        a0.setID(0);
-        a0.setTipology("Hydraulic");
-        a0.setArea(new Area("fisciano", "plumbing"));
-        a0.setEIT(120);
-
-         Activity a1= new Activity();
-        a1.setTipology("Tester");
-         a1.setID(1);
-        a1.setTipology("Hydraulic");
-        a1.setArea(new Area("fisciano", "plumbing"));
-        a1.setEIT(90);
-        
-          Activity a2= new Activity();
-        a2.setTipology("Designer");
-         a2.setID(2);
-        a2.setTipology("Hydraulic");
-        a2.setArea(new Area("fisciano", "plumbing"));
-        a2.setEIT(100);
-        
-          Activity a3= new Activity();
-        a3.setTipology("Architecture");
-        a3.setID(3);
-        a3.setTipology("Hydraulic");
-        a3.setArea(new Area("fisciano", "plumbing"));
-        a3.setEIT(122);
-
-        activities.add(a0);
-        activities.add(a1);
-        activities.add(a2);
-        activities.add(a3);
-        
-        jTable2.setModel(new ActivityTableDataModel(activities));
-        
+    private void setupActivityTable() {
+        activities = new LinkedList<>();
+        refreshActivities();
+        activityTable.setModel(new ActivityTableDataModel(activities));
+        ListSelectionModel selectionModel = activityTable.getSelectionModel();
+        selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        selectionModel.setValueIsAdjusting(true);
+        selectionModel.addListSelectionListener((ListSelectionEvent e) -> {
+            int selectedRow = activityTable.getSelectedRow();
+            if (selectedRow >= 0) {
+                activityTableRowSelected(selectedRow);
+                activityTable.clearSelection();
+            }
+        });
     }
-    
+
+    private void activityTableRowSelected(int index) {
+        selectedActivity = activities.get(index);
+        tabbedPane.setSelectedIndex(1);
+    }
+
+    private void refreshActivities() {
+        activities.clear();
+        Activity[] a = Activity.getAllInstancesAssignedToMaintainer((Maintainer) UserSession.getLoggedUser());
+        if (a != null) {
+            Collections.addAll(activities, a);
+        }
+    }
+
+    private void switchToActivityList() {
+        tabbedPane.setEnabledAt(1, false);
+        selectedActivity = null;
+    }
+
+    private void switchToActivitySummary() {
+        tabbedPane.setEnabledAt(1, true);
+
+        weekNumberLabel.setText(Integer.toString(selectedActivity.getWeekNumber()));
+        areaLabel.setText(selectedActivity.getArea().toString());
+        interventionDescText.setText(selectedActivity.getInterventionDescription());
+        workspaceNotesText.setText(selectedActivity.getWorkspaceNotes());
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -84,13 +87,13 @@ public class MaintainerForm extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
+        tabbedPane = new javax.swing.JTabbedPane();
+        activityListPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jPanel2 = new javax.swing.JPanel();
+        activityTable = new javax.swing.JTable();
+        activitySummaryPanel = new javax.swing.JPanel();
         activitySummary = new javax.swing.JPanel();
         interventionDescScrollPane = new javax.swing.JScrollPane();
         interventionDescText = new javax.swing.JTextPane();
@@ -99,13 +102,13 @@ public class MaintainerForm extends javax.swing.JFrame {
         workspaceNotesScrollPane = new javax.swing.JScrollPane();
         workspaceNotesText = new javax.swing.JTextPane();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        weekNumberLabel = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        areaLabel = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -124,13 +127,19 @@ public class MaintainerForm extends javax.swing.JFrame {
         setTitle("Maintainer View");
         setResizable(false);
 
+        tabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabbedPaneStateChanged(evt);
+            }
+        });
+
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel2.setText("Activity List");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Week n# 10");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        activityTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -141,24 +150,24 @@ public class MaintainerForm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTable2);
+        jScrollPane3.setViewportView(activityTable);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout activityListPanelLayout = new javax.swing.GroupLayout(activityListPanel);
+        activityListPanel.setLayout(activityListPanelLayout);
+        activityListPanelLayout.setHorizontalGroup(
+            activityListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(activityListPanelLayout.createSequentialGroup()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(activityListPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 795, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        activityListPanelLayout.setVerticalGroup(
+            activityListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(activityListPanelLayout.createSequentialGroup()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
@@ -166,7 +175,7 @@ public class MaintainerForm extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Activity List", jPanel1);
+        tabbedPane.addTab("Activity List", activityListPanel);
 
         activitySummary.setBackground(new java.awt.Color(255, 204, 153));
         activitySummary.setLayout(new java.awt.GridBagLayout());
@@ -228,13 +237,13 @@ public class MaintainerForm extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         activitySummary.add(jLabel4, gridBagConstraints);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel5.setText("10");
-        jLabel5.setToolTipText("");
+        weekNumberLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        weekNumberLabel.setText("10");
+        weekNumberLabel.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 4;
-        activitySummary.add(jLabel5, gridBagConstraints);
+        activitySummary.add(weekNumberLabel, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("Week n#");
@@ -284,60 +293,64 @@ public class MaintainerForm extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 3;
         activitySummary.add(jLabel7, gridBagConstraints);
 
-        jLabel8.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel8.setText("Carpentry - Fisciano");
+        areaLabel.setBackground(new java.awt.Color(204, 204, 204));
+        areaLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        areaLabel.setText("Carpentry - Fisciano");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 3;
-        activitySummary.add(jLabel8, gridBagConstraints);
+        activitySummary.add(areaLabel, gridBagConstraints);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout activitySummaryPanelLayout = new javax.swing.GroupLayout(activitySummaryPanel);
+        activitySummaryPanel.setLayout(activitySummaryPanelLayout);
+        activitySummaryPanelLayout.setHorizontalGroup(
+            activitySummaryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 795, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(activitySummaryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(activitySummaryPanelLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
                     .addComponent(activitySummary, javax.swing.GroupLayout.PREFERRED_SIZE, 795, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        activitySummaryPanelLayout.setVerticalGroup(
+            activitySummaryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 573, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(activitySummaryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(activitySummaryPanelLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
                     .addComponent(activitySummary, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
-        jTabbedPane1.addTab("Activity Summary", jPanel2);
+        tabbedPane.addTab("Activity Summary", activitySummaryPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(tabbedPane, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(tabbedPane)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void activityTableRowSelected(int index)
-    {
-            selectedActivity = activities.get(index);
-        jTabbedPane1.setSelectedIndex(1);
-        interventionDescText.setText(selectedActivity.getInterventionDescription());
-    }
-    
-    
+    private void tabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedPaneStateChanged
+        // TODO add your handling code here:
+        int index = tabbedPane.getSelectedIndex();
+        if (tabbedPane.getTabCount() == 2) {
+            if (index == 0) {
+                switchToActivityList();
+            } else if (index == 1) {
+                switchToActivitySummary();
+            }
+        }
+    }//GEN-LAST:event_tabbedPaneStateChanged
+
     /**
      * @param args the command line arguments
      */
@@ -374,7 +387,11 @@ public class MaintainerForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel activityListPanel;
     private javax.swing.JPanel activitySummary;
+    private javax.swing.JPanel activitySummaryPanel;
+    private javax.swing.JTable activityTable;
+    private javax.swing.JLabel areaLabel;
     private javax.swing.JLabel interventionDescLabel;
     private javax.swing.JScrollPane interventionDescScrollPane;
     private javax.swing.JTextPane interventionDescText;
@@ -382,23 +399,19 @@ public class MaintainerForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTabbedPane tabbedPane;
+    private javax.swing.JLabel weekNumberLabel;
     private javax.swing.JLabel workspaceNotesLabel;
     private javax.swing.JScrollPane workspaceNotesScrollPane;
     private javax.swing.JTextPane workspaceNotesText;
     // End of variables declaration//GEN-END:variables
 private Activity selectedActivity;
-private LinkedList<Activity> activities;
+    private LinkedList<Activity> activities;
 }
