@@ -6,9 +6,11 @@
 package it.unisa.team8se.gui;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
 /**
  *
@@ -32,37 +34,56 @@ public class SystemAdminFormTest {
     }
 
     @Test
-    public void testInsertUser1() {
-        form.insertUser("Landino", "Gerardo", "gerry", "xxx", "System Admin");
-        assertTrue(form.containsUsername("gerry"));
+    public void testRefreshUsers() {
+        System.out.println("refreshUsers");
+        SystemAdminForm instance = new SystemAdminForm();
+        boolean expResult = true;
+        boolean result = instance.refreshUsers();
+        assertEquals(expResult, result);
     }
-    
+
+    /**
+     * Test of containsUsername method, of class SystemAdminForm.
+     */
     @Test
-    public void testInsertUser2() {
-        form.insertUser("Landino", "Gerardo", "gerry", "xxx", "System Admin");
-        form.insertUser("Landino", "Gerardo", "gerry", "xxx", "System Admin");
-        assertEquals(form.tableModel.getRowCount(),1);
+    public void testContainsUsername() {
+        System.out.println("containsUsername");
+        String username = "";
+        SystemAdminForm instance = new SystemAdminForm();
+        boolean expResult = false;
+        boolean result = instance.containsUsername(username);
+        assertEquals(expResult, result);
     }
-    
+
+    /**
+     * Test of insertUser method, of class SystemAdminForm.
+     */
     @Test
-    public void testModifyUser1() {
-        form.insertUser("Landino", "Gerardo", "gerry", "xxx", "System Admin");
-        form.modifyUser("gerardo", 0, 2);
-        assertTrue(form.containsUsername("gerardo"));
+    public void testInsertUser() {
+        System.out.println("insertUser");
+        String surname = "";
+        String name = "";
+        String username = "Aug";
+        String password = "";
+        String role = "";
+        SystemAdminForm instance = new SystemAdminForm();
+        boolean expResult = false;
+        boolean result = instance.insertUser(surname, name, username, password, role);
+        assertEquals(expResult, result);
     }
-    
+
+    /**
+     * Test of modifyUser method, of class SystemAdminForm.
+     */
     @Test
-    public void testModifyUser2() {
-        form.insertUser("Landino", "Gerardo", "gerry", "xxx", "System Admin");
-        form.insertUser("Russo", "Gerardo", "gerardo", "xxx", "System Admin");
-        form.modifyUser("gerardo", 0, 2);
-        assertTrue(form.containsUsername("gerry"));
-    }
-    
-    @Test
-    public void testRemoveUser() {
-        form.insertUser("Landino", "Gerardo", "gerry", "xxx", "System Admin");
-        form.removeUser("gerry", 0);
-        assertEquals(form.tableModel.getRowCount(),0);
+    public void testModifyUser() {
+        System.out.println("modifyUser");
+        String newValue = "Paco";
+        int selectedRow = 0;
+        int selectedColumn = 2;
+        SystemAdminForm instance = new SystemAdminForm();
+        boolean expResult = false;
+        boolean result = instance.modifyUser(newValue, selectedRow, selectedColumn);
+        assertEquals(expResult, result);
     }
 }
