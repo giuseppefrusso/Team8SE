@@ -25,10 +25,10 @@ import java.util.logging.Logger;
  */
 public class DatabaseContext {
 
-    private static final String databaseURL = "jdbc:postgresql://localhost/";
-    private static final String username = "admin";
-    private static final String password = "admin";
-    private static final String dbName = "postgres";
+    private static final String DATABASE_URL = "jdbc:postgresql://localhost/";
+    private static final String USERNAME = "admin";
+    private static final String PASSWORD = "admin";
+    private static final String DB_NAME = "postgres";
 
     private static Connection db;
 
@@ -37,9 +37,9 @@ public class DatabaseContext {
         try {
             Class.forName("org.postgresql.Driver");
             Properties info = new Properties();
-            info.setProperty("user", username);
-            info.setProperty("password", password);
-            db = DriverManager.getConnection(databaseURL + dbName, info);
+            info.setProperty("user", USERNAME);
+            info.setProperty("password", PASSWORD);
+            db = DriverManager.getConnection(DATABASE_URL + DB_NAME, info);
         } catch (SQLException e) {
             System.err.println("CONNESSIONE AL DATABASE FALLITA.");
             System.err.println(e.getMessage());

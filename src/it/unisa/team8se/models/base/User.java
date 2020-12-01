@@ -1,14 +1,9 @@
 package it.unisa.team8se.models.base;
 
-import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.models.base.DatabaseModel;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Objects;
 
 
 /**
@@ -85,6 +80,24 @@ public abstract class User extends DatabaseModel{
         return new String[]{getSurname(),getName(),getUsername(),getPassword(),getRole()};
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final User other = (User) obj;
+        if (!Objects.equals(this.username, other.username)) {
+            return false;
+        }
+        return true;
+    }
+    
     @Override
     public void saveToDatabase() throws SQLException{
         
