@@ -269,15 +269,16 @@ public class CompetenceView extends javax.swing.JFrame {
         
         String username = maintainer.getUsername();
         try {            
-            int id = 0;
+            int id = 1;
             boolean assignCompetence = true;         
             Competence competence = new Competence();
             
             if (!competence.existsInDatabase()) {
                 ResultSet rs = DatabaseContext.getStatement().executeQuery("select max(id) from competenza");
-                rs.next();
-                int maxId = rs.getInt(1);
-                id = maxId + 1;
+                if(rs.next()) {
+                    int maxId = rs.getInt(1);
+                    id = maxId + 1;
+                }
                 rs.close();
                 
                 competence.setID(id);
