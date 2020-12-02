@@ -34,8 +34,7 @@ public class Activity extends DatabaseModel{
     private Timestamp datetime; 
     private LinkedList<Competence> requiredCompetencies;
 
-    public Activity(int ID) {
-        this.ID = ID;
+    public Activity() {
         requiredCompetencies = new LinkedList<>();
     }
 

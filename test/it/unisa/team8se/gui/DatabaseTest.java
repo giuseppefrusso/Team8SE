@@ -39,8 +39,9 @@ public class DatabaseTest {
             Logger.getLogger(DatabaseTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        activity = new Activity(new Random().nextInt(10000));
+        activity = new Activity();
         activity.setArea(new Area("molding", "Nocera"));
+        activity.setID(new Random().nextInt(10000));
         activity.setEIT(45);
         activity.setInterruptible(true);
         activity.setTipology("ambito");
