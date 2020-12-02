@@ -6,6 +6,7 @@
 package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
+import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
 import java.awt.Toolkit;
@@ -14,6 +15,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -231,8 +234,13 @@ public class CompetenceView extends javax.swing.JFrame {
     }//GEN-LAST:event_backButtonActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        DatabaseContext.closeConnection();
-        System.exit(0);
+        try {
+            UserSession.close();
+            DatabaseContext.closeConnection();
+            System.exit(0);
+        } catch (SQLException ex) {
+            raiseError("Errore nella chiusura!");
+        }
     }//GEN-LAST:event_formWindowClosing
 
     private Maintainer getSelectedMantainer() {
@@ -269,15 +277,16 @@ public class CompetenceView extends javax.swing.JFrame {
         
         String username = maintainer.getUsername();
         try {            
-            int id = 0;
+            int id = 1;
             boolean assignCompetence = true;         
             Competence competence = new Competence();
             
             if (!competence.existsInDatabase()) {
                 ResultSet rs = DatabaseContext.getStatement().executeQuery("select max(id) from competenza");
-                rs.next();
-                int maxId = rs.getInt(1);
-                id = maxId + 1;
+                if(rs.next()) {
+                    int maxId = rs.getInt(1);
+                    id = maxId + 1;
+                }
                 rs.close();
                 
                 competence.setID(id);
@@ -310,6 +319,9 @@ public class CompetenceView extends javax.swing.JFrame {
         String selectedUsername = selectedMaintainer.getUsername();
         String competence = JOptionPane.showInputDialog(this, "Assegna una competenza a '" + selectedUsername + "'",
                 "Assegnazione", JOptionPane.PLAIN_MESSAGE);
+        if(competence == null) {
+            return;
+        }
         assign(selectedMaintainer, competence);
     }//GEN-LAST:event_assignButtonActionPerformed
 
