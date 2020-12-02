@@ -20,6 +20,7 @@ public class UserSession {
 
     private static User loggedUser;
 
+    
     public static User getLoggedUser() {
         return loggedUser;
     }

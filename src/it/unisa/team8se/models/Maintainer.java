@@ -83,8 +83,7 @@ public class Maintainer extends User {
         ps.setString(3, getSurname());
         ps.setString(4, getUsername());
 
-        ps.executeUpdate();
-        
+        ps.executeUpdate();        
     }
 
     public void updateToDatabase(String newPk) throws SQLException {
@@ -100,7 +99,6 @@ public class Maintainer extends User {
 
         ps.executeUpdate();
         ps.close();
-
     }
 
     public static void removeFromDatabase(String username) throws SQLException {

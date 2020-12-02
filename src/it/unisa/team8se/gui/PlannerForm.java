@@ -17,7 +17,13 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.DocumentFilter;
 
 /**
  *
@@ -35,18 +41,18 @@ public class PlannerForm extends javax.swing.JFrame {
         initComponents();
         setupActivityTable();
         setupMaintainerTable();
+        setupTextBoxes();
+        
+        
 
+        switchToActivityList();
+    }
+    
+    private void setupTextBoxes(){
+        
+        
         interventionDescText.setEditable(false);
         workspaceNotesText.setEditable(false);
-        
-        
-        switchToActivityList();
-        
-        /*
-        panelManager = new MultiPanelManager();
-        panelManager.addPanel("ActivityList", activityList);
-        panelManager.addPanel("ActivitySummary", activitySummary);
-        panelManager.addPanel("MaintainerList", maintainerList);*/
     }
 
     private void setupActivityTable() {
@@ -476,7 +482,7 @@ public class PlannerForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void activityTableRowSelected(int index) {
-        selectedActivity = activities.get(index);        
+        selectedActivity = activities.get(index);
         tabbedPane.setSelectedIndex(1);
     }
 
@@ -498,32 +504,25 @@ public class PlannerForm extends javax.swing.JFrame {
 
     private void switchToMaintainerList() {
     }
-    
-    private void activityModified(){
-         try {
-            selectedActivity.updateInDatabase();
-        } catch (SQLException ex) {
-            Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
+
+
     private void interventionDescriptionEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interventionDescriptionEditButtonActionPerformed
 
-        int textLength=interventionDescText.getText().length();
+        int textLength = interventionDescText.getText().length();
         interventionDescText.setCaretPosition(textLength);
         interventionDescText.setEditable(true);
         interventionDescText.requestFocus();
-        
+
         interventionDescDoneButton.setEnabled(true);
     }//GEN-LAST:event_interventionDescriptionEditButtonActionPerformed
 
     private void workspaceNotesEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workspaceNotesEditButtonActionPerformed
 
-        int textLength=workspaceNotesText.getText().length();
+        int textLength = workspaceNotesText.getText().length();
         workspaceNotesText.setCaretPosition(textLength);
         workspaceNotesText.setEditable(true);
         workspaceNotesText.requestFocus();
-        
+
         workspaceNotesDoneButton.setEnabled(true);
     }//GEN-LAST:event_workspaceNotesEditButtonActionPerformed
 
@@ -550,29 +549,38 @@ public class PlannerForm extends javax.swing.JFrame {
     }//GEN-LAST:event_maintainerListButtonActionPerformed
 
     private void interventionDescTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_interventionDescTextFocusLost
+        if(selectedActivity == null) return;
+        
         interventionDescText.setEditable(false);
-        activityModified();
+        interventionDescDoneButton.setEnabled(false);
+        selectedActivity.setInterventionDescription(interventionDescText.getText());
+        selectedActivity.updateInterventionDescInDatabase();
     }//GEN-LAST:event_interventionDescTextFocusLost
 
     private void workspaceNotesTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_workspaceNotesTextFocusLost
+        if(selectedActivity == null) return;
+        
         workspaceNotesText.setEditable(false);
-        activityModified();
+        workspaceNotesDoneButton.setEnabled(false);
+        selectedActivity.setWorkspaceNotes(workspaceNotesText.getText());
+        selectedActivity.updateWorkspaceNotesInDatabase();
     }//GEN-LAST:event_workspaceNotesTextFocusLost
 
     private void interventionDescDoneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interventionDescDoneButtonActionPerformed
-        // TODO add your handling code here:
         interventionDescText.setEditable(false);
         interventionDescDoneButton.setEnabled(false);
-        activityModified();
+        selectedActivity.setInterventionDescription(interventionDescText.getText());
+        selectedActivity.updateInterventionDescInDatabase();
     }//GEN-LAST:event_interventionDescDoneButtonActionPerformed
 
     private void workspaceNotesDoneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workspaceNotesDoneButtonActionPerformed
-        // TODO add your handling code here:
         workspaceNotesText.setEditable(false);
         workspaceNotesDoneButton.setEnabled(false);
-        activityModified();
+        selectedActivity.setWorkspaceNotes(workspaceNotesText.getText());
+        selectedActivity.updateWorkspaceNotesInDatabase();
     }//GEN-LAST:event_workspaceNotesDoneButtonActionPerformed
 
+    
     /**
      * @param args the command line arguments
      */

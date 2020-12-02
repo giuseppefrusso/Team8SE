@@ -235,8 +235,52 @@ public class Activity extends DatabaseModel{
        setWorkspaceNotes(rs.getString("workspace_notes"));
        setDatetime(rs.getTimestamp("data_e_ora"));
        setInterruptible(rs.getBoolean("interrompibile"));
+       setInterventionDescription(rs.getString("descrizione_intervento"));
     }
 
+
+    @Override
+    public boolean existsInDatabase() {
+        return Activity.getInstanceWithPK(getID()) != null;
+    }
+    
+    //UPDATE FUNCTIONS 
+    
+    public void updateInterventionDescInDatabase(){
+        String sql = "update attivita_pianificata set descrizione_intervento = ? where id = ?";
+        try(PreparedStatement ps = DatabaseContext.getPreparedStatement(sql)){
+            ps.setString(1, getInterventionDescription());
+            ps.setInt(2,getID());
+            int res = ps.executeUpdate();
+        }catch(SQLException ex){
+            
+        }
+    }
+    
+    public void updateWorkspaceNotesInDatabase() {
+        String sql = "update attivita_pianificata set workspace_notes = ? where id = ?";
+        try (PreparedStatement ps = DatabaseContext.getPreparedStatement(sql)) {
+            ps.setString(1, getWorkspaceNotes());
+            ps.setInt(2, getID());
+            int res = ps.executeUpdate();
+        } catch (SQLException ex) {
+
+        }
+    }
+
+    public void updateSMPInDatabase() {
+        throw new RuntimeException("FUNZIONE NON IMPLEMENTATA!");
+        /*
+        String sql = "update attivita_pianificata set smp = ? where id = ?";
+        try (PreparedStatement ps = DatabaseContext.getPreparedStatement(sql)) {
+            int res = ps.executeUpdate();
+        } catch (SQLException ex) {
+
+        }*/
+    }
+    
+    
+    
     @Override
     public int hashCode() {
         int hash = 5; 
@@ -261,19 +305,6 @@ public class Activity extends DatabaseModel{
         }
         return true;
     }
-
-    @Override
-    public boolean existsInDatabase() {
-        return Activity.getInstanceWithPK(getID()) != null;
-    }
-    
-    public void updateDatabaseInterventionDesc(){
-        
-    }
-    
-    public void updateDatabaseWorkspaceNotes(){
-        
-    }    
 }
 
 /*

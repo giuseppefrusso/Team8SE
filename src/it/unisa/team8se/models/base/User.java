@@ -18,7 +18,7 @@ public abstract class User extends DatabaseModel{
     private String username;
     private String password;
     private String role;
-
+    
     public User(){
     }
     
