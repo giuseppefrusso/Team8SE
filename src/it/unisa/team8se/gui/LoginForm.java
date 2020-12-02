@@ -73,7 +73,7 @@ public class LoginForm extends javax.swing.JFrame {
 
         main.setBackground(new java.awt.Color(255, 198, 139));
         java.awt.GridBagLayout mainLayout = new java.awt.GridBagLayout();
-        mainLayout.columnWidths = new int[] {0};
+        mainLayout.columnWidths = new int[] {0, 6, 0, 6, 0};
         mainLayout.rowHeights = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
         main.setLayout(mainLayout);
 
@@ -81,16 +81,16 @@ public class LoginForm extends javax.swing.JFrame {
         loginLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         loginLabel.setText("LOGIN");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 200;
+        gridBagConstraints.ipadx = 100;
         main.add(loginLabel, gridBagConstraints);
 
         utenteLabel.setFont(new java.awt.Font("Trebuchet MS", 0, 16)); // NOI18N
         utenteLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         utenteLabel.setText("UTENTE");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.ipady = 10;
         main.add(utenteLabel, gridBagConstraints);
@@ -102,7 +102,7 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.ipadx = 200;
         main.add(usernameField, gridBagConstraints);
@@ -111,7 +111,7 @@ public class LoginForm extends javax.swing.JFrame {
         passwordLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         passwordLabel.setText("PASSWORD");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.ipady = 10;
         main.add(passwordLabel, gridBagConstraints);
@@ -123,7 +123,7 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.ipadx = 200;
         main.add(passwordField, gridBagConstraints);
@@ -132,14 +132,14 @@ public class LoginForm extends javax.swing.JFrame {
         ruoloLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         ruoloLabel.setText("RUOLO");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 16;
         gridBagConstraints.ipady = 10;
         main.add(ruoloLabel, gridBagConstraints);
 
         roleSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrator", "Planner", "Maintainer" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 18;
         main.add(roleSelector, gridBagConstraints);
 
@@ -150,7 +150,7 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 22;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.ipady = 20;
@@ -158,13 +158,14 @@ public class LoginForm extends javax.swing.JFrame {
 
         loginMessageLabel.setForeground(new java.awt.Color(204, 0, 51));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 20;
         main.add(loginMessageLabel, gridBagConstraints);
 
         viewPasswordButton.setForeground(new java.awt.Color(255, 255, 255));
         viewPasswordButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/eye.png"))); // NOI18N
         viewPasswordButton.setContentAreaFilled(false);
+        viewPasswordButton.setPreferredSize(new java.awt.Dimension(30, 25));
         viewPasswordButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 viewPasswordButtonMousePressed(evt);
@@ -173,7 +174,16 @@ public class LoginForm extends javax.swing.JFrame {
                 viewPasswordButtonMouseReleased(evt);
             }
         });
-        main.add(viewPasswordButton, new java.awt.GridBagConstraints());
+        viewPasswordButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewPasswordButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        main.add(viewPasswordButton, gridBagConstraints);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -258,6 +268,10 @@ public class LoginForm extends javax.swing.JFrame {
     private void viewPasswordButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewPasswordButtonMouseReleased
         passwordField.setEchoChar('*');
     }//GEN-LAST:event_viewPasswordButtonMouseReleased
+
+    private void viewPasswordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPasswordButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_viewPasswordButtonActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
