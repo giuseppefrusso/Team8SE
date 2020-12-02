@@ -20,8 +20,8 @@ public class EWO extends Activity {
 
     private Ticket ticket;
 
-    public EWO(){
-        super();
+    public EWO(int ID){
+        super(ID);
     }
 
     public Ticket getTicket() {
