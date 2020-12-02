@@ -279,7 +279,14 @@ public class Activity extends DatabaseModel{
         }*/
     }
     
-    
+    public void assignActivityToMaintainer(Maintainer m) throws SQLException{
+        String sql = "update attivita_pianificata set maintainer = ? where id = ?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setString(1, m.getUsername());
+        ps.setInt(2, ID);
+        ps.executeUpdate();
+        ps.close();
+    }
     
     @Override
     public int hashCode() {

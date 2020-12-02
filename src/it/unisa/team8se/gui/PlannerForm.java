@@ -11,19 +11,13 @@ import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
 import it.unisa.team8se.gui.datamodels.MaintainerAvailabilityDataModel;
 import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Maintainer;
+import java.awt.Toolkit;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.DocumentFilter;
 
 /**
  *
@@ -42,15 +36,12 @@ public class PlannerForm extends javax.swing.JFrame {
         setupActivityTable();
         setupMaintainerTable();
         setupTextBoxes();
-        
-        
 
         switchToActivityList();
     }
-    
-    private void setupTextBoxes(){
-        
-        
+
+    private void setupTextBoxes() {
+
         interventionDescText.setEditable(false);
         workspaceNotesText.setEditable(false);
     }
@@ -76,9 +67,28 @@ public class PlannerForm extends javax.swing.JFrame {
         try {
             Collections.addAll(maintainers, Maintainer.getAllDatabaseInstances());
         } catch (SQLException ex) {
-            Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
+            raiseError("Errore nella visualizzazione dei maintainers!");
         }
         maintainerTable.setModel(new MaintainerAvailabilityDataModel(maintainers));
+        ListSelectionModel selectionModel = maintainerTable.getSelectionModel();
+        selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        selectionModel.setValueIsAdjusting(true);
+        selectionModel.addListSelectionListener((ListSelectionEvent e) -> {
+            int selectedRow = maintainerTable.getSelectedRow();
+            if (selectedRow >= 0) {
+                try {
+                    maintainerTableRowSelected(selectedRow);
+                } catch (SQLException ex) {
+                    raiseError("Errore nell'assegnazione del maintainer!");
+                }
+                maintainerTable.clearSelection();
+            } 
+        });
+    }
+
+    private void raiseError(String message) {
+        Toolkit.getDefaultToolkit().beep();
+        JOptionPane.showMessageDialog(this, message, "Errore", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -486,6 +496,13 @@ public class PlannerForm extends javax.swing.JFrame {
         tabbedPane.setSelectedIndex(1);
     }
 
+    private void maintainerTableRowSelected(int index) throws SQLException {
+        selectedMaintainer = maintainers.get(index);
+        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler assegnare l'attività '"+selectedActivity.getID()+"' al maintainer '"+selectedMaintainer.getUsername()+"'?", "Assegnamento", JOptionPane.YES_NO_OPTION);
+        if(reply == JOptionPane.YES_OPTION) 
+            selectedActivity.assignActivityToMaintainer(selectedMaintainer);
+    }
+    
     private void switchToActivityList() {
         tabbedPane.setEnabledAt(1, false);
         tabbedPane.setEnabledAt(2, false);
@@ -503,6 +520,7 @@ public class PlannerForm extends javax.swing.JFrame {
     }
 
     private void switchToMaintainerList() {
+        
     }
 
 
@@ -549,8 +567,10 @@ public class PlannerForm extends javax.swing.JFrame {
     }//GEN-LAST:event_maintainerListButtonActionPerformed
 
     private void interventionDescTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_interventionDescTextFocusLost
-        if(selectedActivity == null) return;
-        
+        if (selectedActivity == null) {
+            return;
+        }
+
         interventionDescText.setEditable(false);
         interventionDescDoneButton.setEnabled(false);
         selectedActivity.setInterventionDescription(interventionDescText.getText());
@@ -558,8 +578,10 @@ public class PlannerForm extends javax.swing.JFrame {
     }//GEN-LAST:event_interventionDescTextFocusLost
 
     private void workspaceNotesTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_workspaceNotesTextFocusLost
-        if(selectedActivity == null) return;
-        
+        if (selectedActivity == null) {
+            return;
+        }
+
         workspaceNotesText.setEditable(false);
         workspaceNotesDoneButton.setEnabled(false);
         selectedActivity.setWorkspaceNotes(workspaceNotesText.getText());
@@ -580,7 +602,6 @@ public class PlannerForm extends javax.swing.JFrame {
         selectedActivity.updateWorkspaceNotesInDatabase();
     }//GEN-LAST:event_workspaceNotesDoneButtonActionPerformed
 
-    
     /**
      * @param args the command line arguments
      */
@@ -656,6 +677,6 @@ public class PlannerForm extends javax.swing.JFrame {
     private LinkedList<Activity> activities;
     private LinkedList<Maintainer> maintainers;
     private Activity selectedActivity;
-
+    private Maintainer selectedMaintainer;
     private MultiPanelManager panelManager;
 }

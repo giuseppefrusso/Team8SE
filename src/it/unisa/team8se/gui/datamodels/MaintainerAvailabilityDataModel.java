@@ -47,7 +47,7 @@ public class MaintainerAvailabilityDataModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return maintainers.get(rowIndex).getName();
+                return maintainers.get(rowIndex).getUsername();
             case 1:
                 return "3/5"; //TODO: Implementare contatore delle skill in base all'attività;
             default:
