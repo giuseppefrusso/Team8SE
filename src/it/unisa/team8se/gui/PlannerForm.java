@@ -12,12 +12,17 @@ import it.unisa.team8se.gui.datamodels.MaintainerAvailabilityDataModel;
 import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Maintainer;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -82,7 +87,7 @@ public class PlannerForm extends javax.swing.JFrame {
                     raiseError("Errore nell'assegnazione del maintainer!");
                 }
                 maintainerTable.clearSelection();
-            } 
+            }
         });
     }
 
@@ -120,7 +125,7 @@ public class PlannerForm extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        smpButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
@@ -326,15 +331,20 @@ public class PlannerForm extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activitySummary.add(jLabel6, gridBagConstraints);
 
-        jButton1.setBackground(new java.awt.Color(255, 255, 255));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/pdf.png"))); // NOI18N
-        jButton1.setOpaque(false);
-        jButton1.setPreferredSize(new java.awt.Dimension(70, 70));
+        smpButton.setBackground(new java.awt.Color(255, 255, 255));
+        smpButton.setForeground(new java.awt.Color(255, 255, 255));
+        smpButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/pdf.png"))); // NOI18N
+        smpButton.setOpaque(false);
+        smpButton.setPreferredSize(new java.awt.Dimension(70, 70));
+        smpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smpButtonActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 16;
         gridBagConstraints.gridy = 18;
-        activitySummary.add(jButton1, gridBagConstraints);
+        activitySummary.add(smpButton, gridBagConstraints);
 
         jScrollPane2.setEnabled(false);
         jScrollPane2.setFocusable(false);
@@ -498,11 +508,12 @@ public class PlannerForm extends javax.swing.JFrame {
 
     private void maintainerTableRowSelected(int index) throws SQLException {
         selectedMaintainer = maintainers.get(index);
-        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler assegnare l'attività '"+selectedActivity.getID()+"' al maintainer '"+selectedMaintainer.getUsername()+"'?", "Assegnamento", JOptionPane.YES_NO_OPTION);
-        if(reply == JOptionPane.YES_OPTION) 
+        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler assegnare l'attività '" + selectedActivity.getID() + "' al maintainer '" + selectedMaintainer.getUsername() + "'?", "Assegnamento", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
             selectedActivity.assignActivityToMaintainer(selectedMaintainer);
+        }
     }
-    
+
     private void switchToActivityList() {
         tabbedPane.setEnabledAt(1, false);
         tabbedPane.setEnabledAt(2, false);
@@ -520,7 +531,7 @@ public class PlannerForm extends javax.swing.JFrame {
     }
 
     private void switchToMaintainerList() {
-        
+
     }
 
 
@@ -602,6 +613,17 @@ public class PlannerForm extends javax.swing.JFrame {
         selectedActivity.updateWorkspaceNotesInDatabase();
     }//GEN-LAST:event_workspaceNotesDoneButtonActionPerformed
 
+    private void smpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smpButtonActionPerformed
+        try {
+            if (!selectedActivity.openSMPFromDatabase())
+                raiseError("SMP non definito!");
+        } catch (SQLException ex) {
+            raiseError("Errore nel caricamento dal database!");
+        } catch (IOException | IllegalArgumentException ex) {
+            raiseError("File non trovato!");
+        }
+    }//GEN-LAST:event_smpButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -649,7 +671,6 @@ public class PlannerForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane interventionDescScrollPane;
     private javax.swing.JTextPane interventionDescText;
     private javax.swing.JButton interventionDescriptionEditButton;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -664,6 +685,7 @@ public class PlannerForm extends javax.swing.JFrame {
     private javax.swing.JButton maintainerListButton;
     private javax.swing.JScrollPane maintainerScrollPane;
     private javax.swing.JTable maintainerTable;
+    private javax.swing.JButton smpButton;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JLabel weekNumberLabel;
     private javax.swing.JLabel weeklabel;

@@ -5,7 +5,9 @@
  */
 package it.unisa.team8se.models;
 
+import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.models.base.DatabaseModel;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -14,19 +16,61 @@ import java.sql.SQLException;
  * @author cptso
  */
 public class SMP extends DatabaseModel{
+    private String nome;
+    private String documentoPDF;
+
+    public SMP(String nome) {
+        this.nome = nome;
+    }
+    
+    public SMP(String nome, String documentoPDF) {
+        this.nome = nome;
+        this.documentoPDF = documentoPDF;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getDocumentoPDF() {
+        return documentoPDF;
+    }
+
+    public void setDocumentoPDF(String documentoPDF) {
+        this.documentoPDF = documentoPDF;
+    }
 
     @Override
     public void getFromResultSet(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(rs.next()) {
+            setNome(rs.getString("nome"));
+            setDocumentoPDF(rs.getString("documento_pdf"));
+        }
     }
 
     @Override
     public void saveToDatabase() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "insert into smp(nome, documento_pdf) values(?, ?)";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setString(1, nome);
+        ps.setString(2, documentoPDF);
+        ps.executeUpdate();
+        ps.close();
     }
 
     @Override
     public boolean existsInDatabase() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "select * from smp where nome = ?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setString(1, nome);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next())
+            return true;
+        else
+            return false;
     } 
 }
