@@ -99,6 +99,8 @@ public class SystemAdminForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("System Admistrator View\n");
         setBackground(new java.awt.Color(0, 51, 204));
+        setIconImage(Message.getImageIcon());
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);

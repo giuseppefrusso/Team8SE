@@ -6,7 +6,9 @@
 package it.unisa.team8se;
 
 import java.awt.Component;
+import java.awt.Image;
 import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,6 +16,7 @@ import javax.swing.JOptionPane;
  * @author giuse
  */
 public class Message {
+    
     public Message() {
         
     }
@@ -21,5 +24,10 @@ public class Message {
     public static void raiseError(Component parentComponent, String message) {
         Toolkit.getDefaultToolkit().beep();
         JOptionPane.showMessageDialog(parentComponent, message, "Errore", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public static Image getImageIcon() {
+        ImageIcon icon = new ImageIcon("\\Users\\icon.png");
+        return icon.getImage();
     }
 }

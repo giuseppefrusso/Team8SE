@@ -6,13 +6,10 @@
 package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
+import it.unisa.team8se.Message;
 import it.unisa.team8se.UserSession;
-import it.unisa.team8se.models.Maintainer;
-import it.unisa.team8se.models.Planner;
-import it.unisa.team8se.models.SystemAdmin;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
@@ -62,6 +59,7 @@ public class LoginForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Login");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setIconImage(Message.getImageIcon());
         setMaximumSize(new java.awt.Dimension(800, 600));
         setPreferredSize(new java.awt.Dimension(400, 400));
         setResizable(false);

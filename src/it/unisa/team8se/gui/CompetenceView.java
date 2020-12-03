@@ -6,6 +6,7 @@
 package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
+import it.unisa.team8se.Message;
 import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
@@ -15,8 +16,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -73,7 +72,7 @@ public class CompetenceView extends javax.swing.JFrame {
                 
             }          
         } catch (SQLException ex) {
-            raiseError("Errore nel caricamento!");
+            Message.raiseError(this,"Errore nel caricamento!");
             return false;
         }
         return true;
@@ -112,6 +111,8 @@ public class CompetenceView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Competence View");
+        setIconImage(Message.getImageIcon());
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -217,11 +218,6 @@ public class CompetenceView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void raiseError(String message) {
-        Toolkit.getDefaultToolkit().beep();
-        JOptionPane.showMessageDialog(this, message, "Errore", JOptionPane.ERROR_MESSAGE);
-    }
-
     private void comboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxActionPerformed
         String selectedUsername = (String) comboBox.getSelectedItem();
         refreshCompetences(selectedUsername);
@@ -239,13 +235,13 @@ public class CompetenceView extends javax.swing.JFrame {
             DatabaseContext.closeConnection();
             System.exit(0);
         } catch (SQLException ex) {
-            raiseError("Errore nella chiusura!");
+            Message.raiseError(this,"Errore nella chiusura!");
         }
     }//GEN-LAST:event_formWindowClosing
 
     private Maintainer getSelectedMantainer() {
         if (comboBoxModel.getSize() == 0) {
-            raiseError("Non c'è alcun manutentore!");
+            Message.raiseError(this,"Non c'è alcun manutentore!");
             return null;
         }
         int index = comboBox.getSelectedIndex();
@@ -260,12 +256,12 @@ public class CompetenceView extends javax.swing.JFrame {
 
     private String getSelectedCompetence() {
         if (listModel.getSize() == 0) {
-            raiseError("Non c'è alcuna competenza!");
+            Message.raiseError(this,"Non c'è alcuna competenza!");
             return null;
         }
         String selectedCompetence = listCompetence.getSelectedValue();
         if (selectedCompetence == null) {
-            raiseError("Non è stata selezionata alcuna competenza!");
+            Message.raiseError(this,"Non è stata selezionata alcuna competenza!");
             return null;
         }
         return selectedCompetence;
@@ -304,7 +300,7 @@ public class CompetenceView extends javax.swing.JFrame {
             ps.close();
             
         } catch (SQLException ex) {
-            raiseError("Errore nell'assegnamento");
+            Message.raiseError(this,"Errore nell'assegnamento");
             return false;
         }
         refreshCompetences(username);
@@ -347,7 +343,7 @@ public class CompetenceView extends javax.swing.JFrame {
             rs.close();
             ps.close();
         } catch (SQLException ex) {
-            raiseError("Errore nella rimozione");
+            Message.raiseError(this,"Errore nella rimozione");
             return false;
         }
         refreshCompetences(username);
