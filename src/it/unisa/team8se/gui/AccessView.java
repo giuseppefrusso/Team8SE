@@ -5,6 +5,7 @@
  */
 package it.unisa.team8se.gui;
 
+import it.unisa.team8se.Message;
 import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Access;
