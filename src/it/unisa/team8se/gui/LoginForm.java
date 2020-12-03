@@ -174,11 +174,6 @@ public class LoginForm extends javax.swing.JFrame {
                 viewPasswordButtonMouseReleased(evt);
             }
         });
-        viewPasswordButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewPasswordButtonActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 12;
@@ -268,10 +263,6 @@ public class LoginForm extends javax.swing.JFrame {
     private void viewPasswordButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewPasswordButtonMouseReleased
         passwordField.setEchoChar('*');
     }//GEN-LAST:event_viewPasswordButtonMouseReleased
-
-    private void viewPasswordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPasswordButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_viewPasswordButtonActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

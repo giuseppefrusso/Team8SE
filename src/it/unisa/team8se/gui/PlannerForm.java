@@ -7,6 +7,7 @@ package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.MultiPanelManager;
+import it.unisa.team8se.UserSession;
 import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
 import it.unisa.team8se.gui.datamodels.MaintainerAvailabilityDataModel;
 import it.unisa.team8se.models.Activity;
@@ -68,7 +69,7 @@ public class PlannerForm extends javax.swing.JFrame {
         try {
             Collections.addAll(maintainers, Maintainer.getAllDatabaseInstances());
         } catch (SQLException ex) {
-            raiseError("Errore nella visualizzazione dei maintainers!");
+            Message.raiseError(this,"Errore nella visualizzazione dei maintainers!");
         }
         maintainerTable.setModel(new MaintainerAvailabilityDataModel(maintainers));
         ListSelectionModel selectionModel = maintainerTable.getSelectionModel();
@@ -80,16 +81,11 @@ public class PlannerForm extends javax.swing.JFrame {
                 try {
                     maintainerTableRowSelected(selectedRow);
                 } catch (SQLException ex) {
-                    raiseError("Errore nell'assegnazione del maintainer!");
+                    Message.raiseError(this,"Errore nell'assegnazione del maintainer!");
                 }
                 maintainerTable.clearSelection();
             }
         });
-    }
-
-    private void raiseError(String message) {
-        Toolkit.getDefaultToolkit().beep();
-        JOptionPane.showMessageDialog(this, message, "Errore", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -136,8 +132,13 @@ public class PlannerForm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Planner View");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         tabbedPane.setPreferredSize(new java.awt.Dimension(800, 600));
         tabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -161,6 +162,7 @@ public class PlannerForm extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activityList.add(activityListLabel, gridBagConstraints);
 
+        activityTable.setAutoCreateRowSorter(true);
         activityTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -490,7 +492,7 @@ public class PlannerForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
         pack();
@@ -612,13 +614,23 @@ public class PlannerForm extends javax.swing.JFrame {
     private void smpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smpButtonActionPerformed
         try {
             if (!selectedActivity.openSMPFromDatabase())
-                raiseError("SMP non definito!");
+                Message.raiseError(this,"SMP non definito!");
         } catch (SQLException ex) {
-            raiseError("Errore nel caricamento dal database!");
+            Message.raiseError(this,"Errore nel caricamento dal database!");
         } catch (IOException | IllegalArgumentException ex) {
-            raiseError("File non trovato!");
+            Message.raiseError(this,"File non trovato!");
         }
     }//GEN-LAST:event_smpButtonActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            UserSession.close();
+            DatabaseContext.closeConnection();
+            System.exit(0);
+        } catch (SQLException ex) {
+            Message.raiseError(this,"Errore nella chiusura!");
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
