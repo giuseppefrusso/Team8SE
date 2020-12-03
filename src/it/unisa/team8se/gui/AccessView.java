@@ -37,6 +37,7 @@ public class AccessView extends javax.swing.JFrame {
     
     private boolean refreshPastAccesses() {
         try {
+            pastAccessesModel.setRowCount(0);
             Access[] pastAccesses = Access.getAllDatabaseInstances();
             for (Access a : pastAccesses) {
                 if(a.getDataOraLogoff()!= null)
@@ -51,6 +52,7 @@ public class AccessView extends javax.swing.JFrame {
     
     private boolean refreshCurrentAccesses() {
         try {
+            currentAccessesModel.setRowCount(0);
             Access[] currentAccesses = Access.getAllDatabaseInstances();
             for (Access a : currentAccesses) {
                 if (a.getDataOraLogoff()==null)

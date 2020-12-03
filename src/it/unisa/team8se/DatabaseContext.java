@@ -5,7 +5,6 @@
  */
 package it.unisa.team8se;
 
-import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.base.DatabaseModel;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.logging.Level;

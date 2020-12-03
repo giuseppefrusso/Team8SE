@@ -55,8 +55,10 @@ public class PlannerForm extends javax.swing.JFrame {
             @Override
             public boolean verify(JComponent input) {
                 JTextPane text = (JTextPane)input;
-                if(text.getText().length() > MAX_LENGTH){
-                    JOptionPane.showMessageDialog(PlannerForm.this, "ERRORE: Intervention description must not exceed " + MAX_LENGTH + " characters.", "ERROR", JOptionPane.ERROR_MESSAGE);
+                int texLen = text.getText().length();
+                if(texLen > MAX_LENGTH){
+                    JOptionPane.showMessageDialog(PlannerForm.this, "ERRORE: Intervention description must not exceed " 
+                            + MAX_LENGTH + " characters. (Current Length: " + texLen +")", "ERROR", JOptionPane.ERROR_MESSAGE);
                     Toolkit.getDefaultToolkit().beep();
                 }
                 return false;
