@@ -7,26 +7,19 @@ package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.MultiPanelManager;
+import it.unisa.team8se.UserSession;
 import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
 import it.unisa.team8se.gui.datamodels.MaintainerAvailabilityDataModel;
 import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Maintainer;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Element;
-import javax.swing.text.PlainDocument;
 
 /**
  *
@@ -97,9 +90,23 @@ public class PlannerForm extends javax.swing.JFrame {
         try {
             Collections.addAll(maintainers, Maintainer.getAllDatabaseInstances());
         } catch (SQLException ex) {
-            Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
+            Message.raiseError(this,"Errore nella visualizzazione dei maintainers!");
         }
         maintainerTable.setModel(new MaintainerAvailabilityDataModel(maintainers));
+        ListSelectionModel selectionModel = maintainerTable.getSelectionModel();
+        selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        selectionModel.setValueIsAdjusting(true);
+        selectionModel.addListSelectionListener((ListSelectionEvent e) -> {
+            int selectedRow = maintainerTable.getSelectedRow();
+            if (selectedRow >= 0) {
+                try {
+                    maintainerTableRowSelected(selectedRow);
+                } catch (SQLException ex) {
+                    Message.raiseError(this,"Errore nell'assegnazione del maintainer!");
+                }
+                maintainerTable.clearSelection();
+            }
+        });
     }
 
     /**
@@ -131,7 +138,7 @@ public class PlannerForm extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        smpButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
@@ -146,8 +153,13 @@ public class PlannerForm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Planner View");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         tabbedPane.setPreferredSize(new java.awt.Dimension(800, 600));
         tabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -171,6 +183,7 @@ public class PlannerForm extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activityList.add(activityListLabel, gridBagConstraints);
 
+        activityTable.setAutoCreateRowSorter(true);
         activityTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -337,15 +350,20 @@ public class PlannerForm extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activitySummary.add(jLabel6, gridBagConstraints);
 
-        jButton1.setBackground(new java.awt.Color(255, 255, 255));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/pdf.png"))); // NOI18N
-        jButton1.setOpaque(false);
-        jButton1.setPreferredSize(new java.awt.Dimension(70, 70));
+        smpButton.setBackground(new java.awt.Color(255, 255, 255));
+        smpButton.setForeground(new java.awt.Color(255, 255, 255));
+        smpButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/pdf.png"))); // NOI18N
+        smpButton.setOpaque(false);
+        smpButton.setPreferredSize(new java.awt.Dimension(70, 70));
+        smpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smpButtonActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 16;
         gridBagConstraints.gridy = 18;
-        activitySummary.add(jButton1, gridBagConstraints);
+        activitySummary.add(smpButton, gridBagConstraints);
 
         jScrollPane2.setEnabled(false);
         jScrollPane2.setFocusable(false);
@@ -495,7 +513,7 @@ public class PlannerForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
         pack();
@@ -505,6 +523,14 @@ public class PlannerForm extends javax.swing.JFrame {
     private void activityTableRowSelected(int index) {
         selectedActivity = activities.get(index);
         tabbedPane.setSelectedIndex(1);
+    }
+
+    private void maintainerTableRowSelected(int index) throws SQLException {
+        selectedMaintainer = maintainers.get(index);
+        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler assegnare l'attività '" + selectedActivity.getID() + "' al maintainer '" + selectedMaintainer.getUsername() + "'?", "Assegnamento", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
+            selectedActivity.assignActivityToMaintainer(selectedMaintainer);
+        }
     }
 
     private void switchToActivityList() {
@@ -624,6 +650,26 @@ public class PlannerForm extends javax.swing.JFrame {
             Collections.addAll(activities,a);
         }
     }
+    private void smpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smpButtonActionPerformed
+        try {
+            if (!selectedActivity.openSMPFromDatabase())
+                Message.raiseError(this,"SMP non definito!");
+        } catch (SQLException ex) {
+            Message.raiseError(this,"Errore nel caricamento dal database!");
+        } catch (IOException | IllegalArgumentException ex) {
+            Message.raiseError(this,"File non trovato!");
+        }
+    }//GEN-LAST:event_smpButtonActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            UserSession.close();
+            DatabaseContext.closeConnection();
+            System.exit(0);
+        } catch (SQLException ex) {
+            Message.raiseError(this,"Errore nella chiusura!");
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -672,7 +718,6 @@ public class PlannerForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane interventionDescScrollPane;
     private javax.swing.JTextPane interventionDescText;
     private javax.swing.JButton interventionDescriptionEditButton;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -687,6 +732,7 @@ public class PlannerForm extends javax.swing.JFrame {
     private javax.swing.JButton maintainerListButton;
     private javax.swing.JScrollPane maintainerScrollPane;
     private javax.swing.JTable maintainerTable;
+    private javax.swing.JButton smpButton;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JLabel weekNumberLabel;
     private javax.swing.JLabel weeklabel;
@@ -700,6 +746,6 @@ public class PlannerForm extends javax.swing.JFrame {
     private LinkedList<Activity> activities;
     private LinkedList<Maintainer> maintainers;
     private Activity selectedActivity;
-
+    private Maintainer selectedMaintainer;
     private MultiPanelManager panelManager;
 }

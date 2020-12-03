@@ -11,8 +11,6 @@ import it.unisa.team8se.models.Maintainer;
 import it.unisa.team8se.models.Planner;
 import it.unisa.team8se.models.base.User;
 import it.unisa.team8se.models.SystemAdmin;
-
-import java.awt.Toolkit;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -21,8 +19,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -97,6 +93,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         maintainerRadioButton = new javax.swing.JRadioButton();
         adminRadioButton = new javax.swing.JRadioButton();
         competenceButton = new javax.swing.JButton();
+        accessButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("System Admistrator View\n");
@@ -195,6 +192,13 @@ public class SystemAdminForm extends javax.swing.JFrame {
             }
         });
 
+        accessButton.setText("Accessi");
+        accessButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                accessButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -204,9 +208,11 @@ public class SystemAdminForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(76, 76, 76)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(accessButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(competenceButton))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -281,7 +287,8 @@ public class SystemAdminForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(removeButton)
                     .addComponent(modifyButton)
-                    .addComponent(competenceButton))
+                    .addComponent(competenceButton)
+                    .addComponent(accessButton))
                 .addContainerGap())
         );
 
@@ -318,7 +325,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
                 tableModel.addRow(u.toArray());
             }
         } catch (SQLException ex) {
-            raiseError("Errore nel caricamento");
+            Message.raiseError(this,"Errore nel caricamento");
             return false;
         }
         return true;
@@ -335,18 +342,13 @@ public class SystemAdminForm extends javax.swing.JFrame {
         return false;
     }
 
-    protected void raiseError(String message) {
-        Toolkit.getDefaultToolkit().beep();
-        JOptionPane.showMessageDialog(this, message, "Errore", JOptionPane.ERROR_MESSAGE);
-    }
-
     protected boolean insertUser(String surname, String name, String username, String password, String role) {
         if (containsUsername(username)) {
-            raiseError("Username già presente!");
+            Message.raiseError(this,"Username già presente!");
             return false;
         }
         if (surname.equals("") || name.equals("") || username.equals("") || password.equals("")) {
-            raiseError("Inserire tutti i campi!");
+            Message.raiseError(this,"Inserire tutti i campi!");
             return false;
         }
 
@@ -363,7 +365,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
             ps.close();
 
         } catch (SQLException ex) {
-            raiseError("Errore nell'inserimento");
+            Message.raiseError(this,"Errore nell'inserimento");
             return false;
         }
         refreshUsers();
@@ -389,7 +391,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         } else if (adminRadioButton.isSelected()) {
             role = "system_administrator";
         } else {
-            raiseError("Inserire un ruolo!");
+            Message.raiseError(this,"Inserire un ruolo!");
             return;
         }
 
@@ -419,7 +421,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         String field = tableModel.getColumnName(selectedColumn);
         
         if (selectedColumn == 2 && containsUsername(newValue)) {
-            raiseError("Username già presente!");
+            Message.raiseError(this,"Username già presente!");
             return false;
         }
 
@@ -458,7 +460,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
                     sa.saveToDatabase();
                 }
             } catch (SQLException e) {
-                raiseError("Errore nella modifica del ruolo.");
+                Message.raiseError(this,"Errore nella modifica del ruolo.");
                 return false;
             }
         } else if (field.equalsIgnoreCase("username")) {
@@ -474,7 +476,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
                     sa.updateToDatabase(newValue);
                 }
             } catch (SQLException e) {
-                raiseError("ERRORE" + e.getMessage());
+                Message.raiseError(this,"ERRORE" + e.getMessage());
                 return false;
             }
         } else {
@@ -501,7 +503,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
                     sa.updateToDatabase();
                 }
             } catch (SQLException e) {
-                raiseError("ERRORE" + e.getMessage());
+                Message.raiseError(this,"ERRORE" + e.getMessage());
                 return false;
             }
         }
@@ -514,13 +516,14 @@ public class SystemAdminForm extends javax.swing.JFrame {
 
         int selectedRow = tableUsers.getSelectedRow();
         int selectedColumn = tableUsers.getSelectedColumn();
-        String oldValue = (String) tableUsers.getValueAt(selectedRow, selectedColumn);
 
         if (selectedRow == -1 || selectedColumn == -1) {
-            raiseError("Selezionare una cella");
+            Message.raiseError(this,"Selezionare una cella");
             return;
         }
 
+        String oldValue = (String) tableUsers.getValueAt(selectedRow, selectedColumn);
+        
         String field = tableModel.getColumnName(selectedColumn);
         String newValue = new String();
         if (field.equals("Ruolo")) {
@@ -565,7 +568,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
                 SystemAdmin.removeFromDatabase(selectedUsername);
             }
         }catch(SQLException ex) {
-            raiseError("Errore nella rimozione!");
+            Message.raiseError(this,"Errore nella rimozione!");
         }
         refreshUsers();
     }
@@ -574,7 +577,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         int selectedRow = tableUsers.getSelectedRow();
 
         if (selectedRow == -1) {
-            raiseError("Selezionare una riga!");
+            Message.raiseError(this,"Selezionare una riga!");
             return;
         }
 
@@ -617,9 +620,15 @@ public class SystemAdminForm extends javax.swing.JFrame {
             DatabaseContext.closeConnection();
             System.exit(0);
         } catch (SQLException ex) {
-            raiseError("Errore nella chiusura!");
+            Message.raiseError(this,"Errore nella chiusura!");
         }
     }//GEN-LAST:event_formWindowClosing
+
+    private void accessButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accessButtonActionPerformed
+        AccessView view = new AccessView();
+        view.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_accessButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -657,6 +666,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton accessButton;
     private javax.swing.JRadioButton adminRadioButton;
     private javax.swing.JButton competenceButton;
     private javax.swing.JButton insertButton;

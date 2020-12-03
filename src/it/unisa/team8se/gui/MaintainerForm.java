@@ -5,10 +5,12 @@
  */
 package it.unisa.team8se.gui;
 
+import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.UserSession;
 import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
 import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Maintainer;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
 import javax.swing.ListSelectionModel;
@@ -123,9 +125,14 @@ public class MaintainerForm extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Maintainer View");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         tabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -139,6 +146,7 @@ public class MaintainerForm extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Week n# 10");
 
+        activityTable.setAutoCreateRowSorter(true);
         activityTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -172,7 +180,7 @@ public class MaintainerForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab("Activity List", activityListPanel);
@@ -333,7 +341,9 @@ public class MaintainerForm extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(1, 1, 1)
+                .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 591, Short.MAX_VALUE))
         );
 
         pack();
@@ -350,6 +360,16 @@ public class MaintainerForm extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_tabbedPaneStateChanged
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            UserSession.close();
+            DatabaseContext.closeConnection();
+            System.exit(0);
+        } catch (SQLException ex) {
+            Message.raiseError(this,"Errore nella chiusura!");
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

@@ -2,6 +2,9 @@ package it.unisa.team8se.models;
 
 import it.unisa.team8se.models.base.DatabaseModel;
 import it.unisa.team8se.DatabaseContext;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,15 +30,25 @@ public class Activity extends DatabaseModel{
     private int WeekNumber;
     private String WorkspaceNotes;
     private String InterventionDescription;
-    private int SMP;
     private boolean Interruptible;
-    private Timestamp datetime;
-    
-    
+    private Timestamp datetime; 
     private LinkedList<Competence> requiredCompetencies;
 
     public Activity() {
+        requiredCompetencies = new LinkedList<>();
+    }
 
+    public Activity(int ID, Area Area, String Tipology, int EIT, int WeekNumber, String WorkspaceNotes, String InterventionDescription, boolean Interruptible, Timestamp datetime) {
+        this.ID = ID;
+        this.Area = Area;
+        this.Tipology = Tipology;
+        this.EIT = EIT;
+        this.WeekNumber = WeekNumber;
+        this.WorkspaceNotes = WorkspaceNotes;
+        this.InterventionDescription = InterventionDescription;
+        this.Interruptible = Interruptible;
+        this.datetime = datetime;
+        this.requiredCompetencies = new LinkedList<>();
     }
 
     public int getID() {
@@ -60,10 +73,6 @@ public class Activity extends DatabaseModel{
 
     public void setWeekNumber(int WeekNumber) {
         this.WeekNumber = WeekNumber;
-    }
-
-    public void setSMP(int SMP) {
-        this.SMP = SMP;
     }
 
     public void setInterruptible(boolean Interruptible) {
@@ -94,10 +103,6 @@ public class Activity extends DatabaseModel{
         return WeekNumber;
     }
 
-    public int getSMP() {
-        return SMP;
-    }
-
     public boolean isInterruptible() {
         return Interruptible;
     }
@@ -125,8 +130,6 @@ public class Activity extends DatabaseModel{
     public void addRequiredCompetence(Competence c) {
         requiredCompetencies.add(c);
     }
-
-    
    
     public static Activity[] getAllDatabaseInstances() {
         try {            
@@ -185,8 +188,7 @@ public class Activity extends DatabaseModel{
     {
         return null;
     }
-    
-   
+  
     @Override
     public String toString() {
         return "Activity{" + "ID=" + ID + ", Area=" + Area + ", Tipology=" + Tipology 
@@ -199,8 +201,8 @@ public class Activity extends DatabaseModel{
     public void saveToDatabase() {
         try {
             String sql = "insert into attivita_pianificata "
-                     + "(id, area, luogo_geografico, ambito, week_number, interrompibile, workspace_notes, eta, smp, data_e_ora)"
-                     + "values(?,?,?,?,?,?,?,?,?,?)";
+                     + "(id, area, luogo_geografico, ambito, week_number, interrompibile, workspace_notes, eta, data_e_ora)"
+                     + "values(?,?,?,?,?,?,?,?,?)";
             
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setInt(1,getID());
@@ -211,9 +213,7 @@ public class Activity extends DatabaseModel{
             ps.setBoolean(6, isInterruptible());
             ps.setString(7, getWorkspaceNotes());
             ps.setInt(8, getEIT());
-            
-            ps.setString(9, "appunti");
-            ps.setTimestamp(10, Timestamp.from(Instant.now().truncatedTo(ChronoUnit.MINUTES)));
+            ps.setTimestamp(9, Timestamp.from(Instant.now().truncatedTo(ChronoUnit.MINUTES)));
    
             int res = ps.executeUpdate();
    
@@ -268,18 +268,47 @@ public class Activity extends DatabaseModel{
         }
     }
 
-    public void updateSMPInDatabase() {
-        throw new RuntimeException("FUNZIONE NON IMPLEMENTATA!");
-        /*
-        String sql = "update attivita_pianificata set smp = ? where id = ?";
-        try (PreparedStatement ps = DatabaseContext.getPreparedStatement(sql)) {
-            int res = ps.executeUpdate();
-        } catch (SQLException ex) {
-
-        }*/
+    public boolean updateSMPInDatabase(SMP smp) throws SQLException {
+        if(!smp.existsInDatabase()) 
+            return false;
+        
+        String sql = "update attivita_pianificata set SMP = ? where id = ?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setString(1, smp.getNome());
+        ps.setInt(2, ID);
+        ps.executeUpdate();
+        ps.close();
+        return true;
     }
     
+    public boolean openSMPFromDatabase() throws SQLException, IOException, IllegalArgumentException {
+        String sql = "select S.documento_pdf "
+                + "from attivita_pianificata A join smp S "
+                + "on A.smp = S.nome "
+                + "where A.id = ?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setInt(1, ID);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next()) {
+            File file = new File(rs.getString(1));
+            Desktop.getDesktop().open(file);
+        }else {
+            return false;
+        }
+        
+        rs.close();
+        ps.close();
+        return true;
+    }
     
+    public void assignActivityToMaintainer(Maintainer m) throws SQLException{
+        String sql = "update attivita_pianificata set maintainer = ? where id = ?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setString(1, m.getUsername());
+        ps.setInt(2, ID);
+        ps.executeUpdate();
+        ps.close();
+    }
     
     @Override
     public int hashCode() {

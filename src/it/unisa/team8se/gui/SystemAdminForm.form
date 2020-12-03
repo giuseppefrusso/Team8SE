@@ -35,9 +35,11 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="modifyButton" min="-2" pref="90" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="removeButton" min="-2" pref="90" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="accessButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="competenceButton" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -141,6 +143,7 @@
                   <Component id="removeButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="modifyButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="competenceButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="accessButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -269,6 +272,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="competenceButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="accessButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Accessi"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="accessButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
