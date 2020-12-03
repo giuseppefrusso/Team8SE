@@ -43,14 +43,35 @@ public class PlannerForm extends javax.swing.JFrame {
     }
 
     private void setupTextBoxes() {
-
+        /*
+        interventionDescText.setDocument(new PlainDocument(){
+            private final int MAX_LENGTH = 50;
+            
+            @Override
+            public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+                int texLen = interventionDescText.getText().length();
+                int chngLen = str.length();
+                if (texLen + chngLen <= MAX_LENGTH){
+                     super.insertString(offs, str, a);
+                }
+                else{
+                    int diff = MAX_LENGTH - texLen;
+                    if(diff > 0){
+                        String s = str.substring(0, diff);
+                        super.insertString(offs, s, a);
+                    }
+                    Toolkit.getDefaultToolkit().beep();
+                }
+                System.out.println(texLen);
+            }
+        });*/
+        
         interventionDescText.setEditable(false);
         workspaceNotesText.setEditable(false);
     }
 
     private void setupActivityTable() {
         activities = new LinkedList<>();
-        Collections.addAll(activities, Activity.getAllDatabaseInstances());
         activityTable.setModel(new ActivityTableDataModel(activities));
         ListSelectionModel selectionModel = activityTable.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -513,6 +534,7 @@ public class PlannerForm extends javax.swing.JFrame {
     }
 
     private void switchToActivityList() {
+        refreshActivities();
         tabbedPane.setEnabledAt(1, false);
         tabbedPane.setEnabledAt(2, false);
         selectedActivity = null;
@@ -529,7 +551,7 @@ public class PlannerForm extends javax.swing.JFrame {
     }
 
     private void switchToMaintainerList() {
-
+        refreshMaintainers();
     }
 
 
@@ -611,6 +633,23 @@ public class PlannerForm extends javax.swing.JFrame {
         selectedActivity.updateWorkspaceNotesInDatabase();
     }//GEN-LAST:event_workspaceNotesDoneButtonActionPerformed
 
+    private void refreshMaintainers() {
+        try {
+            Maintainer[] m = Maintainer.getAllDatabaseInstances();
+            if (m != null) {
+                Collections.addAll(maintainers, m);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void refreshActivities() {
+        Activity[] a = Activity.getAllDatabaseInstances();
+        if (a != null) {
+            Collections.addAll(activities,a);
+        }
+    }
     private void smpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smpButtonActionPerformed
         try {
             if (!selectedActivity.openSMPFromDatabase())
