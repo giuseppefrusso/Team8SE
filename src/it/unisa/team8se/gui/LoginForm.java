@@ -234,6 +234,7 @@ public class LoginForm extends javax.swing.JFrame {
 
             raiseError("USER O PASSWORD ERRATI");
         } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
             raiseError("ERRORE DI LOGIN");
         }
     }//GEN-LAST:event_loginButtonActionPerformed
@@ -249,11 +250,11 @@ public class LoginForm extends javax.swing.JFrame {
     }
 
     private void usernameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usernameFieldMouseClicked
-        clean();
+        usernameField.selectAll();
     }//GEN-LAST:event_usernameFieldMouseClicked
 
     private void passwordFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passwordFieldMouseClicked
-        clean();
+        passwordField.selectAll();
     }//GEN-LAST:event_passwordFieldMouseClicked
 
     private void viewPasswordButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewPasswordButtonMousePressed

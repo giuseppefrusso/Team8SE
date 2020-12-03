@@ -17,7 +17,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.InputVerifier;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
@@ -43,28 +48,19 @@ public class PlannerForm extends javax.swing.JFrame {
     }
 
     private void setupTextBoxes() {
-        /*
-        interventionDescText.setDocument(new PlainDocument(){
+        
+        interventionDescText.setInputVerifier(new InputVerifier(){ 
             private final int MAX_LENGTH = 50;
-            
             @Override
-            public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-                int texLen = interventionDescText.getText().length();
-                int chngLen = str.length();
-                if (texLen + chngLen <= MAX_LENGTH){
-                     super.insertString(offs, str, a);
-                }
-                else{
-                    int diff = MAX_LENGTH - texLen;
-                    if(diff > 0){
-                        String s = str.substring(0, diff);
-                        super.insertString(offs, s, a);
-                    }
+            public boolean verify(JComponent input) {
+                JTextPane text = (JTextPane)input;
+                if(text.getText().length() > MAX_LENGTH){
+                    JOptionPane.showMessageDialog(PlannerForm.this, "ERRORE: Intervention description must not exceed " + MAX_LENGTH + " characters.", "ERROR", JOptionPane.ERROR_MESSAGE);
                     Toolkit.getDefaultToolkit().beep();
                 }
-                System.out.println(texLen);
+                return false;
             }
-        });*/
+        });
         
         interventionDescText.setEditable(false);
         workspaceNotesText.setEditable(false);

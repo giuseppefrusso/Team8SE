@@ -79,17 +79,16 @@ public class UserSession {
             id = 1;
         rs.close();
         
-        sql = "insert into accesso("+typeOfUser+", data_e_ora_login) values(?, ?)";
+        sql = "insert into accesso(id_accesso,"+typeOfUser+", data_e_ora_login) values(?, ?, ?)";
         ps = DatabaseContext.getPreparedStatement(sql);
-        ps.setString(1, loggedUser.getUsername());
-        ps.setTimestamp(2, getCurrentTimestamp());
+        ps.setInt(1, id);
+        ps.setString(2, loggedUser.getUsername());
+        ps.setTimestamp(3, getCurrentTimestamp());
         ps.executeUpdate();
         ps.close();
     }
 
     public static void close() throws SQLException {
-        /*String sql = "update accesso set data_e_ora_logoff = ? "
-                + "where username = ? and data_e_ora_logoff = null";*/
         String sql = "update accesso set data_e_ora_logoff = ? " 
                 + "where id_accesso = ?";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);

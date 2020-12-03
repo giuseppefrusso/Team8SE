@@ -9,7 +9,9 @@ import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.UserSession;
 import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
 import it.unisa.team8se.models.Activity;
+import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -27,6 +29,10 @@ public class MaintainerForm extends javax.swing.JFrame {
      */
     public MaintainerForm() {
 
+        if(!DatabaseContext.isConnected()){
+            DatabaseContext.connectDatabase();
+        }
+        
         initComponents();
         setupActivityTable();
 
@@ -57,7 +63,7 @@ public class MaintainerForm extends javax.swing.JFrame {
 
     private void refreshActivities() {
         activities.clear();
-        Activity[] a = Activity.getAllInstancesAssignedToMaintainer((Maintainer) UserSession.getLoggedUser());
+        Activity[] a = Activity.getInstancesAssignedToMaintainer((Maintainer) UserSession.getLoggedUser());
         if (a != null) {
             Collections.addAll(activities, a);
         }
@@ -71,10 +77,20 @@ public class MaintainerForm extends javax.swing.JFrame {
     private void switchToActivitySummary() {
         tabbedPane.setEnabledAt(1, true);
 
+        selectedActivity.getRequiredCompetenciesFromDatabase();
+        
         weekNumberLabel.setText(Integer.toString(selectedActivity.getWeekNumber()));
         areaLabel.setText(selectedActivity.getArea().toString());
         interventionDescText.setText(selectedActivity.getInterventionDescription());
         workspaceNotesText.setText(selectedActivity.getWorkspaceNotes());
+        
+        StringBuilder sb = new StringBuilder();
+        for(Competence c : selectedActivity.getRequiredCompetencies()){
+            sb.append("-");
+            sb.append(c.getDescrizione());
+            sb.append("\n");
+        }
+        requiredCompetenciesText.setText(sb.toString());
     }
 
     /**
@@ -106,11 +122,14 @@ public class MaintainerForm extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         weekNumberLabel = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        smpButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
         areaLabel = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        requiredCompetenciesText = new javax.swing.JTextPane();
+        jLabel3 = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -180,23 +199,24 @@ public class MaintainerForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab("Activity List", activityListPanel);
 
         activitySummary.setBackground(new java.awt.Color(255, 204, 153));
-        activitySummary.setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagLayout activitySummaryLayout = new java.awt.GridBagLayout();
+        activitySummaryLayout.columnWidths = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
+        activitySummaryLayout.rowHeights = new int[] {0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0};
+        activitySummary.setLayout(activitySummaryLayout);
 
         interventionDescScrollPane.setViewportView(interventionDescText);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 11;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 238;
-        gridBagConstraints.ipady = 94;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -205,31 +225,27 @@ public class MaintainerForm extends javax.swing.JFrame {
         interventionDescLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         interventionDescLabel.setText("Intervention Description");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activitySummary.add(interventionDescLabel, gridBagConstraints);
 
         workspaceNotesLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         workspaceNotesLabel.setText("WorkSpace Notes");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activitySummary.add(workspaceNotesLabel, gridBagConstraints);
 
         workspaceNotesScrollPane.setViewportView(workspaceNotesText);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 9;
-        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 238;
-        gridBagConstraints.ipady = 94;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -239,9 +255,9 @@ public class MaintainerForm extends javax.swing.JFrame {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel4.setText("ACTIVITY SUMMARY");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         activitySummary.add(jLabel4, gridBagConstraints);
 
@@ -249,27 +265,33 @@ public class MaintainerForm extends javax.swing.JFrame {
         weekNumberLabel.setText("10");
         weekNumberLabel.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         activitySummary.add(weekNumberLabel, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("Week n#");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activitySummary.add(jLabel6, gridBagConstraints);
 
-        jButton1.setBackground(new java.awt.Color(255, 255, 255));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/pdf.png"))); // NOI18N
-        jButton1.setOpaque(false);
-        jButton1.setPreferredSize(new java.awt.Dimension(70, 70));
+        smpButton.setBackground(new java.awt.Color(255, 255, 255));
+        smpButton.setForeground(new java.awt.Color(255, 255, 255));
+        smpButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/pdf.png"))); // NOI18N
+        smpButton.setOpaque(false);
+        smpButton.setPreferredSize(new java.awt.Dimension(70, 70));
+        smpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smpButtonActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
-        gridBagConstraints.gridy = 16;
-        activitySummary.add(jButton1, gridBagConstraints);
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 18;
+        activitySummary.add(smpButton, gridBagConstraints);
 
         jScrollPane2.setEnabled(false);
         jScrollPane2.setFocusable(false);
@@ -289,26 +311,50 @@ public class MaintainerForm extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTextArea1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 16;
         activitySummary.add(jScrollPane2, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Activity to receive");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         activitySummary.add(jLabel7, gridBagConstraints);
 
         areaLabel.setBackground(new java.awt.Color(204, 204, 204));
         areaLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         areaLabel.setText("Carpentry - Fisciano");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         activitySummary.add(areaLabel, gridBagConstraints);
+
+        requiredCompetenciesText.setEditable(false);
+        requiredCompetenciesText.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jScrollPane4.setViewportView(requiredCompetenciesText);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.ipadx = 250;
+        gridBagConstraints.ipady = 100;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        activitySummary.add(jScrollPane4, gridBagConstraints);
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setText("Required Competencies");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        activitySummary.add(jLabel3, gridBagConstraints);
 
         javax.swing.GroupLayout activitySummaryPanelLayout = new javax.swing.GroupLayout(activitySummaryPanel);
         activitySummaryPanel.setLayout(activitySummaryPanelLayout);
@@ -323,7 +369,7 @@ public class MaintainerForm extends javax.swing.JFrame {
         );
         activitySummaryPanelLayout.setVerticalGroup(
             activitySummaryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 573, Short.MAX_VALUE)
+            .addGap(0, 601, Short.MAX_VALUE)
             .addGroup(activitySummaryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(activitySummaryPanelLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -343,14 +389,13 @@ public class MaintainerForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(1, 1, 1)
-                .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 591, Short.MAX_VALUE))
+                .addComponent(tabbedPane))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void tabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedPaneStateChanged
-        // TODO add your handling code here:
         int index = tabbedPane.getSelectedIndex();
         if (tabbedPane.getTabCount() == 2) {
             if (index == 0) {
@@ -370,6 +415,17 @@ public class MaintainerForm extends javax.swing.JFrame {
             Message.raiseError(this,"Errore nella chiusura!");
         }
     }//GEN-LAST:event_formWindowClosing
+
+    private void smpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smpButtonActionPerformed
+         try {
+            if (!selectedActivity.openSMPFromDatabase())
+                Message.raiseError(this,"SMP non definito!");
+        } catch (SQLException ex) {
+            Message.raiseError(this,"Errore nel caricamento dal database!");
+        } catch (IOException | IllegalArgumentException ex) {
+            Message.raiseError(this,"File non trovato!");
+        }
+    }//GEN-LAST:event_smpButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -415,17 +471,20 @@ public class MaintainerForm extends javax.swing.JFrame {
     private javax.swing.JLabel interventionDescLabel;
     private javax.swing.JScrollPane interventionDescScrollPane;
     private javax.swing.JTextPane interventionDescText;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextPane requiredCompetenciesText;
+    private javax.swing.JButton smpButton;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JLabel weekNumberLabel;
     private javax.swing.JLabel workspaceNotesLabel;

@@ -112,6 +112,8 @@ public class Activity extends DatabaseModel{
     }
 
     public void setWorkspaceNotes(String WorkspaceNotes) {
+        if(WorkspaceNotes != null && WorkspaceNotes.length() > 100)
+            WorkspaceNotes = WorkspaceNotes.substring(0,99);
         this.WorkspaceNotes = WorkspaceNotes;
     }
 
@@ -120,6 +122,8 @@ public class Activity extends DatabaseModel{
     }
 
     public void setInterventionDescription(String InterventionDescription) {
+        if(InterventionDescription != null && InterventionDescription.length() > 50)
+            InterventionDescription = InterventionDescription.substring(0,49);
         this.InterventionDescription = InterventionDescription;
     }
 
@@ -158,7 +162,7 @@ public class Activity extends DatabaseModel{
         return null;
     }
     
-    public static Activity[] getInstancesAssignToMaintainer(Maintainer m){
+    public static Activity[] getInstancesAssignedToMaintainer(Maintainer m){
         String sql = "select * from attivita_pianificata where maintainer = ?";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
@@ -184,9 +188,17 @@ public class Activity extends DatabaseModel{
         return null;
     }
     
-    public static Activity[] getAllInstancesAssignedToMaintainer(Maintainer m)
-    {
-        return null;
+    public void getRequiredCompetenciesFromDatabase(){
+        String sql = "select C.id, C.descrizione from requisito_planned R, competenza C "
+                + "where R.attivita_pianificata = ? and C.id = R.competenza";
+        try(PreparedStatement ps = DatabaseContext.getPreparedStatement(sql)){
+            ps.setInt(1,getID());
+            LinkedList<Competence> comp = DatabaseContext.fetchAllModels(Competence.class, ps);
+            requiredCompetencies = comp;
+        }
+        catch(SQLException ex){
+            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
   
     @Override
