@@ -20,13 +20,7 @@ public class AccessView extends javax.swing.JFrame {
     private DefaultTableModel pastAccessesModel, currentAccessesModel;
     
     private void initPastAccessesModel() {
-        pastAccessesModel = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        
+        pastAccessesModel = new DefaultTableModel();
         pastAccessesModel.addColumn("ID");
         pastAccessesModel.addColumn("Username");
         pastAccessesModel.addColumn("Data e ora login");
@@ -34,13 +28,7 @@ public class AccessView extends javax.swing.JFrame {
     }
     
     private void initCurrentAccessesModel() {
-        currentAccessesModel = new DefaultTableModel(){
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
+        currentAccessesModel = new DefaultTableModel();
         currentAccessesModel.addColumn("ID");
         currentAccessesModel.addColumn("Username");
         currentAccessesModel.addColumn("Data e ora login");
