@@ -113,7 +113,19 @@ INSERT INTO public.requisito_extra(
 INSERT INTO public.requisito_planned(
 	competenza, attivita_pianificata)
 	VALUES (2, 1);
-	
+
+INSERT INTO public.competenza (id,descrizione) VALUES (3,'Java Programming');
+INSERT INTO public.competenza (id,descrizione) VALUES (4, 'Electrician');
+
+insert into public.requisito_planned (attivita_pianificata, competenza) values (1,3);
+insert into public.requisito_planned (attivita_pianificata, competenza) values (1,4);
+
+insert into public.maintainer (username, password, nome,cognome) values ('maintainer','maintainer','maintainer','maintainer');
+insert into public.planner (username, password, nome,cognome) values ('planner','planner','planner','planner');
+insert into public.system_administrator (username, password, nome,cognome) values ('admin','admin','admin','admin');
+
+insert into public.possesso (id,maintainer) values (3,'maintainer');
+insert into public.possesso (id,maintainer) values (4,'maintainer');
 
 	
 
