@@ -453,13 +453,13 @@ public class PlannerForm extends javax.swing.JFrame {
 
         maintainerTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Title1", "Title2"
             }
         ));
         maintainerScrollPane.setViewportView(maintainerTable);
