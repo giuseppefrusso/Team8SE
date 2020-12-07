@@ -11,8 +11,11 @@ import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Area;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -48,6 +51,7 @@ public class AreaView extends javax.swing.JFrame {
     }
 
     protected boolean refreshLocations() {
+        comboBoxModel.removeAllElements();
         LinkedList<Area> as = Area.getAllDatabaseInstances();
         if (as != null && as.size() > 0) {
             for (Area a : as) {
@@ -88,7 +92,7 @@ public class AreaView extends javax.swing.JFrame {
         backButton = new javax.swing.JButton();
         addSectorButton = new javax.swing.JButton();
         removeSectorButton = new javax.swing.JButton();
-        addLocationButton = new javax.swing.JButton();
+        addAreaButton = new javax.swing.JButton();
         removeLocationButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -114,7 +118,7 @@ public class AreaView extends javax.swing.JFrame {
 
         jLabel1.setText("Filiale");
 
-        jLabel2.setText("Area");
+        jLabel2.setText("Settore");
 
         backButton.setText("Utenti");
         backButton.addActionListener(new java.awt.event.ActionListener() {
@@ -124,13 +128,23 @@ public class AreaView extends javax.swing.JFrame {
         });
 
         addSectorButton.setText("Aggiungi");
+        addSectorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addSectorButtonActionPerformed(evt);
+            }
+        });
 
         removeSectorButton.setText("Rimuovi");
-
-        addLocationButton.setText("Aggiungi");
-        addLocationButton.addActionListener(new java.awt.event.ActionListener() {
+        removeSectorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addLocationButtonActionPerformed(evt);
+                removeSectorButtonActionPerformed(evt);
+            }
+        });
+
+        addAreaButton.setText("Aggiungi");
+        addAreaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addAreaButtonActionPerformed(evt);
             }
         });
 
@@ -153,19 +167,15 @@ public class AreaView extends javax.swing.JFrame {
                         .addComponent(backButton)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(locationBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(locationBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(jLabel1)))
-                                .addGap(105, 105, 105))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(addLocationButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(removeLocationButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)))
+                                .addGap(0, 79, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(addAreaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(removeLocationButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(105, 105, 105)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(addSectorButton)
@@ -185,14 +195,16 @@ public class AreaView extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(locationBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(locationBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(54, 54, 54)
+                        .addComponent(addAreaButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(removeLocationButton))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(addSectorButton)
-                        .addComponent(addLocationButton)
-                        .addComponent(removeLocationButton))
+                    .addComponent(addSectorButton)
                     .addComponent(removeSectorButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addComponent(backButton)
@@ -234,13 +246,79 @@ public class AreaView extends javax.swing.JFrame {
         refreshSectors(selectedLocation);
     }//GEN-LAST:event_locationBoxActionPerformed
 
-    private void addLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLocationButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_addLocationButtonActionPerformed
+    protected boolean addArea(String location, String sector) {
+        Area area = new Area(sector, location);
+        if(area.existsInDatabase()) {
+            Message.raiseError(this, "L'area ('"+location+"', '"+sector+"') è già presente!");
+            return false;
+        }
+        try {
+            area.saveToDatabase();
+            return true;
+        } catch (SQLException ex) {
+            Message.raiseError(this, "L'area ('"+location+"', '"+sector+"') non è stata inserita correttamente!");
+            return false;
+        }
+    }
+    
+    private void addAreaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAreaButtonActionPerformed
+        String newLocation = JOptionPane.showInputDialog(this, "Inserisci il nome della nuova filiale", 
+                "Creazione di una nuova area", JOptionPane.PLAIN_MESSAGE);
+        if(newLocation == null) {
+            Message.raiseError(this, "Non è stata inserita nessuna filiale!");
+        }
+        String newSector = JOptionPane.showInputDialog(this, "Inserisci il nome del nuovo settore", 
+                "Creazione di una nuova area", JOptionPane.PLAIN_MESSAGE);
+        if(newSector == null) {
+            Message.raiseError(this, "Non è stato inserito nessun settore per la nuova filiale '"+newLocation+"'!");
+        }
+        addArea(newLocation, newSector);
+        refreshLocations();
+    }//GEN-LAST:event_addAreaButtonActionPerformed
 
+    protected boolean removeLocation(String location) {
+        Area area = new Area(null, location);
+        try {
+            area.removeFromDatabaseWithLocation();
+            return true;
+        } catch (SQLException ex) {
+            Message.raiseError(this, "La filiale '"+location+"' non è stata rimossa correttamente!");
+            return false;
+        }
+    }
+    
     private void removeLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeLocationButtonActionPerformed
-        // TODO add your handling code here:
+        String selectedLocation = (String) locationBox.getSelectedItem();
+        if (selectedLocation == null) {
+            Message.raiseError(this, "Non è stata selezionata alcuna filiale!");
+            return;
+        }
+        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la filiale "
+                + "'"+selectedLocation+"' ?", "Rimozione", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
+            removeLocation(selectedLocation);
+        }
+        refreshLocations();
     }//GEN-LAST:event_removeLocationButtonActionPerformed
+    
+    private void addSectorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSectorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addSectorButtonActionPerformed
+
+    protected boolean removeSector(String location, String sector) {
+        Area area = new Area(sector, location);
+        try {
+            area.removeFromDatabase();
+            return true;
+        } catch (SQLException ex) {
+            Message.raiseError(this, "L'area ('"+location+"', '"+sector+"') non è stata rimossa correttamente!");
+            return false;
+        }
+    }
+    
+    private void removeSectorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeSectorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_removeSectorButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -279,7 +357,7 @@ public class AreaView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addLocationButton;
+    private javax.swing.JButton addAreaButton;
     private javax.swing.JButton addSectorButton;
     private javax.swing.JButton backButton;
     private javax.swing.JLabel jLabel1;

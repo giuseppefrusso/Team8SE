@@ -25,11 +25,18 @@ public class Area extends DatabaseModel{
 
     }
 
-    public Area(String Sector, String Location) {
-        this.sector = Sector;
-        this.location = Location;
+    public Area(String sector, String location) {
+        this.sector = sector;
+        this.location = location;
     }
 
+    public void setSector(String sector) {
+        this.sector = sector;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
     
     public void finalize() throws Throwable {
 
@@ -95,6 +102,25 @@ public class Area extends DatabaseModel{
     public void saveToDatabase() throws SQLException{
         String sql = "insert into area(nome, luogo_geografico) "
                 + "values(?, ?)";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setString(1, sector);
+        ps.setString(2, location);
+        if(ps.executeUpdate()<1)
+            throw new SQLException();
+        ps.close();
+    }
+    
+    public void removeFromDatabaseWithLocation() throws SQLException {
+        String sql = "delete from area where luogo_geografico=?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setString(1, location);
+        if(ps.executeUpdate()<1)
+            throw new SQLException();
+        ps.close();
+    }
+
+    public void removeFromDatabase() throws SQLException {
+        String sql = "delete from area where nome=? and luogo_geografico=?";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
         ps.setString(1, sector);
         ps.setString(2, location);

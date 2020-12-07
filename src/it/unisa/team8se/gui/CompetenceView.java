@@ -355,6 +355,7 @@ public class CompetenceView extends javax.swing.JFrame {
         String selectedUsername = getSelectedMantainer().getUsername();
         String selectedCompetence = getSelectedCompetence();
         if (selectedUsername == null || selectedCompetence == null) {
+            Message.raiseError(this, "Non è stata selezionata alcuna competenza!");
             return;
         }
 
