@@ -277,8 +277,9 @@ public class AreaView extends javax.swing.JFrame {
     }//GEN-LAST:event_addAreaButtonActionPerformed
 
     protected boolean removeLocation(String location) {
+        Area area = new Area(null, location);
         try {
-            Area.removeFromDatabaseWithLocation(location);
+            area.removeFromDatabaseWithLocation();
             return true;
         } catch (SQLException ex) {
             Message.raiseError(this, "La filiale '"+location+"' non è stata rimossa correttamente!");
@@ -299,11 +300,22 @@ public class AreaView extends javax.swing.JFrame {
         }
         refreshLocations();
     }//GEN-LAST:event_removeLocationButtonActionPerformed
-
+    
     private void addSectorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSectorButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_addSectorButtonActionPerformed
 
+    protected boolean removeSector(String location, String sector) {
+        Area area = new Area(sector, location);
+        try {
+            area.removeFromDatabase();
+            return true;
+        } catch (SQLException ex) {
+            Message.raiseError(this, "L'area ('"+location+"', '"+sector+"') non è stata rimossa correttamente!");
+            return false;
+        }
+    }
+    
     private void removeSectorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeSectorButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_removeSectorButtonActionPerformed
