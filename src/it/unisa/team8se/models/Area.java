@@ -110,6 +110,15 @@ public class Area extends DatabaseModel{
         ps.close();
     }
     
+    public static void removeFromDatabaseWithLocation(String location) throws SQLException {
+        String sql = "delete from area where luogo_geografico=?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setString(1, location);
+        if(ps.executeUpdate()<1)
+            throw new SQLException();
+        ps.close();
+    }
+
     public void removeFromDatabase() throws SQLException {
         String sql = "delete from area where nome=? and luogo_geografico=?";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);

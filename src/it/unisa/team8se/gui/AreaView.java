@@ -51,6 +51,7 @@ public class AreaView extends javax.swing.JFrame {
     }
 
     protected boolean refreshLocations() {
+        comboBoxModel.removeAllElements();
         LinkedList<Area> as = Area.getAllDatabaseInstances();
         if (as != null && as.size() > 0) {
             for (Area a : as) {
@@ -92,7 +93,7 @@ public class AreaView extends javax.swing.JFrame {
         addSectorButton = new javax.swing.JButton();
         removeSectorButton = new javax.swing.JButton();
         addAreaButton = new javax.swing.JButton();
-        removeAreaButton = new javax.swing.JButton();
+        removeLocationButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Area View");
@@ -147,10 +148,10 @@ public class AreaView extends javax.swing.JFrame {
             }
         });
 
-        removeAreaButton.setText("Rimuovi");
-        removeAreaButton.addActionListener(new java.awt.event.ActionListener() {
+        removeLocationButton.setText("Rimuovi");
+        removeLocationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeAreaButtonActionPerformed(evt);
+                removeLocationButtonActionPerformed(evt);
             }
         });
 
@@ -173,7 +174,7 @@ public class AreaView extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(addAreaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel1)
-                                    .addComponent(removeAreaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(removeLocationButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(105, 105, 105)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -199,7 +200,7 @@ public class AreaView extends javax.swing.JFrame {
                         .addGap(54, 54, 54)
                         .addComponent(addAreaButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(removeAreaButton))
+                        .addComponent(removeLocationButton))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -272,36 +273,32 @@ public class AreaView extends javax.swing.JFrame {
             Message.raiseError(this, "Non è stato inserito nessun settore per la nuova filiale '"+newLocation+"'!");
         }
         addArea(newLocation, newSector);
+        refreshLocations();
     }//GEN-LAST:event_addAreaButtonActionPerformed
 
-    protected boolean removeArea(String location, String sector) {
-        Area area = new Area(location, sector);
-        if(!area.existsInDatabase()) {
-            Message.raiseError(this, "L'area ('"+location+"', '"+sector+"') non è presente!");
-            return false;
-        }
+    protected boolean removeLocation(String location) {
         try {
-            area.removeFromDatabase();
+            Area.removeFromDatabaseWithLocation(location);
             return true;
         } catch (SQLException ex) {
-            Message.raiseError(this, "L'area ('"+location+"', '"+sector+"') non è stata rimossa correttamente!");
+            Message.raiseError(this, "La filiale '"+location+"' non è stata rimossa correttamente!");
             return false;
         }
     }
     
-    private void removeAreaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAreaButtonActionPerformed
+    private void removeLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeLocationButtonActionPerformed
         String selectedLocation = (String) locationBox.getSelectedItem();
-        String selectedSector = (String) sectorList.getSelectedValue();
-        if (selectedLocation == null || selectedSector == null) {
-            Message.raiseError(this, "Non è stata selezionata alcuna area!");
+        if (selectedLocation == null) {
+            Message.raiseError(this, "Non è stata selezionata alcuna filiale!");
             return;
         }
-        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare l'area "
-                + "('"+selectedLocation+"', '"+selectedSector+"') ?", "Rimozione", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la filiale "
+                + "'"+selectedLocation+"' ?", "Rimozione", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
-            removeArea(selectedLocation, selectedSector);
+            removeLocation(selectedLocation);
         }
-    }//GEN-LAST:event_removeAreaButtonActionPerformed
+        refreshLocations();
+    }//GEN-LAST:event_removeLocationButtonActionPerformed
 
     private void addSectorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSectorButtonActionPerformed
         // TODO add your handling code here:
@@ -356,7 +353,7 @@ public class AreaView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JComboBox<String> locationBox;
-    private javax.swing.JButton removeAreaButton;
+    private javax.swing.JButton removeLocationButton;
     private javax.swing.JButton removeSectorButton;
     private javax.swing.JList<String> sectorList;
     // End of variables declaration//GEN-END:variables
