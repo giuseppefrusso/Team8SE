@@ -47,21 +47,33 @@ public class Area extends DatabaseModel{
         return sector + " - "+ location;
     }
     
-    public static Area[] getAllDatabaseInstances() {
-        String sql = "select * from attivita_pianificata";
+    public static LinkedList<Area> getAllDatabaseInstances() {
+        String sql = "select * from area";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             LinkedList<Area> instances = DatabaseContext.fetchAllModels(Area.class, ps);
-            return Arrays.copyOf(instances.toArray(),instances.size(),Area[].class);
+            return instances;
         } catch (SQLException ex) {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
+    public static LinkedList<Area> getAllSectorsOf(String location) {
+        String sql = "select * from area where luogo_geografico = ?";
+        try {
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            ps.setString(1, location);
+            LinkedList<Area> sectors = DatabaseContext.fetchAllModels(Area.class, ps);
+            return sectors;
+        } catch (SQLException ex) {
+            Logger.getLogger(Area.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
     
     public static Area getInstanceWithPK(String sector, String location) {
-        String sql = "select * from attivita_pianificata where nome = ? and luogo_geografico = ?";
+        String sql = "select * from area where nome = ? and luogo_geografico = ?";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1, sector);

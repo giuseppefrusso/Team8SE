@@ -95,6 +95,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         adminRadioButton = new javax.swing.JRadioButton();
         competenceButton = new javax.swing.JButton();
         accessButton = new javax.swing.JButton();
+        areaButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("System Admistrator View\n");
@@ -202,6 +203,13 @@ public class SystemAdminForm extends javax.swing.JFrame {
             }
         });
 
+        areaButton.setText("Aree");
+        areaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                areaButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -214,6 +222,8 @@ public class SystemAdminForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(areaButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(accessButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(competenceButton))
@@ -237,7 +247,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(96, 96, 96)
                                         .addComponent(usernameLabel)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -291,7 +301,8 @@ public class SystemAdminForm extends javax.swing.JFrame {
                     .addComponent(removeButton)
                     .addComponent(modifyButton)
                     .addComponent(competenceButton)
-                    .addComponent(accessButton))
+                    .addComponent(accessButton)
+                    .addComponent(areaButton))
                 .addContainerGap())
         );
 
@@ -633,6 +644,12 @@ public class SystemAdminForm extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_accessButtonActionPerformed
 
+    private void areaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_areaButtonActionPerformed
+        AreaView view = new AreaView();
+        view.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_areaButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -671,6 +688,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton accessButton;
     private javax.swing.JRadioButton adminRadioButton;
+    private javax.swing.JButton areaButton;
     private javax.swing.JButton competenceButton;
     private javax.swing.JButton insertButton;
     private javax.swing.JScrollPane jScrollPane2;

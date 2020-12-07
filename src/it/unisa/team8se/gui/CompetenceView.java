@@ -10,7 +10,6 @@ import it.unisa.team8se.Message;
 import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
-import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -61,6 +60,7 @@ public class CompetenceView extends javax.swing.JFrame {
     }
 
     protected boolean refreshUsers() {
+        comboBoxModel.removeAllElements();
         try {
             Maintainer[] ms = Maintainer.getAllDatabaseInstances();
             if (ms != null && ms.length > 0) {
