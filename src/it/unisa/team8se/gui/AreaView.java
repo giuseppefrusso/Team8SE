@@ -128,8 +128,18 @@ public class AreaView extends javax.swing.JFrame {
         removeSectorButton.setText("Rimuovi");
 
         addLocationButton.setText("Aggiungi");
+        addLocationButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addLocationButtonActionPerformed(evt);
+            }
+        });
 
         removeLocationButton.setText("Rimuovi");
+        removeLocationButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeLocationButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -223,6 +233,14 @@ public class AreaView extends javax.swing.JFrame {
         String selectedLocation = (String) comboBoxModel.getSelectedItem();
         refreshSectors(selectedLocation);
     }//GEN-LAST:event_locationBoxActionPerformed
+
+    private void addLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLocationButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addLocationButtonActionPerformed
+
+    private void removeLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeLocationButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_removeLocationButtonActionPerformed
 
     /**
      * @param args the command line arguments
