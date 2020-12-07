@@ -232,6 +232,7 @@ public class Activity extends DatabaseModel{
             if(res < 1){
                 throw new RuntimeException("Insert failed of object" + this);
             }
+            ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         }

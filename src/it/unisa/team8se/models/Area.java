@@ -79,9 +79,16 @@ public class Area extends DatabaseModel{
         return null;
     }
 
-    
-    public void saveToDatabase() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Override
+    public void saveToDatabase() throws SQLException{
+        String sql = "insert into area(nome, luogo_geografico) "
+                + "values(?, ?)";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setString(1, sector);
+        ps.setString(2, location);
+        if(ps.executeUpdate()<1)
+            throw new SQLException();
+        ps.close();
     }
     
     @Override
