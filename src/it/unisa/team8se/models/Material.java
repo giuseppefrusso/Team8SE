@@ -37,7 +37,15 @@ public class Material extends DatabaseModel{
     public String getDescription() {
         return description;
     }
-	    
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+	   
     public static Material[] getAllDatabaseInstances() {
         String sql = "select * from materiale";
         try {
@@ -90,5 +98,31 @@ public class Material extends DatabaseModel{
     @Override
     public boolean existsInDatabase() {
         return Material.getInstanceWithPK(getName()) != null;
+    }
+
+    public void removeFromDatabase() {
+        String sql = "delete from materiale where nome = ?";
+        try(PreparedStatement ps = DatabaseContext.getPreparedStatement(sql)) {
+            ps.setString(1, getName());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Material.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void updateToDatabase(){
+        updateToDatabaseWithName(getName());
+    }
+    
+    public void updateToDatabaseWithName(String newName){
+        String sql = "update materiale set nome = ?, descrizione = ? where nome = ?";
+        try(PreparedStatement ps = DatabaseContext.getPreparedStatement(sql)){
+          ps.setString(1, newName);
+          ps.setString(2, getDescription());
+          ps.setString(3, getName());
+          ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Material.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }//end Material

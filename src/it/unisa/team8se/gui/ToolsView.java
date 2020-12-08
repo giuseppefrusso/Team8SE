@@ -11,6 +11,8 @@ import it.unisa.team8se.models.Material;
 import java.util.Collections;
 import java.util.LinkedList;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -18,33 +20,41 @@ import javax.swing.DefaultListModel;
  */
 public class ToolsView extends javax.swing.JFrame {
 
-    private LinkedList<Material> materials; 
-    private DefaultListModel listModel;
-    
+    private LinkedList<Material> materials;
+    //private DefaultListModel listModel;
+    private DefaultTableModel listModel;
+
     /**
      * Creates new form ToolsView
      */
     public ToolsView() {
         initComponents();
-        
-        if(!DatabaseContext.isConnected())
+
+        if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
-            
+        }
+
         materials = new LinkedList<>();
-        
+        listModel = new DefaultTableModel(new String[]{"Name", "Description"}, 0);
+
+        toolList.setModel(listModel);
         refreshMaterials();
-                
-    
     }
-    
-    private void refreshMaterials(){
+
+    private void refreshMaterials() {
         materials.clear();
-        
+        listModel.setRowCount(0);
+
         Material[] m = Material.getAllDatabaseInstances();
-        if(m != null){
+
+        if (m != null) {
             Collections.addAll(materials, m);
-            for(Material mat : m){
-                
+            for (Material mat : m) {
+                if (mat.getDescription() != null) {
+                    listModel.addRow(new String[]{mat.getName(), mat.getDescription()});
+                } else {
+                    listModel.addRow(new String[]{mat.getName(), ""});
+                }
             }
         }
     }
@@ -58,8 +68,6 @@ public class ToolsView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        toolList = new javax.swing.JList<>();
         toolsLabel = new javax.swing.JLabel();
         removeButton = new javax.swing.JButton();
         modifyButton = new javax.swing.JButton();
@@ -69,16 +77,12 @@ public class ToolsView extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        toolList = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        toolList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " " };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        toolList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(toolList);
+        setBackground(new java.awt.Color(255, 204, 153));
 
         toolsLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         toolsLabel.setText("TOOLS");
@@ -107,46 +111,64 @@ public class ToolsView extends javax.swing.JFrame {
             }
         });
 
-        descriptionField.setPreferredSize(new java.awt.Dimension(6, 20));
-
         jLabel1.setText("Description");
 
         jLabel2.setText("Name");
+
+        jLabel3.setText("LIST");
+
+        toolList.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        toolList.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        toolList.setShowHorizontalLines(false);
+        toolList.getTableHeader().setReorderingAllowed(false);
+        toolList.setVerifyInputWhenFocusTarget(false);
+        toolList.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                toolListFocusGained(evt);
+            }
+        });
+        jScrollPane2.setViewportView(toolList);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(removeButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(modifyButton))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator1)))
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(addButton)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(addButton)
+                        .addGap(327, 474, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane2)
+                            .addComponent(descriptionField)
+                            .addComponent(jSeparator1)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(removeButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(modifyButton))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(toolsLabel)
-                                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(descriptionField, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(toolsLabel, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(nameField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -160,19 +182,21 @@ public class ToolsView extends javax.swing.JFrame {
                 .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(descriptionField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(addButton)
-                .addGap(11, 11, 11)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(descriptionField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(modifyButton)
                     .addComponent(removeButton))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -181,25 +205,58 @@ public class ToolsView extends javax.swing.JFrame {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         String name = nameField.getText();
         String desc = descriptionField.getText();
-        
-        if(name.isEmpty() || desc.isEmpty()){
-            Message m = new Message();
-            m.raiseError(rootPane, "Fill all required fields!");
+
+        if (name.isEmpty()) {
+            Message.raiseError(rootPane, "Please fill the name field!");
             return;
         }
-        
+
         Material m = new Material(name, desc);
         m.saveToDatabase();
         refreshMaterials();
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-        // TODO add your handling code here:
+        Material selected = materials.get(toolList.getSelectedRow());
+        if (selected != null) {
+            selected.removeFromDatabase();
+            refreshMaterials();
+        }
+        toolList.clearSelection();
     }//GEN-LAST:event_removeButtonActionPerformed
 
     private void modifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyButtonActionPerformed
-        // TODO add your handling code here:
+        int selectedCol = toolList.getSelectedColumn();
+        int selectedRow = toolList.getSelectedRow();
+
+        if (selectedCol >= 0 && selectedRow >= 0) {
+            Material selectedMat = materials.get(selectedRow);
+            String colName = toolList.getColumnName(selectedCol);
+
+            if (selectedCol == 0) {
+                String newValue = (String) JOptionPane.showInputDialog(this, "Modify " + colName, "Modify",
+                         JOptionPane.INFORMATION_MESSAGE, null, null, selectedMat.getName());
+                if (newValue != null && !newValue.isEmpty()) {
+                    selectedMat.updateToDatabaseWithName(newValue);
+                    refreshMaterials();
+                }
+            } else if (selectedCol == 1) {
+                String newValue = (String) JOptionPane.showInputDialog(this, "Modify " + colName, "Modify",
+                         JOptionPane.INFORMATION_MESSAGE, null, null, selectedMat.getDescription());
+                if(newValue != null){
+                    selectedMat.setDescription(newValue);
+                    selectedMat.updateToDatabase();
+                    refreshMaterials();
+                }
+            }
+        }
+        toolList.clearSelection();
     }//GEN-LAST:event_modifyButtonActionPerformed
+
+    private void toolListFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_toolListFocusGained
+        modifyButton.setEnabled(true);
+        removeButton.setEnabled(true);
+    }//GEN-LAST:event_toolListFocusGained
 
     /**
      * @param args the command line arguments
@@ -241,12 +298,13 @@ public class ToolsView extends javax.swing.JFrame {
     private javax.swing.JTextField descriptionField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton modifyButton;
     private javax.swing.JTextField nameField;
     private javax.swing.JButton removeButton;
-    private javax.swing.JList<String> toolList;
+    private javax.swing.JTable toolList;
     private javax.swing.JLabel toolsLabel;
     // End of variables declaration//GEN-END:variables
 }

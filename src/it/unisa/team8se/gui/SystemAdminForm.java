@@ -414,19 +414,19 @@ public class SystemAdminForm extends javax.swing.JFrame {
     }//GEN-LAST:event_insertButtonActionPerformed
 
     private void surnameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_surnameFieldMouseClicked
-        surnameField.setText("");
+        surnameField.selectAll();
     }//GEN-LAST:event_surnameFieldMouseClicked
 
     private void nameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nameFieldMouseClicked
-        nameField.setText("");
+        nameField.selectAll();
     }//GEN-LAST:event_nameFieldMouseClicked
 
     private void passwordFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passwordFieldMouseClicked
-        passwordField.setText("");
+        passwordField.selectAll();
     }//GEN-LAST:event_passwordFieldMouseClicked
 
     private void usernameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usernameFieldMouseClicked
-        usernameField.setText("");
+        usernameField.selectAll();
     }//GEN-LAST:event_usernameFieldMouseClicked
 
     protected boolean modifyUser(String newValue, int selectedRow, int selectedColumn) {

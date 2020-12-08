@@ -197,6 +197,7 @@ public class PlannerForm extends javax.swing.JFrame {
             }
         ));
         activityTable.setIntercellSpacing(new java.awt.Dimension(2, 1));
+        activityTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(activityTable);
         activityTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 

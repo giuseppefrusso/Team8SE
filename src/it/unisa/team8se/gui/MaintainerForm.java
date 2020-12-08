@@ -183,6 +183,7 @@ public class MaintainerForm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        activityTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(activityTable);
 
         listWeekNumberLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
