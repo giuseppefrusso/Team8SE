@@ -15,11 +15,11 @@ import it.unisa.team8se.models.SystemAdmin;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -339,7 +339,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
                 tableModel.addRow(u.toArray());
             }
         } catch (SQLException ex) {
-            Message.raiseError(this,"Errore nel caricamento");
+            Message.raiseError(this, "Errore nel caricamento");
             return false;
         }
         return true;
@@ -358,30 +358,30 @@ public class SystemAdminForm extends javax.swing.JFrame {
 
     protected boolean insertUser(String surname, String name, String username, String password, String role) {
         if (containsUsername(username)) {
-            Message.raiseError(this,"Username già presente!");
+            Message.raiseError(this, "Username già presente!");
             return false;
         }
         if (surname.equals("") || name.equals("") || username.equals("") || password.equals("")) {
-            Message.raiseError(this,"Inserire tutti i campi!");
+            Message.raiseError(this, "Inserire tutti i campi!");
             return false;
         }
 
-        try {
-            Connection c = DatabaseContext.getConnection();
-            String query = "insert into " + role + "(username,password,cognome,nome) values(?,?,?,?)";
-            PreparedStatement ps = c.prepareStatement(query);
-            //ps.setString(1, role);
-            ps.setString(1, username);
-            ps.setString(2, password);
-            ps.setString(3, surname);
-            ps.setString(4, name);
-            ps.executeUpdate();
-            ps.close();
-
-        } catch (SQLException ex) {
-            Message.raiseError(this,"Errore nell'inserimento");
-            return false;
+        if (role.equalsIgnoreCase("maintainer")) {
+            Maintainer m = new Maintainer(surname, name, username, password);
+            try {
+                m.saveToDatabase();
+            } catch (SQLException ex) {
+                Logger.getLogger(SystemAdminForm.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }
+        } else if (role.equalsIgnoreCase("planner")) {
+            Planner p = new Planner(surname, name, username, password);
+            p.saveToDatabase();
+        } else if (role.equalsIgnoreCase("system admin")) {
+            SystemAdmin sa = new SystemAdmin(surname, name, username, password);
+            sa.saveToDatabase();
         }
+
         refreshUsers();
 
         return true;
@@ -403,9 +403,9 @@ public class SystemAdminForm extends javax.swing.JFrame {
             role = "maintainer";
 
         } else if (adminRadioButton.isSelected()) {
-            role = "system_administrator";
+            role = "system admin";
         } else {
-            Message.raiseError(this,"Inserire un ruolo!");
+            Message.raiseError(this, "Inserire un ruolo!");
             return;
         }
 
@@ -433,9 +433,9 @@ public class SystemAdminForm extends javax.swing.JFrame {
         String selectedUsername = (String) tableModel.getValueAt(selectedRow, 2);
         String selectedRole = (String) tableModel.getValueAt(selectedRow, 4);
         String field = tableModel.getColumnName(selectedColumn);
-        
+
         if (selectedColumn == 2 && containsUsername(newValue)) {
-            Message.raiseError(this,"Username già presente!");
+            Message.raiseError(this, "Username già presente!");
             return false;
         }
 
@@ -474,7 +474,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
                     sa.saveToDatabase();
                 }
             } catch (SQLException e) {
-                Message.raiseError(this,"Errore nella modifica del ruolo.");
+                Message.raiseError(this, "Errore nella modifica del ruolo.");
                 return false;
             }
         } else if (field.equalsIgnoreCase("username")) {
@@ -490,7 +490,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
                     sa.updateToDatabase(newValue);
                 }
             } catch (SQLException e) {
-                Message.raiseError(this,"ERRORE" + e.getMessage());
+                Message.raiseError(this, "ERRORE" + e.getMessage());
                 return false;
             }
         } else {
@@ -517,7 +517,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
                     sa.updateToDatabase();
                 }
             } catch (SQLException e) {
-                Message.raiseError(this,"ERRORE" + e.getMessage());
+                Message.raiseError(this, "ERRORE" + e.getMessage());
                 return false;
             }
         }
@@ -526,18 +526,17 @@ public class SystemAdminForm extends javax.swing.JFrame {
     }
 
     private void modifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyButtonActionPerformed
-        //chiedere a madison delucidazioni su SELECTION MODEL
 
         int selectedRow = tableUsers.getSelectedRow();
         int selectedColumn = tableUsers.getSelectedColumn();
 
         if (selectedRow == -1 || selectedColumn == -1) {
-            Message.raiseError(this,"Selezionare una cella");
+            Message.raiseError(this, "Selezionare una cella");
             return;
         }
 
         String oldValue = (String) tableUsers.getValueAt(selectedRow, selectedColumn);
-        
+
         String field = tableModel.getColumnName(selectedColumn);
         String newValue = new String();
         if (field.equals("Ruolo")) {
@@ -564,25 +563,27 @@ public class SystemAdminForm extends javax.swing.JFrame {
             }
         }
 
-        if(newValue.equalsIgnoreCase(oldValue)) {
+        if (newValue.equalsIgnoreCase(oldValue)) {
             return;
         }
-        
+
         modifyUser(newValue, selectedRow, selectedColumn);
     }//GEN-LAST:event_modifyButtonActionPerformed
 
     protected void removeUser(String selectedUsername, int selectedRow) {
-        try{
+        try {
             String role = (String) tableModel.getValueAt(selectedRow, 4);
-            if(role.equalsIgnoreCase("Planner")) {
+            if (role.equalsIgnoreCase("Planner")) {
                 Planner.removeFromDatabase(selectedUsername);
-            } if(role.equalsIgnoreCase("Maintainer")) {
+            }
+            if (role.equalsIgnoreCase("Maintainer")) {
                 Maintainer.removeFromDatabase(selectedUsername);
-            } if(role.equalsIgnoreCase("System Admin")) {
+            }
+            if (role.equalsIgnoreCase("System Admin")) {
                 SystemAdmin.removeFromDatabase(selectedUsername);
             }
-        }catch(SQLException ex) {
-            Message.raiseError(this,"Errore nella rimozione!");
+        } catch (SQLException ex) {
+            Message.raiseError(this, "Errore nella rimozione!");
         }
         refreshUsers();
     }
@@ -591,7 +592,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         int selectedRow = tableUsers.getSelectedRow();
 
         if (selectedRow == -1) {
-            Message.raiseError(this,"Selezionare una riga!");
+            Message.raiseError(this, "Selezionare una riga!");
             return;
         }
 
@@ -634,7 +635,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
             DatabaseContext.closeConnection();
             System.exit(0);
         } catch (SQLException ex) {
-            Message.raiseError(this,"Errore nella chiusura!");
+            Message.raiseError(this, "Errore nella chiusura!");
         }
     }//GEN-LAST:event_formWindowClosing
 

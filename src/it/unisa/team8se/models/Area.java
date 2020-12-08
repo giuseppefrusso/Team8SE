@@ -38,10 +38,6 @@ public class Area extends DatabaseModel{
         this.location = location;
     }
     
-    public void finalize() throws Throwable {
-
-    }
-
     public String getSector() {
         return sector;
     }
@@ -50,15 +46,20 @@ public class Area extends DatabaseModel{
         return location;
     }
 
+    @Override
     public String toString() {
         return sector + " - "+ location;
     }
     
-    public static LinkedList<Area> getAllDatabaseInstances() {
-        String sql = "select * from area";
+    public static LinkedList<String> getAllLocations() {
+        String sql = "select distinct luogo_geografico from area order by luogo_geografico";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-            LinkedList<Area> instances = DatabaseContext.fetchAllModels(Area.class, ps);
+            ResultSet rs = ps.executeQuery();
+            LinkedList<String> instances = new LinkedList<>();
+            while(rs.next()) {
+                instances.add(rs.getString(1));
+            }
             return instances;
         } catch (SQLException ex) {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
@@ -67,7 +68,7 @@ public class Area extends DatabaseModel{
     }
 
     public static LinkedList<Area> getAllSectorsOf(String location) {
-        String sql = "select * from area where luogo_geografico = ?";
+        String sql = "select * from area where luogo_geografico = ? order by nome";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1, location);
@@ -80,7 +81,7 @@ public class Area extends DatabaseModel{
     }
     
     public static Area getInstanceWithPK(String sector, String location) {
-        String sql = "select * from area where nome = ? and luogo_geografico = ?";
+        String sql = "select * from area where nome = ? and luogo_geografico = ? order by luogo_geografico, nome";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1, sector);
