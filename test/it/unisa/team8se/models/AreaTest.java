@@ -78,10 +78,10 @@ public class AreaTest {
      * Test of getAllDatabaseInstances method, of class Area.
      */
     @Test
-    public void testGetAllDatabaseInstances() {
+    public void testGetAllLocations() {
         System.out.println("getAllDatabaseInstances");
-        LinkedList<Area> expResult = null;
-        LinkedList<Area> result = Area.getAllDatabaseInstances();
+        LinkedList<String> expResult = null;
+        LinkedList<String> result = Area.getAllLocations();
         assertEquals(expResult, result);
     }
 
