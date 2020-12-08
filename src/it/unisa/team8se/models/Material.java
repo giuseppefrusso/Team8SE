@@ -71,7 +71,14 @@ public class Material extends DatabaseModel{
     
     @Override
     public void saveToDatabase() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "insert into materiale (nome,descrizione) values (?,?)";
+        try (PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);){            
+            ps.setString(1,getName());
+            ps.setString(2,getDescription());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Material.class.getName()).log(Level.SEVERE, null, ex);
+        }
     } 
 
     @Override

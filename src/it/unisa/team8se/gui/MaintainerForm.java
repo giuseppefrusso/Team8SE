@@ -112,6 +112,7 @@ public class MaintainerForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         activityTable = new javax.swing.JTable();
+        listWeekNumberLabel = new javax.swing.JLabel();
         activitySummaryPanel = new javax.swing.JPanel();
         activitySummary = new javax.swing.JPanel();
         interventionDescScrollPane = new javax.swing.JScrollPane();
@@ -147,6 +148,7 @@ public class MaintainerForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Maintainer View");
+        setBackground(new java.awt.Color(255, 204, 153));
         setIconImage(Message.getImageIcon());
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -161,11 +163,13 @@ public class MaintainerForm extends javax.swing.JFrame {
             }
         });
 
+        activityListPanel.setBackground(new java.awt.Color(255, 204, 153));
+
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel2.setText("Activity List");
+        jLabel2.setText("ACTIVITY LIST");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("Week n# 10");
+        jLabel1.setText("Week n#");
 
         activityTable.setAutoCreateRowSorter(true);
         activityTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -181,27 +185,35 @@ public class MaintainerForm extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(activityTable);
 
+        listWeekNumberLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        listWeekNumberLabel.setText("10");
+
         javax.swing.GroupLayout activityListPanelLayout = new javax.swing.GroupLayout(activityListPanel);
         activityListPanel.setLayout(activityListPanelLayout);
         activityListPanelLayout.setHorizontalGroup(
             activityListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(activityListPanelLayout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 795, Short.MAX_VALUE)
             .addGroup(activityListPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(activityListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(activityListPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(listWeekNumberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 795, Short.MAX_VALUE)
         );
         activityListPanelLayout.setVerticalGroup(
             activityListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(activityListPanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
+                .addGroup(activityListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(listWeekNumberLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab("Activity List", activityListPanel);
@@ -485,6 +497,7 @@ public class MaintainerForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JLabel listWeekNumberLabel;
     private javax.swing.JTextPane requiredCompetenciesText;
     private javax.swing.JButton smpButton;
     private javax.swing.JTabbedPane tabbedPane;
