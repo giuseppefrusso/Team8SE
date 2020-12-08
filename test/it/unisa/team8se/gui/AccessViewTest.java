@@ -15,16 +15,19 @@ import static org.junit.Assert.*;
  * @author giuse
  */
 public class AccessViewTest {
+    private AccessView access;
     
     public AccessViewTest() {
     }
     
     @Before
     public void setUp() {
+        access= new AccessView();
     }
     
     @After
     public void tearDown() {
+        access = null;
     }
 
     /**
@@ -33,12 +36,9 @@ public class AccessViewTest {
     @Test
     public void testRefreshPastAccesses() {
         System.out.println("refreshPastAccesses");
-        AccessView instance = new AccessView();
-        boolean expResult = false;
-        boolean result = instance.refreshPastAccesses();
+        boolean expResult = true;
+        boolean result = access.refreshPastAccesses();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -47,12 +47,9 @@ public class AccessViewTest {
     @Test
     public void testRefreshCurrentAccesses() {
         System.out.println("refreshCurrentAccesses");
-        AccessView instance = new AccessView();
-        boolean expResult = false;
-        boolean result = instance.refreshCurrentAccesses();
+        boolean expResult = true;
+        boolean result = access.refreshCurrentAccesses();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -61,24 +58,11 @@ public class AccessViewTest {
     @Test
     public void testRefreshAccesses() {
         System.out.println("refreshAccesses");
-        AccessView instance = new AccessView();
-        boolean expResult = false;
-        boolean result = instance.refreshAccesses();
+        boolean expResult = true;
+        boolean result = access.refreshAccesses();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
-    /**
-     * Test of main method, of class AccessView.
-     */
-    @Test
-    public void testMain() {
-        System.out.println("main");
-        String[] args = null;
-        AccessView.main(args);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+
     
 }
