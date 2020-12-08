@@ -38,10 +38,6 @@ public class Area extends DatabaseModel{
         this.location = location;
     }
     
-    public void finalize() throws Throwable {
-
-    }
-
     public String getSector() {
         return sector;
     }
