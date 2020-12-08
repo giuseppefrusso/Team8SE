@@ -123,6 +123,8 @@ public class AccessView extends javax.swing.JFrame {
         pastAccessesTable.setAutoCreateRowSorter(true);
         pastAccessesTable.setModel(pastAccessesModel);
         pastAccessesTable.setEnabled(false);
+        pastAccessesTable.setRowSelectionAllowed(false);
+        pastAccessesTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(pastAccessesTable);
 
         jLabel1.setText("Accessi passati");
