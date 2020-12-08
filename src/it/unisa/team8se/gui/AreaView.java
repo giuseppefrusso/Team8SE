@@ -11,8 +11,6 @@ import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Area;
 import java.sql.SQLException;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -23,7 +21,7 @@ import javax.swing.JOptionPane;
  */
 public class AreaView extends javax.swing.JFrame {
 
-    private DefaultComboBoxModel comboBoxModel;
+    private DefaultComboBoxModel<String> comboBoxModel;
     private DefaultListModel<String> listModel;
 
     /**
@@ -38,11 +36,11 @@ public class AreaView extends javax.swing.JFrame {
     }
 
     private void initComboBoxModel() {
-        comboBoxModel = new DefaultComboBoxModel();
+        comboBoxModel = new DefaultComboBoxModel<>();
         refreshLocations();
     }
 
-    protected void initListModel() {
+    private void initListModel() {
         listModel = new DefaultListModel<>();
         if (comboBoxModel.getSize() != 0) {
             String defaultLocation = (String) comboBoxModel.getElementAt(0);
@@ -52,10 +50,10 @@ public class AreaView extends javax.swing.JFrame {
 
     protected boolean refreshLocations() {
         comboBoxModel.removeAllElements();
-        LinkedList<Area> as = Area.getAllDatabaseInstances();
-        if (as != null && as.size() > 0) {
-            for (Area a : as) {
-                comboBoxModel.addElement(a.getLocation());
+        LinkedList<String> ls = Area.getAllLocations();
+        if (ls != null && ls.size() > 0) {
+            for (String l : ls) {
+                comboBoxModel.addElement(l);
             }    
             return true;
         }
@@ -249,14 +247,14 @@ public class AreaView extends javax.swing.JFrame {
     protected boolean addArea(String location, String sector) {
         Area area = new Area(sector, location);
         if(area.existsInDatabase()) {
-            Message.raiseError(this, "L'area ('"+location+"', '"+sector+"') è già presente!");
+            Message.raiseError(this, "L'area "+area.toString()+" è già presente!");
             return false;
         }
         try {
             area.saveToDatabase();
             return true;
         } catch (SQLException ex) {
-            Message.raiseError(this, "L'area ('"+location+"', '"+sector+"') non è stata inserita correttamente!");
+            Message.raiseError(this, "L'area "+area.toString()+" non è stata inserita correttamente!");
             return false;
         }
     }
@@ -265,12 +263,14 @@ public class AreaView extends javax.swing.JFrame {
         String newLocation = JOptionPane.showInputDialog(this, "Inserisci il nome della nuova filiale", 
                 "Creazione di una nuova area", JOptionPane.PLAIN_MESSAGE);
         if(newLocation == null) {
-            Message.raiseError(this, "Non è stata inserita nessuna filiale!");
+            //Message.raiseError(this, "Non è stata inserita nessuna filiale!");
+            return;
         }
         String newSector = JOptionPane.showInputDialog(this, "Inserisci il nome del nuovo settore", 
                 "Creazione di una nuova area", JOptionPane.PLAIN_MESSAGE);
         if(newSector == null) {
-            Message.raiseError(this, "Non è stato inserito nessun settore per la nuova filiale '"+newLocation+"'!");
+            //Message.raiseError(this, "Non è stato inserito nessun settore per la nuova filiale '"+newLocation+"'!");
+            return;
         }
         addArea(newLocation, newSector);
         refreshLocations();
@@ -282,7 +282,11 @@ public class AreaView extends javax.swing.JFrame {
             area.removeFromDatabaseWithLocation();
             return true;
         } catch (SQLException ex) {
-            Message.raiseError(this, "La filiale '"+location+"' non è stata rimossa correttamente!");
+            if(ex.getMessage().contains("viola il vincolo di chiave esterna"))
+                Message.raiseError(this, "Non è possibile rimuovere la filiale '"+location+
+                        "' perché\nun'attività è già stata assegnata a questa filiale!");
+            else
+                Message.raiseError(this, "La filiale '"+location+"' non è stata rimossa correttamente!");
             return false;
         }
     }
@@ -293,7 +297,7 @@ public class AreaView extends javax.swing.JFrame {
             Message.raiseError(this, "Non è stata selezionata alcuna filiale!");
             return;
         }
-        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la filiale "
+        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler rimuovere la filiale "
                 + "'"+selectedLocation+"' ?", "Rimozione", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             removeLocation(selectedLocation);
@@ -302,7 +306,19 @@ public class AreaView extends javax.swing.JFrame {
     }//GEN-LAST:event_removeLocationButtonActionPerformed
     
     private void addSectorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSectorButtonActionPerformed
-        // TODO add your handling code here:
+        String selectedLocation = (String) comboBoxModel.getSelectedItem();
+        if (selectedLocation == null) {
+            Message.raiseError(this, "Non è stata selezionata alcuna filiale!");
+            return;
+        }
+        String newSector = JOptionPane.showInputDialog(this, "Inserisci il nome del nuovo settore", 
+                "Creazione di una nuova area", JOptionPane.PLAIN_MESSAGE);
+        if(newSector == null) {
+            Message.raiseError(this, "Non è stato inserito nessun nuovo settore per la filiale '"+
+                    selectedLocation+"'!");
+        }
+        addArea(selectedLocation, newSector);
+        refreshLocations();
     }//GEN-LAST:event_addSectorButtonActionPerformed
 
     protected boolean removeSector(String location, String sector) {
@@ -311,13 +327,32 @@ public class AreaView extends javax.swing.JFrame {
             area.removeFromDatabase();
             return true;
         } catch (SQLException ex) {
-            Message.raiseError(this, "L'area ('"+location+"', '"+sector+"') non è stata rimossa correttamente!");
+            if(ex.getMessage().contains("viola il vincolo di chiave esterna"))
+                Message.raiseError(this, "Non è possibile rimuovere l'area "+area.toString()+
+                        "\nperché un'attività è già stata assegnata a quest'area!");
+            else
+                Message.raiseError(this, "L'area "+area.toString()+" non è stata rimossa corrrettamente!");
             return false;
         }
     }
     
     private void removeSectorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeSectorButtonActionPerformed
-        // TODO add your handling code here:
+        String selectedLocation = (String) locationBox.getSelectedItem();
+        String selectedSector = sectorList.getSelectedValue();
+        if (selectedLocation == null) {
+            Message.raiseError(this, "Non è stata selezionata alcuna filiale!");
+            return;
+        }
+        if(selectedSector == null) {
+            Message.raiseError(this, "Non è stato selezionato alcun settore!");
+            return;
+        }
+        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler rimuovere l'area "
+                +selectedSector+" - "+selectedLocation+" ?", "Rimozione", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
+            removeSector(selectedLocation, selectedSector);
+        }
+        refreshLocations();
     }//GEN-LAST:event_removeSectorButtonActionPerformed
 
     /**

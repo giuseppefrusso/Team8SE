@@ -35,7 +35,7 @@ public class AccessView extends javax.swing.JFrame {
         currentAccessesModel.addColumn("Data e ora login");
     }
     
-    private boolean refreshPastAccesses() {
+    protected boolean refreshPastAccesses() {
         try {
             pastAccessesModel.setRowCount(0);
             Access[] pastAccesses = Access.getAllDatabaseInstances();
@@ -50,7 +50,7 @@ public class AccessView extends javax.swing.JFrame {
         return true;
     }
     
-    private boolean refreshCurrentAccesses() {
+    protected boolean refreshCurrentAccesses() {
         try {
             currentAccessesModel.setRowCount(0);
             Access[] currentAccesses = Access.getAllDatabaseInstances();
