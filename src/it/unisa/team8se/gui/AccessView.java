@@ -35,7 +35,7 @@ public class AccessView extends javax.swing.JFrame {
         currentAccessesModel.addColumn("Data e ora login");
     }
     
-    private boolean refreshPastAccesses() {
+    protected boolean refreshPastAccesses() {
         try {
             pastAccessesModel.setRowCount(0);
             Access[] pastAccesses = Access.getAllDatabaseInstances();
@@ -50,7 +50,7 @@ public class AccessView extends javax.swing.JFrame {
         return true;
     }
     
-    private boolean refreshCurrentAccesses() {
+    protected boolean refreshCurrentAccesses() {
         try {
             currentAccessesModel.setRowCount(0);
             Access[] currentAccesses = Access.getAllDatabaseInstances();
@@ -122,6 +122,8 @@ public class AccessView extends javax.swing.JFrame {
         pastAccessesTable.setAutoCreateRowSorter(true);
         pastAccessesTable.setModel(pastAccessesModel);
         pastAccessesTable.setEnabled(false);
+        pastAccessesTable.setRowSelectionAllowed(false);
+        pastAccessesTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(pastAccessesTable);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N

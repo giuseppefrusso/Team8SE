@@ -35,14 +35,6 @@ public class AreaTest {
     }
 
     /**
-     * Test of finalize method, of class Area.
-     */
-    @Test
-    public void testFinalize() throws Exception {
-
-    }
-
-    /**
      * Test of getSector method, of class Area.
      */
     @Test
@@ -73,84 +65,4 @@ public class AreaTest {
         assertTrue(result instanceof String);
 
     }
-
-    /**
-     * Test of getAllDatabaseInstances method, of class Area.
-     */
-    @Test
-    public void testGetAllDatabaseInstances() {
-        System.out.println("getAllDatabaseInstances");
-        LinkedList<Area> expResult = null;
-        LinkedList<Area> result = Area.getAllDatabaseInstances();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getAllSectorsOf method, of class Area.
-     */
-    @Test
-    public void testGetAllSectorsOf() {
-        System.out.println("getAllSectorsOf");
-        String location = "";
-        LinkedList<Area> expResult = null;
-        LinkedList<Area> result = Area.getAllSectorsOf(location);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getInstanceWithPK method, of class Area.
-     */
-    @Test
-    public void testGetInstanceWithPK() {
-        System.out.println("getInstanceWithPK");
-        String sector = "";
-        String location = "";
-        Area expResult = null;
-        Area result = Area.getInstanceWithPK(sector, location);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of saveToDatabase method, of class Area.
-     */
-    @Test
-    public void testSaveToDatabase() throws Exception {
-        System.out.println("saveToDatabase");
-        Area instance = new Area();
-        instance.saveToDatabase();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getFromResultSet method, of class Area.
-     */
-    @Test
-    public void testGetFromResultSet() throws Exception {
-        System.out.println("getFromResultSet");
-        ResultSet rs = null;
-        Area instance = new Area();
-        instance.getFromResultSet(rs);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of existsInDatabase method, of class Area.
-     */
-    @Test
-    public void testExistsInDatabase() {
-        System.out.println("existsInDatabase");
-        Area instance = new Area();
-        boolean expResult = false;
-        boolean result = instance.existsInDatabase();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
 }
