@@ -25,6 +25,14 @@ public class CompetenceViewTest {
     
     public CompetenceViewTest() {
     }
+
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+    }
     
     @Before
     public void setUp() {
@@ -112,4 +120,16 @@ public class CompetenceViewTest {
         boolean result = instance.remove(username, competence);
         assertEquals(expResult, result);
     }    
+
+    /**
+     * Test of main method, of class CompetenceView.
+     */
+    @Test
+    public void testMain() {
+        System.out.println("main");
+        String[] args = null;
+        CompetenceView.main(args);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
 }
