@@ -21,7 +21,9 @@ import static org.junit.Assert.*;
  * @author prgne
  */
 public class MaintainerTest {
+    
     Maintainer instance;
+    
     public MaintainerTest() {
     }
     

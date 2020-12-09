@@ -14,14 +14,23 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author giuse
+ * @author prgne
  */
 public class LoginFormTest {
+    
     private LoginForm form;
     
     public LoginFormTest() {
     }
-
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
     @Before
     public void setUp() {
         form = new LoginForm();
@@ -31,4 +40,15 @@ public class LoginFormTest {
     public void tearDown() {
         form = null;
     }
+
+    /**
+     * Test of main method, of class LoginForm.
+     */
+    @Test
+    public void testMain() {
+        System.out.println("main");
+        String[] args = null;
+        LoginForm.main(args);
+    }
+    
 }
