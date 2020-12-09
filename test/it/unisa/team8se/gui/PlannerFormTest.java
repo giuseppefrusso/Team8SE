@@ -6,6 +6,9 @@
 package it.unisa.team8se.gui;
 
 import it.unisa.team8se.models.Planner;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -26,12 +29,23 @@ public class PlannerFormTest {
     
     @Before
     public void setUp() {
-        form = new PlannerForm();
-        
+        try {
+            form = new PlannerForm();
+            form.getConnection().setAutoCommit(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(PlannerFormTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @After
     public void tearDown() {
-        form=null;
+        try {
+            form.getConnection().rollback();
+            form.getConnection().setAutoCommit(true);
+            form.closeConnection();
+            form=null;
+        } catch (SQLException ex) {
+            Logger.getLogger(PlannerFormTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
