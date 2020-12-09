@@ -529,7 +529,7 @@ ATTIVITA_PIANIFICATA
 /*==============================================================*/
 create table SMP (
    NOME                 VARCHAR(16)          not null,
-   DOCUMENTO_PDF        VARCHAR(100)         not null,
+   DOCUMENTO_PDF        BYTEA         	     not null,
    constraint PK_SMP primary key (NOME)
 );
 

@@ -46,14 +46,6 @@ public class SMP extends DatabaseModel {
         this.nome = nome;
     }
 
-    /*
-    public String getDocumentoPDF() {
-        return documentoPDF;
-    }
-
-    public void setDocumentoPDF(String documentoPDF) {
-        this.documentoPDF = documentoPDF;
-    }*/
     public void importDocument(String filePath, String fileName) {
         try {
             file = Files.readAllBytes(Paths.get(filePath + fileName + ".pdf"));
@@ -72,7 +64,9 @@ public class SMP extends DatabaseModel {
     }
 
     public void openDocument() {
-
+        if(file != null){
+            
+        }
     }
 
     public static SMP[] getAllDatabaseInstances() {

@@ -50,21 +50,21 @@ INSERT INTO public.possesso(
 	id, maintainer)
 	VALUES (2, 'Spadino');
 
-INSERT INTO public.smp(
-	nome, documento_pdf)
-	VALUES ('protocollo', '/Users/doc.pdf');
+--INSERT INTO public.smp(
+--	nome, documento_pdf)
+--	VALUES ('protocollo', '/Users/doc.pdf');
 
-INSERT INTO public.smp(
-	nome, documento_pdf)
-	VALUES ('appunti', '/Users/doc1.pdf');
-
-INSERT INTO public.ewo(
-	id, smp, area, luogo_geografico, maintainer, planner, ambito, data_e_ora, week_number, eta, workspace_notes, interrompibile, stato_del_ticket, stato_del_maintainer, stato_del_dipartimento)
-	VALUES (1, 'protocollo', 'molding', 'Nocera', 'Aug', 'Flaco', 'meccanica', current_timestamp, 20, 30, null, true, 'non avviato', 'inviato', 'inviato');
+--INSERT INTO public.smp(
+--	nome, documento_pdf)
+--	VALUES ('appunti', '/Users/doc1.pdf');
 
 INSERT INTO public.ewo(
 	id, smp, area, luogo_geografico, maintainer, planner, ambito, data_e_ora, week_number, eta, workspace_notes, interrompibile, stato_del_ticket, stato_del_maintainer, stato_del_dipartimento)
-	VALUES (2, 'appunti', 'carpentry', 'Fisciano', 'Spadino', 'Singo', 'meccanica', current_timestamp, 10, 60, null, true, 'non avviato', 'inviato', 'inviato');
+	VALUES (1, null, 'molding', 'Nocera', 'Aug', 'Flaco', 'meccanica', current_timestamp, 20, 30, null, true, 'non avviato', 'inviato', 'inviato');
+
+INSERT INTO public.ewo(
+	id, smp, area, luogo_geografico, maintainer, planner, ambito, data_e_ora, week_number, eta, workspace_notes, interrompibile, stato_del_ticket, stato_del_maintainer, stato_del_dipartimento)
+	VALUES (2, null, 'carpentry', 'Fisciano', 'Spadino', 'Singo', 'meccanica', current_timestamp, 10, 60, null, true, 'non avviato', 'inviato', 'inviato');
 
 INSERT INTO public.materiale(
 	nome, descrizione)
@@ -92,7 +92,7 @@ INSERT INTO public.uso_ewo(
 
 INSERT INTO public.attivita_extra(
 	id, area, luogo_geografico, planner, smp, maintainer, ambito, data_e_ora, week_number, eta, workspace_notes, interrompibile)
-	VALUES (1, 'carpentry', 'Fisciano', 'Flaco', 'appunti','Spadino', 'meccanica', current_timestamp, 30, 40, null, true);
+	VALUES (1, 'carpentry', 'Fisciano', 'Flaco', null,'Spadino', 'meccanica', current_timestamp, 30, 40, null, true);
 
 INSERT INTO public.uso_extra(
 	materiale, attivita_extra)
@@ -100,7 +100,7 @@ INSERT INTO public.uso_extra(
 
 INSERT INTO public.attivita_pianificata(
 	id, smp, maintainer, area, luogo_geografico, planner, ambito, data_e_ora, week_number, eta, workspace_notes, interrompibile)
-		VALUES (1, 'appunti', 'Spadino', 'molding', 'Nocera', 'Flaco', 'meccanica', current_timestamp, 32, 50, null, false);
+		VALUES (1, null, 'Spadino', 'molding', 'Nocera', 'Flaco', 'meccanica', current_timestamp, 32, 50, null, false);
 
 INSERT INTO public.uso_planned(
 	materiale, attivita_pianificata)
