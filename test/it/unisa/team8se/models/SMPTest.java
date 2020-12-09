@@ -71,9 +71,20 @@ public class SMPTest extends TestCase {
         }
         assertTrue(instance.file.length > 0);
     }
-
+    
+    @Test
     public void testExportDocument() {
         instance = SMP.getInstanceWithPK("nome");
         instance.exportDocument("C:\\Users\\cptso\\Desktop\\", "doc1");
+    }
+    
+    @Test
+    public void testOpenDocument(){
+        instance = SMP.getInstanceWithPK("nome");
+        assertTrue(instance.openDocument());   
+    }
+    @Test
+    public void testCleanTemp(){
+        assertTrue(SMP.cleanTempDocumentFolder());   
     }
 }
