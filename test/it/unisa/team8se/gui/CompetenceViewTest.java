@@ -6,13 +6,13 @@ package it.unisa.team8se.gui;
  * and open the template in the editor.
  */
 
-import it.unisa.team8se.gui.CompetenceView;
 import it.unisa.team8se.models.Maintainer;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -25,23 +25,27 @@ public class CompetenceViewTest {
     
     public CompetenceViewTest() {
     }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
     
     @Before
     public void setUp() {
-        form = new CompetenceView();
+        try {
+            form = new CompetenceView();
+            form.getConnection().setAutoCommit(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(CompetenceViewTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @After
     public void tearDown() {
-        form = null;
+        try {
+            form.getConnection().rollback();
+            form.getConnection().setAutoCommit(true);
+            form.closeConnection();
+            form = null;
+        } catch (SQLException ex) {
+            Logger.getLogger(CompetenceViewTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -50,9 +54,8 @@ public class CompetenceViewTest {
     @Test
     public void testInitListModel() {
         System.out.println("initListModel");
-        CompetenceView instance = new CompetenceView();
-        instance.initListModel();
-        assertTrue(instance.listModel instanceof DefaultListModel);
+        form.initListModel();
+        assertTrue(form.listModel instanceof DefaultListModel);
     }
 
     /**
@@ -61,9 +64,8 @@ public class CompetenceViewTest {
     @Test
     public void testRefreshUsers() {
         System.out.println("refreshUsers");
-        CompetenceView instance = new CompetenceView();
         boolean expResult = true;
-        boolean result = instance.refreshUsers();
+        boolean result = form.refreshUsers();
         assertEquals(expResult, result);
     }
 
@@ -74,36 +76,46 @@ public class CompetenceViewTest {
     public void testRefreshCompetences() {
         System.out.println("refreshCompetences");
         String username = "Aug";
-        CompetenceView instance = new CompetenceView();
         boolean expResult = true;
-        boolean result = instance.refreshCompetences(username);
+        boolean result = form.refreshCompetences(username);
         assertEquals(expResult, result);
     }
     
     /**
-     * Test of wrog execution of refreshCompetences method, of class CompetenceView.
+     * Test of wrong execution of refreshCompetences method, of class CompetenceView.
      */
     @Test
     public void testRefreshCompetencesWrong() {
         System.out.println("wrong execution of refreshCompetences");
         String username = "noMaintainer";
-        CompetenceView instance = new CompetenceView();
         boolean expResult = false;
-        boolean result = instance.refreshCompetences(username);
+        boolean result = form.refreshCompetences(username);
         assertEquals(expResult, result);
     }
 
     /**
-     * Test of assign method, of class CompetenceView.
+     * Wrong test of assign method, of class CompetenceView.
      */
     @Test
-    public void testAssign() {
-        System.out.println("assign");
-        Maintainer maintainer = null;
-        String competenceDesc = "";
-        CompetenceView instance = new CompetenceView();
+    public void testAssign1() {
+        System.out.println("assign1");
+        Maintainer maintainer = new Maintainer("Adami", "Aureliano", "Aug", "procopio12");
+        String competenceDesc = "Problem solving";
         boolean expResult = false;
-        boolean result = instance.assign(maintainer, competenceDesc);
+        boolean result = form.assign(maintainer, competenceDesc);
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Wrong test of assign method, of class CompetenceView.
+     */
+    @Test
+    public void testAssign2() {
+        System.out.println("assign2");
+        Maintainer maintainer = new Maintainer("Anacleti", "Alberto", "Spadino", "sinti90");
+        String competenceDesc = "Problem solving";
+        boolean expResult = true;
+        boolean result = form.assign(maintainer, competenceDesc);
         assertEquals(expResult, result);
     }
 
@@ -111,25 +123,25 @@ public class CompetenceViewTest {
      * Test of remove method, of class CompetenceView.
      */
     @Test
-    public void testRemove() {
-        System.out.println("remove");
-        String username = "";
-        String competence = "";
-        CompetenceView instance = new CompetenceView();
-        boolean expResult = false;
-        boolean result = instance.remove(username, competence);
+    public void testRemove1() {
+        System.out.println("remove1");
+        String username = "Aug";
+        String competence = "Problem solving";
+        boolean expResult = true;
+        boolean result = form.remove(username, competence);
         assertEquals(expResult, result);
-    }    
-
+    }
+    
     /**
-     * Test of main method, of class CompetenceView.
+     * Wrong test of remove method, of class CompetenceView.
      */
     @Test
-    public void testMain() {
-        System.out.println("main");
-        String[] args = null;
-        CompetenceView.main(args);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    public void testRemove2() {
+        System.out.println("remove2");
+        String username = "";
+        String competence = "";
+        boolean expResult = false;
+        boolean result = form.remove(username, competence);
+        assertEquals(expResult, result);
+    }    
 }

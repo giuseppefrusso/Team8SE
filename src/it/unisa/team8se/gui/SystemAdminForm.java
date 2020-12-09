@@ -59,7 +59,9 @@ public class SystemAdminForm extends javax.swing.JFrame {
     public SystemAdminForm() {
         allUsers = new LinkedList<>();
 
-        DatabaseContext.connectDatabase();
+        if (!DatabaseContext.isConnected()) {
+            DatabaseContext.connectDatabase();
+        }
         initTableModel();
         refreshUsers();
         initButtonGroup();

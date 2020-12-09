@@ -36,7 +36,9 @@ public class CompetenceView extends javax.swing.JFrame {
      * Creates new form CompetenceView
      */
     public CompetenceView() {
-        DatabaseContext.connectDatabase();
+        if (!DatabaseContext.isConnected()) {
+            DatabaseContext.connectDatabase();
+        }
         
         maintainers = new LinkedList<>();
         
@@ -46,6 +48,14 @@ public class CompetenceView extends javax.swing.JFrame {
 
     }
 
+    protected Connection getConnection() {
+        return DatabaseContext.getConnection();
+    }
+        
+    protected void closeConnection() {
+        DatabaseContext.closeConnection();
+    }
+    
     private void initComboBoxModel() {
         comboBoxModel = new DefaultComboBoxModel();
         refreshUsers();
@@ -232,7 +242,7 @@ public class CompetenceView extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             UserSession.close();
-            DatabaseContext.closeConnection();
+            closeConnection();
             System.exit(0);
         } catch (SQLException ex) {
             Message.raiseError(this,"Errore nella chiusura!");
@@ -276,6 +286,7 @@ public class CompetenceView extends javax.swing.JFrame {
             int id = 1;
             boolean assignCompetence = true;         
             Competence competence = new Competence();
+            competence.setDescrizione(competenceDesc);
             
             if (!competence.existsInDatabase()) {
                 ResultSet rs = DatabaseContext.getStatement().executeQuery("select max(id) from competenza");
@@ -286,7 +297,6 @@ public class CompetenceView extends javax.swing.JFrame {
                 rs.close();
                 
                 competence.setID(id);
-                competence.setDescrizione(competenceDesc);
                 competence.saveToDatabase();
             }
             
