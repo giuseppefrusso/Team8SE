@@ -20,7 +20,9 @@ import static org.junit.Assert.*;
  * @author prgne
  */
 public class ActivityTest {
+    
     Activity instance;
+    
     public ActivityTest() {
     }
     
