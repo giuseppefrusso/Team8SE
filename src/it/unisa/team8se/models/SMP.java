@@ -7,6 +7,7 @@ package it.unisa.team8se.models;
 
 import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.models.base.DatabaseModel;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,7 +29,7 @@ public class SMP extends DatabaseModel {
 
     private String nome;
     //private String documentoPDF;
-    public byte[] file;
+    public byte[] document;
 
     public SMP(){
         
@@ -45,10 +46,27 @@ public class SMP extends DatabaseModel {
     public void setNome(String nome) {
         this.nome = nome;
     }
+    
+    
+    public static boolean cleanTempDocumentFolder(){
+        Path path = Paths.get(".\\temp\\");
+        boolean all = true;
+        if(Files.exists(path)){
+            File dir = new File(path.toUri());
+            for(File f : dir.listFiles()){
+                System.out.println("deleting " + f.getName());
+                if(!f.delete()){
+                    all = false;
+                }
+            }
+            return all;
+        }
+        return true;
+    }
 
     public void importDocument(String filePath, String fileName) {
         try {
-            file = Files.readAllBytes(Paths.get(filePath + fileName + ".pdf"));
+            document = Files.readAllBytes(Paths.get(filePath + fileName + ".pdf"));
         } catch (IOException ex) {
             Logger.getLogger(SMP.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -57,16 +75,30 @@ public class SMP extends DatabaseModel {
     public void exportDocument(String filePath, String fileName) {
         try {
             Path path = Paths.get(filePath + fileName + ".pdf");
-            Files.write(path,file);
+            Files.write(path,document);
         } catch (IOException ex) {
             Logger.getLogger(SMP.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void openDocument() {
-        if(file != null){
-            
+    public boolean openDocument() {
+        if(document != null){
+            Path path = Paths.get(".\\temp\\");
+            try {
+                if(!Files.exists(path)){
+                    File directory = new File(path.toUri());
+                    directory.mkdir();
+                }
+                path = Paths.get(".\\temp\\" + getNome() + "_temp.pdf");
+                Files.write(path, document);
+                Desktop.getDesktop().open(new File(path.toUri()));
+            } catch (IOException ex) {
+                Logger.getLogger(SMP.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }
+            return true;
         }
+        return false;
     }
 
     public static SMP[] getAllDatabaseInstances() {
@@ -100,7 +132,7 @@ public class SMP extends DatabaseModel {
     @Override
     public void getFromResultSet(ResultSet rs) throws SQLException {
         setNome(rs.getString("nome"));
-        file = rs.getBytes("documento_pdf");
+        document = rs.getBytes("documento_pdf");
     }
 
     @Override
@@ -108,7 +140,7 @@ public class SMP extends DatabaseModel {
         String sql = "insert into smp(nome, documento_pdf) values(?, ?)";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
         ps.setString(1, nome);
-        ps.setBytes(2, file);
+        ps.setBytes(2, document);
         ps.executeUpdate();
         ps.close();
     }
