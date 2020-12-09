@@ -21,7 +21,6 @@ import javax.swing.table.DefaultTableModel;
 public class ToolsView extends javax.swing.JFrame {
 
     private LinkedList<Material> materials;
-    //private DefaultListModel listModel;
     private DefaultTableModel listModel;
 
     /**
