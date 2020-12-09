@@ -78,7 +78,9 @@ public class AccessView extends javax.swing.JFrame {
      * Creates new form AccessView
      */
     public AccessView() {
-        DatabaseContext.connectDatabase();
+        if (!DatabaseContext.isConnected()) {
+            DatabaseContext.connectDatabase();
+        }
         initTableModels();
         refreshAccesses();
         initComponents();        

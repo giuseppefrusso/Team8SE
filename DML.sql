@@ -33,6 +33,10 @@ INSERT INTO public.area(
 INSERT INTO public.area(
 	nome, luogo_geografico)
 	VALUES ('molding', 'Nocera');
+	
+INSERT INTO public.area(
+	nome, luogo_geografico)
+	VALUES('hydraulic', 'Pagani');
 
 INSERT INTO public.competenza(
 	id, descrizione)

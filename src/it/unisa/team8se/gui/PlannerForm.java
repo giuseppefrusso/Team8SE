@@ -15,6 +15,7 @@ import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Maintainer;
 import java.awt.Toolkit;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -48,6 +49,14 @@ public class PlannerForm extends javax.swing.JFrame {
         switchToActivityList();
     }
 
+    protected Connection getConnection() {
+        return DatabaseContext.getConnection();
+    }
+    
+    protected void closeConnection() {
+        DatabaseContext.closeConnection();
+    }
+    
     private void setupTextBoxes() {
         
         interventionDescText.setInputVerifier(new InputVerifier(){ 
@@ -666,7 +675,7 @@ public class PlannerForm extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             UserSession.close();
-            DatabaseContext.closeConnection();
+            closeConnection();
             System.exit(0);
         } catch (SQLException ex) {
             Message.raiseError(this,"Errore nella chiusura!");

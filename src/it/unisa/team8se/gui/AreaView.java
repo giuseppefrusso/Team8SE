@@ -9,6 +9,7 @@ import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.Message;
 import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Area;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import javax.swing.DefaultComboBoxModel;
@@ -23,18 +24,27 @@ public class AreaView extends javax.swing.JFrame {
 
     private DefaultComboBoxModel<String> comboBoxModel;
     private DefaultListModel<String> listModel;
-
+    
     /**
      * Creates new form NewJFrame
      */
     public AreaView() {
-        DatabaseContext.connectDatabase();
-        
+        if (!DatabaseContext.isConnected()) {
+            DatabaseContext.connectDatabase();
+        }
         initComboBoxModel();
         initListModel();
         initComponents();
     }
 
+    protected Connection getConnection() {
+        return DatabaseContext.getConnection();
+    }
+    
+    protected void closeConnection() {
+        DatabaseContext.closeConnection();
+    }
+    
     private void initComboBoxModel() {
         comboBoxModel = new DefaultComboBoxModel<>();
         refreshLocations();
@@ -227,7 +237,7 @@ public class AreaView extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             UserSession.close();
-            DatabaseContext.closeConnection();
+            closeConnection();
             System.exit(0);
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nella chiusura!");

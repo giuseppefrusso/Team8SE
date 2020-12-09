@@ -135,7 +135,7 @@ drop table if exists USO_PLANNED cascade;
 /* Table: ACCESSO                                               */
 /*==============================================================*/
 create table ACCESSO (
-   ID_ACCESSO           SERIAL               not null,
+   ID_ACCESSO           INT               not null,
    DATA_E_ORA_LOGIN     TIMESTAMP                 not null,
    DATA_E_ORA_LOGOFF    TIMESTAMP                 null,
    SYSTEM_ADMINISTRATOR VARCHAR(20)          null,
@@ -165,7 +165,7 @@ LUOGO_GEOGRAFICO
 /* Table: ATTIVITA_EXTRA                                        */
 /*==============================================================*/
 create table ATTIVITA_EXTRA (
-   ID                   SERIAL               not null,
+   ID                   INT               not null,
    AREA                 VARCHAR(16)          not null,
    LUOGO_GEOGRAFICO     VARCHAR(25)          not null,
    PLANNER              VARCHAR(20)          null,
@@ -221,7 +221,7 @@ SMP
 /* Table: ATTIVITA_PIANIFICATA                                  */
 /*==============================================================*/
 create table ATTIVITA_PIANIFICATA (
-   ID                   SERIAL               not null,
+   ID                   INT               not null,
    SMP                  VARCHAR(16)          null,
    MAINTAINER           VARCHAR(20)          null,
    AREA                 VARCHAR(16)          not null,
@@ -277,7 +277,7 @@ SMP
 /* Table: COMPETENZA                                            */
 /*==============================================================*/
 create table COMPETENZA (
-   ID                   SERIAL               not null,
+   ID                   INT               not null,
    DESCRIZIONE          VARCHAR(20)          null,
    constraint PK_COMPETENZA primary key (ID)
 );
@@ -293,7 +293,7 @@ ID
 /* Table: EWO                                                   */
 /*==============================================================*/
 create table EWO (
-   ID                   SERIAL               not null,
+   ID                   INT               not null,
    SMP                  VARCHAR(16)          null,
    AREA                 VARCHAR(16)          not null,
    LUOGO_GEOGRAFICO     VARCHAR(25)          not null,
@@ -404,7 +404,7 @@ USERNAME
 /* Table: POSSESSO                                              */
 /*==============================================================*/
 create table POSSESSO (
-   ID                   SERIAL               not null,
+   ID                   INT               not null,
    MAINTAINER           VARCHAR(20)          not null,
    constraint PK_POSSESSO primary key (ID, MAINTAINER)
 );
@@ -435,8 +435,8 @@ MAINTAINER
 /* Table: REQUISITO_EWO                                         */
 /*==============================================================*/
 create table REQUISITO_EWO (
-   EWO                  SERIAL               not null,
-   COMPETENZA           SERIAL               not null,
+   EWO                  INT               not null,
+   COMPETENZA           INT               not null,
    constraint PK_REQUISITO_EWO primary key (EWO, COMPETENZA)
 );
 
@@ -466,8 +466,8 @@ COMPETENZA
 /* Table: REQUISITO_EXTRA                                       */
 /*==============================================================*/
 create table REQUISITO_EXTRA (
-   COMPETENZA           SERIAL               not null,
-   ATTIVITA_EXTRA       SERIAL               not null,
+   COMPETENZA           INT               not null,
+   ATTIVITA_EXTRA       INT               not null,
    constraint PK_REQUISITO_EXTRA primary key (COMPETENZA, ATTIVITA_EXTRA)
 );
 
@@ -497,8 +497,8 @@ ATTIVITA_EXTRA
 /* Table: REQUISITO_PLANNED                                     */
 /*==============================================================*/
 create table REQUISITO_PLANNED (
-   COMPETENZA           SERIAL               not null,
-   ATTIVITA_PIANIFICATA SERIAL               not null,
+   COMPETENZA           INT               not null,
+   ATTIVITA_PIANIFICATA INT               not null,
    constraint PK_REQUISITO_PLANNED primary key (COMPETENZA, ATTIVITA_PIANIFICATA)
 );
 
@@ -563,7 +563,7 @@ USERNAME
 /*==============================================================*/
 create table USO_EWO (
    MATERIALE            VARCHAR(20)          not null,
-   EWO                  SERIAL               not null,
+   EWO                  INT               not null,
    constraint PK_USO_EWO primary key (MATERIALE, EWO)
 );
 
@@ -594,7 +594,7 @@ EWO
 /*==============================================================*/
 create table USO_EXTRA (
    MATERIALE            VARCHAR(20)          not null,
-   ATTIVITA_EXTRA       SERIAL               not null,
+   ATTIVITA_EXTRA       INT               not null,
    constraint PK_USO_EXTRA primary key (MATERIALE, ATTIVITA_EXTRA)
 );
 
@@ -625,7 +625,7 @@ ATTIVITA_EXTRA
 /*==============================================================*/
 create table USO_PLANNED (
    MATERIALE            VARCHAR(20)          not null,
-   ATTIVITA_PIANIFICATA SERIAL               not null,
+   ATTIVITA_PIANIFICATA INT               not null,
    constraint PK_USO_PLANNED primary key (MATERIALE, ATTIVITA_PIANIFICATA)
 );
 
