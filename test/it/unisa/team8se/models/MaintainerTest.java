@@ -49,8 +49,7 @@ public class MaintainerTest {
     @Test
     public void testGetCompetencies() {
         System.out.println("getCompetencies");
-        Maintainer instance = new Maintainer();
-        LinkedList<Competence> expResult = null;
+        LinkedList<Competence> expResult= new LinkedList<>();
         LinkedList<Competence> result = instance.getCompetencies();
         assertEquals(expResult, result);
     }
@@ -62,8 +61,8 @@ public class MaintainerTest {
     public void testSetCompetencies() {
         System.out.println("setCompetencies");
         LinkedList<Competence> competencies = null;
-        Maintainer instance = new Maintainer();
         instance.setCompetencies(competencies);
+        assertEquals(competencies,instance.getCompetencies());
     }
 
     /**
@@ -72,9 +71,11 @@ public class MaintainerTest {
     @Test
     public void testAddCompetence() {
         System.out.println("addCompetence");
-        Competence c = null;
-        Maintainer instance = new Maintainer();
+        Competence c = new Competence (1,"Testing");
         instance.addCompetence(c);
+        LinkedList<Competence> expResult= new LinkedList <>();
+        expResult.add(c);
+        assertEquals(true,instance.getCompetencies().equals(expResult));
     }
 
     /**

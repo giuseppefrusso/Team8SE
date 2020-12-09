@@ -81,8 +81,8 @@ public class ActivityTest {
     public void testSetTipology() {
         System.out.println("setTipology");
         String Tipology = "";
-        Activity instance = new Activity();
         instance.setTipology(Tipology);
+        assertEquals(Tipology,instance.getTipology());
     }
 
     /**
@@ -92,8 +92,8 @@ public class ActivityTest {
     public void testSetEIT() {
         System.out.println("setEIT");
         int EIT = 0;
-        Activity instance = new Activity();
         instance.setEIT(EIT);
+        assertEquals(EIT,instance.getEIT());
     }
 
     /**
@@ -103,8 +103,8 @@ public class ActivityTest {
     public void testSetWeekNumber() {
         System.out.println("setWeekNumber");
         int WeekNumber = 0;
-        Activity instance = new Activity();
         instance.setWeekNumber(WeekNumber);
+        assertEquals(WeekNumber,instance.getWeekNumber());
     }
 
     /**
@@ -114,8 +114,8 @@ public class ActivityTest {
     public void testSetInterruptible() {
         System.out.println("setInterruptible");
         boolean Interruptible = false;
-        Activity instance = new Activity();
         instance.setInterruptible(Interruptible);
+        assertEquals(Interruptible,instance.isInterruptible());
     }
 
     /**
@@ -135,8 +135,8 @@ public class ActivityTest {
     public void testSetDatetime() {
         System.out.println("setDatetime");
         Timestamp datetime = null;
-        Activity instance = new Activity();
         instance.setDatetime(datetime);
+        assertEquals(201367896,instance.getDatetime());
     }
 
     /**
@@ -156,10 +156,8 @@ public class ActivityTest {
     @Test
     public void testGetTipology() {
         System.out.println("getTipology");
-        Activity instance = new Activity();
-        String expResult = "";
         String result = instance.getTipology();
-        assertEquals(expResult, result);
+        assertEquals("Electrical", result);
     }
 
     /**
@@ -168,10 +166,8 @@ public class ActivityTest {
     @Test
     public void testGetEIT() {
         System.out.println("getEIT");
-        Activity instance = new Activity();
-        int expResult = 0;
         int result = instance.getEIT();
-        assertEquals(expResult, result);
+        assertEquals(2, result);
     }
 
     /**
@@ -180,10 +176,8 @@ public class ActivityTest {
     @Test
     public void testGetWeekNumber() {
         System.out.println("getWeekNumber");
-        Activity instance = new Activity();
-        int expResult = 0;
         int result = instance.getWeekNumber();
-        assertEquals(expResult, result);
+        assertEquals(3, result);
     }
 
     /**
@@ -192,7 +186,6 @@ public class ActivityTest {
     @Test
     public void testIsInterruptible() {
         System.out.println("isInterruptible");
-        Activity instance = new Activity();
         boolean expResult = false;
         boolean result = instance.isInterruptible();
         assertEquals(expResult, result);
@@ -204,10 +197,8 @@ public class ActivityTest {
     @Test
     public void testGetWorkspaceNotes() {
         System.out.println("getWorkspaceNotes");
-        Activity instance = new Activity();
-        String expResult = "";
         String result = instance.getWorkspaceNotes();
-        assertEquals(expResult, result);
+        assertEquals("Notes", result);
     }
 
     /**
@@ -217,8 +208,8 @@ public class ActivityTest {
     public void testSetWorkspaceNotes() {
         System.out.println("setWorkspaceNotes");
         String WorkspaceNotes = "";
-        Activity instance = new Activity();
         instance.setWorkspaceNotes(WorkspaceNotes);
+        assertEquals(WorkspaceNotes,instance.getWorkspaceNotes());
     }
 
     /**
@@ -227,10 +218,8 @@ public class ActivityTest {
     @Test
     public void testGetInterventionDescription() {
         System.out.println("getInterventionDescription");
-        Activity instance = new Activity();
-        String expResult = "";
         String result = instance.getInterventionDescription();
-        assertEquals(expResult, result);
+        assertEquals("Revisionare", result);
     }
 
     /**
@@ -240,8 +229,8 @@ public class ActivityTest {
     public void testSetInterventionDescription() {
         System.out.println("setInterventionDescription");
         String InterventionDescription = "";
-        Activity instance = new Activity();
         instance.setInterventionDescription(InterventionDescription);
+        assertEquals(InterventionDescription,instance.getInterventionDescription());
     }
 
     /**
