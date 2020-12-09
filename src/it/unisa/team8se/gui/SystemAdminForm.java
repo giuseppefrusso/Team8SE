@@ -12,6 +12,7 @@ import it.unisa.team8se.models.Maintainer;
 import it.unisa.team8se.models.Planner;
 import it.unisa.team8se.models.base.User;
 import it.unisa.team8se.models.SystemAdmin;
+import java.sql.Connection;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -52,7 +53,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         buttonGroup.add(maintainerRadioButton);
         buttonGroup.add(adminRadioButton);
     }
-
+    
     /**
      * Creates new form SystemAdminForm
      */
@@ -69,7 +70,15 @@ public class SystemAdminForm extends javax.swing.JFrame {
         initComponents();
 
     }
+    
+    protected Connection getConnection() {
+        return DatabaseContext.getConnection();
+    }
 
+    protected void closeConnection() {
+        DatabaseContext.closeConnection();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -634,7 +643,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             UserSession.close();
-            DatabaseContext.closeConnection();
+            closeConnection();
             System.exit(0);
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nella chiusura!");

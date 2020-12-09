@@ -5,32 +5,46 @@
  */
 package it.unisa.team8se.gui;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.BeforeClass;
 
 /**
  *
  * @author giuse
  */
 public class SystemAdminFormTest {
+
     private SystemAdminForm form;
-    
+
     public SystemAdminFormTest() {
-        
+
     }
-    
+
     @Before
     public void setUp() {
-        form = new SystemAdminForm();
+        try {
+            form = new SystemAdminForm();
+            form.getConnection().setAutoCommit(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(SystemAdminFormTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
+
     @After
     public void tearDown() {
-        form = null;
+        try {
+            form.getConnection().rollback();
+            form.getConnection().setAutoCommit(true);
+            form.closeConnection();
+            form = null;
+        } catch (SQLException ex) {
+            Logger.getLogger(SystemAdminFormTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Test
@@ -46,12 +60,23 @@ public class SystemAdminFormTest {
      * Test of containsUsername method, of class SystemAdminForm.
      */
     @Test
-    public void testContainsUsername() {
+    public void testContainsUsername1() {
         System.out.println("containsUsername");
+        String username = "Aug";
+        boolean expResult = true;
+        boolean result = form.containsUsername(username);
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Wrong test of containsUsername method, of class SystemAdminForm.
+     */
+    @Test
+    public void testContainsUsername2() {
+        System.out.println("containsUsername2");
         String username = "";
-        SystemAdminForm instance = new SystemAdminForm();
         boolean expResult = false;
-        boolean result = instance.containsUsername(username);
+        boolean result = form.containsUsername(username);
         assertEquals(expResult, result);
     }
 
@@ -59,16 +84,31 @@ public class SystemAdminFormTest {
      * Test of insertUser method, of class SystemAdminForm.
      */
     @Test
-    public void testInsertUser() {
-        System.out.println("insertUser");
+    public void testInsertUser1() {
+        System.out.println("insertUser1");
+        String surname = "Russo";
+        String name = "Giuseppe Felice";
+        String username = "pepito";
+        String password = "rondinone";
+        String role = "planner";
+        boolean expResult = true;
+        boolean result = form.insertUser(surname, name, username, password, role);
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Wrong test of insertUser method, of class SystemAdminForm.
+     */
+    @Test
+    public void testInsertUser2() {
+        System.out.println("insertUser2");
         String surname = "";
         String name = "";
         String username = "Aug";
         String password = "";
         String role = "";
-        SystemAdminForm instance = new SystemAdminForm();
         boolean expResult = false;
-        boolean result = instance.insertUser(surname, name, username, password, role);
+        boolean result = form.insertUser(surname, name, username, password, role);
         assertEquals(expResult, result);
     }
 
@@ -76,14 +116,27 @@ public class SystemAdminFormTest {
      * Test of modifyUser method, of class SystemAdminForm.
      */
     @Test
-    public void testModifyUser() {
-        System.out.println("modifyUser");
+    public void testModifyUser1() {
+        System.out.println("modifyUser1");
+        String newValue = "Tullio";
+        int selectedRow = 0;
+        int selectedColumn = 1;
+        boolean expResult = true;
+        boolean result = form.modifyUser(newValue, selectedRow, selectedColumn);
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Wrong test of modifyUser method, of class SystemAdminForm.
+     */
+    @Test
+    public void testModifyUser2() {
+        System.out.println("modifyUser2");
         String newValue = "Paco";
         int selectedRow = 0;
         int selectedColumn = 2;
-        SystemAdminForm instance = new SystemAdminForm();
         boolean expResult = false;
-        boolean result = instance.modifyUser(newValue, selectedRow, selectedColumn);
+        boolean result = form.modifyUser(newValue, selectedRow, selectedColumn);
         assertEquals(expResult, result);
     }
 }
