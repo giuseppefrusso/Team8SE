@@ -32,10 +32,10 @@ public class Activity extends DatabaseModel{
     private String InterventionDescription;
     private boolean Interruptible;
     private Timestamp datetime; 
-    private LinkedList<Competence> requiredCompetencies;
+    private LinkedList<Competence> requiredCompetences;
 
     public Activity() {
-        requiredCompetencies = new LinkedList<>();
+        requiredCompetences = new LinkedList<>();
     }
 
     public Activity(int ID, Area Area, String Tipology, int EIT, int WeekNumber, String WorkspaceNotes, String InterventionDescription, boolean Interruptible, Timestamp datetime) {
@@ -48,7 +48,7 @@ public class Activity extends DatabaseModel{
         this.InterventionDescription = InterventionDescription;
         this.Interruptible = Interruptible;
         this.datetime = datetime;
-        this.requiredCompetencies = new LinkedList<>();
+        this.requiredCompetences = new LinkedList<>();
     }
 
     public int getID() {
@@ -127,12 +127,12 @@ public class Activity extends DatabaseModel{
         this.InterventionDescription = InterventionDescription;
     }
 
-    public LinkedList<Competence> getRequiredCompetencies() {
-        return requiredCompetencies;
+    public LinkedList<Competence> getRequiredCompetences() {
+        return requiredCompetences;
     }
 
     public void addRequiredCompetence(Competence c) {
-        requiredCompetencies.add(c);
+        requiredCompetences.add(c);
     }
    
     public static Activity[] getAllDatabaseInstances() {
@@ -188,13 +188,13 @@ public class Activity extends DatabaseModel{
         return null;
     }
     
-    public void getRequiredCompetenciesFromDatabase(){
+    public void getRequiredCompetencesFromDatabase(){
         String sql = "select C.id, C.descrizione from requisito_planned R, competenza C "
                 + "where R.attivita_pianificata = ? and C.id = R.competenza";
         try(PreparedStatement ps = DatabaseContext.getPreparedStatement(sql)){
             ps.setInt(1,getID());
             LinkedList<Competence> comp = DatabaseContext.fetchAllModels(Competence.class, ps);
-            requiredCompetencies = comp;
+            requiredCompetences = comp;
         }
         catch(SQLException ex){
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
@@ -206,7 +206,7 @@ public class Activity extends DatabaseModel{
         return "Activity{" + "ID=" + ID + ", Area=" + Area + ", Tipology=" + Tipology 
                 + ", EIT=" + EIT + ", WeekNumber=" + WeekNumber + ", WorkspaceNotes=" 
                 + WorkspaceNotes + ", InterventionDescription=" + InterventionDescription + ", Interruptible=" 
-                + Interruptible + ", requiredCompetencies=" + requiredCompetencies + '}';
+                + Interruptible + ", requiredCompetencies=" + requiredCompetences + '}';
     }
 
     @Override

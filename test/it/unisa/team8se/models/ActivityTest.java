@@ -239,10 +239,10 @@ public class ActivityTest {
      * Test of getRequiredCompetencies method, of class Activity.
      */
     @Test
-    public void testGetRequiredCompetencies() {
-        System.out.println("getRequiredCompetencies");
+    public void testGetRequiredCompetences() {
+        System.out.println("getRequiredCompetences");
         LinkedList<Competence> expResult = new LinkedList<>();
-        LinkedList<Competence> result = instance.getRequiredCompetencies();
+        LinkedList<Competence> result = instance.getRequiredCompetences();
         assertEquals(expResult, result);
     }
 
@@ -256,7 +256,7 @@ public class ActivityTest {
         instance.addRequiredCompetence(c);
         LinkedList<Competence> expResult = new LinkedList<>();
         expResult.add(c);
-        assertEquals(true, instance.getRequiredCompetencies().equals(expResult));
+        assertEquals(true, instance.getRequiredCompetences().equals(expResult));
     }
 
     /**
@@ -310,10 +310,10 @@ public class ActivityTest {
      * Test of getRequiredCompetenciesFromDatabase method, of class Activity.
      */
     @Test
-    public void testGetRequiredCompetenciesFromDatabase() {
-        System.out.println("getRequiredCompetenciesFromDatabase");
+    public void testGetRequiredCompetencesFromDatabase() {
+        System.out.println("getRequiredCompetencesFromDatabase");
         Activity instance = new Activity();
-        instance.getRequiredCompetenciesFromDatabase();
+        instance.getRequiredCompetencesFromDatabase();
     }
 
     /**
