@@ -282,27 +282,26 @@ public class CompetenceView extends javax.swing.JFrame {
         
         String username = maintainer.getUsername();
         try {            
-            int id = 1;
+            Competence competence = Competence.getInstanceWithDescription(competenceDesc);
             boolean assignCompetence = true;         
-            Competence competence = new Competence();
-            competence.setDescrizione(competenceDesc);
-            
-            if (!competence.existsInDatabase()) {
+
+            if (competence == null) {
+                competence = new Competence();
                 ResultSet rs = DatabaseContext.getStatement().executeQuery("select max(id) from competenza");
                 if(rs.next()) {
                     int maxId = rs.getInt(1);
-                    id = maxId + 1;
+                    competence.setID(maxId+1);
+                    competence.setDescrizione(competenceDesc);
                 }
                 rs.close();
                 
-                competence.setID(id);
                 competence.saveToDatabase();
             }
             
             String query = "insert into possesso values(?, ?)";
             PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
             
-            ps.setInt(1, id);
+            ps.setInt(1, competence.getID());
             ps.setString(2, username);
             
             ps.executeUpdate();
@@ -324,7 +323,7 @@ public class CompetenceView extends javax.swing.JFrame {
         String selectedUsername = selectedMaintainer.getUsername();
         String competence = JOptionPane.showInputDialog(this, "Assegna una competenza a '" + selectedUsername + "'",
                 "Assegnazione", JOptionPane.PLAIN_MESSAGE);
-        if(competence == null) {
+        if(competence == null || competence.equals("")) {
             return;
         }
         assign(selectedMaintainer, competence);

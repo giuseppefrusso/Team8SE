@@ -279,7 +279,7 @@ public class AreaView extends javax.swing.JFrame {
         }
         String newSector = JOptionPane.showInputDialog(this, "Inserisci il nome del nuovo settore", 
                 "Creazione di una nuova area", JOptionPane.PLAIN_MESSAGE);
-        if(newSector == null) {
+        if(newSector == null || newSector.equals("")) {
             //Message.raiseError(this, "Non è stato inserito nessun settore per la nuova filiale '"+newLocation+"'!");
             return;
         }
@@ -324,7 +324,7 @@ public class AreaView extends javax.swing.JFrame {
         }
         String newSector = JOptionPane.showInputDialog(this, "Inserisci il nome del nuovo settore", 
                 "Creazione di una nuova area", JOptionPane.PLAIN_MESSAGE);
-        if(newSector == null) {
+        if(newSector == null || newSector.equals("")) {
             Message.raiseError(this, "Non è stato inserito nessun nuovo settore per la filiale '"+
                     selectedLocation+"'!");
         }
