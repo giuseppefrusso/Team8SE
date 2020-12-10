@@ -282,10 +282,18 @@ public class ActivityView extends javax.swing.JFrame {
         setLabels(selectedActivity);
     }//GEN-LAST:event_activityComboBoxActionPerformed
 
+    protected boolean assignCompetence(int id, String description) {
+        return true;
+    }
+    
     private void assignButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assignButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_assignButtonActionPerformed
 
+    protected boolean removeCompetence(int id, String description) {
+        return true;
+    }
+    
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_removeButtonActionPerformed
