@@ -12,8 +12,6 @@ import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Competence;
 import java.sql.SQLException;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 
@@ -36,21 +34,22 @@ public class ActivityView extends javax.swing.JFrame {
         }
         activities = new LinkedList<>();
         initComboBoxModel();
-        initListModel();
+        refreshActivities();
+        int defaultActivity = initListModel();
         initComponents();
+        refreshCompetences(defaultActivity);
     }
 
     private void initComboBoxModel() {
-        comboBoxModel = new DefaultComboBoxModel();
-        refreshActivities();
+        comboBoxModel = new DefaultComboBoxModel();     
     }
 
-    protected void initListModel() {
+    protected int initListModel() {
         listModel = new DefaultListModel<>();
         if (comboBoxModel.getSize() != 0) {
-            int defaultActivity = (int) comboBoxModel.getElementAt(0);
-            refreshCompetences(defaultActivity);
+            return (int) comboBoxModel.getElementAt(0);           
         }
+        return -1;
     }
     
     protected boolean refreshActivities() {
@@ -108,6 +107,7 @@ public class ActivityView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Activity View");
+        setIconImage(Message.getImageIcon());
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -154,7 +154,7 @@ public class ActivityView extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Competenze");
 
-        areaLabel.setText("###########");
+        areaLabel.setText("###############");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Area");
@@ -185,16 +185,16 @@ public class ActivityView extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(activityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel1))
-                                .addGap(33, 33, 33)
+                                .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(areaLabel)
-                                    .addComponent(jLabel3)))
+                                    .addComponent(jLabel3)
+                                    .addComponent(areaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(assignButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)

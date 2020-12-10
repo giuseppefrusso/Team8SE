@@ -45,7 +45,6 @@ public class CompetenceView extends javax.swing.JFrame {
         initComboBoxModel();
         initListModel();
         initComponents();
-
     }
 
     protected Connection getConnection() {
