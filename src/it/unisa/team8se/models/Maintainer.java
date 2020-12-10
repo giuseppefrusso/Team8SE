@@ -131,7 +131,7 @@ public class Maintainer extends User {
         super.getFromResultSet(rs);
         setRole("Maintainer");
         
-        Competence[] competences = Competence.getAllCompetenceOfMaintainer(getUsername());
+        Competence[] competences = Competence.getAllCompetencesOfMaintainer(getUsername());
         if (competences != null) {
             Collections.addAll(competencies, competences);
         }
