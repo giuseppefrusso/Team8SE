@@ -59,15 +59,6 @@ public class Competence extends DatabaseModel {
         return null;
     }
 
-    public static Competence[] getAllCompetencesOfActivity(int id) throws SQLException {
-        String sql = "select C.id as id, C.descrizione as descrizione from competenza C "
-                + "join requisito_planned P on C.id = P.id where P.attivita_pianificata=? order by descrizione";
-        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-        ps.setInt(1, id);
-        LinkedList<Competence> instances = DatabaseContext.fetchAllModels(Competence.class, ps);
-        return Arrays.copyOf(instances.toArray(), instances.size(), Competence[].class);
-    }
-
     public static Competence[] getAllDatabaseInstances() {
         String sql = "select * from competenza";
         try {
