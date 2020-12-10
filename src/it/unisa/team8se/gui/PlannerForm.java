@@ -32,7 +32,7 @@ import javax.swing.event.ListSelectionEvent;
  *
  * @author cptso
  */
-public class PlannerForm extends javax.swing.JFrame {
+public class PlannerForm extends UserBaseForm {
 
     /**
      * Creates new form ActivityList
@@ -134,6 +134,7 @@ public class PlannerForm extends javax.swing.JFrame {
         activityTable = new javax.swing.JTable();
         weeklabel = new javax.swing.JLabel();
         weekNumberLabel = new javax.swing.JLabel();
+        competenceButton = new javax.swing.JButton();
         activitySummary = new javax.swing.JPanel();
         interventionDescScrollPane = new javax.swing.JScrollPane();
         interventionDescText = new javax.swing.JTextPane();
@@ -237,6 +238,14 @@ public class PlannerForm extends javax.swing.JFrame {
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activityList.add(weekNumberLabel, gridBagConstraints);
+
+        competenceButton.setText("Assegna competenze");
+        competenceButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                competenceButtonActionPerformed(evt);
+            }
+        });
+        activityList.add(competenceButton, new java.awt.GridBagConstraints());
 
         tabbedPane.addTab("ActivityList", activityList);
 
@@ -682,6 +691,12 @@ public class PlannerForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowClosing
 
+    private void competenceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_competenceButtonActionPerformed
+        ActivityView view = new ActivityView();
+        view.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_competenceButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -724,6 +739,7 @@ public class PlannerForm extends javax.swing.JFrame {
     private javax.swing.JPanel activitySummary;
     private javax.swing.JTable activityTable;
     private javax.swing.JLabel areaLabel;
+    private javax.swing.JButton competenceButton;
     private javax.swing.JButton interventionDescDoneButton;
     private javax.swing.JLabel interventionDescLabel;
     private javax.swing.JScrollPane interventionDescScrollPane;

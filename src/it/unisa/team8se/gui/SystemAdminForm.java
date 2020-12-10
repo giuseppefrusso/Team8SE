@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  *
  * @author cptso
  */
-public class SystemAdminForm extends javax.swing.JFrame {
+public class SystemAdminForm extends UserBaseForm {
 
     protected DefaultTableModel tableModel;
     private ButtonGroup buttonGroup;
@@ -107,6 +107,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
         competenceButton = new javax.swing.JButton();
         accessButton = new javax.swing.JButton();
         areaButton = new javax.swing.JButton();
+        taskButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("System Admistrator View\n");
@@ -221,6 +222,13 @@ public class SystemAdminForm extends javax.swing.JFrame {
             }
         });
 
+        taskButton.setText("Attività");
+        taskButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                taskButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -228,11 +236,14 @@ public class SystemAdminForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                        .addComponent(taskButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(areaButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(accessButton)
@@ -258,7 +269,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(96, 96, 96)
                                         .addComponent(usernameLabel)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -270,9 +281,8 @@ public class SystemAdminForm extends javax.swing.JFrame {
                             .addComponent(adminRadioButton)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(9, 9, 9)
-                                .addComponent(insertButton))))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(57, 57, 57))
+                                .addComponent(insertButton)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,7 +323,8 @@ public class SystemAdminForm extends javax.swing.JFrame {
                     .addComponent(modifyButton)
                     .addComponent(competenceButton)
                     .addComponent(accessButton)
-                    .addComponent(areaButton))
+                    .addComponent(areaButton)
+                    .addComponent(taskButton))
                 .addContainerGap())
         );
 
@@ -662,6 +673,12 @@ public class SystemAdminForm extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_areaButtonActionPerformed
 
+    private void taskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskButtonActionPerformed
+        ActivityView view = new ActivityView();
+        view.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_taskButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -715,6 +732,7 @@ public class SystemAdminForm extends javax.swing.JFrame {
     private javax.swing.JTextField surnameField;
     private javax.swing.JLabel surnameLabel;
     private javax.swing.JTable tableUsers;
+    private javax.swing.JButton taskButton;
     private javax.swing.JTextField usernameField;
     private javax.swing.JLabel usernameLabel;
     // End of variables declaration//GEN-END:variables

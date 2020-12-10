@@ -90,7 +90,7 @@ public class CompetenceView extends javax.swing.JFrame {
 
     protected boolean refreshCompetences(String username) {
         listModel.clear();
-        Competence[] competences = Competence.getAllCompetenceOfMaintainer(username);
+        Competence[] competences = Competence.getAllCompetencesOfMaintainer(username);
         if (competences.length!=0) {
             for (Competence c : competences) {
                 listModel.addElement(c.getDescrizione());

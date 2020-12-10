@@ -90,7 +90,7 @@ public class CompetenceTest {
         System.out.println("getAllCompetenceOfMaintainer");
         String username = "";
         Competence[] expResult = null;
-        Competence[] result = Competence.getAllCompetenceOfMaintainer(username);
+        Competence[] result = Competence.getAllCompetencesOfMaintainer(username);
         assertArrayEquals(expResult, result);
     }
 

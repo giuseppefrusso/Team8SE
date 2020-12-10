@@ -45,7 +45,7 @@ public class Competence extends DatabaseModel {
         this.descrizione = Descrizione;
     }
 
-    public static Competence[] getAllCompetenceOfMaintainer(String username) {
+    public static Competence[] getAllCompetencesOfMaintainer(String username) {
         String sql = "select C.id as id, C.descrizione as descrizione from competenza C "
                 + "join possesso P on C.id = P.id where P.maintainer=? order by descrizione";
         try {
@@ -57,6 +57,15 @@ public class Competence extends DatabaseModel {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public static Competence[] getAllCompetencesOfActivity(int id) throws SQLException {
+        String sql = "select C.id as id, C.descrizione as descrizione from competenza C "
+                + "join requisito_planned P on C.id = P.id where P.attivita_pianificata=? order by descrizione";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setInt(1, id);
+        LinkedList<Competence> instances = DatabaseContext.fetchAllModels(Competence.class, ps);
+        return Arrays.copyOf(instances.toArray(), instances.size(), Competence[].class);
     }
 
     public static Competence[] getAllDatabaseInstances() {
@@ -87,9 +96,9 @@ public class Competence extends DatabaseModel {
         }
         return null;
     }
-    
-    public static Competence getInstanceWithDescription(String desc){
-         String sql = "select * from competenza where lower(descrizione) = lower(?)";
+
+    public static Competence getInstanceWithDescription(String desc) {
+        String sql = "select * from competenza where lower(descrizione) = lower(?)";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1, desc);
@@ -104,21 +113,21 @@ public class Competence extends DatabaseModel {
         }
         return null;
     }
-    
+
     @Override
     public void saveToDatabase() {
         try {
             String sql = "insert into competenza (descrizione, id) values (?, ?)";
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-            
+
             ps.setInt(2, getID());
             ps.setString(1, getDescrizione());
-            
+
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(Competence.class.getName()).log(Level.SEVERE, null, ex);
-        }   
+        }
     }
 
     @Override
