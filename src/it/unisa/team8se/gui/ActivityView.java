@@ -66,20 +66,18 @@ public class ActivityView extends javax.swing.JFrame {
         return true;
     }
     
-    protected boolean refreshCompetences(int id) {
-        try {
-            listModel.clear();
-            Competence[] competences = Competence.getAllCompetencesOfActivity(id);
-            if (competences.length!=0) {
-                for (Competence c : competences) {
-                    listModel.addElement(c.getDescrizione());
-                }
-                return true;
-            }
-            return false;
-        } catch (SQLException ex) {
-            Message.raiseError(this, "Le competenze dell'attività pianificata "+id+" non sono state caricate correttamente");
-            return false;
+    private void setLabels(Activity a) {
+        areaLabel.setText(a.getArea().toString());
+        typologyLabel.setText(a.getTipology());
+        eitLabel.setText(String.valueOf(a.getEIT()));
+    }
+    
+    protected void refreshCompetences(int id) {
+        Activity activity = Activity.getInstanceWithPK(id);
+        setLabels(activity);
+        activity.getRequiredCompetencesFromDatabase();
+        for (Competence c : activity.getRequiredCompetences()) {
+            listModel.addElement(c.getDescrizione());
         }
     }
     
@@ -97,8 +95,8 @@ public class ActivityView extends javax.swing.JFrame {
         activityComboBox = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         competenceList = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        assignButton = new javax.swing.JButton();
+        removeButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         areaLabel = new javax.swing.JLabel();
@@ -127,13 +125,28 @@ public class ActivityView extends javax.swing.JFrame {
         });
 
         activityComboBox.setModel(comboBoxModel);
+        activityComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                activityComboBoxActionPerformed(evt);
+            }
+        });
 
         competenceList.setModel(listModel);
         jScrollPane1.setViewportView(competenceList);
 
-        jButton1.setText("Assegna");
+        assignButton.setText("Assegna");
+        assignButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                assignButtonActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Rimuovi");
+        removeButton.setText("Rimuovi");
+        removeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeButtonActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("ID attività");
@@ -178,9 +191,9 @@ public class ActivityView extends javax.swing.JFrame {
                                     .addComponent(jLabel3)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jButton1)
+                                .addComponent(assignButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,8 +235,8 @@ public class ActivityView extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(backButton)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(removeButton)
+                    .addComponent(assignButton))
                 .addContainerGap())
         );
 
@@ -261,6 +274,21 @@ public class ActivityView extends javax.swing.JFrame {
         form.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_backButtonActionPerformed
+
+    private void activityComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activityComboBoxActionPerformed
+        int selectedId = (int) activityComboBox.getSelectedItem();
+        refreshCompetences(selectedId);
+        Activity selectedActivity = Activity.getInstanceWithPK(selectedId);
+        setLabels(selectedActivity);
+    }//GEN-LAST:event_activityComboBoxActionPerformed
+
+    private void assignButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assignButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_assignButtonActionPerformed
+
+    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_removeButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -301,11 +329,10 @@ public class ActivityView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<Integer> activityComboBox;
     private javax.swing.JLabel areaLabel;
+    private javax.swing.JButton assignButton;
     private javax.swing.JButton backButton;
     private javax.swing.JList<String> competenceList;
     private javax.swing.JLabel eitLabel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -313,6 +340,7 @@ public class ActivityView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton removeButton;
     private javax.swing.JLabel typologyLabel;
     // End of variables declaration//GEN-END:variables
 }

@@ -78,7 +78,7 @@ public class MaintainerForm extends javax.swing.JFrame {
     private void switchToActivitySummary() {
         tabbedPane.setEnabledAt(1, true);
 
-        selectedActivity.getRequiredCompetenciesFromDatabase();
+        selectedActivity.getRequiredCompetencesFromDatabase();
         
         weekNumberLabel.setText(Integer.toString(selectedActivity.getWeekNumber()));
         areaLabel.setText(selectedActivity.getArea().toString());
@@ -86,7 +86,7 @@ public class MaintainerForm extends javax.swing.JFrame {
         workspaceNotesText.setText(selectedActivity.getWorkspaceNotes());
         
         StringBuilder sb = new StringBuilder();
-        for(Competence c : selectedActivity.getRequiredCompetencies()){
+        for(Competence c : selectedActivity.getRequiredCompetences()){
             sb.append("-");
             sb.append(c.getDescrizione());
             sb.append("\n");
