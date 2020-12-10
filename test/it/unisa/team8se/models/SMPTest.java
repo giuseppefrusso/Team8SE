@@ -69,15 +69,14 @@ public class SMPTest extends TestCase {
             instance.saveToDatabase();
         } catch (SQLException ex) {
         }
-        assertTrue(instance.file.length > 0);
+        assertTrue(instance.document.length > 0);
     }
     
     @Test
     public void testExportDocument() {
         instance = SMP.getInstanceWithPK("nome");
         instance.exportDocument("C:\\Users\\cptso\\Desktop\\", "doc1");
-    }
-    
+    }    
     @Test
     public void testOpenDocument(){
         instance = SMP.getInstanceWithPK("nome");
@@ -85,6 +84,7 @@ public class SMPTest extends TestCase {
     }
     @Test
     public void testCleanTemp(){
-        assertTrue(SMP.cleanTempDocumentFolder());   
+        boolean status = SMP.cleanTempDocumentFolder();
+        assertTrue(status);   
     }
 }
