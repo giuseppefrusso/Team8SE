@@ -5,13 +5,16 @@
  */
 package it.unisa.team8se.gui;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
 /**
  *
@@ -19,29 +22,38 @@ import static org.junit.Assert.*;
  */
 public class SystemAdminFormTest {
 
-    private SystemAdminForm form;
+    private static SystemAdminForm form;
+    private static Connection connection;
 
     public SystemAdminFormTest() {
-
     }
 
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUpClass() {
         try {
             form = new SystemAdminForm();
-            form.getConnection().setAutoCommit(false);
+            connection = form.getConnection();
+            connection.setAutoCommit(false);
         } catch (SQLException ex) {
             Logger.getLogger(SystemAdminFormTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    @AfterClass
+    public static void tearDownClass() {
+        try {
+            connection.setAutoCommit(true);
+            form.closeConnection();
+            form = null;
+        } catch (SQLException ex) {
+            Logger.getLogger(SystemAdminFormTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     @After
     public void tearDown() {
         try {
-            form.getConnection().rollback();
-            form.getConnection().setAutoCommit(true);
-            form.closeConnection();
-            form = null;
+            connection.rollback();
         } catch (SQLException ex) {
             Logger.getLogger(SystemAdminFormTest.class.getName()).log(Level.SEVERE, null, ex);
         }

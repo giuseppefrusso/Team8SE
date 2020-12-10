@@ -7,30 +7,46 @@ package it.unisa.team8se.gui;
  */
 
 import it.unisa.team8se.models.Maintainer;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
 /**
  *
  * @author gerar
  */
 public class CompetenceViewTest {
-    private CompetenceView form;
+    
+    private static CompetenceView form;
+    private static Connection connection;
     
     public CompetenceViewTest() {
     }
     
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUpClass() {
         try {
             form = new CompetenceView();
-            form.getConnection().setAutoCommit(false);
+            connection = form.getConnection();
+            connection.setAutoCommit(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(CompetenceViewTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+        try {
+            connection.setAutoCommit(true);
+            form.closeConnection();
         } catch (SQLException ex) {
             Logger.getLogger(CompetenceViewTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -39,10 +55,7 @@ public class CompetenceViewTest {
     @After
     public void tearDown() {
         try {
-            form.getConnection().rollback();
-            form.getConnection().setAutoCommit(true);
-            form.closeConnection();
-            form = null;
+            connection.rollback();
         } catch (SQLException ex) {
             Logger.getLogger(CompetenceViewTest.class.getName()).log(Level.SEVERE, null, ex);
         }

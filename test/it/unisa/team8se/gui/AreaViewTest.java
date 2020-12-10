@@ -5,13 +5,16 @@
  */
 package it.unisa.team8se.gui;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
 /**
  *
@@ -19,16 +22,28 @@ import static org.junit.Assert.*;
  */
 public class AreaViewTest {
 
-    private AreaView area;
+    private static AreaView area;
+    private static Connection connection;
 
     public AreaViewTest() {
     }
     
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUpClass() {       
+        area = new AreaView();
+        connection = area.getConnection();
         try {
-            area = new AreaView();
-            area.getConnection().setAutoCommit(false);
+            connection.setAutoCommit(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(AreaViewTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+        try {
+            connection.setAutoCommit(true);
+            area.closeConnection();
         } catch (SQLException ex) {
             Logger.getLogger(AreaViewTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -37,10 +52,7 @@ public class AreaViewTest {
     @After
     public void tearDown() {
         try {
-            area.getConnection().rollback();
-            area.getConnection().setAutoCommit(true);
-            area.closeConnection();
-            area = null;
+            connection.rollback();
         } catch (SQLException ex) {
             Logger.getLogger(AreaViewTest.class.getName()).log(Level.SEVERE, null, ex);
         }
