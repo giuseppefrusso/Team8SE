@@ -145,4 +145,9 @@ public class Material extends DatabaseModel{
             Logger.getLogger(Material.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    @Override
+    public String toString() {
+        return name+" - "+description;
+    }
 }//end Material

@@ -41,7 +41,7 @@ public class ActivityView extends javax.swing.JFrame {
         activities = new LinkedList<>();
         initComboBoxModel();
         refreshActivities();
-        int firstId = initListModels();       
+        int firstId = initListModels();
         initComponents();
         if (defaultId != -1) {
             activityComboBox.setEnabled(false);
@@ -88,10 +88,10 @@ public class ActivityView extends javax.swing.JFrame {
         refreshCompetences(activity);
         refreshMaterials(activity);
     }
-    
+
     private void refreshCompetences(Activity activity) {
         competenceModel.clear();
-        try {           
+        try {
             for (Competence c : activity.getRequiredCompetencesFromDatabase()) {
                 competenceModel.addElement(c.getDescrizione());
             }
@@ -104,14 +104,14 @@ public class ActivityView extends javax.swing.JFrame {
     private void refreshMaterials(Activity activity) {
         materialModel.clear();
         try {
-            for(Material m : activity.getUsedMaterialsFromDatabase()) {
+            for (Material m : activity.getUsedMaterialsFromDatabase()) {
                 materialModel.addElement(m.getName());
             }
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nel caricamento dei materiali!");
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -397,18 +397,18 @@ public class ActivityView extends javax.swing.JFrame {
     }
 
     private String getSelectedMaterial() {
-        if(materialModel.getSize() == 0) {
+        if (materialModel.getSize() == 0) {
             Message.raiseError(this, "Non c'è alcun materiale!");
             return null;
         }
         String selectedMaterial = materialList.getSelectedValue();
         if (selectedMaterial == null) {
-            Message.raiseError(this, "Non è stata selezionata alcun materiale!");
+            Message.raiseError(this, "Non è stato selezionato alcun materiale!");
             return null;
         }
         return selectedMaterial;
     }
-    
+
     protected boolean assignCompetence(Activity activity, String competenceDesc) {
         if (activity == null || competenceDesc.equals("")) {
             return false;
@@ -472,7 +472,7 @@ public class ActivityView extends javax.swing.JFrame {
 
         try {
             Material material = Material.getInstanceWithPK(nome);
-            if(material == null) {
+            if (material == null) {
                 material = new Material(nome, null);
                 material.saveToDatabase();
             }
@@ -483,13 +483,13 @@ public class ActivityView extends javax.swing.JFrame {
         }
         return true;
     }
-    
+
     private void assignMaterialButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assignMaterialButtonActionPerformed
         Activity selectedActivity = getSelectedActivity();
         if (selectedActivity == null) {
             return;
         }
-        
+
         String material = JOptionPane.showInputDialog(this, "Assegna un materiale all'attività "
                 + String.valueOf(selectedActivity.getID()), "Assegnazione", JOptionPane.PLAIN_MESSAGE);
         if (material == null || material.equals("")) {
@@ -502,8 +502,9 @@ public class ActivityView extends javax.swing.JFrame {
     protected boolean removeMaterial(Activity activity, String nome) {
         try {
             Material material = Material.getInstanceWithPK(nome);
-            if(material == null || !activity.getUsedMaterialsFromDatabase().contains(material))
+            if (material == null || activity.getUsedMaterialsFromDatabase().contains(material)) {
                 return false;
+            }
             material.removeFromUse(activity.getID());
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nella rimozione!");
@@ -511,7 +512,7 @@ public class ActivityView extends javax.swing.JFrame {
         }
         return true;
     }
-    
+
     private void removeMaterialButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeMaterialButtonActionPerformed
         Activity selectedActivity = getSelectedActivity();
         String material = getSelectedMaterial();
