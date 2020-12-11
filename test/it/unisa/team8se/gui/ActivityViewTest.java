@@ -21,14 +21,15 @@ import static org.junit.Assert.*;
  * @author gerar
  */
 public class ActivityViewTest {
+
     private static ActivityView act;
     private static Connection connection;
-    
+
     public ActivityViewTest() {
     }
-    
+
     @BeforeClass
-    public static void setUpClass() {       
+    public static void setUpClass() {
         act = new ActivityView();
         connection = DatabaseContext.getConnection();
         try {
@@ -37,7 +38,7 @@ public class ActivityViewTest {
             Logger.getLogger(AreaViewTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
         try {
@@ -47,7 +48,7 @@ public class ActivityViewTest {
             Logger.getLogger(AreaViewTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @After
     public void tearDown() {
         try {
@@ -62,11 +63,38 @@ public class ActivityViewTest {
      * Test of assignCompetence method, of class ActivityView.
      */
     @Test
-    public void testAssignCompetence() {
+    public void testAssignCompetence1() {
         System.out.println("assignCompetence");
         int id = 1;
         String description = "Problem solving";
         boolean expResult = true;
+        boolean result = act.assignCompetence(id, description);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Wrong test of assignCompetence method, of class ActivityView.
+     */
+    @Test
+    public void testAssignCompetence2() {
+        System.out.println("assignCompetence");
+        int id = 1;
+        String description = "Lateral thinking";
+        boolean expResult = false;
+        boolean result = act.assignCompetence(id, description);
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Wrong test of assignCompetence method, of class ActivityView.
+     */
+    
+    @Test
+    public void testAssignCompetence3() {
+        System.out.println("assignCompetence");
+        int id = 1;
+        String description = "";
+        boolean expResult = false;
         boolean result = act.assignCompetence(id, description);
         assertEquals(expResult, result);
     }
@@ -78,15 +106,38 @@ public class ActivityViewTest {
     public void testRemoveCompetence() {
         System.out.println("removeCompetence");
         int id = 1;
-        String description = "";
-        ActivityView instance = new ActivityView();
-        boolean expResult = false;
-        boolean result = instance.removeCompetence(id, description);
+        String description = "Lateral thinking";
+        boolean expResult = true;
+        boolean result = act.removeCompetence(id, description);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+    }
+    /**
+     * Wrong test of removeCompetence method, of class ActivityView.
+     */
+    @Test
+    public void testRemoveCompetence2() {
+        System.out.println("removeCompetence");
+        int id = 1;
+        String description = "Problem solving";
+        boolean expResult = false;
+        boolean result = act.removeCompetence(id, description);
+        assertEquals(expResult, result);
+
     }
 
+    /**
+     * Wrong test of removeCompetence method, of class ActivityView.
+     */
+    @Test
+    public void testRemoveCompetence3() {
+        System.out.println("removeCompetence");
+        int id = 1;
+        String description = "";
+        boolean expResult = false;
+        boolean result = act.removeCompetence(id, description);
+        assertEquals(expResult, result);
 
-    
+    }    
+
 }
