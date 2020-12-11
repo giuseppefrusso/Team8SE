@@ -27,11 +27,12 @@ public class ActivityView extends javax.swing.JFrame {
     private DefaultComboBoxModel<Integer> comboBoxModel;
     private DefaultListModel<String> listModel;
     private LinkedList<Activity> activities;
+    private int defaultId;
 
     /**
      * Creates new form TaskView
      */
-    public ActivityView() {
+    public ActivityView(int defaultId) {
         if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
         }
