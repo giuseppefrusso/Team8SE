@@ -38,6 +38,12 @@ public class Activity extends DatabaseModel {
         this.requiredCompetences = new LinkedList<>();
         this.usedMaterials = new LinkedList<>();
     }
+    
+    public Activity(int ID) {
+        this.ID = ID;
+        this.requiredCompetences = new LinkedList<>();
+        this.usedMaterials = new LinkedList<>();
+    }
 
     public Activity(int ID, Area Area, String Tipology, int EIT, int WeekNumber, String WorkspaceNotes, String InterventionDescription, boolean Interruptible, Timestamp datetime) {
         this.ID = ID;

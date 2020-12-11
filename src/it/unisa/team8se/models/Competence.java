@@ -105,7 +105,7 @@ public class Competence extends DatabaseModel {
         return null;
     }
 
-    public void saveIntoRequisito(int idActivity) throws SQLException {
+    public void saveIntoRequisite(int idActivity) throws SQLException {
         String query = "insert into requisito_planned(competenza, attivita_pianificata) values(?, ?)";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
 
@@ -148,7 +148,7 @@ public class Competence extends DatabaseModel {
         ps.close();
     }
 
-    public static void removeFromRequisitoWithDescription(String competence, int idActivity) throws SQLException{
+    public static void removeFromRequisiteWithDescription(String competence, int idActivity) throws SQLException{
         String query = "select C.id as id_competenza from competenza C where C.descrizione=? "
                 + "intersect "
                 + "select P.competenza as id_competenza from requisito_planned P where P.attivita_pianificata=?";
