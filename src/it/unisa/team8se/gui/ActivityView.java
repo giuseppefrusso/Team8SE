@@ -39,9 +39,12 @@ public class ActivityView extends javax.swing.JFrame {
         activities = new LinkedList<>();
         initComboBoxModel();
         refreshActivities();
-        int defaultActivity = initListModel();
+        if(defaultId!=-1)
+            print();
+        else    
+            defaultId = initListModel();
         initComponents();
-        refreshCompetences(defaultActivity);
+        refreshCompetences(defaultId);
     }
 
     private void initComboBoxModel() {

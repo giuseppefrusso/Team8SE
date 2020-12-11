@@ -674,7 +674,7 @@ public class SystemAdminForm extends UserBaseForm {
     }//GEN-LAST:event_areaButtonActionPerformed
 
     private void taskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskButtonActionPerformed
-        ActivityView view = new ActivityView();
+        ActivityView view = new ActivityView(-1);
         view.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_taskButtonActionPerformed
