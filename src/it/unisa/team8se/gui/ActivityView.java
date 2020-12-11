@@ -502,6 +502,8 @@ public class ActivityView extends javax.swing.JFrame {
     protected boolean removeMaterial(Activity activity, String nome) {
         try {
             Material material = Material.getInstanceWithPK(nome);
+            if(material == null)
+                return false;
             material.removeFromUse(activity.getID());
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nella rimozione!");
