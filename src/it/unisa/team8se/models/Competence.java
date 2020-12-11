@@ -105,6 +105,45 @@ public class Competence extends DatabaseModel {
         return null;
     }
 
+    public void saveIntoRequisito(int idActivity) throws SQLException {
+        String query = "insert into requisito_planned(competenza, attivita_pianificata) values(?, ?)";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
+
+        ps.setInt(1, this.getID());
+        ps.setInt(2, idActivity);
+
+        ps.executeUpdate();
+        ps.close();
+    }
+    
+    public void saveIntoPossesso(String username) throws SQLException {
+        String query = "insert into possesso(id, maintainer) values(?, ?)";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
+
+        ps.setInt(1, this.getID());
+        ps.setString(2, username);
+
+        ps.executeUpdate();
+        ps.close();
+    }
+
+    public static Competence saveToDatabaseWithDescription(String competenceDesc) throws SQLException {
+        Competence competence = Competence.getInstanceWithDescription(competenceDesc);
+        if (competence == null) {
+            competence = new Competence();
+            ResultSet rs = DatabaseContext.getStatement().executeQuery("select max(id) from competenza");
+            if (rs.next()) {
+                int maxId = rs.getInt(1);
+                competence.setID(maxId + 1);
+                competence.setDescrizione(competenceDesc);
+            }
+            rs.close();
+
+            competence.saveToDatabase();
+        }
+        return competence;
+    }
+
     @Override
     public void saveToDatabase() {
         try {

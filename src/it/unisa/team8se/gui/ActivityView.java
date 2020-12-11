@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,7 +25,7 @@ public class ActivityView extends javax.swing.JFrame {
     private DefaultComboBoxModel<Integer> comboBoxModel;
     private DefaultListModel<String> listModel;
     private LinkedList<Activity> activities;
-    
+
     /**
      * Creates new form TaskView
      */
@@ -41,18 +42,18 @@ public class ActivityView extends javax.swing.JFrame {
     }
 
     private void initComboBoxModel() {
-        comboBoxModel = new DefaultComboBoxModel();     
+        comboBoxModel = new DefaultComboBoxModel();
     }
 
     protected int initListModel() {
         listModel = new DefaultListModel<>();
         if (comboBoxModel.getSize() != 0) {
-            return (int) comboBoxModel.getElementAt(0);           
+            return (int) comboBoxModel.getElementAt(0);
         }
         return -1;
     }
-    
-    protected boolean refreshActivities() {
+
+    protected void refreshActivities() {
         comboBoxModel.removeAllElements();
         Activity[] as = Activity.getAllDatabaseInstances();
         if (as != null && as.length > 0) {
@@ -62,15 +63,14 @@ public class ActivityView extends javax.swing.JFrame {
                 activities.add(a);
             }
         }
-        return true;
     }
-    
+
     private void setLabels(Activity a) {
         areaLabel.setText(a.getArea().toString());
         typologyLabel.setText(a.getTipology());
         eitLabel.setText(String.valueOf(a.getEIT()));
     }
-    
+
     protected void refreshCompetences(int id) {
         Activity activity = Activity.getInstanceWithPK(id);
         setLabels(activity);
@@ -79,7 +79,7 @@ public class ActivityView extends javax.swing.JFrame {
             listModel.addElement(c.getDescrizione());
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -260,17 +260,18 @@ public class ActivityView extends javax.swing.JFrame {
             DatabaseContext.closeConnection();
             System.exit(0);
         } catch (SQLException ex) {
-            Message.raiseError(this,"Errore nella chiusura!");
+            Message.raiseError(this, "Errore nella chiusura!");
         }
     }//GEN-LAST:event_formWindowClosing
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         String role = UserSession.getLoggedUser().getRole();
         UserBaseForm form;
-        if(role.equalsIgnoreCase("planner"))
+        if (role.equalsIgnoreCase("planner")) {
             form = new PlannerForm();
-        else
+        } else {
             form = new SystemAdminForm();
+        }
         form.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_backButtonActionPerformed
@@ -282,20 +283,77 @@ public class ActivityView extends javax.swing.JFrame {
         setLabels(selectedActivity);
     }//GEN-LAST:event_activityComboBoxActionPerformed
 
-    protected boolean assignCompetence(int id, String description) {
+    private Activity getSelectedActivity() {
+        if (comboBoxModel.getSize() == 0) {
+            Message.raiseError(this, "Non c'è alcun'attività!");
+            return null;
+        }
+        int index = activityComboBox.getSelectedIndex();
+
+        if (index < 0 || index > activities.size()) {
+            return activities.get(0);
+        } else {
+            return activities.get(index);
+        }
+    }
+
+    private String getSelectedCompetence() {
+        if (listModel.getSize() == 0) {
+            Message.raiseError(this, "Non c'è alcuna competenza!");
+            return null;
+        }
+        String selectedCompetence = competenceList.getSelectedValue();
+        if (selectedCompetence == null) {
+            Message.raiseError(this, "Non è stata selezionata alcuna competenza!");
+            return null;
+        }
+        return selectedCompetence;
+    }
+
+    protected boolean assignCompetence(Activity activity, String competenceDesc) {
+        if(activity == null || competenceDesc.equals(""))
+            return false;
+        
+        int id = activity.getID();
+        try {            
+            Competence competence = Competence.saveToDatabaseWithDescription(competenceDesc);
+            competence.saveIntoRequisito(id);            
+        } catch (SQLException ex) {
+            Message.raiseError(this,"Errore nell'assegnamento");
+            return false;
+        }
+        refreshCompetences(id);
         return true;
     }
-    
+
     private void assignButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assignButtonActionPerformed
-        // TODO add your handling code here:
+        Activity selectedActivity = getSelectedActivity();
+        if(selectedActivity == null)
+            return;
+        String competence = JOptionPane.showInputDialog(this, "Assegna una competenza all'attività "+
+                String.valueOf(selectedActivity.getID()), "Assegnazione", JOptionPane.PLAIN_MESSAGE);
+        if(competence == null || competence.equals(""))
+            return;
+        assignCompetence(selectedActivity, competence);
     }//GEN-LAST:event_assignButtonActionPerformed
 
     protected boolean removeCompetence(int id, String description) {
+        System.out.println(id+" "+description);
         return true;
     }
-    
+
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-        // TODO add your handling code here:
+        Activity selectedActivity = getSelectedActivity();
+        String competence = getSelectedCompetence();
+        if(selectedActivity == null || competence == null)
+            return;
+        
+        int selectedId = selectedActivity.getID();
+        
+        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la competenza '"+
+                competence+"'?", "Rimozione", JOptionPane.YES_NO_OPTION);
+        if(reply==JOptionPane.YES_OPTION)
+            removeCompetence(selectedId, competence);
     }//GEN-LAST:event_removeButtonActionPerformed
 
     /**
