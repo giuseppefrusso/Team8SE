@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
@@ -78,7 +80,11 @@ public class MaintainerForm extends javax.swing.JFrame {
     private void switchToActivitySummary() {
         tabbedPane.setEnabledAt(1, true);
 
-        selectedActivity.getRequiredCompetencesFromDatabase();
+        try {
+            selectedActivity.getRequiredCompetencesFromDatabase();
+        } catch (SQLException ex) {
+            Message.raiseError(this, "Errore nel caricamento delle competenze!");
+        }
         
         weekNumberLabel.setText(Integer.toString(selectedActivity.getWeekNumber()));
         areaLabel.setText(selectedActivity.getArea().toString());

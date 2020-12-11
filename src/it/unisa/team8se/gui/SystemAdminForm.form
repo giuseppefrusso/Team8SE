@@ -43,7 +43,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="removeButton" min="-2" pref="90" max="-2" attributes="0"/>
                       <EmptySpace pref="77" max="32767" attributes="0"/>
-                      <Component id="taskButton" min="-2" max="-2" attributes="0"/>
+                      <Component id="activityButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="areaButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -153,7 +153,7 @@
                   <Component id="competenceButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="accessButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="areaButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="taskButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="activityButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -300,12 +300,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="areaButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="taskButton">
+    <Component class="javax.swing.JButton" name="activityButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Attivit&#xe0;"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="taskButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="activityButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

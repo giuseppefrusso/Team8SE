@@ -18,7 +18,6 @@ import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -27,11 +26,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.stage.FileChooser;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
@@ -167,8 +164,7 @@ public class PlannerForm extends UserBaseForm {
         interventionDescDoneButton = new javax.swing.JButton();
         uploadSMPButton = new javax.swing.JButton();
         viewExplorerButton = new javax.swing.JButton();
-        materialButton = new javax.swing.JButton();
-        competenceButton = new javax.swing.JButton();
+        manageButton = new javax.swing.JButton();
         maintainerList = new javax.swing.JPanel();
         maintainerScrollPane = new javax.swing.JScrollPane();
         maintainerTable = new javax.swing.JTable();
@@ -496,24 +492,17 @@ public class PlannerForm extends UserBaseForm {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         activitySummary.add(viewExplorerButton, gridBagConstraints);
 
-        materialButton.setText("Gestisci Materiali");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
-        gridBagConstraints.gridy = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        activitySummary.add(materialButton, gridBagConstraints);
-
-        competenceButton.setText("Assegna competenze");
-        competenceButton.addActionListener(new java.awt.event.ActionListener() {
+        manageButton.setText("Assegna competenze e materiali");
+        manageButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                competenceButtonActionPerformed(evt);
+                manageButtonActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 22;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        activitySummary.add(competenceButton, gridBagConstraints);
+        activitySummary.add(manageButton, gridBagConstraints);
 
         tabbedPane.addTab("ActivitySummary", activitySummary);
 
@@ -753,11 +742,12 @@ public class PlannerForm extends UserBaseForm {
         }
     }//GEN-LAST:event_formWindowClosing
 
-    private void competenceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_competenceButtonActionPerformed
-        ActivityView view = new ActivityView();
+    private void manageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageButtonActionPerformed
+        int selectedId = selectedActivity.getID();
+        ActivityView view = new ActivityView(selectedId);
         view.setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_competenceButtonActionPerformed
+    }//GEN-LAST:event_manageButtonActionPerformed
 
     private void uploadSMPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadSMPButtonActionPerformed
         JFileChooser fc = new JFileChooser();
@@ -829,7 +819,6 @@ public class PlannerForm extends UserBaseForm {
     private javax.swing.JPanel activitySummary;
     private javax.swing.JTable activityTable;
     private javax.swing.JLabel areaLabel;
-    private javax.swing.JButton competenceButton;
     private javax.swing.JButton interventionDescDoneButton;
     private javax.swing.JLabel interventionDescLabel;
     private javax.swing.JScrollPane interventionDescScrollPane;
@@ -849,7 +838,7 @@ public class PlannerForm extends UserBaseForm {
     private javax.swing.JButton maintainerListButton;
     private javax.swing.JScrollPane maintainerScrollPane;
     private javax.swing.JTable maintainerTable;
-    private javax.swing.JButton materialButton;
+    private javax.swing.JButton manageButton;
     private javax.swing.JButton smpButton;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JButton uploadSMPButton;

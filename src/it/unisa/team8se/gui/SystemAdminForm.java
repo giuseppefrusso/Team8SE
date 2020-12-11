@@ -107,7 +107,7 @@ public class SystemAdminForm extends UserBaseForm {
         competenceButton = new javax.swing.JButton();
         accessButton = new javax.swing.JButton();
         areaButton = new javax.swing.JButton();
-        taskButton = new javax.swing.JButton();
+        activityButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("System Admistrator View\n");
@@ -222,10 +222,10 @@ public class SystemAdminForm extends UserBaseForm {
             }
         });
 
-        taskButton.setText("Attività");
-        taskButton.addActionListener(new java.awt.event.ActionListener() {
+        activityButton.setText("Attività");
+        activityButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                taskButtonActionPerformed(evt);
+                activityButtonActionPerformed(evt);
             }
         });
 
@@ -242,7 +242,7 @@ public class SystemAdminForm extends UserBaseForm {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
-                        .addComponent(taskButton)
+                        .addComponent(activityButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(areaButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -324,7 +324,7 @@ public class SystemAdminForm extends UserBaseForm {
                     .addComponent(competenceButton)
                     .addComponent(accessButton)
                     .addComponent(areaButton)
-                    .addComponent(taskButton))
+                    .addComponent(activityButton))
                 .addContainerGap())
         );
 
@@ -673,11 +673,11 @@ public class SystemAdminForm extends UserBaseForm {
         this.setVisible(false);
     }//GEN-LAST:event_areaButtonActionPerformed
 
-    private void taskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskButtonActionPerformed
+    private void activityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activityButtonActionPerformed
         ActivityView view = new ActivityView(-1);
         view.setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_taskButtonActionPerformed
+    }//GEN-LAST:event_activityButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -716,6 +716,7 @@ public class SystemAdminForm extends UserBaseForm {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton accessButton;
+    private javax.swing.JButton activityButton;
     private javax.swing.JRadioButton adminRadioButton;
     private javax.swing.JButton areaButton;
     private javax.swing.JButton competenceButton;
@@ -732,7 +733,6 @@ public class SystemAdminForm extends UserBaseForm {
     private javax.swing.JTextField surnameField;
     private javax.swing.JLabel surnameLabel;
     private javax.swing.JTable tableUsers;
-    private javax.swing.JButton taskButton;
     private javax.swing.JTextField usernameField;
     private javax.swing.JLabel usernameLabel;
     // End of variables declaration//GEN-END:variables
