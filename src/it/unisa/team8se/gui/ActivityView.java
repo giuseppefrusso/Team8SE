@@ -471,9 +471,9 @@ public class ActivityView extends javax.swing.JFrame {
         }
 
         try {
-            Material material = new Material();
-            material.setName(nome);
-            if(!material.existsInDatabase())
+            Material material = Material.getInstanceWithPK(nome);
+            if(material == null)
+                material = new Material(nome, null);
                 material.saveToDatabase();
             material.saveIntoUse(activity.getID());
         } catch (SQLException ex) {
@@ -500,8 +500,7 @@ public class ActivityView extends javax.swing.JFrame {
 
     protected boolean removeMaterial(Activity activity, String nome) {
         try {
-            Material material = new Material();
-            material.setName(nome);
+            Material material = Material.getInstanceWithPK(nome);
             material.removeFromUse(activity.getID());
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nella rimozione!");
