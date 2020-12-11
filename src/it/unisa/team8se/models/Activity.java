@@ -145,10 +145,6 @@ public class Activity extends DatabaseModel {
         return smpIdentifier;
     }
 
-    public LinkedList<Material> getUsedMaterials() {
-        return usedMaterials;
-    }
-
     public LinkedList<Competence> getRequiredCompetences() {
         return requiredCompetences;
     }

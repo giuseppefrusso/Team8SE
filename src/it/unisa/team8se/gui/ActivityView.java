@@ -502,7 +502,7 @@ public class ActivityView extends javax.swing.JFrame {
     protected boolean removeMaterial(Activity activity, String nome) {
         try {
             Material material = Material.getInstanceWithPK(nome);
-            if(material == null || !activity.getUsedMaterials().contains(material))
+            if(material == null || !activity.getUsedMaterialsFromDatabase().contains(material))
                 return false;
             material.removeFromUse(activity.getID());
         } catch (SQLException ex) {
