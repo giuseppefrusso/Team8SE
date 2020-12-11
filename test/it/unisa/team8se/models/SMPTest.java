@@ -6,6 +6,7 @@
 package it.unisa.team8se.models;
 
 import it.unisa.team8se.DatabaseContext;
+import java.sql.*;
 import java.sql.SQLException;
 import junit.framework.TestCase;
 import org.junit.After;
@@ -21,6 +22,7 @@ import org.junit.Test;
 public class SMPTest extends TestCase {
 
     protected SMP instance;
+    private static Connection con;
 
     public SMPTest(String testName) {
         super(testName);
@@ -29,10 +31,15 @@ public class SMPTest extends TestCase {
 
     @BeforeClass
     public static void setUpClass() {
+                  if (!DatabaseContext.isConnected()) {
+            DatabaseContext.connectDatabase();
+            con = DatabaseContext.getConnection();
+          }
     }
 
     @AfterClass
     public static void tearDownClass() {
+        DatabaseContext.closeConnection();
     }
 
     @Before
@@ -60,6 +67,15 @@ public class SMPTest extends TestCase {
         String Nome = "";
         instance.setNome(Nome);
         assertEquals(Nome, instance.getNome());
+    }
+    
+    private void deleteAllDatabaseIntances (Statement stm) throws SQLException{
+        String query="Delete from smp";
+        stm.executeUpdate(query);
+    }
+    
+     private void addActivityDatabase(Statement stm, SMP sm) {
+        String query = "Insert into smp values (" + sm.getNome()+ "," + sm.getClass() +")";
     }
     
     @Test

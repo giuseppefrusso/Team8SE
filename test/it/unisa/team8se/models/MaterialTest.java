@@ -5,6 +5,8 @@
  */
 package it.unisa.team8se.models;
 
+import it.unisa.team8se.DatabaseContext;
+import java.sql.*;
 import java.sql.ResultSet;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -20,16 +22,22 @@ import static org.junit.Assert.*;
 public class MaterialTest {
     
     Material instance;
+    private static Connection con;
     
     public MaterialTest() {
     }
     
     @BeforeClass
     public static void setUpClass() {
+                  if (!DatabaseContext.isConnected()) {
+            DatabaseContext.connectDatabase();
+            con = DatabaseContext.getConnection();
+          }
     }
     
     @AfterClass
     public static void tearDownClass() {
+        DatabaseContext.closeConnection();
     }
     
     @Before
@@ -49,6 +57,7 @@ public class MaterialTest {
     public void testGetName() {
         System.out.println("getName");
         String expResult = "";
+        instance.setName(expResult);
         String result = instance.getName();
         assertEquals(expResult, result);
     }
@@ -60,6 +69,7 @@ public class MaterialTest {
     public void testGetDescription() {
         System.out.println("getDescription");
         String expResult = "";
+        instance.setDescription(expResult);
         String result = instance.getDescription();
         assertEquals(expResult, result);
     }
@@ -84,6 +94,15 @@ public class MaterialTest {
         String description = "";
         instance.setDescription(description);
         assertEquals(description,instance.getDescription());
+    }
+    
+    private void deleteAllDatabaseIntances (Statement stm) throws SQLException{
+        String query="Delete from materiale";
+        stm.executeUpdate(query);
+    }
+    
+    private void addActivityDatabase (Statement stm, Material m){
+      String query= "Insert into maintainer values("+ m.getName()+","+ m.getDescription()+")";
     }
 
     /**

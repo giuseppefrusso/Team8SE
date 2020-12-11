@@ -5,8 +5,8 @@
  */
 package it.unisa.team8se.models;
 
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import it.unisa.team8se.DatabaseContext;
+import java.sql.*;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -20,6 +20,8 @@ import static org.junit.Assert.*;
  */
 public class AccessTest {
     
+
+    private static Connection con;
     Access instance;
     
     public AccessTest() {
@@ -27,10 +29,15 @@ public class AccessTest {
     
     @BeforeClass
     public static void setUpClass() {
+          if (!DatabaseContext.isConnected()) {
+            DatabaseContext.connectDatabase();
+            con = DatabaseContext.getConnection();
+          }
     }
     
     @AfterClass
     public static void tearDownClass() {
+        DatabaseContext.closeConnection();
     }
     
     @Before
@@ -50,6 +57,7 @@ public class AccessTest {
     public void testGetID() {
         System.out.println("getID");
         int expResult = 0;
+        instance.setID(expResult);
         int result = instance.getID();
         assertEquals(expResult, result);
     }
@@ -72,6 +80,7 @@ public class AccessTest {
     public void testGetUsername() {
         System.out.println("getUsername");
         String expResult = "";
+        instance.setUsername(expResult);
         String result = instance.getUsername();
         assertEquals(expResult, result);
     }
@@ -129,6 +138,24 @@ public class AccessTest {
         Timestamp dataOraLogoff = null;
         instance.setDataOraLogoff(dataOraLogoff);
         assertEquals(dataOraLogoff,instance.getDataOraLogoff());
+    }
+    
+    private void deleteAllDatabaseInstances (Statement stm) throws SQLException{
+        String query = "Delete from accesso";
+        stm.executeUpdate(query);
+    }
+    
+    private void addActivityToDatabase(Statement stm, Access a){
+        String query = "Insert into accesso values("+ a.getID()+","+ a.getDataOraLogin()+","+ a.getDataOraLogoff()+",'Marco','Manu','Ale')";
+    }
+    private void addForeignKey() throws SQLException{
+        Statement stm = con.createStatement();
+        String query1="Insert into maintainer values('Ale')";
+        String query2="Insert into planner values ('Manu')";
+        String query3="Insert into system_administrator values ('Marco')";
+        stm.executeUpdate(query1);
+        stm.executeUpdate(query2);
+        stm.executeUpdate(query3);
     }
 
     /**
@@ -203,7 +230,11 @@ public class AccessTest {
     @Test
     public void testToPastArray() {
         System.out.println("toPastArray");
-        Object[] expResult = null;
+        Object[] expResult = {1,"Stringa",new Timestamp (192188), new Timestamp(301814)};
+        instance.setID(1);
+        instance.setUsername("Stringa");
+        instance.setDataOraLogin(new Timestamp (192188));
+        instance.setDataOraLogoff(new Timestamp(301814));
         Object[] result = instance.toPastArray();
         assertArrayEquals(expResult, result);
     }
@@ -214,7 +245,10 @@ public class AccessTest {
     @Test
     public void testToCurrentArray() {
         System.out.println("toCurrentArray");
-        Object[] expResult = null;
+        Object[] expResult = {1,"Stringa",new Timestamp (192188)};
+        instance.setID(1);
+        instance.setUsername("Stringa");
+        instance.setDataOraLogin(new Timestamp (192188));
         Object[] result = instance.toCurrentArray();
         assertArrayEquals(expResult, result);
     }

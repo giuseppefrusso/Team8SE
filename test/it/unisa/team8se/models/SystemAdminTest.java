@@ -5,6 +5,8 @@
  */
 package it.unisa.team8se.models;
 
+import it.unisa.team8se.DatabaseContext;
+import java.sql.*;
 import java.sql.ResultSet;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -20,16 +22,22 @@ import static org.junit.Assert.*;
 public class SystemAdminTest {
     
     SystemAdmin instance;
+    private static Connection con;
     
     public SystemAdminTest() {
     }
     
     @BeforeClass
     public static void setUpClass() {
+                  if (!DatabaseContext.isConnected()) {
+            DatabaseContext.connectDatabase();
+            con = DatabaseContext.getConnection();
+          }
     }
     
     @AfterClass
     public static void tearDownClass() {
+        DatabaseContext.closeConnection();
     }
     
     @Before
@@ -40,6 +48,14 @@ public class SystemAdminTest {
     @After
     public void tearDown() {
         instance = null;
+    }
+    
+     private void deleteAllDatabaseIntances (Statement stm) throws SQLException{
+        String query="Delete from system_administrator";
+        stm.executeUpdate(query);
+    }
+    private void addActivityDatabase(Statement stm, SystemAdmin sa) {
+        String query = "Insert into planner values (" + sa.getUsername() + "," + sa.getPassword() + "," + sa.getSurname() + "," + sa.getName() + ")";
     }
 
     /**

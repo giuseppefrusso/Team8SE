@@ -5,8 +5,9 @@
  */
 package it.unisa.team8se.models;
 
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+
+import it.unisa.team8se.DatabaseContext;
+import java.sql.*;
 import java.util.LinkedList;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -22,21 +23,27 @@ import static org.junit.Assert.*;
 public class ActivityTest {
     
     Activity instance;
+    private static Connection con;
     
     public ActivityTest() {
     }
     
     @BeforeClass
     public static void setUpClass() {
+         if (!DatabaseContext.isConnected()) {
+            DatabaseContext.connectDatabase();
+            con = DatabaseContext.getConnection();
+        }
     }
     
     @AfterClass
     public static void tearDownClass() {
+        DatabaseContext.closeConnection();
     }
     
     @Before
     public void setUp() {
-        instance= new Activity(1,new Area("Fisciano","Carpentry"),"Electrical",2,3,"Revisionare","Notes",false,new Timestamp(201367896)); 
+        instance= new Activity(1,new Area("Fisciano","Carpentry"),"Electrical",2,3,"Notes","Revisionare",false,new Timestamp(201367896)); 
     }
     
     @After
@@ -138,7 +145,7 @@ public class ActivityTest {
         System.out.println("setDatetime");
         Timestamp datetime = null;
         instance.setDatetime(datetime);
-        assertEquals(201367896,instance.getDatetime());
+        assertEquals(datetime,instance.getDatetime());
     }
 
     /**
@@ -147,7 +154,7 @@ public class ActivityTest {
     @Test
     public void testGetArea() {
         System.out.println("getArea");
-        Area expResult = new Area("Fisciano", "Carpentry");
+        Area expResult = new Area("Fisciano","Carpentry");
         Area result = instance.getArea();
         assertEquals(expResult, result);
     }
@@ -200,6 +207,7 @@ public class ActivityTest {
     public void testGetWorkspaceNotes() {
         System.out.println("getWorkspaceNotes");
         String result = instance.getWorkspaceNotes();
+        instance.setWorkspaceNotes("Notes");
         assertEquals("Notes", result);
     }
 
@@ -259,6 +267,30 @@ public class ActivityTest {
         assertEquals(true, instance.getRequiredCompetences().equals(expResult));
     }
 
+    /**
+     * Test of getAllDatabaseInstances method, of class Activity.
+     */
+    private void deleteAllDatabaseIntances(Statement stm) throws SQLException{
+        String query= "Delete from attivita_pianificata";
+        stm.executeUpdate(query);
+    }
+    
+    private void addActivityToDatabase (Statement stm, Activity a){
+    String query = "Insert into attivita_pianificata values("+ a.getID()+",'doc','Ale','Fisciano','Carpentry',"+ a.getArea().getLocation()+",'Manu',"+ a.getTipology()+","+ a.getDatetime()+","+ a.getWeekNumber()+","+ a.getEIT()+","+ a.getWorkspaceNotes()+","+ a.getInterventionDescription()+","+ a.isInterruptible()+")";
+    }
+    
+    private void addForeignKey() throws SQLException{
+    Statement stm= con.createStatement();
+    String query1="Insert into area values('Fisciano','Carpentry')";
+    String query2="Insert into planner values ('Manu')";
+    String query3="Insert into smp values ('doc')";
+    String query4="Insert into maintainer values ('Ale')";
+    stm.executeUpdate(query1);
+    stm.executeUpdate(query2);
+    stm.executeUpdate(query3);
+    stm.executeUpdate(query4);
+    }
+    
     /**
      * Test of getAllDatabaseInstances method, of class Activity.
      */

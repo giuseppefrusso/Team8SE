@@ -5,6 +5,8 @@
  */
 package it.unisa.team8se.models;
 
+import it.unisa.team8se.DatabaseContext;
+import java.sql.*;
 import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
 import java.sql.ResultSet;
@@ -23,16 +25,22 @@ import static org.junit.Assert.*;
 public class MaintainerTest {
     
     Maintainer instance;
+    private static Connection con;
     
     public MaintainerTest() {
     }
     
     @BeforeClass
     public static void setUpClass() {
+                  if (!DatabaseContext.isConnected()) {
+            DatabaseContext.connectDatabase();
+            con = DatabaseContext.getConnection();
+          }
     }
     
     @AfterClass
     public static void tearDownClass() {
+        DatabaseContext.closeConnection();
     }
     
     @Before
@@ -89,6 +97,15 @@ public class MaintainerTest {
         int ID = 0;
         Maintainer instance = new Maintainer();
         instance.removeCompetence(ID);
+    }
+    
+    private void deleteAllDatabaseIntances (Statement stm) throws SQLException{
+        String query="Delete from maintainer";
+        stm.executeUpdate(query);
+    }
+    
+    private void addActivityDatabase (Statement stm, Maintainer m){
+      String query= "Insert into maintainer values("+ m.getUsername()+","+ m.getPassword()+","+ m.getSurname()+","+ m.getName()+")";
     }
 
     /**

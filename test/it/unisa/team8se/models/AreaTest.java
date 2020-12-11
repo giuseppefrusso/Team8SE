@@ -5,8 +5,8 @@
  */
 package it.unisa.team8se.models;
 
-import java.sql.ResultSet;
-import java.util.LinkedList;
+import it.unisa.team8se.DatabaseContext;
+import java.sql.*;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -21,7 +21,20 @@ import static org.junit.Assert.*;
 public class AreaTest {
 
     Area instance;
+    private static Connection con;
+    
     public AreaTest() {
+    }
+    @BeforeClass
+    public static void setUpClass(){
+              if (!DatabaseContext.isConnected()) {
+            DatabaseContext.connectDatabase();
+            con = DatabaseContext.getConnection();
+          }
+    }
+    @AfterClass
+    public static void tearDownClass(){
+    DatabaseContext.closeConnection();
     }
 
     @Before
@@ -64,5 +77,14 @@ public class AreaTest {
         String result = instance.toString();
         assertTrue(result instanceof String);
 
+    }
+    
+    private void deleteAllDatabaseIntances (Statement stm) throws SQLException{
+        String query="Delete from area";
+        stm.executeUpdate(query);
+    }
+    
+     private void addActivityDatabase(Statement stm, Area a) {
+        String query = "Insert into planner values (" + a.getSector() + "," + a.getLocation() +")";
     }
 }

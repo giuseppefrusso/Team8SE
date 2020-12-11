@@ -5,6 +5,8 @@
  */
 package it.unisa.team8se.models;
 
+import it.unisa.team8se.DatabaseContext;
+import java.sql.*;
 import java.sql.ResultSet;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -19,15 +21,22 @@ import static org.junit.Assert.*;
  */
 public class CompetenceTest {
     Competence instance;
+    private static Connection con;
+    
     public CompetenceTest() {
     }
     
     @BeforeClass
     public static void setUpClass() {
+                  if (!DatabaseContext.isConnected()) {
+            DatabaseContext.connectDatabase();
+            con = DatabaseContext.getConnection();
+          }
     }
     
     @AfterClass
     public static void tearDownClass() {
+        DatabaseContext.closeConnection();
     }
     
     @Before
@@ -93,6 +102,16 @@ public class CompetenceTest {
         Competence[] result = Competence.getAllCompetencesOfMaintainer(username);
         assertArrayEquals(expResult, result);
     }
+    
+    private void deleteAllDatabaseIntances (Statement stm) throws SQLException{
+        String query="Delete from competenza";
+        stm.executeUpdate(query);
+    }
+    
+    private void addActivityDatabase (Statement stm, Competence c){
+    String query= "Insert into competenza values("+c.getID()+"," +c.getDescrizione()+")";
+    }
+    
 
     /**
      * Test of getAllDatabaseInstances method, of class Competence.
