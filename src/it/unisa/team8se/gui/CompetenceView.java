@@ -308,25 +308,7 @@ public class CompetenceView extends javax.swing.JFrame {
 
     protected boolean remove(String username, String competence) {
         try {
-            Connection c = DatabaseContext.getConnection();
-            String query = "select C.id as id from competenza C where C.descrizione=? "
-                    + "intersect "
-                    + "select P.id as id from possesso P where P.maintainer=?";
-            PreparedStatement ps = c.prepareStatement(query);
-            ps.setString(1, competence);
-            ps.setString(2, username);
-            ResultSet rs = ps.executeQuery();
-            rs.next();
-            int id = rs.getInt("id");
-
-            query = "delete from possesso where id=? and maintainer=?";
-            ps = c.prepareStatement(query);
-            ps.setInt(1, id);
-            ps.setString(2, username);
-            ps.executeUpdate();
-
-            rs.close();
-            ps.close();
+            Competence.removeFromPossessoWithDescription(competence, username);
         } catch (SQLException ex) {
             Message.raiseError(this,"Errore nella rimozione");
             return false;

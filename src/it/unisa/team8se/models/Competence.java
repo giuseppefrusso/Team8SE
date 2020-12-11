@@ -115,7 +115,7 @@ public class Competence extends DatabaseModel {
         ps.executeUpdate();
         ps.close();
     }
-    
+
     public void saveIntoPossesso(String username) throws SQLException {
         String query = "insert into possesso(id, maintainer) values(?, ?)";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
@@ -127,6 +127,48 @@ public class Competence extends DatabaseModel {
         ps.close();
     }
 
+    public static void removeFromPossessoWithDescription(String competence, String username) throws SQLException {
+        String query = "select C.id as id from competenza C where C.descrizione=? "
+                + "intersect "
+                + "select P.id as id from possesso P where P.maintainer=?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
+        ps.setString(1, competence);
+        ps.setString(2, username);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        int idCompetence = rs.getInt("id");
+
+        query = "delete from possesso where id=? and maintainer=?";
+        ps = DatabaseContext.getPreparedStatement(query);
+        ps.setInt(1, idCompetence);
+        ps.setString(2, username);
+        ps.executeUpdate();
+
+        rs.close();
+        ps.close();
+    }
+
+    public static void removeFromRequisitoWithDescription(String competence, int idActivity) throws SQLException{
+        String query = "select C.id as id from competenza C where C.descrizione=? "
+                + "intersect "
+                + "select P.competenza as competenza from requisito_planned P where P.attivita_pianificata=?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
+        ps.setString(1, competence);
+        ps.setInt(2, idActivity);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        int idCompetence = rs.getInt("competenza");
+
+        query = "delete from requisito_planned where competenza=? and attivita_pianificata=?";
+        ps = DatabaseContext.getPreparedStatement(query);
+        ps.setInt(1, idCompetence);
+        ps.setInt(2, idActivity);
+        ps.executeUpdate();
+
+        rs.close();
+        ps.close();
+    }
+    
     public static Competence saveToDatabaseWithDescription(String competenceDesc) throws SQLException {
         Competence competence = Competence.getInstanceWithDescription(competenceDesc);
         if (competence == null) {

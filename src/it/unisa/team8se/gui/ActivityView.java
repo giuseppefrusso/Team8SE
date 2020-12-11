@@ -12,6 +12,8 @@ import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Competence;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -310,11 +312,10 @@ public class ActivityView extends javax.swing.JFrame {
         return selectedCompetence;
     }
 
-    protected boolean assignCompetence(Activity activity, String competenceDesc) {
-        if(activity == null || competenceDesc.equals(""))
+    protected boolean assignCompetence(int id, String competenceDesc) {
+        if(id < 0 || competenceDesc.equals(""))
             return false;
         
-        int id = activity.getID();
         try {            
             Competence competence = Competence.saveToDatabaseWithDescription(competenceDesc);
             competence.saveIntoRequisito(id);            
@@ -330,15 +331,22 @@ public class ActivityView extends javax.swing.JFrame {
         Activity selectedActivity = getSelectedActivity();
         if(selectedActivity == null)
             return;
+        int selectedId = selectedActivity.getID();
         String competence = JOptionPane.showInputDialog(this, "Assegna una competenza all'attività "+
-                String.valueOf(selectedActivity.getID()), "Assegnazione", JOptionPane.PLAIN_MESSAGE);
+                String.valueOf(selectedId), "Assegnazione", JOptionPane.PLAIN_MESSAGE);
         if(competence == null || competence.equals(""))
             return;
-        assignCompetence(selectedActivity, competence);
+        assignCompetence(selectedId, competence);
     }//GEN-LAST:event_assignButtonActionPerformed
 
     protected boolean removeCompetence(int id, String description) {
-        System.out.println(id+" "+description);
+        try {
+            Competence.removeFromRequisitoWithDescription(description, id);
+        } catch (SQLException ex) {
+            Message.raiseError(this, "Errore nella rimozione!");
+            return false;
+        }
+        refreshCompetences(id);
         return true;
     }
 
