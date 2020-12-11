@@ -437,6 +437,7 @@ public class ActivityView extends javax.swing.JFrame {
             return;
         }
         assignCompetence(selectedActivity, competence);
+        refreshCompetences(selectedActivity);
     }//GEN-LAST:event_assignCompetenceButtonActionPerformed
 
     protected boolean removeCompetence(Activity activity, String description) {
@@ -446,7 +447,6 @@ public class ActivityView extends javax.swing.JFrame {
             Message.raiseError(this, "Errore nella rimozione!");
             return false;
         }
-        refreshCompetences(activity);
         return true;
     }
 
@@ -461,10 +461,25 @@ public class ActivityView extends javax.swing.JFrame {
                 + competence + "'?", "Rimozione", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             removeCompetence(selectedActivity, competence);
+            refreshCompetences(selectedActivity);
         }
     }//GEN-LAST:event_removeCompetenceButtonActionPerformed
 
     protected boolean assignMaterial(Activity activity, String nome) {
+        if (activity == null || nome.equals("")) {
+            return false;
+        }
+
+        try {
+            Material material = new Material();
+            material.setName(nome);
+            if(!material.existsInDatabase())
+                material.saveToDatabase();
+            material.saveIntoUse(activity.getID());
+        } catch (SQLException ex) {
+            Message.raiseError(this, "Errore nell'assegnamento");
+            return false;
+        }
         return true;
     }
     
@@ -480,9 +495,18 @@ public class ActivityView extends javax.swing.JFrame {
             return;
         }
         assignMaterial(selectedActivity, material);
+        refreshMaterials(selectedActivity);
     }//GEN-LAST:event_assignMaterialButtonActionPerformed
 
     protected boolean removeMaterial(Activity activity, String nome) {
+        try {
+            Material material = new Material();
+            material.setName(nome);
+            material.removeFromUse(activity.getID());
+        } catch (SQLException ex) {
+            Message.raiseError(this, "Errore nella rimozione!");
+            return false;
+        }
         return true;
     }
     
@@ -497,6 +521,7 @@ public class ActivityView extends javax.swing.JFrame {
                 + material + "'?", "Rimozione", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             removeMaterial(selectedActivity, material);
+            refreshMaterials(selectedActivity);
         }
     }//GEN-LAST:event_removeMaterialButtonActionPerformed
 

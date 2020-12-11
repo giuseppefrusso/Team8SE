@@ -60,7 +60,7 @@ public class Competence extends DatabaseModel {
     }
 
     public static Competence[] getAllDatabaseInstances() {
-        String sql = "select * from competenza";
+        String sql = "select * from competenza order by descrizione";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             LinkedList<Competence> instances = DatabaseContext.fetchAllModels(Competence.class, ps);

@@ -212,8 +212,10 @@ public class Activity extends DatabaseModel {
     }
 
     public LinkedList<Competence> getRequiredCompetencesFromDatabase() throws SQLException {
-        String sql = "select C.id, C.descrizione from requisito_planned R, competenza C "
-                + "where R.attivita_pianificata = ? and C.id = R.competenza";
+        String sql = "select C.id, C.descrizione "
+                + "from requisito_planned R, competenza C "
+                + "where R.attivita_pianificata = ? and C.id = R.competenza "
+                + "order by C.descrizione";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
         ps.setInt(1, getID());
         LinkedList<Competence> comp = DatabaseContext.fetchAllModels(Competence.class, ps);
@@ -224,7 +226,8 @@ public class Activity extends DatabaseModel {
     public LinkedList<Material> getUsedMaterialsFromDatabase() throws SQLException {
         String sql = "select M.nome, M.descrizione "
                 + "from materiale M, uso_planned U "
-                + "where M.nome = U.materiale and U.attivita_pianificata=?";
+                + "where M.nome = U.materiale and U.attivita_pianificata=? "
+                + "order by M.nome";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
         ps.setInt(1, getID());
         LinkedList<Material> mat = DatabaseContext.fetchAllModels(Material.class, ps);

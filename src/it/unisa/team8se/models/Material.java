@@ -89,6 +89,17 @@ public class Material extends DatabaseModel{
         }
     } 
 
+    public void saveIntoUse(int idActivity) throws SQLException {
+        String query = "insert into uso_planned(materiale, attivita_pianificata) values(?, ?)";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
+
+        ps.setString(1, this.getName());
+        ps.setInt(2, idActivity);
+
+        ps.executeUpdate();
+        ps.close();
+    }
+    
     @Override
     public void getFromResultSet(ResultSet rs) throws SQLException {
         name = rs.getString("nome");
@@ -108,6 +119,15 @@ public class Material extends DatabaseModel{
         } catch (SQLException ex) {
             Logger.getLogger(Material.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void removeFromUse(int idActivity) throws SQLException {
+        String query = "delete from uso_planned where materiale=? and attivita_pianificata=?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
+        ps.setString(1, getName());
+        ps.setInt(2, idActivity);
+        ps.executeUpdate();
+        ps.close();
     }
     
     public void updateToDatabase(){
