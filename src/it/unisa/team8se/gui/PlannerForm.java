@@ -145,7 +145,6 @@ public class PlannerForm extends UserBaseForm {
         activityTable = new javax.swing.JTable();
         weeklabel = new javax.swing.JLabel();
         weekNumberLabel = new javax.swing.JLabel();
-        competenceButton = new javax.swing.JButton();
         activitySummary = new javax.swing.JPanel();
         interventionDescScrollPane = new javax.swing.JScrollPane();
         interventionDescText = new javax.swing.JTextPane();
@@ -168,6 +167,8 @@ public class PlannerForm extends UserBaseForm {
         interventionDescDoneButton = new javax.swing.JButton();
         uploadSMPButton = new javax.swing.JButton();
         viewExplorerButton = new javax.swing.JButton();
+        materialButton = new javax.swing.JButton();
+        competenceButton = new javax.swing.JButton();
         maintainerList = new javax.swing.JPanel();
         maintainerScrollPane = new javax.swing.JScrollPane();
         maintainerTable = new javax.swing.JTable();
@@ -252,23 +253,12 @@ public class PlannerForm extends UserBaseForm {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activityList.add(weekNumberLabel, gridBagConstraints);
 
-        competenceButton.setText("Assegna competenze");
-        competenceButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                competenceButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 8;
-        activityList.add(competenceButton, gridBagConstraints);
-
         tabbedPane.addTab("ActivityList", activityList);
 
         activitySummary.setBackground(new java.awt.Color(255, 204, 153));
         java.awt.GridBagLayout activitySummaryLayout = new java.awt.GridBagLayout();
-        activitySummaryLayout.columnWidths = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
-        activitySummaryLayout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
+        activitySummaryLayout.columnWidths = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
+        activitySummaryLayout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
         activitySummary.setLayout(activitySummaryLayout);
 
         interventionDescText.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -279,7 +269,7 @@ public class PlannerForm extends UserBaseForm {
         interventionDescScrollPane.setViewportView(interventionDescText);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -293,7 +283,7 @@ public class PlannerForm extends UserBaseForm {
         interventionDescLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         interventionDescLabel.setText("Intervention Description");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -302,7 +292,7 @@ public class PlannerForm extends UserBaseForm {
         workspaceNotesLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         workspaceNotesLabel.setText("WorkSpace Notes");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -316,7 +306,7 @@ public class PlannerForm extends UserBaseForm {
         workspaceNotesScrollPane.setViewportView(workspaceNotesText);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 16;
         gridBagConstraints.gridwidth = 9;
         gridBagConstraints.gridheight = 5;
@@ -338,7 +328,7 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activitySummary.add(workspaceNotesEditButton, gridBagConstraints);
@@ -353,7 +343,7 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.ipadx = 3;
         gridBagConstraints.ipady = 3;
@@ -364,7 +354,7 @@ public class PlannerForm extends UserBaseForm {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel4.setText("ACTIVITY SUMMARY");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -374,16 +364,16 @@ public class PlannerForm extends UserBaseForm {
         jLabel5.setText("10");
         jLabel5.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         activitySummary.add(jLabel5, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("Week n#");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activitySummary.add(jLabel6, gridBagConstraints);
 
         smpButton.setBackground(new java.awt.Color(255, 255, 255));
@@ -397,7 +387,7 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 18;
         activitySummary.add(smpButton, gridBagConstraints);
 
@@ -419,7 +409,7 @@ public class PlannerForm extends UserBaseForm {
         jScrollPane2.setViewportView(jTextArea1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 16;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         activitySummary.add(jScrollPane2, gridBagConstraints);
@@ -427,7 +417,7 @@ public class PlannerForm extends UserBaseForm {
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Activity to assign");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 3;
         activitySummary.add(jLabel7, gridBagConstraints);
@@ -436,7 +426,7 @@ public class PlannerForm extends UserBaseForm {
         areaLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         areaLabel.setText("Carpentry - Fisciano");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 3;
         activitySummary.add(areaLabel, gridBagConstraints);
@@ -449,7 +439,7 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.ipady = 20;
         activitySummary.add(maintainerListButton, gridBagConstraints);
@@ -462,7 +452,7 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 22;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         activitySummary.add(workspaceNotesDoneButton, gridBagConstraints);
@@ -475,7 +465,7 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         activitySummary.add(interventionDescDoneButton, gridBagConstraints);
@@ -488,7 +478,7 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 18;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         activitySummary.add(uploadSMPButton, gridBagConstraints);
@@ -501,10 +491,29 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 18;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         activitySummary.add(viewExplorerButton, gridBagConstraints);
+
+        materialButton.setText("Gestisci Materiali");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        activitySummary.add(materialButton, gridBagConstraints);
+
+        competenceButton.setText("Assegna competenze");
+        competenceButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                competenceButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 22;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        activitySummary.add(competenceButton, gridBagConstraints);
 
         tabbedPane.addTab("ActivitySummary", activitySummary);
 
@@ -840,6 +849,7 @@ public class PlannerForm extends UserBaseForm {
     private javax.swing.JButton maintainerListButton;
     private javax.swing.JScrollPane maintainerScrollPane;
     private javax.swing.JTable maintainerTable;
+    private javax.swing.JButton materialButton;
     private javax.swing.JButton smpButton;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JButton uploadSMPButton;
