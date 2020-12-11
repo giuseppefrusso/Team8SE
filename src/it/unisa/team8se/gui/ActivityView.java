@@ -439,14 +439,14 @@ public class ActivityView extends javax.swing.JFrame {
         assignCompetence(selectedActivity, competence);
     }//GEN-LAST:event_assignCompetenceButtonActionPerformed
 
-    protected boolean removeCompetence(int id, String description) {
+    protected boolean removeCompetence(Activity activity, String description) {
         try {
-            Competence.removeFromRequisiteWithDescription(description, id);
+            Competence.removeFromRequisiteWithDescription(description, activity.getID());
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nella rimozione!");
             return false;
         }
-        refreshCompetencesAndMaterials(id);
+        refreshCompetences(activity);
         return true;
     }
 
@@ -457,16 +457,14 @@ public class ActivityView extends javax.swing.JFrame {
             return;
         }
 
-        int selectedId = selectedActivity.getID();
-
         int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la competenza '"
                 + competence + "'?", "Rimozione", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
-            removeCompetence(selectedId, competence);
+            removeCompetence(selectedActivity, competence);
         }
     }//GEN-LAST:event_removeCompetenceButtonActionPerformed
 
-    protected boolean assignMaterial(int id, String nome) {
+    protected boolean assignMaterial(Activity activity, String nome) {
         return true;
     }
     
@@ -475,16 +473,16 @@ public class ActivityView extends javax.swing.JFrame {
         if (selectedActivity == null) {
             return;
         }
-        int selectedId = selectedActivity.getID();
+        
         String material = JOptionPane.showInputDialog(this, "Assegna un materiale all'attività "
-                + String.valueOf(selectedId), "Assegnazione", JOptionPane.PLAIN_MESSAGE);
+                + String.valueOf(selectedActivity.getID()), "Assegnazione", JOptionPane.PLAIN_MESSAGE);
         if (material == null || material.equals("")) {
             return;
         }
-        assignMaterial(selectedId, material);
+        assignMaterial(selectedActivity, material);
     }//GEN-LAST:event_assignMaterialButtonActionPerformed
 
-    protected boolean removeMaterial(int id, String nome) {
+    protected boolean removeMaterial(Activity activity, String nome) {
         return true;
     }
     
@@ -495,12 +493,10 @@ public class ActivityView extends javax.swing.JFrame {
             return;
         }
 
-        int selectedId = selectedActivity.getID();
-
         int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare il materiale '"
                 + material + "'?", "Rimozione", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
-            removeMaterial(selectedId, material);
+            removeMaterial(selectedActivity, material);
         }
     }//GEN-LAST:event_removeMaterialButtonActionPerformed
 
