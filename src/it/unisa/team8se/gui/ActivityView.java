@@ -74,6 +74,7 @@ public class ActivityView extends javax.swing.JFrame {
     }
 
     protected void refreshCompetences(int id) {
+        listModel.clear();
         Activity activity = Activity.getInstanceWithPK(id);
         setLabels(activity);
         activity.getRequiredCompetencesFromDatabase();
