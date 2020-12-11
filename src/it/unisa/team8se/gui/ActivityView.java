@@ -472,9 +472,10 @@ public class ActivityView extends javax.swing.JFrame {
 
         try {
             Material material = Material.getInstanceWithPK(nome);
-            if(material == null)
+            if(material == null) {
                 material = new Material(nome, null);
                 material.saveToDatabase();
+            }
             material.saveIntoUse(activity.getID());
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nell'assegnamento");
