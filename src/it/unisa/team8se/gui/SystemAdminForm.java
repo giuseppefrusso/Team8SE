@@ -71,14 +71,6 @@ public class SystemAdminForm extends UserBaseForm {
 
     }
     
-    protected Connection getConnection() {
-        return DatabaseContext.getConnection();
-    }
-
-    protected void closeConnection() {
-        DatabaseContext.closeConnection();
-    }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -654,7 +646,7 @@ public class SystemAdminForm extends UserBaseForm {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             UserSession.close();
-            closeConnection();
+            DatabaseContext.closeConnection();
             System.exit(0);
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nella chiusura!");

@@ -5,6 +5,7 @@
  */
 package it.unisa.team8se.gui;
 
+import it.unisa.team8se.DatabaseContext;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -31,7 +32,7 @@ public class AreaViewTest {
     @BeforeClass
     public static void setUpClass() {       
         area = new AreaView();
-        connection = area.getConnection();
+        connection = DatabaseContext.getConnection();
         try {
             connection.setAutoCommit(false);
         } catch (SQLException ex) {
@@ -43,7 +44,7 @@ public class AreaViewTest {
     public static void tearDownClass() {
         try {
             connection.setAutoCommit(true);
-            area.closeConnection();
+            DatabaseContext.closeConnection();
         } catch (SQLException ex) {
             Logger.getLogger(AreaViewTest.class.getName()).log(Level.SEVERE, null, ex);
         }

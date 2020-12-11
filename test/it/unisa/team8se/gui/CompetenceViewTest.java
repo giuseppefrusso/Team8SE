@@ -6,6 +6,7 @@ package it.unisa.team8se.gui;
  * and open the template in the editor.
  */
 
+import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.models.Maintainer;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -34,7 +35,7 @@ public class CompetenceViewTest {
     public static void setUpClass() {
         try {
             form = new CompetenceView();
-            connection = form.getConnection();
+            connection = DatabaseContext.getConnection();
             connection.setAutoCommit(false);
         } catch (SQLException ex) {
             Logger.getLogger(CompetenceViewTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -45,7 +46,7 @@ public class CompetenceViewTest {
     public static void tearDownClass() {
         try {
             connection.setAutoCommit(true);
-            form.closeConnection();
+            DatabaseContext.closeConnection();
         } catch (SQLException ex) {
             Logger.getLogger(CompetenceViewTest.class.getName()).log(Level.SEVERE, null, ex);
         }

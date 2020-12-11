@@ -36,14 +36,6 @@ public class AreaView extends javax.swing.JFrame {
         initListModel();
         initComponents();
     }
-
-    protected Connection getConnection() {
-        return DatabaseContext.getConnection();
-    }
-    
-    protected void closeConnection() {
-        DatabaseContext.closeConnection();
-    }
     
     private void initComboBoxModel() {
         comboBoxModel = new DefaultComboBoxModel<>();
@@ -237,7 +229,7 @@ public class AreaView extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             UserSession.close();
-            closeConnection();
+            DatabaseContext.closeConnection();
             System.exit(0);
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nella chiusura!");
