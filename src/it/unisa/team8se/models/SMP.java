@@ -29,12 +29,13 @@ public class SMP extends DatabaseModel {
 
     private String nome;
     //private String documentoPDF;
-    public byte[] document;
+    private byte[] document;
+    private boolean tempVersionStored;
 
-    public SMP(){
-        
+    public SMP() {
+
     }
-    
+
     public SMP(String nome) {
         this.nome = nome;
     }
@@ -46,16 +47,15 @@ public class SMP extends DatabaseModel {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
-    
-    public static boolean cleanTempDocumentFolder(){
+
+    public static boolean cleanTempDocumentFolder() {
         Path path = Paths.get(".\\temp\\");
         boolean all = true;
-        if(Files.exists(path)){
+        if (Files.exists(path)) {
             File dir = new File(path.toUri());
-            for(File f : dir.listFiles()){
+            for (File f : dir.listFiles()) {
                 System.out.println("deleting " + f.getName());
-                if(!f.delete()){
+                if (!f.delete()) {
                     all = false;
                 }
             }
@@ -75,22 +75,25 @@ public class SMP extends DatabaseModel {
     public void exportDocument(String filePath, String fileName) {
         try {
             Path path = Paths.get(filePath + fileName + ".pdf");
-            Files.write(path,document);
+            Files.write(path, document);
         } catch (IOException ex) {
             Logger.getLogger(SMP.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public boolean openDocument() {
-        if(document != null){
+        if (document != null) {
             Path path = Paths.get(".\\temp\\");
             try {
-                if(!Files.exists(path)){
-                    File directory = new File(path.toUri());
-                    directory.mkdir();
+                if (!tempVersionStored) {
+                    if (!Files.exists(path)) {
+                        File directory = new File(path.toUri());
+                        directory.mkdir();
+                    }
+                    path = Paths.get(".\\temp\\" + getNome() + "_temp.pdf");
+                    Files.write(path, document);
+                    tempVersionStored = true;
                 }
-                path = Paths.get(".\\temp\\" + getNome() + "_temp.pdf");
-                Files.write(path, document);
                 Desktop.getDesktop().open(new File(path.toUri()));
             } catch (IOException ex) {
                 Logger.getLogger(SMP.class.getName()).log(Level.SEVERE, null, ex);
@@ -119,10 +122,11 @@ public class SMP extends DatabaseModel {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1, name);
             LinkedList<SMP> list = DatabaseContext.fetchAllModels(SMP.class, ps);
-            if(list != null)
+            if (list != null) {
                 return list.get(0);
-            else
+            } else {
                 return null;
+            }
         } catch (SQLException ex) {
             Logger.getLogger(SMP.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -25,13 +25,15 @@ public class Activity extends DatabaseModel{
 
     private int ID;
     private Area Area;
-    private String Tipology;
-    private int EIT;
-    private int WeekNumber;
-    private String WorkspaceNotes;
-    private String InterventionDescription;
-    private boolean Interruptible;
+    private String tipology;
+    private int eit;
+    private int weekNumber;
+    private String workspaceNotes;
+    private String interventionDescription;
+    private boolean interruptible;
     private Timestamp datetime; 
+    private String smpIdentifier;
+    
     private LinkedList<Competence> requiredCompetences;
 
     public Activity() {
@@ -41,12 +43,12 @@ public class Activity extends DatabaseModel{
     public Activity(int ID, Area Area, String Tipology, int EIT, int WeekNumber, String WorkspaceNotes, String InterventionDescription, boolean Interruptible, Timestamp datetime) {
         this.ID = ID;
         this.Area = Area;
-        this.Tipology = Tipology;
-        this.EIT = EIT;
-        this.WeekNumber = WeekNumber;
-        this.WorkspaceNotes = WorkspaceNotes;
-        this.InterventionDescription = InterventionDescription;
-        this.Interruptible = Interruptible;
+        this.tipology = Tipology;
+        this.eit = EIT;
+        this.weekNumber = WeekNumber;
+        this.workspaceNotes = WorkspaceNotes;
+        this.interventionDescription = InterventionDescription;
+        this.interruptible = Interruptible;
         this.datetime = datetime;
         this.requiredCompetences = new LinkedList<>();
     }
@@ -64,19 +66,19 @@ public class Activity extends DatabaseModel{
     }
 
     public void setTipology(String Tipology) {
-        this.Tipology = Tipology;
+        this.tipology = Tipology;
     }
 
     public void setEIT(int EIT) {
-        this.EIT = EIT;
+        this.eit = EIT;
     }
 
     public void setWeekNumber(int WeekNumber) {
-        this.WeekNumber = WeekNumber;
+        this.weekNumber = WeekNumber;
     }
 
     public void setInterruptible(boolean Interruptible) {
-        this.Interruptible = Interruptible;
+        this.interruptible = Interruptible;
     }
 
     public Timestamp getDatetime() {
@@ -92,39 +94,47 @@ public class Activity extends DatabaseModel{
     }
 
     public String getTipology() {
-        return Tipology;
+        return tipology;
     }
 
     public int getEIT() {
-        return EIT;
+        return eit;
     }
 
     public int getWeekNumber() {
-        return WeekNumber;
+        return weekNumber;
     }
 
     public boolean isInterruptible() {
-        return Interruptible;
+        return interruptible;
     }
 
     public String getWorkspaceNotes() {
-        return WorkspaceNotes;
+        return workspaceNotes;
     }
 
     public void setWorkspaceNotes(String WorkspaceNotes) {
         if(WorkspaceNotes != null && WorkspaceNotes.length() > 100)
             WorkspaceNotes = WorkspaceNotes.substring(0,99);
-        this.WorkspaceNotes = WorkspaceNotes;
+        this.workspaceNotes = WorkspaceNotes;
     }
 
     public String getInterventionDescription() {
-        return InterventionDescription;
+        return interventionDescription;
     }
 
     public void setInterventionDescription(String InterventionDescription) {
         if(InterventionDescription != null && InterventionDescription.length() > 50)
             InterventionDescription = InterventionDescription.substring(0,49);
-        this.InterventionDescription = InterventionDescription;
+        this.interventionDescription = InterventionDescription;
+    }
+
+    public int getEit() {
+        return eit;
+    }
+
+    public String getSmpIdentifier() {
+        return smpIdentifier;
     }
 
     public LinkedList<Competence> getRequiredCompetences() {
@@ -203,37 +213,33 @@ public class Activity extends DatabaseModel{
   
     @Override
     public String toString() {
-        return "Activity{" + "ID=" + ID + ", Area=" + Area + ", Tipology=" + Tipology 
-                + ", EIT=" + EIT + ", WeekNumber=" + WeekNumber + ", WorkspaceNotes=" 
-                + WorkspaceNotes + ", InterventionDescription=" + InterventionDescription + ", Interruptible=" 
-                + Interruptible + ", requiredCompetencies=" + requiredCompetences + '}';
+        return "Activity{" + "ID=" + ID + ", Area=" + Area + ", Tipology=" + tipology 
+                + ", EIT=" + eit + ", WeekNumber=" + weekNumber + ", WorkspaceNotes=" 
+                + workspaceNotes + ", InterventionDescription=" + interventionDescription + ", Interruptible=" 
+                + interruptible + ", requiredCompetencies=" + requiredCompetences + '}';
     }
 
     @Override
     public void saveToDatabase() {
-        try {
+
             String sql = "insert into attivita_pianificata "
-                     + "(id, area, luogo_geografico, ambito, week_number, interrompibile, workspace_notes, eta, data_e_ora)"
-                     + "values(?,?,?,?,?,?,?,?,?)";
+                     + "(id, area, luogo_geografico, ambito, week_number, interrompibile, workspace_notes, eta, data_e_ora, smp)"
+                     + "values(?,?,?,?,?,?,?,?,?,?)";
             
-            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-            ps.setInt(1,getID());
-            ps.setString(2,getArea().getSector());
-            ps.setString(3,getArea().getLocation());
-            ps.setString(4,getTipology());
+        try (PreparedStatement ps = DatabaseContext.getPreparedStatement(sql)) {
+            ps.setInt(1, getID());
+            ps.setString(2, getArea().getSector());
+            ps.setString(3, getArea().getLocation());
+            ps.setString(4, getTipology());
             ps.setInt(5, getWeekNumber());
             ps.setBoolean(6, isInterruptible());
             ps.setString(7, getWorkspaceNotes());
             ps.setInt(8, getEIT());
-            ps.setTimestamp(9, Timestamp.from(Instant.now().truncatedTo(ChronoUnit.MINUTES)));
-   
+            ps.setTimestamp(9, getDatetime());
+            ps.setString(10, getSmpIdentifier());
+
             int res = ps.executeUpdate();
-   
-            if(res < 1){
-                throw new RuntimeException("Insert failed of object" + this);
-            }
-            ps.close();
-        } catch (SQLException ex) {
+        }catch (SQLException ex) {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -249,6 +255,8 @@ public class Activity extends DatabaseModel{
        setDatetime(rs.getTimestamp("data_e_ora"));
        setInterruptible(rs.getBoolean("interrompibile"));
        setInterventionDescription(rs.getString("descrizione_intervento"));
+       
+       smpIdentifier = rs.getString("smp");
     }
 
 
