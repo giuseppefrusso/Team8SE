@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -59,19 +58,13 @@ public class ActivityViewTest {
 
     }
 
-
-    /**
-     * Test of refreshActivities method, of class ActivityView.
-     */
-
-
     /**
      * Test of assignCompetence method, of class ActivityView.
      */
     @Test
     public void testAssignCompetence() {
         System.out.println("assignCompetence");
-        int id = 2;
+        int id = 1;
         String description = "Problem solving";
         boolean expResult = true;
         boolean result = act.assignCompetence(id, description);
@@ -84,7 +77,7 @@ public class ActivityViewTest {
     @Test
     public void testRemoveCompetence() {
         System.out.println("removeCompetence");
-        int id = 0;
+        int id = 1;
         String description = "";
         ActivityView instance = new ActivityView();
         boolean expResult = false;

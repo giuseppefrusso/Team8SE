@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
@@ -120,13 +119,13 @@ public class CompetenceViewTest {
     }
     
     /**
-     * Wrong test of assign method, of class CompetenceView.
+     * Test of assign method, of class CompetenceView.
      */
     @Test
     public void testAssign2() {
         System.out.println("assign2");
         Maintainer maintainer = new Maintainer("Anacleti", "Alberto", "Spadino", "sinti90");
-        String competenceDesc = "Problem solving";
+        String competenceDesc = "Lateral thinking";
         boolean expResult = true;
         boolean result = form.assign(maintainer, competenceDesc);
         assertEquals(expResult, result);
