@@ -169,9 +169,12 @@ public class ActivityView extends javax.swing.JFrame {
         });
 
         materialList.setModel(materialModel);
-        materialList.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                materialListMouseClicked(evt);
+        materialList.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                materialListFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                materialListFocusLost(evt);
             }
         });
         jScrollPane1.setViewportView(materialList);
@@ -184,6 +187,7 @@ public class ActivityView extends javax.swing.JFrame {
         });
 
         removeCompetenceButton.setText("Rimuovi");
+        removeCompetenceButton.setEnabled(false);
         removeCompetenceButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeCompetenceButtonActionPerformed(evt);
@@ -212,9 +216,12 @@ public class ActivityView extends javax.swing.JFrame {
         jLabel7.setText("EIT");
 
         competenceList.setModel(competenceModel);
-        competenceList.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                competenceListMouseClicked(evt);
+        competenceList.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                competenceListFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                competenceListFocusLost(evt);
             }
         });
         jScrollPane2.setViewportView(competenceList);
@@ -230,6 +237,7 @@ public class ActivityView extends javax.swing.JFrame {
         });
 
         removeMaterialButton.setText("Rimuovi");
+        removeMaterialButton.setEnabled(false);
         removeMaterialButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeMaterialButtonActionPerformed(evt);
@@ -493,13 +501,19 @@ public class ActivityView extends javax.swing.JFrame {
         if (selectedActivity == null) {
             return;
         }
-
-        String material = JOptionPane.showInputDialog(this, "Assegna un materiale all'attività "
-                + String.valueOf(selectedActivity.getID()), "Assegnazione", JOptionPane.PLAIN_MESSAGE);
-        if (material == null || material.equals("")) {
+        Material[] options = Material.getAllDatabaseInstances();
+        /*String material = JOptionPane.showInputDialog(this, "Assegna un materiale all'attività "
+                + String.valueOf(selectedActivity.getID()), "Assegnazione", JOptionPane.PLAIN_MESSAGE);*/
+        int index = JOptionPane.showOptionDialog(this, "Scegli il materiale da assegnare all'attività "+
+                String.valueOf(selectedActivity.getID()), "Assegnazione", JOptionPane.DEFAULT_OPTION, 
+                JOptionPane.PLAIN_MESSAGE, null, options, null);
+        if(index==-1)
             return;
-        }
-        assignMaterial(selectedActivity, material);
+        Material material = options[index];
+        /*if (material == null || material.equals("")) {
+            return;
+        }*/
+        assignMaterial(selectedActivity, material.getName());
         refreshMaterials(selectedActivity);
     }//GEN-LAST:event_assignMaterialButtonActionPerformed
 
@@ -532,13 +546,25 @@ public class ActivityView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_removeMaterialButtonActionPerformed
 
-    private void materialListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_materialListMouseClicked
-        competenceList.setSelectedIndex(-1); //deselezionare
-    }//GEN-LAST:event_materialListMouseClicked
+    private void competenceListFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_competenceListFocusGained
+        removeCompetenceButton.setEnabled(true);
+        refreshMaterials(getSelectedActivity());
+    }//GEN-LAST:event_competenceListFocusGained
 
-    private void competenceListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_competenceListMouseClicked
-        materialList.setSelectedIndex(-1); //deselezionare
-    }//GEN-LAST:event_competenceListMouseClicked
+    private void competenceListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_competenceListFocusLost
+        removeCompetenceButton.setEnabled(false);
+        refreshCompetences(getSelectedActivity());
+    }//GEN-LAST:event_competenceListFocusLost
+
+    private void materialListFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_materialListFocusGained
+        removeMaterialButton.setEnabled(true);
+        refreshCompetences(getSelectedActivity());
+    }//GEN-LAST:event_materialListFocusGained
+
+    private void materialListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_materialListFocusLost
+        removeMaterialButton.setEnabled(false);
+        refreshMaterials(getSelectedActivity());
+    }//GEN-LAST:event_materialListFocusLost
 
     /**
      * @param args the command line arguments

@@ -132,6 +132,7 @@ public class SystemAdminForm extends UserBaseForm {
         });
 
         removeButton.setText("Rimuovi");
+        removeButton.setEnabled(false);
         removeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeButtonActionPerformed(evt);
@@ -139,6 +140,7 @@ public class SystemAdminForm extends UserBaseForm {
         });
 
         modifyButton.setText("Modifica");
+        modifyButton.setEnabled(false);
         modifyButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modifyButtonActionPerformed(evt);
@@ -162,6 +164,14 @@ public class SystemAdminForm extends UserBaseForm {
         tableUsers.setRowSelectionAllowed(false);
         tableUsers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tableUsers.getTableHeader().setReorderingAllowed(false);
+        tableUsers.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tableUsersFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tableUsersFocusLost(evt);
+            }
+        });
         jScrollPane2.setViewportView(tableUsers);
 
         surnameLabel.setText("Cognome");
@@ -670,6 +680,16 @@ public class SystemAdminForm extends UserBaseForm {
         view.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_activityButtonActionPerformed
+
+    private void tableUsersFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tableUsersFocusGained
+        modifyButton.setEnabled(true);
+        removeButton.setEnabled(true);
+    }//GEN-LAST:event_tableUsersFocusGained
+
+    private void tableUsersFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tableUsersFocusLost
+        modifyButton.setEnabled(false);
+        removeButton.setEnabled(false);
+    }//GEN-LAST:event_tableUsersFocusLost
 
     /**
      * @param args the command line arguments

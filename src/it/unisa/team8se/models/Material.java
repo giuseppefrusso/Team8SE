@@ -148,6 +148,6 @@ public class Material extends DatabaseModel{
     
     @Override
     public String toString() {
-        return name+" - "+description;
+        return name;
     }
 }//end Material

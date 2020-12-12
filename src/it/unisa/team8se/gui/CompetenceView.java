@@ -132,6 +132,14 @@ public class CompetenceView extends javax.swing.JFrame {
         });
 
         listCompetence.setModel(listModel);
+        listCompetence.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                listCompetenceFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                listCompetenceFocusLost(evt);
+            }
+        });
         jScrollPane2.setViewportView(listCompetence);
 
         jLabel1.setText("Utente");
@@ -139,6 +147,7 @@ public class CompetenceView extends javax.swing.JFrame {
         jLabel2.setText("Competenze");
 
         removeButton.setText("Rimuovi");
+        removeButton.setEnabled(false);
         removeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeButtonActionPerformed(evt);
@@ -325,6 +334,14 @@ public class CompetenceView extends javax.swing.JFrame {
             remove(selectedUsername, selectedCompetence);
         }
     }//GEN-LAST:event_removeButtonActionPerformed
+
+    private void listCompetenceFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_listCompetenceFocusGained
+        removeButton.setEnabled(true);
+    }//GEN-LAST:event_listCompetenceFocusGained
+
+    private void listCompetenceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_listCompetenceFocusLost
+        removeButton.setEnabled(false);
+    }//GEN-LAST:event_listCompetenceFocusLost
 
     /**
      * @param args the command line arguments

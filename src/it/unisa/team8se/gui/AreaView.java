@@ -108,6 +108,14 @@ public class AreaView extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 102));
 
         sectorList.setModel(listModel);
+        sectorList.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                sectorListFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                sectorListFocusLost(evt);
+            }
+        });
         jScrollPane1.setViewportView(sectorList);
 
         locationBox.setModel(comboBoxModel);
@@ -136,6 +144,7 @@ public class AreaView extends javax.swing.JFrame {
         });
 
         removeSectorButton.setText("Rimuovi");
+        removeSectorButton.setEnabled(false);
         removeSectorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeSectorButtonActionPerformed(evt);
@@ -357,6 +366,14 @@ public class AreaView extends javax.swing.JFrame {
         }
         refreshLocations();
     }//GEN-LAST:event_removeSectorButtonActionPerformed
+
+    private void sectorListFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sectorListFocusGained
+        removeSectorButton.setEnabled(true);
+    }//GEN-LAST:event_sectorListFocusGained
+
+    private void sectorListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sectorListFocusLost
+        removeSectorButton.setEnabled(false);
+    }//GEN-LAST:event_sectorListFocusLost
 
     /**
      * @param args the command line arguments

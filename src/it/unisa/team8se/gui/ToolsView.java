@@ -128,12 +128,16 @@ public class ToolsView extends javax.swing.JFrame {
             }
         ));
         toolList.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        toolList.setRowSelectionAllowed(false);
         toolList.setShowHorizontalLines(false);
         toolList.getTableHeader().setReorderingAllowed(false);
         toolList.setVerifyInputWhenFocusTarget(false);
         toolList.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 toolListFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                toolListFocusLost(evt);
             }
         });
         jScrollPane2.setViewportView(toolList);
@@ -256,6 +260,11 @@ public class ToolsView extends javax.swing.JFrame {
         modifyButton.setEnabled(true);
         removeButton.setEnabled(true);
     }//GEN-LAST:event_toolListFocusGained
+
+    private void toolListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_toolListFocusLost
+        modifyButton.setEnabled(false);
+        removeButton.setEnabled(false);
+    }//GEN-LAST:event_toolListFocusLost
 
     /**
      * @param args the command line arguments
