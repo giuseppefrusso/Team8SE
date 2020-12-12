@@ -366,7 +366,7 @@ public class ActivityTest {
      * Test of getRequiredCompetenciesFromDatabase method, of class Activity.
      */
     @Test
-    public void testGetRequiredCompetencesFromDatabase() {
+    public void testGetRequiredCompetencesFromDatabase() throws SQLException {
         System.out.println("getRequiredCompetencesFromDatabase");
         Activity instance = new Activity();
         instance.getRequiredCompetencesFromDatabase();

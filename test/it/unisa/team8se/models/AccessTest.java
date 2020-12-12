@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  */
 public class AccessTest {
     
-
+    private static Statement stm;
     private static Connection con;
     Access instance;
     
@@ -28,11 +28,14 @@ public class AccessTest {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws SQLException {
           if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
             con = DatabaseContext.getConnection();
+            con.setAutoCommit(false);
           }
+          stm = con.createStatement();
+          addForeignKey();
     }
     
     @AfterClass
@@ -145,17 +148,27 @@ public class AccessTest {
         stm.executeUpdate(query);
     }
     
-    private void addActivityToDatabase(Statement stm, Access a){
-        String query = "Insert into accesso values("+ a.getID()+","+ a.getDataOraLogin()+","+ a.getDataOraLogoff()+",'Marco','Manu','Ale')";
+    private void addActivityToDatabase(Statement stm, Access a) throws SQLException{
+        String query = "Insert into accesso values("+ a.getID()+",'"+ a.getDataOraLogin()+"','"+ a.getDataOraLogoff()+"','Marco','Manu','Ale')";
+        stm.executeUpdate(query);
     }
-    private void addForeignKey() throws SQLException{
-        Statement stm = con.createStatement();
-        String query1="Insert into maintainer values('Ale')";
-        String query2="Insert into planner values ('Manu')";
-        String query3="Insert into system_administrator values ('Marco')";
+    private static void addForeignKey() throws SQLException{
+        String query1="Insert into maintainer values('Ale','cit','ro','nel')";
+        String query2="Insert into planner values ('Manu','cos','nick','ola')";
+        String query3="Insert into system_administrator values ('Marco','sin','orn','dries')";
         stm.executeUpdate(query1);
         stm.executeUpdate(query2);
         stm.executeUpdate(query3);
+    }
+    
+     
+    private static void removeForeignKey() throws SQLException{
+    String query1="Delete from maintainer where username=('Ale')";
+    String query2="Delete from planner where username='Manu'";
+    String query3="Delete from system_administrator where username='Marco'";
+    stm.executeUpdate(query1);
+    stm.executeUpdate(query2);
+    stm.executeUpdate(query3);
     }
 
     /**

@@ -23,16 +23,20 @@ public class MaterialTest {
     
     Material instance;
     private static Connection con;
+    private static Statement stm;
     
     public MaterialTest() {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws SQLException {
                   if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
             con = DatabaseContext.getConnection();
+            con.setAutoCommit(false);
           }
+                  stm= con.createStatement();
+                  
     }
     
     @AfterClass
@@ -101,8 +105,9 @@ public class MaterialTest {
         stm.executeUpdate(query);
     }
     
-    private void addActivityDatabase (Statement stm, Material m){
-      String query= "Insert into maintainer values("+ m.getName()+","+ m.getDescription()+")";
+    private void addActivityDatabase (Statement stm, Material m) throws SQLException{
+      String query= "Insert into materiale values('"+ m.getName()+"','"+ m.getDescription()+"')";
+      stm.executeUpdate(query);
     }
 
     /**

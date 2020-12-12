@@ -22,15 +22,18 @@ public class AreaTest {
 
     Area instance;
     private static Connection con;
+    private static Statement stm;
     
     public AreaTest() {
     }
     @BeforeClass
-    public static void setUpClass(){
+    public static void setUpClass() throws SQLException{
               if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
             con = DatabaseContext.getConnection();
+            con.setAutoCommit(false);
           }
+              stm= con.createStatement();
     }
     @AfterClass
     public static void tearDownClass(){
@@ -84,7 +87,10 @@ public class AreaTest {
         stm.executeUpdate(query);
     }
     
-     private void addActivityDatabase(Statement stm, Area a) {
-        String query = "Insert into planner values ('" + a.getSector() + "','" + a.getLocation() +"')";
+     private void addActivityDatabase(Statement stm, Area a) throws SQLException {
+        String query = "Insert into area values ('" + a.getSector() + "','" + a.getLocation() +"')";
+        stm.executeUpdate(query);
     }
+     
+     
 }

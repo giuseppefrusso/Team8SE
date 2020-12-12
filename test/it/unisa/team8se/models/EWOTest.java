@@ -23,16 +23,20 @@ public class EWOTest {
     
     EWO instance;
     public static Connection con;
+    private static Statement stm;
     
     public EWOTest() {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws SQLException {
                   if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
             con = DatabaseContext.getConnection();
+            con.setAutoCommit(false);
           }
+                  stm= con.createStatement();
+                  addForeignKey();
     }
     
     @AfterClass
@@ -67,19 +71,31 @@ public class EWOTest {
     }
     
       private void addActivityDatabase (Statement stm, EWO e){
-    //String query= "Insert into EWO values("+ e.getID()+", 'doc','Fisciano','Carpentry','Ale','Manu'"+ e.getTipology()+","+ e.getDatetime()+","+ e.getWeekNumber()+","+ e.getEIT()+","+ e.getWorkspaceNotes()+","+ e.getInterventionDescription()+","+;
-    }
+    //String query= "Insert into ewo values("+ e.getID()+", 'doc','Fisciano','Carpentry','Ale','Manu'"+ e.getTipology()+","+ e.getDatetime()+","+ e.getWeekNumber()+","+ e.getEIT()+","+ e.getWorkspaceNotes()+","+ e.getInterventionDescription()+","+;
+    //stm.executeUpdate(string);
+      }
       
-       private void addForeignKey() throws SQLException{
-        Statement stm = con.createStatement();
+       private static void addForeignKey() throws SQLException{
         String query1="Insert into area values ('Fisciano','Carpentry')";
-        String query2="Insert into planner values ('Manu')";
-        String query3="Insert into smp values ('doc')";
-        String query4="Insert into maintainer values ('Ale')";
+        String query2="Insert into planner values ('Manu','cos','nick','ola')";
+        String query3="Insert into smp values ('doc','pdf')";
+        String query4="Insert into maintainer values ('Ale','cit','ro','nell')";
         stm.executeUpdate(query1);
         stm.executeUpdate(query2);
         stm.executeUpdate(query3);
         stm.executeUpdate(query4);
+    }
+       
+        
+    private static void removeForeignKey() throws SQLException{
+    String query1="Delete from area where (nome,luogo_geografico)=('Fisciano','Carpentry')";
+    String query2="Delete from planner where username='Manu'";
+    String query3="Delete from smp where nome='doc'";
+    String query4="Delete from maintainer where username='Ale'";
+    stm.executeUpdate(query1);
+    stm.executeUpdate(query2);
+    stm.executeUpdate(query3);
+    stm.executeUpdate(query4);
     }
 
     /**

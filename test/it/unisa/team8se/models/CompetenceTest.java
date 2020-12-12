@@ -22,16 +22,19 @@ import static org.junit.Assert.*;
 public class CompetenceTest {
     Competence instance;
     private static Connection con;
+    private static Statement stm;
     
     public CompetenceTest() {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws SQLException {
                   if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
             con = DatabaseContext.getConnection();
+            con.setAutoCommit(false);
           }
+                  stm = con.createStatement();
     }
     
     @AfterClass
@@ -108,8 +111,9 @@ public class CompetenceTest {
         stm.executeUpdate(query);
     }
     
-    private void addActivityDatabase (Statement stm, Competence c){
-    String query= "Insert into competenza values("+c.getID()+"," +c.getDescrizione()+")";
+    private void addActivityDatabase (Statement stm, Competence c) throws SQLException{
+    String query= "Insert into competenza values("+c.getID()+",'" +c.getDescrizione()+"')";
+    stm.executeUpdate(query);
     }
     
 

@@ -26,16 +26,19 @@ public class MaintainerTest {
     
     Maintainer instance;
     private static Connection con;
+    private static Statement stm;
     
     public MaintainerTest() {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws SQLException {
                   if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
             con = DatabaseContext.getConnection();
+            con.setAutoCommit(false);
           }
+                  stm= con.createStatement();
     }
     
     @AfterClass
@@ -104,8 +107,9 @@ public class MaintainerTest {
         stm.executeUpdate(query);
     }
     
-    private void addActivityDatabase (Statement stm, Maintainer m){
-      String query= "Insert into maintainer values("+ m.getUsername()+","+ m.getPassword()+","+ m.getSurname()+","+ m.getName()+")";
+    private void addActivityDatabase (Statement stm, Maintainer m) throws SQLException{
+      String query= "Insert into maintainer values('"+ m.getUsername()+"','"+ m.getPassword()+"','"+ m.getSurname()+"','"+ m.getName()+"')";
+      stm.executeUpdate(query);
     }
 
     /**

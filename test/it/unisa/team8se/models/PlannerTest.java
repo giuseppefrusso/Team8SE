@@ -23,16 +23,19 @@ public class PlannerTest {
     
     Planner instance;
     private static Connection con;
+    private static Statement stm;
     
     public PlannerTest() {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws SQLException {
                   if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
             con = DatabaseContext.getConnection();
+            con.setAutoCommit(false);
           }
+                  stm= con.createStatement();
     }
     
     @AfterClass
@@ -55,8 +58,9 @@ public class PlannerTest {
         stm.executeUpdate(query);
     }
     
-     private void addActivityDatabase (Statement stm, Planner p){
-      String query= "Insert into planner values ("+ p.getUsername()+","+ p.getPassword()+","+ p.getSurname()+","+ p.getName()+")";
+     private void addActivityDatabase (Statement stm, Planner p) throws SQLException{
+      String query= "Insert into planner values ('"+ p.getUsername()+"','"+ p.getPassword()+"','"+ p.getSurname()+"','"+ p.getName()+"')";
+      stm.executeUpdate(query);
     }
 
     /**

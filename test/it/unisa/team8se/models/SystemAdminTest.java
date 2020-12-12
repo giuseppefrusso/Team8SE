@@ -23,16 +23,19 @@ public class SystemAdminTest {
     
     SystemAdmin instance;
     private static Connection con;
+    private static Statement stm;
     
     public SystemAdminTest() {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws SQLException {
                   if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
             con = DatabaseContext.getConnection();
+            con.setAutoCommit(false);
           }
+                  stm=con.createStatement();
     }
     
     @AfterClass
@@ -54,8 +57,9 @@ public class SystemAdminTest {
         String query="Delete from system_administrator";
         stm.executeUpdate(query);
     }
-    private void addActivityDatabase(Statement stm, SystemAdmin sa) {
-        String query = "Insert into planner values (" + sa.getUsername() + "," + sa.getPassword() + "," + sa.getSurname() + "," + sa.getName() + ")";
+    private void addActivityDatabase(Statement stm, SystemAdmin sa) throws SQLException {
+        String query = "Insert into system_administrator values ('" + sa.getUsername() + "','" + sa.getPassword() + "','" + sa.getSurname() + "','" + sa.getName() + "')";
+        stm.executeUpdate(query);
     }
 
     /**
