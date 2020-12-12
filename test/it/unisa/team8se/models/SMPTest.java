@@ -75,7 +75,7 @@ public class SMPTest extends TestCase {
     }
     
      private void addActivityDatabase(Statement stm, SMP sm) {
-        String query = "Insert into smp values (" + sm.getNome()+ "," + sm.getClass() +")";
+        String query = "Insert into smp values (" + sm.getNome()+ ",'documento')";
     }
     
     @Test

@@ -24,21 +24,27 @@ public class ActivityTest {
     
     Activity instance;
     private static Connection con;
+    private static Statement stm;
     
     public ActivityTest() {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws SQLException {
          if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
             con = DatabaseContext.getConnection();
+            con.setAutoCommit(false);
         }
+         stm= con.createStatement();
+         addForeignKey();
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        removeForeignKey();
         DatabaseContext.closeConnection();
+        
     }
     
     @Before
@@ -270,21 +276,32 @@ public class ActivityTest {
     /**
      * Test of getAllDatabaseInstances method, of class Activity.
      */
-    private void deleteAllDatabaseIntances(Statement stm) throws SQLException{
+    private void deleteAllDatabaseInstances() throws SQLException{
         String query= "Delete from attivita_pianificata";
         stm.executeUpdate(query);
     }
     
-    private void addActivityToDatabase (Statement stm, Activity a){
-    String query = "Insert into attivita_pianificata values("+ a.getID()+",'doc','Ale','Fisciano','Carpentry',"+ a.getArea().getLocation()+",'Manu',"+ a.getTipology()+","+ a.getDatetime()+","+ a.getWeekNumber()+","+ a.getEIT()+","+ a.getWorkspaceNotes()+","+ a.getInterventionDescription()+","+ a.isInterruptible()+")";
+    private void addActivityToDatabase (Activity a) throws SQLException{
+    String query = "Insert into attivita_pianificata values("+ a.getID()+",'doc','Ale','Fisciano','Carpentry','Manu','"+ a.getTipology()+"','"+ a.getDatetime()+"',"+ a.getWeekNumber()+","+ a.getEIT()+",'"+ a.getWorkspaceNotes()+"','"+ a.getInterventionDescription()+"',"+ a.isInterruptible()+")";
+    stm.executeUpdate(query);
     }
     
-    private void addForeignKey() throws SQLException{
-    Statement stm= con.createStatement();
+    private static void addForeignKey() throws SQLException{
     String query1="Insert into area values('Fisciano','Carpentry')";
-    String query2="Insert into planner values ('Manu')";
-    String query3="Insert into smp values ('doc')";
-    String query4="Insert into maintainer values ('Ale')";
+    String query2="Insert into planner values ('Manu','cos','nick','ola')";
+    String query3="Insert into smp values ('doc','pdf')";
+    String query4="Insert into maintainer values ('Ale','cit','ro','nell')";
+    stm.executeUpdate(query1);
+    stm.executeUpdate(query2);
+    stm.executeUpdate(query3);
+    stm.executeUpdate(query4);
+    }
+    
+    private static void removeForeignKey() throws SQLException{
+    String query1="Delete from area where (nome,luogo_geografico)=('Fisciano','Carpentry')";
+    String query2="Delete from planner where username='Manu'";
+    String query3="Delete from smp where nome='doc'";
+    String query4="Delete from maintainer where username='Ale'";
     stm.executeUpdate(query1);
     stm.executeUpdate(query2);
     stm.executeUpdate(query3);
@@ -295,23 +312,30 @@ public class ActivityTest {
      * Test of getAllDatabaseInstances method, of class Activity.
      */
     @Test
-    public void testGetAllDatabaseInstances() {
+    public void testGetAllDatabaseInstances() throws SQLException {
         System.out.println("getAllDatabaseInstances");
-        Activity[] expResult = null;
+        deleteAllDatabaseInstances();
+        Activity a= instance;
+        Activity[] expResult = {a};
+        addActivityToDatabase(a);
         Activity[] result = Activity.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
+        con.rollback();
     }
 
     /**
      * Test of getInstanceWithPK method, of class Activity.
      */
     @Test
-    public void testGetInstanceWithPK() {
+    public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        int ID = 0;
-        Activity expResult = null;
+        deleteAllDatabaseInstances();
+        int ID = 1;
+        Activity expResult = instance;
+        addActivityToDatabase(instance);
         Activity result = Activity.getInstanceWithPK(ID);
         assertEquals(expResult, result);
+        con.rollback();
     }
 
     /**

@@ -85,6 +85,6 @@ public class AreaTest {
     }
     
      private void addActivityDatabase(Statement stm, Area a) {
-        String query = "Insert into planner values (" + a.getSector() + "," + a.getLocation() +")";
+        String query = "Insert into planner values ('" + a.getSector() + "','" + a.getLocation() +"')";
     }
 }
