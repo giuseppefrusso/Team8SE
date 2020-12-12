@@ -143,12 +143,12 @@ public class AccessTest {
         assertEquals(dataOraLogoff,instance.getDataOraLogoff());
     }
     
-    private void deleteAllDatabaseInstances (Statement stm) throws SQLException{
+    private void deleteAllDatabaseInstances () throws SQLException{
         String query = "Delete from accesso";
         stm.executeUpdate(query);
     }
     
-    private void addActivityToDatabase(Statement stm, Access a) throws SQLException{
+    private void addActivityToDatabase(Access a) throws SQLException{
         String query = "Insert into accesso values("+ a.getID()+",'"+ a.getDataOraLogin()+"','"+ a.getDataOraLogoff()+"','Marco','Manu','Ale')";
         stm.executeUpdate(query);
     }
@@ -177,21 +177,28 @@ public class AccessTest {
     @Test
     public void testGetAllDatabaseInstances() throws Exception {
         System.out.println("getAllDatabaseInstances");
-        Access[] expResult = null;
+        deleteAllDatabaseInstances();
+        Access a = instance;
+        Access[] expResult = {a};
+        addActivityToDatabase(instance);
         Access[] result = Access.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
+        con.rollback();
     }
 
     /**
      * Test of getInstanceWithPK method, of class Access.
      */
     @Test
-    public void testGetInstanceWithPK() {
+    public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        int ID = 0;
-        Access expResult = null;
+        deleteAllDatabaseInstances();
+        int ID = 1;
+        Access expResult = instance;
+        addActivityToDatabase(instance);
         Access result = Access.getInstanceWithPK(ID);
         assertEquals(expResult, result);
+        con.rollback();
     }
 
     /**

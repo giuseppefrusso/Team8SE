@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertArrayEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,6 +24,7 @@ public class SMPTest extends TestCase {
 
     protected SMP instance;
     private static Connection con;
+     private static Statement stm;
 
     public SMPTest(String testName) {
         super(testName);
@@ -69,12 +71,12 @@ public class SMPTest extends TestCase {
         assertEquals(Nome, instance.getNome());
     }
     
-    private void deleteAllDatabaseIntances (Statement stm) throws SQLException{
+    private void deleteAllDatabaseInstances () throws SQLException{
         String query="Delete from smp";
         stm.executeUpdate(query);
     }
     
-     private void addActivityDatabase(Statement stm, SMP sm) {
+     private void addActivityDatabase(SMP sm) {
         String query = "Insert into smp values (" + sm.getNome()+ ",'documento')";
     }
     
@@ -102,5 +104,29 @@ public class SMPTest extends TestCase {
     public void testCleanTemp(){
         boolean status = SMP.cleanTempDocumentFolder();
         assertTrue(status);   
+    }
+    
+     @Test
+    public void testGetAllDatabaseInstances() throws SQLException {
+        System.out.println("getAllDatabaseInstances");
+        deleteAllDatabaseInstances();
+        SMP sm=instance;
+        SMP[] expResult = {sm};
+        addActivityDatabase(sm);
+        SMP[] result = SMP.getAllDatabaseInstances();
+        assertArrayEquals(expResult, result);
+        con.rollback();
+    }
+    
+     @Test
+    public void testGetInstanceWithPK() throws SQLException {
+        System.out.println("getInstanceWithPK");
+        deleteAllDatabaseInstances();
+        String name = "";
+        SMP expResult = instance;
+        addActivityDatabase(instance);
+        SMP result = SMP.getInstanceWithPK(name);
+        assertEquals(expResult, result);
+        con.rollback();
     }
 }

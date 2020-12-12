@@ -354,12 +354,16 @@ public class ActivityTest {
      * Test of getInstancesWithWeekNumber method, of class Activity.
      */
     @Test
-    public void testGetInstancesWithWeekNumber() {
+    public void testGetInstancesWithWeekNumber() throws SQLException {
         System.out.println("getInstancesWithWeekNumber");
-        int weekNumber = 0;
-        Activity[] expResult = null;
+        deleteAllDatabaseInstances();
+        int weekNumber = 3;
+        Activity a= instance;
+        Activity[] expResult = {a};
+        addActivityToDatabase(a);
         Activity[] result = Activity.getInstancesWithWeekNumber(weekNumber);
         assertArrayEquals(expResult, result);
+        con.rollback();
     }
 
     /**
@@ -431,10 +435,14 @@ public class ActivityTest {
      * Test of updateWorkspaceNotesInDatabase method, of class Activity.
      */
     @Test
-    public void testUpdateWorkspaceNotesInDatabase() {
+    public void testUpdateWorkspaceNotesInDatabase() throws SQLException {
         System.out.println("updateWorkspaceNotesInDatabase");
-        Activity instance = new Activity();
+        deleteAllDatabaseInstances();
+        String result= instance.getWorkspaceNotes();
+        instance.setWorkspaceNotes("notes");
+        addActivityToDatabase(instance);
         instance.updateWorkspaceNotesInDatabase();
+        con.rollback();
     }
 
     /**

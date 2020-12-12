@@ -100,12 +100,12 @@ public class MaterialTest {
         assertEquals(description,instance.getDescription());
     }
     
-    private void deleteAllDatabaseIntances (Statement stm) throws SQLException{
+    private void deleteAllDatabaseInstances () throws SQLException{
         String query="Delete from materiale";
         stm.executeUpdate(query);
     }
     
-    private void addActivityDatabase (Statement stm, Material m) throws SQLException{
+    private void addActivityDatabase (Material m) throws SQLException{
       String query= "Insert into materiale values('"+ m.getName()+"','"+ m.getDescription()+"')";
       stm.executeUpdate(query);
     }
@@ -114,23 +114,30 @@ public class MaterialTest {
      * Test of getAllDatabaseInstances method, of class Material.
      */
     @Test
-    public void testGetAllDatabaseInstances() {
+    public void testGetAllDatabaseInstances() throws SQLException {
         System.out.println("getAllDatabaseInstances");
-        Material[] expResult = null;
+        deleteAllDatabaseInstances();
+        Material m=instance;
+        Material[] expResult = {m};
+        addActivityDatabase(m);
         Material[] result = Material.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
+        con.rollback();
     }
 
     /**
      * Test of getInstanceWithPK method, of class Material.
      */
     @Test
-    public void testGetInstanceWithPK() {
+    public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
+        deleteAllDatabaseInstances();
         String name = "";
-        Material expResult = null;
+        Material expResult = instance;
+        addActivityDatabase(instance);
         Material result = Material.getInstanceWithPK(name);
         assertEquals(expResult, result);
+        con.rollback();
     }
 
     /**
