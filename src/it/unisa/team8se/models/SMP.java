@@ -64,12 +64,12 @@ public class SMP extends DatabaseModel {
         return true;
     }
 
-    public void importDocument(String filePath, String fileName) {
-        try {
-            document = Files.readAllBytes(Paths.get(filePath + fileName + ".pdf"));
-        } catch (IOException ex) {
-            Logger.getLogger(SMP.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void importDocument(String fullPath) throws IOException {
+        document = Files.readAllBytes(Paths.get(fullPath));
+    }
+
+    public void importDocument(String filePath, String fileName) throws IOException {
+        importDocument(filePath + fileName + ".pdf");
     }
 
     public void exportDocument(String filePath, String fileName) {
