@@ -53,12 +53,12 @@ public class PlannerTest {
         instance = null;
     }
     
-    private void deleteAllDatabaseIntances (Statement stm) throws SQLException{
+    private void deleteAllDatabaseInstances () throws SQLException{
         String query="Delete from planner";
         stm.executeUpdate(query);
     }
     
-     private void addActivityDatabase (Statement stm, Planner p) throws SQLException{
+     private void addActivityDatabase (Planner p) throws SQLException{
       String query= "Insert into planner values ('"+ p.getUsername()+"','"+ p.getPassword()+"','"+ p.getSurname()+"','"+ p.getName()+"')";
       stm.executeUpdate(query);
     }
@@ -67,23 +67,30 @@ public class PlannerTest {
      * Test of getAllDatabaseInstances method, of class Planner.
      */
     @Test
-    public void testGetAllDatabaseInstances() {
+    public void testGetAllDatabaseInstances() throws SQLException {
         System.out.println("getAllDatabaseInstances");
-        Planner[] expResult = null;
+        deleteAllDatabaseInstances();
+        Planner p=instance;
+        Planner[] expResult = {p};
+        addActivityDatabase(p);
         Planner[] result = Planner.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
+        con.rollback();
     }
 
     /**
      * Test of getInstanceWithPK method, of class Planner.
      */
     @Test
-    public void testGetInstanceWithPK() {
+    public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
+        deleteAllDatabaseInstances();
         String username = "";
-        Planner expResult = null;
+        Planner expResult = instance;
+        addActivityDatabase(instance);
         Planner result = Planner.getInstanceWithPK(username);
         assertEquals(expResult, result);
+        con.rollback();
     }
 
     /**

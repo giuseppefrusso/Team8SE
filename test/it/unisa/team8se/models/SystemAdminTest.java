@@ -53,11 +53,11 @@ public class SystemAdminTest {
         instance = null;
     }
     
-     private void deleteAllDatabaseIntances (Statement stm) throws SQLException{
+     private void deleteAllDatabaseInstances () throws SQLException{
         String query="Delete from system_administrator";
         stm.executeUpdate(query);
     }
-    private void addActivityDatabase(Statement stm, SystemAdmin sa) throws SQLException {
+    private void addActivityDatabase( SystemAdmin sa) throws SQLException {
         String query = "Insert into system_administrator values ('" + sa.getUsername() + "','" + sa.getPassword() + "','" + sa.getSurname() + "','" + sa.getName() + "')";
         stm.executeUpdate(query);
     }
@@ -66,23 +66,30 @@ public class SystemAdminTest {
      * Test of getAllDatabaseInstances method, of class SystemAdmin.
      */
     @Test
-    public void testGetAllDatabaseInstances() {
+    public void testGetAllDatabaseInstances() throws SQLException {
         System.out.println("getAllDatabaseInstances");
-        SystemAdmin[] expResult = null;
+        deleteAllDatabaseInstances();
+        SystemAdmin sa= instance;
+        SystemAdmin[] expResult = {sa};
+        addActivityDatabase(sa);
         SystemAdmin[] result = SystemAdmin.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
+        con.rollback();
     }
 
     /**
      * Test of getInstanceWithPK method, of class SystemAdmin.
      */
     @Test
-    public void testGetInstanceWithPK() {
+    public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
+            deleteAllDatabaseInstances();
         String username = "";
-        SystemAdmin expResult = null;
+        SystemAdmin expResult = instance;
+        addActivityDatabase(instance);
         SystemAdmin result = SystemAdmin.getInstanceWithPK(username);
         assertEquals(expResult, result);
+        con.rollback();
     }
 
     /**

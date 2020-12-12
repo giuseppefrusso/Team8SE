@@ -106,12 +106,12 @@ public class CompetenceTest {
         assertArrayEquals(expResult, result);
     }
     
-    private void deleteAllDatabaseIntances (Statement stm) throws SQLException{
+    private void deleteAllDatabaseInstances () throws SQLException{
         String query="Delete from competenza";
         stm.executeUpdate(query);
     }
     
-    private void addActivityDatabase (Statement stm, Competence c) throws SQLException{
+    private void addActivityDatabase (Competence c) throws SQLException{
     String query= "Insert into competenza values("+c.getID()+",'" +c.getDescrizione()+"')";
     stm.executeUpdate(query);
     }
@@ -121,35 +121,45 @@ public class CompetenceTest {
      * Test of getAllDatabaseInstances method, of class Competence.
      */
     @Test
-    public void testGetAllDatabaseInstances() {
+    public void testGetAllDatabaseInstances() throws SQLException {
         System.out.println("getAllDatabaseInstances");
-        Competence[] expResult = null;
+        deleteAllDatabaseInstances();
+        Competence c=instance;
+        Competence[] expResult = {c};
+        addActivityDatabase(c);
         Competence[] result = Competence.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
+        con.rollback();
     }
 
     /**
      * Test of getInstanceWithPK method, of class Competence.
      */
     @Test
-    public void testGetInstanceWithPK() {
+    public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
+        deleteAllDatabaseInstances();
         int id = 0;
-        Competence expResult = null;
+        Competence expResult = instance;
+        addActivityDatabase(instance);
         Competence result = Competence.getInstanceWithPK(id);
         assertEquals(expResult, result);
+        con.rollback();
     }
 
     /**
      * Test of getInstanceWithDescription method, of class Competence.
      */
     @Test
-    public void testGetInstanceWithDescription() {
+    public void testGetInstanceWithDescription() throws SQLException {
         System.out.println("getInstanceWithDescription");
+        deleteAllDatabaseInstances();
         String desc = "";
-        Competence expResult = null;
+        Competence expResult = instance;
+        addActivityDatabase(instance);
         Competence result = Competence.getInstanceWithDescription(desc);
         assertEquals(expResult, result);
+        con.rollback();
     }
 
     /**

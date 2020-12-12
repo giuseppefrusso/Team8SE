@@ -102,12 +102,12 @@ public class MaintainerTest {
         instance.removeCompetence(ID);
     }
     
-    private void deleteAllDatabaseIntances (Statement stm) throws SQLException{
+    private void deleteAllDatabaseInstances () throws SQLException{
         String query="Delete from maintainer";
         stm.executeUpdate(query);
     }
     
-    private void addActivityDatabase (Statement stm, Maintainer m) throws SQLException{
+    private void addActivityDatabase (Maintainer m) throws SQLException{
       String query= "Insert into maintainer values('"+ m.getUsername()+"','"+ m.getPassword()+"','"+ m.getSurname()+"','"+ m.getName()+"')";
       stm.executeUpdate(query);
     }
@@ -118,9 +118,13 @@ public class MaintainerTest {
     @Test
     public void testGetAllDatabaseInstances() throws Exception {
         System.out.println("getAllDatabaseInstances");
-        Maintainer[] expResult = null;
+        deleteAllDatabaseInstances();
+        Maintainer m=instance;
+        Maintainer[] expResult = {m};
+        addActivityDatabase(m);
         Maintainer[] result = Maintainer.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
+        con.rollback();
     }
 
     /**
@@ -129,10 +133,12 @@ public class MaintainerTest {
     @Test
     public void testGetInstanceWithPK() throws Exception {
         System.out.println("getInstanceWithPK");
+        deleteAllDatabaseInstances();
         String username = "";
-        Maintainer expResult = null;
+        Maintainer expResult = instance;
         Maintainer result = Maintainer.getInstanceWithPK(username);
         assertEquals(expResult, result);
+        con.rollback();
     }
 
     /**

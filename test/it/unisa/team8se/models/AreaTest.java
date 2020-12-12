@@ -7,6 +7,7 @@ package it.unisa.team8se.models;
 
 import it.unisa.team8se.DatabaseContext;
 import java.sql.*;
+import java.util.LinkedList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -82,15 +83,36 @@ public class AreaTest {
 
     }
     
-    private void deleteAllDatabaseIntances (Statement stm) throws SQLException{
+    private void deleteAllDatabaseInstances () throws SQLException{
         String query="Delete from area";
         stm.executeUpdate(query);
     }
     
-     private void addActivityDatabase(Statement stm, Area a) throws SQLException {
+     private void addActivityDatabase(Area a) throws SQLException {
         String query = "Insert into area values ('" + a.getSector() + "','" + a.getLocation() +"')";
         stm.executeUpdate(query);
     }
+     @Test
+    public void testGetInstanceWithPK() throws SQLException {
+        System.out.println("getInstanceWithPK");
+        deleteAllDatabaseInstances();
+        String sector = "";
+        String location = "";
+        Area expResult =instance;
+        addActivityDatabase(instance);
+        Area result = Area.getInstanceWithPK(sector, location);
+        assertEquals(expResult, result);
+        con.rollback();
+    }
      
-     
+    @Test
+    public void testGetAllLocations() throws SQLException {
+        System.out.println("getAllLocations");
+        deleteAllDatabaseInstances();
+        LinkedList<String> expResult =null;
+        addActivityDatabase(instance);
+        LinkedList<String> result = Area.getAllLocations();
+        assertEquals(expResult, result);
+        con.rollback();
+    }
 }

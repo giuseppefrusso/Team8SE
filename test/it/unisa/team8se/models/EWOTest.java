@@ -65,12 +65,12 @@ public class EWOTest {
         assertEquals(expResult, result);
     }
     
-    private void deleteAllDatabaseIntances (Statement stm) throws SQLException{
+    private void deleteAllDatabaseInstances () throws SQLException{
         String query="Delete from ewo";
         stm.executeUpdate(query);
     }
     
-      private void addActivityDatabase (Statement stm, EWO e){
+      private void addActivityDatabase (EWO e){
     //String query= "Insert into ewo values("+ e.getID()+", 'doc','Fisciano','Carpentry','Ale','Manu'"+ e.getTipology()+","+ e.getDatetime()+","+ e.getWeekNumber()+","+ e.getEIT()+","+ e.getWorkspaceNotes()+","+ e.getInterventionDescription()+","+;
     //stm.executeUpdate(string);
       }
@@ -102,35 +102,46 @@ public class EWOTest {
      * Test of getAllDatabaseInstances method, of class EWO.
      */
     @Test
-    public void testGetAllDatabaseInstances() {
+    public void testGetAllDatabaseInstances() throws SQLException {
         System.out.println("getAllDatabaseInstances");
-        EWO[] expResult = null;
+        deleteAllDatabaseInstances();
+        EWO e=instance;
+        EWO[] expResult = {e};
+        addActivityDatabase(e);
         EWO[] result = EWO.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
+        con.rollback();
     }
 
     /**
      * Test of getInstanceWithPK method, of class EWO.
      */
     @Test
-    public void testGetInstanceWithPK() {
+    public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        int id = 0;
-        EWO expResult = null;
+        deleteAllDatabaseInstances();
+        int id = 1;
+        EWO expResult = instance;
+        addActivityDatabase(instance);
         EWO result = EWO.getInstanceWithPK(id);
         assertEquals(expResult, result);
+        con.rollback();
     }
 
     /**
      * Test of getInstancesWithWeekNumber method, of class EWO.
      */
     @Test
-    public void testGetInstancesWithWeekNumber() {
+    public void testGetInstancesWithWeekNumber() throws SQLException {
         System.out.println("getInstancesWithWeekNumber");
-        int weekNumber = 0;
-        EWO[] expResult = null;
+        deleteAllDatabaseInstances();
+        int weekNumber = 3;
+        EWO e =instance;
+        EWO[] expResult = {e};
+        addActivityDatabase(e);
         EWO[] result = EWO.getInstancesWithWeekNumber(weekNumber);
         assertArrayEquals(expResult, result);
+        con.rollback();
     }
 
     /**
