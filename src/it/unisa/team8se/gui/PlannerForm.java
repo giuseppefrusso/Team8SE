@@ -13,8 +13,13 @@ import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
 import it.unisa.team8se.gui.datamodels.MaintainerAvailabilityDataModel;
 import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Maintainer;
+import it.unisa.team8se.models.SMP;
+import java.awt.Desktop;
 import java.awt.Toolkit;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -23,10 +28,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -52,28 +59,29 @@ public class PlannerForm extends UserBaseForm {
     protected Connection getConnection() {
         return DatabaseContext.getConnection();
     }
-    
+
     protected void closeConnection() {
         DatabaseContext.closeConnection();
     }
-    
+
     private void setupTextBoxes() {
-        
-        interventionDescText.setInputVerifier(new InputVerifier(){ 
+
+        interventionDescText.setInputVerifier(new InputVerifier() {
             private final int MAX_LENGTH = 50;
+
             @Override
             public boolean verify(JComponent input) {
-                JTextPane text = (JTextPane)input;
+                JTextPane text = (JTextPane) input;
                 int texLen = text.getText().length();
-                if(texLen > MAX_LENGTH){
-                    JOptionPane.showMessageDialog(PlannerForm.this, "ERRORE: Intervention description must not exceed " 
-                            + MAX_LENGTH + " characters. (Current Length: " + texLen +")", "ERROR", JOptionPane.ERROR_MESSAGE);
+                if (texLen > MAX_LENGTH) {
+                    JOptionPane.showMessageDialog(PlannerForm.this, "ERRORE: Intervention description must not exceed "
+                            + MAX_LENGTH + " characters. (Current Length: " + texLen + ")", "ERROR", JOptionPane.ERROR_MESSAGE);
                     Toolkit.getDefaultToolkit().beep();
                 }
                 return false;
             }
         });
-        
+
         interventionDescText.setEditable(false);
         workspaceNotesText.setEditable(false);
     }
@@ -98,7 +106,7 @@ public class PlannerForm extends UserBaseForm {
         try {
             Collections.addAll(maintainers, Maintainer.getAllDatabaseInstances());
         } catch (SQLException ex) {
-            Message.raiseError(this,"Errore nella visualizzazione dei maintainers!");
+            Message.raiseError(this, "Errore nella visualizzazione dei maintainers!");
         }
         maintainerTable.setModel(new MaintainerAvailabilityDataModel(maintainers));
         ListSelectionModel selectionModel = maintainerTable.getSelectionModel();
@@ -110,7 +118,7 @@ public class PlannerForm extends UserBaseForm {
                 try {
                     maintainerTableRowSelected(selectedRow);
                 } catch (SQLException ex) {
-                    Message.raiseError(this,"Errore nell'assegnazione del maintainer!");
+                    Message.raiseError(this, "Errore nell'assegnazione del maintainer!");
                 }
                 maintainerTable.clearSelection();
             }
@@ -134,7 +142,6 @@ public class PlannerForm extends UserBaseForm {
         activityTable = new javax.swing.JTable();
         weeklabel = new javax.swing.JLabel();
         weekNumberLabel = new javax.swing.JLabel();
-        competenceButton = new javax.swing.JButton();
         activitySummary = new javax.swing.JPanel();
         interventionDescScrollPane = new javax.swing.JScrollPane();
         interventionDescText = new javax.swing.JTextPane();
@@ -155,6 +162,9 @@ public class PlannerForm extends UserBaseForm {
         maintainerListButton = new javax.swing.JButton();
         workspaceNotesDoneButton = new javax.swing.JButton();
         interventionDescDoneButton = new javax.swing.JButton();
+        uploadSMPButton = new javax.swing.JButton();
+        viewExplorerButton = new javax.swing.JButton();
+        manageButton = new javax.swing.JButton();
         maintainerList = new javax.swing.JPanel();
         maintainerScrollPane = new javax.swing.JScrollPane();
         maintainerTable = new javax.swing.JTable();
@@ -181,8 +191,8 @@ public class PlannerForm extends UserBaseForm {
 
         activityList.setPreferredSize(new java.awt.Dimension(800, 600));
         java.awt.GridBagLayout activityListLayout = new java.awt.GridBagLayout();
-        activityListLayout.columnWidths = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0};
-        activityListLayout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0};
+        activityListLayout.columnWidths = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
+        activityListLayout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0};
         activityList.setLayout(activityListLayout);
 
         activityListLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -214,7 +224,7 @@ public class PlannerForm extends UserBaseForm {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridwidth = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 757;
         gridBagConstraints.ipady = 400;
@@ -239,20 +249,12 @@ public class PlannerForm extends UserBaseForm {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activityList.add(weekNumberLabel, gridBagConstraints);
 
-        competenceButton.setText("Assegna competenze");
-        competenceButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                competenceButtonActionPerformed(evt);
-            }
-        });
-        activityList.add(competenceButton, new java.awt.GridBagConstraints());
-
         tabbedPane.addTab("ActivityList", activityList);
 
         activitySummary.setBackground(new java.awt.Color(255, 204, 153));
         java.awt.GridBagLayout activitySummaryLayout = new java.awt.GridBagLayout();
-        activitySummaryLayout.columnWidths = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
-        activitySummaryLayout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
+        activitySummaryLayout.columnWidths = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
+        activitySummaryLayout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
         activitySummary.setLayout(activitySummaryLayout);
 
         interventionDescText.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -263,7 +265,7 @@ public class PlannerForm extends UserBaseForm {
         interventionDescScrollPane.setViewportView(interventionDescText);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -277,7 +279,7 @@ public class PlannerForm extends UserBaseForm {
         interventionDescLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         interventionDescLabel.setText("Intervention Description");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -286,7 +288,7 @@ public class PlannerForm extends UserBaseForm {
         workspaceNotesLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         workspaceNotesLabel.setText("WorkSpace Notes");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -300,7 +302,7 @@ public class PlannerForm extends UserBaseForm {
         workspaceNotesScrollPane.setViewportView(workspaceNotesText);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 16;
         gridBagConstraints.gridwidth = 9;
         gridBagConstraints.gridheight = 5;
@@ -322,7 +324,7 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activitySummary.add(workspaceNotesEditButton, gridBagConstraints);
@@ -337,7 +339,7 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.ipadx = 3;
         gridBagConstraints.ipady = 3;
@@ -348,7 +350,7 @@ public class PlannerForm extends UserBaseForm {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel4.setText("ACTIVITY SUMMARY");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -358,16 +360,16 @@ public class PlannerForm extends UserBaseForm {
         jLabel5.setText("10");
         jLabel5.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         activitySummary.add(jLabel5, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("Week n#");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activitySummary.add(jLabel6, gridBagConstraints);
 
         smpButton.setBackground(new java.awt.Color(255, 255, 255));
@@ -381,7 +383,7 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 18;
         activitySummary.add(smpButton, gridBagConstraints);
 
@@ -403,14 +405,15 @@ public class PlannerForm extends UserBaseForm {
         jScrollPane2.setViewportView(jTextArea1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 16;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         activitySummary.add(jScrollPane2, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Activity to assign");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 3;
         activitySummary.add(jLabel7, gridBagConstraints);
@@ -419,7 +422,7 @@ public class PlannerForm extends UserBaseForm {
         areaLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         areaLabel.setText("Carpentry - Fisciano");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 3;
         activitySummary.add(areaLabel, gridBagConstraints);
@@ -432,7 +435,7 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.ipady = 20;
         activitySummary.add(maintainerListButton, gridBagConstraints);
@@ -445,7 +448,7 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 22;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         activitySummary.add(workspaceNotesDoneButton, gridBagConstraints);
@@ -458,10 +461,48 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         activitySummary.add(interventionDescDoneButton, gridBagConstraints);
+
+        uploadSMPButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/upload.png"))); // NOI18N
+        uploadSMPButton.setPreferredSize(new java.awt.Dimension(35, 35));
+        uploadSMPButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uploadSMPButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        activitySummary.add(uploadSMPButton, gridBagConstraints);
+
+        viewExplorerButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/folder.png"))); // NOI18N
+        viewExplorerButton.setPreferredSize(new java.awt.Dimension(35, 35));
+        viewExplorerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewExplorerButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        activitySummary.add(viewExplorerButton, gridBagConstraints);
+
+        manageButton.setText("Assegna competenze e materiali");
+        manageButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                manageButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 22;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        activitySummary.add(manageButton, gridBagConstraints);
 
         tabbedPane.addTab("ActivitySummary", activitySummary);
 
@@ -667,18 +708,28 @@ public class PlannerForm extends UserBaseForm {
     private void refreshActivities() {
         Activity[] a = Activity.getAllDatabaseInstances();
         if (a != null) {
-            Collections.addAll(activities,a);
+            Collections.addAll(activities, a);
         }
     }
     private void smpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smpButtonActionPerformed
-        try {
-            if (!selectedActivity.openSMPFromDatabase())
-                Message.raiseError(this,"SMP non definito!");
-        } catch (SQLException ex) {
-            Message.raiseError(this,"Errore nel caricamento dal database!");
-        } catch (IOException | IllegalArgumentException ex) {
-            Message.raiseError(this,"File non trovato!");
+
+        String smpID = selectedActivity.getSmpIdentifier();
+        if (smpID != null) {
+            SMP smp = SMP.getInstanceWithPK(smpID);
+            if (smp != null) {
+                smp.openDocument();
+            }
+        } else {
+            Message.raiseError(this, "SMP non definito.");
         }
+        /*
+        try {
+
+        } catch (SQLException ex) {
+            Message.raiseError(this, "Errore nel caricamento dal database!");
+        } catch (IOException | IllegalArgumentException ex) {
+            Message.raiseError(this, "File non trovato!");
+        }*/
     }//GEN-LAST:event_smpButtonActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -687,15 +738,44 @@ public class PlannerForm extends UserBaseForm {
             closeConnection();
             System.exit(0);
         } catch (SQLException ex) {
-            Message.raiseError(this,"Errore nella chiusura!");
+            Message.raiseError(this, "Errore nella chiusura!");
         }
     }//GEN-LAST:event_formWindowClosing
 
-    private void competenceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_competenceButtonActionPerformed
-        ActivityView view = new ActivityView();
+    private void manageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageButtonActionPerformed
+        int selectedId = selectedActivity.getID();
+        ActivityView view = new ActivityView(selectedId);
         view.setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_competenceButtonActionPerformed
+    }//GEN-LAST:event_manageButtonActionPerformed
+
+    private void uploadSMPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadSMPButtonActionPerformed
+        JFileChooser fc = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Document (*.pdf)", "pdf");
+        fc.setFileFilter(filter);
+        
+        int res = fc.showDialog(this, "Load");
+        if(res == JFileChooser.APPROVE_OPTION){
+            File f = fc.getSelectedFile();
+            try {
+                SMP smp = new SMP();
+                smp.setNome(f.getName());
+                //smp.importDocument(f.g, fileName);
+            } catch (IOException ex) {
+                Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_uploadSMPButtonActionPerformed
+
+    private void viewExplorerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewExplorerButtonActionPerformed
+        Path p = Paths.get(".\\temp");
+        try {
+            File directory = new File(p.toUri());
+            Desktop.getDesktop().open(directory);
+        } catch (IOException ex) {
+            Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_viewExplorerButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -739,7 +819,6 @@ public class PlannerForm extends UserBaseForm {
     private javax.swing.JPanel activitySummary;
     private javax.swing.JTable activityTable;
     private javax.swing.JLabel areaLabel;
-    private javax.swing.JButton competenceButton;
     private javax.swing.JButton interventionDescDoneButton;
     private javax.swing.JLabel interventionDescLabel;
     private javax.swing.JScrollPane interventionDescScrollPane;
@@ -759,8 +838,11 @@ public class PlannerForm extends UserBaseForm {
     private javax.swing.JButton maintainerListButton;
     private javax.swing.JScrollPane maintainerScrollPane;
     private javax.swing.JTable maintainerTable;
+    private javax.swing.JButton manageButton;
     private javax.swing.JButton smpButton;
     private javax.swing.JTabbedPane tabbedPane;
+    private javax.swing.JButton uploadSMPButton;
+    private javax.swing.JButton viewExplorerButton;
     private javax.swing.JLabel weekNumberLabel;
     private javax.swing.JLabel weeklabel;
     private javax.swing.JButton workspaceNotesDoneButton;

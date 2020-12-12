@@ -60,7 +60,7 @@ public class Competence extends DatabaseModel {
     }
 
     public static Competence[] getAllDatabaseInstances() {
-        String sql = "select * from competenza";
+        String sql = "select * from competenza order by descrizione";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             LinkedList<Competence> instances = DatabaseContext.fetchAllModels(Competence.class, ps);
@@ -103,6 +103,87 @@ public class Competence extends DatabaseModel {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public void saveIntoRequisite(int idActivity) throws SQLException {
+        String query = "insert into requisito_planned(competenza, attivita_pianificata) values(?, ?)";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
+
+        ps.setInt(1, this.getID());
+        ps.setInt(2, idActivity);
+
+        ps.executeUpdate();
+        ps.close();
+    }
+
+    public void saveIntoPossesso(String username) throws SQLException {
+        String query = "insert into possesso(id, maintainer) values(?, ?)";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
+
+        ps.setInt(1, this.getID());
+        ps.setString(2, username);
+
+        ps.executeUpdate();
+        ps.close();
+    }
+
+    public static void removeFromPossessoWithDescription(String competence, String username) throws SQLException {
+        String query = "select C.id as id from competenza C where C.descrizione=? "
+                + "intersect "
+                + "select P.id as id from possesso P where P.maintainer=?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
+        ps.setString(1, competence);
+        ps.setString(2, username);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        int idCompetence = rs.getInt("id");
+
+        query = "delete from possesso where id=? and maintainer=?";
+        ps = DatabaseContext.getPreparedStatement(query);
+        ps.setInt(1, idCompetence);
+        ps.setString(2, username);
+        ps.executeUpdate();
+
+        rs.close();
+        ps.close();
+    }
+
+    public static void removeFromRequisiteWithDescription(String competence, int idActivity) throws SQLException{
+        String query = "select C.id as id_competenza from competenza C where C.descrizione=? "
+                + "intersect "
+                + "select P.competenza as id_competenza from requisito_planned P where P.attivita_pianificata=?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
+        ps.setString(1, competence);
+        ps.setInt(2, idActivity);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        int idCompetence = rs.getInt("id_competenza");
+
+        query = "delete from requisito_planned where competenza=? and attivita_pianificata=?";
+        ps = DatabaseContext.getPreparedStatement(query);
+        ps.setInt(1, idCompetence);
+        ps.setInt(2, idActivity);
+        ps.executeUpdate();
+
+        rs.close();
+        ps.close();
+    }
+    
+    public static Competence saveToDatabaseWithDescription(String competenceDesc) throws SQLException {
+        Competence competence = Competence.getInstanceWithDescription(competenceDesc);
+        if (competence == null) {
+            competence = new Competence();
+            ResultSet rs = DatabaseContext.getStatement().executeQuery("select max(id) from competenza");
+            if (rs.next()) {
+                int maxId = rs.getInt(1);
+                competence.setID(maxId + 1);
+                competence.setDescrizione(competenceDesc);
+            }
+            rs.close();
+
+            competence.saveToDatabase();
+        }
+        return competence;
     }
 
     @Override

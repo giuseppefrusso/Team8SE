@@ -5,6 +5,7 @@
  */
 package it.unisa.team8se.gui;
 
+import it.unisa.team8se.DatabaseContext;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -31,7 +32,7 @@ public class SystemAdminFormTest {
     public static void setUpClass() {
         try {
             form = new SystemAdminForm();
-            connection = form.getConnection();
+            connection = DatabaseContext.getConnection();
             connection.setAutoCommit(false);
         } catch (SQLException ex) {
             Logger.getLogger(SystemAdminFormTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -42,8 +43,7 @@ public class SystemAdminFormTest {
     public static void tearDownClass() {
         try {
             connection.setAutoCommit(true);
-            form.closeConnection();
-            form = null;
+            DatabaseContext.closeConnection();
         } catch (SQLException ex) {
             Logger.getLogger(SystemAdminFormTest.class.getName()).log(Level.SEVERE, null, ex);
         }

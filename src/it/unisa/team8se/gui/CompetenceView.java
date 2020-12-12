@@ -47,14 +47,6 @@ public class CompetenceView extends javax.swing.JFrame {
         initComponents();
     }
 
-    protected Connection getConnection() {
-        return DatabaseContext.getConnection();
-    }
-        
-    protected void closeConnection() {
-        DatabaseContext.closeConnection();
-    }
-    
     private void initComboBoxModel() {
         comboBoxModel = new DefaultComboBoxModel();
         refreshUsers();
@@ -241,7 +233,7 @@ public class CompetenceView extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             UserSession.close();
-            closeConnection();
+            DatabaseContext.closeConnection();
             System.exit(0);
         } catch (SQLException ex) {
             Message.raiseError(this,"Errore nella chiusura!");
@@ -282,31 +274,8 @@ public class CompetenceView extends javax.swing.JFrame {
         
         String username = maintainer.getUsername();
         try {            
-            Competence competence = Competence.getInstanceWithDescription(competenceDesc);
-            boolean assignCompetence = true;         
-
-            if (competence == null) {
-                competence = new Competence();
-                ResultSet rs = DatabaseContext.getStatement().executeQuery("select max(id) from competenza");
-                if(rs.next()) {
-                    int maxId = rs.getInt(1);
-                    competence.setID(maxId+1);
-                    competence.setDescrizione(competenceDesc);
-                }
-                rs.close();
-                
-                competence.saveToDatabase();
-            }
-            
-            String query = "insert into possesso values(?, ?)";
-            PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
-            
-            ps.setInt(1, competence.getID());
-            ps.setString(2, username);
-            
-            ps.executeUpdate();
-            ps.close();
-            
+            Competence competence = Competence.saveToDatabaseWithDescription(competenceDesc);
+            competence.saveIntoPossesso(username);            
         } catch (SQLException ex) {
             Message.raiseError(this,"Errore nell'assegnamento");
             return false;
@@ -331,25 +300,7 @@ public class CompetenceView extends javax.swing.JFrame {
 
     protected boolean remove(String username, String competence) {
         try {
-            Connection c = DatabaseContext.getConnection();
-            String query = "select C.id as id from competenza C where C.descrizione=? "
-                    + "intersect "
-                    + "select P.id as id from possesso P where P.maintainer=?";
-            PreparedStatement ps = c.prepareStatement(query);
-            ps.setString(1, competence);
-            ps.setString(2, username);
-            ResultSet rs = ps.executeQuery();
-            rs.next();
-            int id = rs.getInt("id");
-
-            query = "delete from possesso where id=? and maintainer=?";
-            ps = c.prepareStatement(query);
-            ps.setInt(1, id);
-            ps.setString(2, username);
-            ps.executeUpdate();
-
-            rs.close();
-            ps.close();
+            Competence.removeFromPossessoWithDescription(competence, username);
         } catch (SQLException ex) {
             Message.raiseError(this,"Errore nella rimozione");
             return false;
@@ -360,13 +311,15 @@ public class CompetenceView extends javax.swing.JFrame {
 
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-        String selectedUsername = getSelectedMantainer().getUsername();
+        Maintainer selectedMaintainer = getSelectedMantainer();
         String selectedCompetence = getSelectedCompetence();
-        if (selectedUsername == null || selectedCompetence == null) {
+        if (selectedMaintainer == null || selectedCompetence == null) {
             Message.raiseError(this, "Non è stata selezionata alcuna competenza!");
             return;
         }
 
+        String selectedUsername = selectedMaintainer.getUsername();
+        
         int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la competenza '" + selectedCompetence + "' di '" + selectedUsername + "' ?", "Rimozione", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             remove(selectedUsername, selectedCompetence);

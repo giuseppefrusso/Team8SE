@@ -6,6 +6,7 @@ package it.unisa.team8se.gui;
  * and open the template in the editor.
  */
 
+import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.models.Maintainer;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,7 +15,6 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
@@ -35,7 +35,7 @@ public class CompetenceViewTest {
     public static void setUpClass() {
         try {
             form = new CompetenceView();
-            connection = form.getConnection();
+            connection = DatabaseContext.getConnection();
             connection.setAutoCommit(false);
         } catch (SQLException ex) {
             Logger.getLogger(CompetenceViewTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -46,7 +46,7 @@ public class CompetenceViewTest {
     public static void tearDownClass() {
         try {
             connection.setAutoCommit(true);
-            form.closeConnection();
+            DatabaseContext.closeConnection();
         } catch (SQLException ex) {
             Logger.getLogger(CompetenceViewTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -120,13 +120,13 @@ public class CompetenceViewTest {
     }
     
     /**
-     * Wrong test of assign method, of class CompetenceView.
+     * Test of assign method, of class CompetenceView.
      */
     @Test
     public void testAssign2() {
         System.out.println("assign2");
         Maintainer maintainer = new Maintainer("Anacleti", "Alberto", "Spadino", "sinti90");
-        String competenceDesc = "Problem solving";
+        String competenceDesc = "Lateral thinking";
         boolean expResult = true;
         boolean result = form.assign(maintainer, competenceDesc);
         assertEquals(expResult, result);
