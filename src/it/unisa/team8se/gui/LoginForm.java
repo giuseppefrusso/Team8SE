@@ -215,7 +215,7 @@ public class LoginForm extends javax.swing.JFrame {
             } else if (role.equals("Planner")) {
                 if (UserSession.authenticateAsPlanner(user, pwd)) {
                     EventQueue.invokeLater(() -> {
-                        new PlannerForm().setVisible(true);
+                        new PlannerForm(-1).setVisible(true);
                         dispose();
                     });
                     return;

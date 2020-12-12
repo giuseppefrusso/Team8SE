@@ -44,7 +44,7 @@ public class PlannerForm extends UserBaseForm {
     /**
      * Creates new form ActivityList
      */
-    public PlannerForm() {
+    public PlannerForm(int defaultId) {
         if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
         }
@@ -53,7 +53,15 @@ public class PlannerForm extends UserBaseForm {
         setupMaintainerTable();
         setupTextBoxes();
 
-        switchToActivityList();
+        if (defaultId != -1) {
+            refreshActivities();
+            selectedActivity = Activity.getInstanceWithPK(defaultId);
+            switchToActivitySummary();
+            tabbedPane.setSelectedIndex(1);
+        } else {
+            
+            switchToActivityList();
+        }
     }
 
     protected Connection getConnection() {
@@ -753,9 +761,9 @@ public class PlannerForm extends UserBaseForm {
         JFileChooser fc = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Document (*.pdf)", "pdf");
         fc.setFileFilter(filter);
-        
+
         int res = fc.showDialog(this, "Load");
-        if(res == JFileChooser.APPROVE_OPTION){
+        if (res == JFileChooser.APPROVE_OPTION) {
             File f = fc.getSelectedFile();
             String absPath = f.getAbsolutePath();
             if(absPath == null || !absPath.substring(absPath.length() - 5, absPath.length()).equals(".pdf")){
@@ -775,7 +783,7 @@ public class PlannerForm extends UserBaseForm {
                 
             } catch (IOException ex) {
                 Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
         }
     }//GEN-LAST:event_uploadSMPButtonActionPerformed
 
@@ -816,7 +824,7 @@ public class PlannerForm extends UserBaseForm {
         }
         //</editor-fold>
         //</editor-fold>
-        PlannerForm pf = new PlannerForm();
+        PlannerForm pf = new PlannerForm(-1);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
