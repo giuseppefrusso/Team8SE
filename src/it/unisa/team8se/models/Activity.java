@@ -31,6 +31,8 @@ public class Activity extends DatabaseModel {
     private boolean interruptible;
     private Timestamp datetime;
     private String smpIdentifier;
+    
+    private SMP smp;
     private LinkedList<Material> usedMaterials;
     private LinkedList<Competence> requiredCompetences;
 
@@ -153,6 +155,19 @@ public class Activity extends DatabaseModel {
         requiredCompetences.add(c);
     }
 
+    public SMP getSmp() {
+        if(smp == null){
+            smp = SMP.getInstanceWithPK(smpIdentifier);
+        }
+        return smp;
+    }
+
+    public void setSmp(SMP smp) {
+        this.smp = smp;
+    }
+
+    
+    
     public static Activity[] getAllDatabaseInstances() {
         try {
             String sql = "select * from attivita_pianificata";

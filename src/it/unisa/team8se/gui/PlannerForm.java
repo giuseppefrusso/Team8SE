@@ -765,11 +765,23 @@ public class PlannerForm extends UserBaseForm {
         int res = fc.showDialog(this, "Load");
         if (res == JFileChooser.APPROVE_OPTION) {
             File f = fc.getSelectedFile();
-            //try {
+            String absPath = f.getAbsolutePath();
+            if(absPath == null || !absPath.substring(absPath.length() - 5, absPath.length()).equals(".pdf")){
+                System.out.println();
+                Message.raiseError(this, "Per favore seleziona un file di tipo .pdf");
+            }
+            
+            //if(f.get)
+            
+               
+            try {
                 SMP smp = new SMP();
                 smp.setNome(f.getName());
-                //smp.importDocument(f.g, fileName);
-            /*} catch (IOException ex) {
+                smp.importDocument(f.getAbsolutePath());
+                
+                selectedActivity.setSmp(smp);
+                
+            } catch (IOException ex) {
                 Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
             }*/
         }
