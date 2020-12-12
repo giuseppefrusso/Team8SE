@@ -59,7 +59,7 @@ public class PlannerForm extends UserBaseForm {
             switchToActivitySummary();
             tabbedPane.setSelectedIndex(1);
         } else {
-            
+
             switchToActivityList();
         }
     }
@@ -721,23 +721,12 @@ public class PlannerForm extends UserBaseForm {
     }
     private void smpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smpButtonActionPerformed
 
-        String smpID = selectedActivity.getSmpIdentifier();
-        if (smpID != null) {
-            SMP smp = SMP.getInstanceWithPK(smpID);
-            if (smp != null) {
-                smp.openDocument();
-            }
+        SMP smp = selectedActivity.getSmp();
+        if (smp != null) {
+            smp.openDocument();
         } else {
-            Message.raiseError(this, "SMP non definito.");
+            Message.raiseInfo(this, "Nessun SMP specificato.");
         }
-        /*
-        try {
-
-        } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nel caricamento dal database!");
-        } catch (IOException | IllegalArgumentException ex) {
-            Message.raiseError(this, "File non trovato!");
-        }*/
     }//GEN-LAST:event_smpButtonActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -766,24 +755,29 @@ public class PlannerForm extends UserBaseForm {
         if (res == JFileChooser.APPROVE_OPTION) {
             File f = fc.getSelectedFile();
             String absPath = f.getAbsolutePath();
-            if(absPath == null || !absPath.substring(absPath.length() - 5, absPath.length()).equals(".pdf")){
-                System.out.println();
-                Message.raiseError(this, "Per favore seleziona un file di tipo .pdf");
+            String fileExtension = absPath.substring(absPath.length() - 4, absPath.length());
+
+            if (absPath == null || !fileExtension.equals(".pdf")) {
+                System.out.println(fileExtension);
+                Message.raiseError(this, "Per favore seleziona un file di tipo PDF.");
+                return;
             }
-            
-            //if(f.get)
-            
-               
+
             try {
                 SMP smp = new SMP();
                 smp.setNome(f.getName());
                 smp.importDocument(f.getAbsolutePath());
-                
+                if (!smp.existsInDatabase()) {
+                    smp.saveToDatabase();
+                }
+
                 selectedActivity.setSmp(smp);
-                
+                selectedActivity.updateSMPInDatabase();
             } catch (IOException ex) {
                 Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
+            } catch (SQLException ex) {
+                Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_uploadSMPButtonActionPerformed
 

@@ -322,17 +322,17 @@ public class Activity extends DatabaseModel {
         }
     }
 
-    public boolean updateSMPInDatabase(SMP smp) throws SQLException {
+    public boolean updateSMPInDatabase() throws SQLException {
         if (!smp.existsInDatabase()) {
             return false;
         }
 
         String sql = "update attivita_pianificata set SMP = ? where id = ?";
-        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-        ps.setString(1, smp.getNome());
-        ps.setInt(2, ID);
-        ps.executeUpdate();
-        ps.close();
+        try (PreparedStatement ps = DatabaseContext.getPreparedStatement(sql)) {
+            ps.setString(1, smp.getNome());
+            ps.setInt(2, ID);
+            ps.executeUpdate();
+        }
         return true;
     }
 

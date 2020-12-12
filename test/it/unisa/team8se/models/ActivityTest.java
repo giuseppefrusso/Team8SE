@@ -444,9 +444,11 @@ public class ActivityTest {
     public void testUpdateSMPInDatabase() throws Exception {
         System.out.println("updateSMPInDatabase");
         SMP smp = null;
+        
         Activity instance = new Activity();
+        instance.setSmp(smp);
         boolean expResult = false;
-        boolean result = instance.updateSMPInDatabase(smp);
+        boolean result = instance.updateSMPInDatabase();
         assertEquals(expResult, result);
     }
 
