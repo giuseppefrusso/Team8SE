@@ -56,11 +56,13 @@ public class PlannerForm extends UserBaseForm {
         if (defaultId != -1) {
             //activitySummary.setVisible(true);
             //activityTable.setEnabled(false);
-
-            //switchToActivitySummary();
-            switchToMaintainerList();
+            refreshActivities();
+            selectedActivity = Activity.getInstanceWithPK(defaultId);
+            switchToActivitySummary();
+            tabbedPane.setSelectedIndex(1);
+            //switchToMaintainerList();
         } else {
-            defaultId = -1;
+            
             switchToActivityList();
             //switchToActivitySummary();
         }

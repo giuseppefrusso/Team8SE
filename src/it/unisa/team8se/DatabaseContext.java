@@ -24,9 +24,9 @@ import java.util.logging.Logger;
 public class DatabaseContext {
 
     private static final String DATABASE_URL = "jdbc:postgresql://localhost/";
-    private static final String USERNAME = "postgres";
-    private static final String PASSWORD = "strike98";
-    private static final String DB_NAME = "Team8_SE";
+    private static final String USERNAME = "admin";
+    private static final String PASSWORD = "admin";
+    private static final String DB_NAME = "postgres";
 
     private static Connection db;
 
