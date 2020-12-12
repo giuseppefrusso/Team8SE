@@ -30,7 +30,7 @@ public class PlannerFormTest {
     @Before
     public void setUp() {
         try {
-            form = new PlannerForm();
+            form = new PlannerForm(-1);
             form.getConnection().setAutoCommit(false);
         } catch (SQLException ex) {
             Logger.getLogger(PlannerFormTest.class.getName()).log(Level.SEVERE, null, ex);

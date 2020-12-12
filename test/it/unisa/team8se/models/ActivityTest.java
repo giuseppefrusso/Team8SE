@@ -9,8 +9,11 @@ package it.unisa.team8se.models;
 import it.unisa.team8se.DatabaseContext;
 import java.sql.*;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,7 +25,7 @@ import static org.junit.Assert.*;
  */
 public class ActivityTest {
     
-    Activity instance;
+    private Activity instance;
     private static Connection con;
     private static Statement stm;
     
@@ -42,19 +45,24 @@ public class ActivityTest {
     
     @AfterClass
     public static void tearDownClass() throws SQLException {
-        removeForeignKey();
+        con.setAutoCommit(true);
         DatabaseContext.closeConnection();
         
     }
     
     @Before
     public void setUp() {
-        instance= new Activity(1,new Area("Fisciano","Carpentry"),"Electrical",2,3,"Notes","Revisionare",false,new Timestamp(201367896)); 
+        instance= new Activity(3,new Area("Fisciano","Carpentry"),"Electrical",2,3,"Notes","Revisionare",false,new Timestamp(201367896)); 
     }
     
     @After
     public void tearDown() {
-        instance = null;
+        try {
+            con.rollback();
+            instance = null;
+        } catch (SQLException ex) {
+            Logger.getLogger(ActivityTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -64,7 +72,7 @@ public class ActivityTest {
     public void testGetID() {
         System.out.println("getID");
         int result = instance.getID();
-        assertEquals(1, result);
+        assertEquals(3, result);
     }
 
     /**
@@ -312,15 +320,19 @@ public class ActivityTest {
      * Test of getAllDatabaseInstances method, of class Activity.
      */
     @Test
-    public void testGetAllDatabaseInstances() throws SQLException {
-        System.out.println("getAllDatabaseInstances");
-        deleteAllDatabaseInstances();
-        Activity a= instance;
-        Activity[] expResult = {a};
-        addActivityToDatabase(a);
-        Activity[] result = Activity.getAllDatabaseInstances();
-        assertArrayEquals(expResult, result);
-        con.rollback();
+    public void testGetAllDatabaseInstances(){
+        try {
+            System.out.println("getAllDatabaseInstances");
+            Activity a2 = Activity.getInstanceWithPK(1);
+            Activity a= instance;
+            Activity[] expResult = {a2, a};
+            addForeignKey();
+            addActivityToDatabase(a);
+            Activity[] result = Activity.getAllDatabaseInstances();
+            assertArrayEquals(expResult, result);
+        } catch (SQLException ex) {
+            Assert.fail();
+        }
     }
 
     /**
@@ -329,13 +341,13 @@ public class ActivityTest {
     @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        deleteAllDatabaseInstances();
-        int ID = 1;
+
+        int ID = 3;
         Activity expResult = instance;
+        addForeignKey();
         addActivityToDatabase(instance);
         Activity result = Activity.getInstanceWithPK(ID);
         assertEquals(expResult, result);
-        con.rollback();
     }
 
     /**
@@ -345,7 +357,13 @@ public class ActivityTest {
     public void testGetInstancesAssignedToMaintainer() {
         System.out.println("getInstancesAssignedToMaintainer");
         Maintainer m = null;
-        Activity[] expResult = null;
+        try {
+            m = Maintainer.getInstanceWithPK("Spadino");
+        } catch (SQLException ex) {
+            Logger.getLogger(ActivityTest.class.getName()).log(Level.SEVERE, null, ex);
+            Assert.fail();
+        }
+        Activity[] expResult = {Activity.getInstanceWithPK(1)};
         Activity[] result = Activity.getInstancesAssignedToMaintainer(m);
         assertArrayEquals(expResult, result);
     }
@@ -356,14 +374,14 @@ public class ActivityTest {
     @Test
     public void testGetInstancesWithWeekNumber() throws SQLException {
         System.out.println("getInstancesWithWeekNumber");
-        deleteAllDatabaseInstances();
+        //deleteAllDatabaseInstances();
         int weekNumber = 3;
         Activity a= instance;
+        addForeignKey();     
         Activity[] expResult = {a};
         addActivityToDatabase(a);
         Activity[] result = Activity.getInstancesWithWeekNumber(weekNumber);
         assertArrayEquals(expResult, result);
-        con.rollback();
     }
 
     /**
@@ -382,8 +400,11 @@ public class ActivityTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        Activity instance = new Activity();
-        String expResult = "";
+        
+        String expResult = "Activity{" + "ID=" + instance.getID() + ", Area=" + instance.getArea() + ", Tipology=" + instance.getTipology()
+                + ", EIT=" + instance.getEIT() + ", WeekNumber=" + instance.getWeekNumber() + ", WorkspaceNotes="
+                + instance.getWorkspaceNotes() + ", InterventionDescription=" + instance.getInterventionDescription() + ", Interruptible="
+                + instance.isInterruptible() + '}';
         String result = instance.toString();
         assertEquals(expResult, result);
     }
@@ -394,14 +415,15 @@ public class ActivityTest {
     @Test
     public void testSaveToDatabase() {
         System.out.println("saveToDatabase");
-        Activity instance = new Activity();
+        Activity instance = new Activity(2);
+        instance.setArea(new Area());
         instance.saveToDatabase();
     }
 
     /**
      * Test of getFromResultSet method, of class Activity.
      */
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testGetFromResultSet() throws Exception {
         System.out.println("getFromResultSet");
         ResultSet rs = null;
@@ -437,12 +459,12 @@ public class ActivityTest {
     @Test
     public void testUpdateWorkspaceNotesInDatabase() throws SQLException {
         System.out.println("updateWorkspaceNotesInDatabase");
-        deleteAllDatabaseInstances();
-        String result= instance.getWorkspaceNotes();
         instance.setWorkspaceNotes("notes");
+        addForeignKey();
         addActivityToDatabase(instance);
         instance.updateWorkspaceNotesInDatabase();
-        con.rollback();
+        String result= instance.getWorkspaceNotes();
+        assertEquals(result, "notes");
     }
 
     /**
@@ -451,9 +473,9 @@ public class ActivityTest {
     @Test
     public void testUpdateSMPInDatabase() throws Exception {
         System.out.println("updateSMPInDatabase");
-        SMP smp = null;
+        SMP smp = new SMP();
         
-        Activity instance = new Activity();
+        //Activity instance = new Activity();
         instance.setSmp(smp);
         boolean expResult = false;
         boolean result = instance.updateSMPInDatabase();
@@ -476,11 +498,17 @@ public class ActivityTest {
      * Test of assignActivityToMaintainer method, of class Activity.
      */
     @Test
-    public void testAssignActivityToMaintainer() throws Exception {
-        System.out.println("assignActivityToMaintainer");
-        Maintainer m = null;
-        Activity instance = new Activity();
-        instance.assignActivityToMaintainer(m);
+    public void testAssignActivityToMaintainer(){
+        try {
+            System.out.println("assignActivityToMaintainer");
+            Maintainer m = Maintainer.getInstanceWithPK("Spadino");
+            addForeignKey();
+            addActivityToDatabase(instance);
+            instance.assignActivityToMaintainer(m);
+            assertEquals(m,instance.getMaintainer());
+        } catch (SQLException ex) {
+            Assert.fail();
+        }
     }
 
     /**
@@ -489,7 +517,7 @@ public class ActivityTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Activity instance1 = new Activity(1,new Area("Fisciano","Carpentry"),"Electrical",2,3,"Revisionare","Notes",false,new Timestamp(201367896));
+        Activity instance1 = new Activity(3,new Area("Fisciano","Carpentry"),"Electrical",2,3,"Revisionare","Notes",false,new Timestamp(201367896));
         int result = instance.hashCode();
         assertEquals(instance1.hashCode(), result);
     }
@@ -500,7 +528,7 @@ public class ActivityTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        Activity instance1 = new Activity(1,new Area("Fisciano","Carpentry"),"Electrical",2,3,"Revisionare","Notes",false,new Timestamp(201367896));
+        Activity instance1 = new Activity(3,new Area("Fisciano","Carpentry"),"Electrical",2,3,"Revisionare","Notes",false,new Timestamp(201367896));
         boolean result = instance.equals(instance1);
         assertEquals(true, result);
     }

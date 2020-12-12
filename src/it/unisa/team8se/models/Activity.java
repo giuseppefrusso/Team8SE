@@ -31,7 +31,7 @@ public class Activity extends DatabaseModel {
     private boolean interruptible;
     private Timestamp datetime;
     private String smpIdentifier;
-    
+
     private SMP smp;
     private LinkedList<Material> usedMaterials;
     private LinkedList<Competence> requiredCompetences;
@@ -40,7 +40,7 @@ public class Activity extends DatabaseModel {
         this.requiredCompetences = new LinkedList<>();
         this.usedMaterials = new LinkedList<>();
     }
-    
+
     public Activity(int ID) {
         this.ID = ID;
         this.requiredCompetences = new LinkedList<>();
@@ -139,10 +139,6 @@ public class Activity extends DatabaseModel {
         this.interventionDescription = InterventionDescription;
     }
 
-    public int getEit() {
-        return eit;
-    }
-
     public String getSmpIdentifier() {
         return smpIdentifier;
     }
@@ -156,7 +152,7 @@ public class Activity extends DatabaseModel {
     }
 
     public SMP getSmp() {
-        if(smp == null){
+        if (smp == null) {
             smp = SMP.getInstanceWithPK(smpIdentifier);
         }
         return smp;
@@ -166,8 +162,6 @@ public class Activity extends DatabaseModel {
         this.smp = smp;
     }
 
-    
-    
     public static Activity[] getAllDatabaseInstances() {
         try {
             String sql = "select * from attivita_pianificata";
@@ -194,6 +188,28 @@ public class Activity extends DatabaseModel {
             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public Maintainer getMaintainer() {
+        Maintainer m = null;
+        String sql = "select maintainer "
+                + "from attivita_pianificata"
+                + "where id = ?";
+        PreparedStatement ps;
+        try {
+            ps = DatabaseContext.getPreparedStatement(sql);
+            ps.setInt(1, ID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                m = Maintainer.getInstanceWithPK(rs.getString(1));
+                System.out.println(rs.getString(1));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return m;
     }
 
     public static Activity[] getInstancesAssignedToMaintainer(Maintainer m) {
@@ -251,7 +267,7 @@ public class Activity extends DatabaseModel {
         return "Activity{" + "ID=" + ID + ", Area=" + Area + ", Tipology=" + tipology
                 + ", EIT=" + eit + ", WeekNumber=" + weekNumber + ", WorkspaceNotes="
                 + workspaceNotes + ", InterventionDescription=" + interventionDescription + ", Interruptible="
-                + interruptible + ", requiredCompetencies=" + requiredCompetences + '}';
+                + interruptible + '}';
     }
 
     @Override
@@ -401,4 +417,4 @@ maintainer
 descrizione_intervento
 workspace_notes
 smp
-*/
+ */
