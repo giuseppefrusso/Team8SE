@@ -777,6 +777,7 @@ public class PlannerForm extends UserBaseForm {
                 Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {
                 Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
+                Message.raiseError(this, "Errore nel salvataggio del file SMP");
             }
         }
     }//GEN-LAST:event_uploadSMPButtonActionPerformed
