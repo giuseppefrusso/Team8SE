@@ -26,6 +26,7 @@ public class ActivityView extends javax.swing.JFrame {
     private DefaultComboBoxModel<Integer> comboBoxModel;
     private DefaultListModel<String> competenceModel, materialModel;
     private LinkedList<Activity> activities;
+    private int defaultId;
 
     /**
      * Creates new form TaskView
@@ -41,6 +42,7 @@ public class ActivityView extends javax.swing.JFrame {
         refreshActivities();
         int firstId = initListModels();
         initComponents();
+        this.defaultId = defaultId;
         if (defaultId != -1) {
             activityComboBox.setEnabled(false);
         } else {
@@ -353,8 +355,10 @@ public class ActivityView extends javax.swing.JFrame {
         String role = UserSession.getLoggedUser().getRole();
         UserBaseForm form;
         if (role.equalsIgnoreCase("planner")) {
-            form = new PlannerForm();
+            form = new PlannerForm(this.defaultId);
             //per tornare esattamente alla schermata di quell'attività, mettere un parametro in questo costruttore
+            form.setVisible(true);
+            this.setVisible(false);
         } else {
             form = new SystemAdminForm();
         }
