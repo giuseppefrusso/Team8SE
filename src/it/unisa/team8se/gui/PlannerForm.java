@@ -44,7 +44,7 @@ public class PlannerForm extends UserBaseForm {
     /**
      * Creates new form ActivityList
      */
-    public PlannerForm() {
+    public PlannerForm(int defaultId) {
         if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
         }
@@ -53,7 +53,19 @@ public class PlannerForm extends UserBaseForm {
         setupMaintainerTable();
         setupTextBoxes();
 
-        switchToActivityList();
+        if (defaultId != -1) {
+            //activitySummary.setVisible(true);
+            //activityTable.setEnabled(false);
+
+            //switchToActivitySummary();
+            switchToMaintainerList();
+        } else {
+            defaultId = -1;
+            switchToActivityList();
+            //switchToActivitySummary();
+        }
+
+        //switchToActivityList();
     }
 
     protected Connection getConnection() {
@@ -753,9 +765,9 @@ public class PlannerForm extends UserBaseForm {
         JFileChooser fc = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Document (*.pdf)", "pdf");
         fc.setFileFilter(filter);
-        
+
         int res = fc.showDialog(this, "Load");
-        if(res == JFileChooser.APPROVE_OPTION){
+        if (res == JFileChooser.APPROVE_OPTION) {
             File f = fc.getSelectedFile();
             try {
                 SMP smp = new SMP();
@@ -804,7 +816,7 @@ public class PlannerForm extends UserBaseForm {
         }
         //</editor-fold>
         //</editor-fold>
-        PlannerForm pf = new PlannerForm();
+        PlannerForm pf = new PlannerForm(-1);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

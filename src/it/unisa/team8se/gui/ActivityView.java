@@ -353,8 +353,10 @@ public class ActivityView extends javax.swing.JFrame {
         String role = UserSession.getLoggedUser().getRole();
         UserBaseForm form;
         if (role.equalsIgnoreCase("planner")) {
-            form = new PlannerForm();
+            form = new PlannerForm(1);
             //per tornare esattamente alla schermata di quell'attività, mettere un parametro in questo costruttore
+            form.setVisible(true);
+            this.setVisible(false);
         } else {
             form = new SystemAdminForm();
         }
