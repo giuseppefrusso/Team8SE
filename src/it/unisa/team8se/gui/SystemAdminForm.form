@@ -42,7 +42,9 @@
                       <Component id="modifyButton" min="-2" pref="90" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="removeButton" min="-2" pref="90" max="-2" attributes="0"/>
-                      <EmptySpace pref="77" max="32767" attributes="0"/>
+                      <EmptySpace pref="69" max="32767" attributes="0"/>
+                      <Component id="materialButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="activityButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="areaButton" min="-2" max="-2" attributes="0"/>
@@ -154,6 +156,7 @@
                   <Component id="accessButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="areaButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="activityButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="materialButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -312,6 +315,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="activityButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="materialButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Materiali"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="materialButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

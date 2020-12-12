@@ -25,7 +25,7 @@ import javax.swing.event.ListSelectionEvent;
  *
  * @author cptso
  */
-public class MaintainerForm extends javax.swing.JFrame {
+public class MaintainerForm extends UserBaseForm {
 
     /**
      * Creates new form MaintainerForm

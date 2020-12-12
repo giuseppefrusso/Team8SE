@@ -100,6 +100,7 @@ public class SystemAdminForm extends UserBaseForm {
         accessButton = new javax.swing.JButton();
         areaButton = new javax.swing.JButton();
         activityButton = new javax.swing.JButton();
+        materialButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("System Admistrator View\n");
@@ -231,6 +232,13 @@ public class SystemAdminForm extends UserBaseForm {
             }
         });
 
+        materialButton.setText("Materiali");
+        materialButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                materialButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -243,7 +251,9 @@ public class SystemAdminForm extends UserBaseForm {
                         .addComponent(modifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                        .addComponent(materialButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(activityButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(areaButton)
@@ -326,7 +336,8 @@ public class SystemAdminForm extends UserBaseForm {
                     .addComponent(competenceButton)
                     .addComponent(accessButton)
                     .addComponent(areaButton)
-                    .addComponent(activityButton))
+                    .addComponent(activityButton)
+                    .addComponent(materialButton))
                 .addContainerGap())
         );
 
@@ -691,6 +702,12 @@ public class SystemAdminForm extends UserBaseForm {
         removeButton.setEnabled(false);
     }//GEN-LAST:event_tableUsersFocusLost
 
+    private void materialButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_materialButtonActionPerformed
+        ToolsView view = new ToolsView();
+        view.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_materialButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -735,6 +752,7 @@ public class SystemAdminForm extends UserBaseForm {
     private javax.swing.JButton insertButton;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JRadioButton maintainerRadioButton;
+    private javax.swing.JButton materialButton;
     private javax.swing.JButton modifyButton;
     private javax.swing.JTextField nameField;
     private javax.swing.JLabel nameLabel;

@@ -7,7 +7,9 @@ package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.Message;
+import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Material;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
 import javax.swing.DefaultListModel;
@@ -80,8 +82,16 @@ public class ToolsView extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         toolList = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Tools View");
         setBackground(new java.awt.Color(255, 204, 153));
+        setIconImage(Message.getImageIcon());
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         toolsLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         toolsLabel.setText("TOOLS");
@@ -265,6 +275,16 @@ public class ToolsView extends javax.swing.JFrame {
         modifyButton.setEnabled(false);
         removeButton.setEnabled(false);
     }//GEN-LAST:event_toolListFocusLost
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            UserSession.close();
+            DatabaseContext.closeConnection();
+            System.exit(0);
+        } catch (SQLException ex) {
+            Message.raiseError(this, "Errore nella chiusura!");
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
