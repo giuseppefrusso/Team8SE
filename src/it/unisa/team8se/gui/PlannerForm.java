@@ -54,20 +54,14 @@ public class PlannerForm extends UserBaseForm {
         setupTextBoxes();
 
         if (defaultId != -1) {
-            //activitySummary.setVisible(true);
-            //activityTable.setEnabled(false);
             refreshActivities();
             selectedActivity = Activity.getInstanceWithPK(defaultId);
             switchToActivitySummary();
             tabbedPane.setSelectedIndex(1);
-            //switchToMaintainerList();
         } else {
             
             switchToActivityList();
-            //switchToActivitySummary();
         }
-
-        //switchToActivityList();
     }
 
     protected Connection getConnection() {
@@ -771,13 +765,13 @@ public class PlannerForm extends UserBaseForm {
         int res = fc.showDialog(this, "Load");
         if (res == JFileChooser.APPROVE_OPTION) {
             File f = fc.getSelectedFile();
-            try {
+            //try {
                 SMP smp = new SMP();
                 smp.setNome(f.getName());
                 //smp.importDocument(f.g, fileName);
-            } catch (IOException ex) {
+            /*} catch (IOException ex) {
                 Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
         }
     }//GEN-LAST:event_uploadSMPButtonActionPerformed
 
