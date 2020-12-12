@@ -60,8 +60,6 @@ public class LoginForm extends javax.swing.JFrame {
         setTitle("Login");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setIconImage(Message.getImageIcon());
-        setMaximumSize(new java.awt.Dimension(800, 600));
-        setPreferredSize(new java.awt.Dimension(400, 400));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -94,9 +92,19 @@ public class LoginForm extends javax.swing.JFrame {
         main.add(utenteLabel, gridBagConstraints);
 
         usernameField.setText("Paco");
+        usernameField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                usernameFieldFocusGained(evt);
+            }
+        });
         usernameField.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 usernameFieldMouseClicked(evt);
+            }
+        });
+        usernameField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usernameFieldActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -115,9 +123,19 @@ public class LoginForm extends javax.swing.JFrame {
         main.add(passwordLabel, gridBagConstraints);
 
         passwordField.setText("nothing");
+        passwordField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                passwordFieldFocusGained(evt);
+            }
+        });
         passwordField.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 passwordFieldMouseClicked(evt);
+            }
+        });
+        passwordField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordFieldActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -198,7 +216,7 @@ public class LoginForm extends javax.swing.JFrame {
         clean();
     }
 
-    private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
+    private void login() {
         try {
             String user = usernameField.getText();
             String pwd = passwordField.getText();
@@ -215,7 +233,7 @@ public class LoginForm extends javax.swing.JFrame {
             } else if (role.equals("Planner")) {
                 if (UserSession.authenticateAsPlanner(user, pwd)) {
                     EventQueue.invokeLater(() -> {
-                        new PlannerForm().setVisible(true);
+                        new PlannerForm(-1).setVisible(true);
                         dispose();
                     });
                     return;
@@ -235,6 +253,10 @@ public class LoginForm extends javax.swing.JFrame {
             System.err.println(ex.getMessage());
             raiseError("ERRORE DI LOGIN");
         }
+    }
+
+    private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
+        login();
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -256,12 +278,28 @@ public class LoginForm extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordFieldMouseClicked
 
     private void viewPasswordButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewPasswordButtonMousePressed
-        passwordField.setEchoChar((char)0);
+        passwordField.setEchoChar((char) 0);
     }//GEN-LAST:event_viewPasswordButtonMousePressed
 
     private void viewPasswordButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewPasswordButtonMouseReleased
         passwordField.setEchoChar('*');
     }//GEN-LAST:event_viewPasswordButtonMouseReleased
+
+    private void passwordFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passwordFieldFocusGained
+        passwordField.selectAll();
+    }//GEN-LAST:event_passwordFieldFocusGained
+
+    private void usernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameFieldActionPerformed
+        login();
+    }//GEN-LAST:event_usernameFieldActionPerformed
+
+    private void usernameFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_usernameFieldFocusGained
+        usernameField.selectAll();
+    }//GEN-LAST:event_usernameFieldFocusGained
+
+    private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordFieldActionPerformed
+        login();
+    }//GEN-LAST:event_passwordFieldActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
