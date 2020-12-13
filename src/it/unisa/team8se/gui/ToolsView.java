@@ -146,9 +146,6 @@ public class ToolsView extends javax.swing.JFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 toolListFocusGained(evt);
             }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                toolListFocusLost(evt);
-            }
         });
         jScrollPane2.setViewportView(toolList);
 
@@ -226,6 +223,8 @@ public class ToolsView extends javax.swing.JFrame {
 
         Material m = new Material(name, desc);
         m.saveToDatabase();
+        modifyButton.setEnabled(false);
+        removeButton.setEnabled(false);
         refreshMaterials();
     }//GEN-LAST:event_addButtonActionPerformed
 
@@ -236,6 +235,8 @@ public class ToolsView extends javax.swing.JFrame {
             refreshMaterials();
         }
         toolList.clearSelection();
+        modifyButton.setEnabled(false);
+        removeButton.setEnabled(false);
     }//GEN-LAST:event_removeButtonActionPerformed
 
     private void modifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyButtonActionPerformed
@@ -264,17 +265,14 @@ public class ToolsView extends javax.swing.JFrame {
             }
         }
         toolList.clearSelection();
+        modifyButton.setEnabled(false);
+        removeButton.setEnabled(false);
     }//GEN-LAST:event_modifyButtonActionPerformed
 
     private void toolListFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_toolListFocusGained
         modifyButton.setEnabled(true);
         removeButton.setEnabled(true);
     }//GEN-LAST:event_toolListFocusGained
-
-    private void toolListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_toolListFocusLost
-        modifyButton.setEnabled(false);
-        removeButton.setEnabled(false);
-    }//GEN-LAST:event_toolListFocusLost
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {

@@ -171,6 +171,7 @@ public class PlannerForm extends UserBaseForm {
         weeklabel = new javax.swing.JLabel();
         weekNumberLabel = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        activityButton = new javax.swing.JButton();
         activitySummary = new javax.swing.JPanel();
         interventionDescScrollPane = new javax.swing.JScrollPane();
         interventionDescText = new javax.swing.JTextPane();
@@ -236,7 +237,7 @@ public class PlannerForm extends UserBaseForm {
 
         activityListLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         activityListLabel.setForeground(new java.awt.Color(255, 255, 255));
-        activityListLabel.setText("ACTIVITY LIST");
+        activityListLabel.setText("PLANNED ACTIVITY LIST");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -309,6 +310,14 @@ public class PlannerForm extends UserBaseForm {
         gridBagConstraints.gridheight = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         activityList.add(jPanel2, gridBagConstraints);
+
+        activityButton.setText("Manage activities");
+        activityButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                activityButtonActionPerformed(evt);
+            }
+        });
+        activityList.add(activityButton, new java.awt.GridBagConstraints());
 
         tabbedPane.addTab("ActivityList", activityList);
 
@@ -471,7 +480,6 @@ public class PlannerForm extends UserBaseForm {
 
         maintainerListButton.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         maintainerListButton.setText("Select Maintainer");
-        maintainerListButton.setActionCommand("Select Maintainer");
         maintainerListButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 maintainerListButtonActionPerformed(evt);
@@ -958,6 +966,12 @@ public class PlannerForm extends UserBaseForm {
         }
     }//GEN-LAST:event_viewExplorerButtonActionPerformed
 
+    private void activityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activityButtonActionPerformed
+        ActivityManager view = new ActivityManager();
+        view.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_activityButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -995,6 +1009,7 @@ public class PlannerForm extends UserBaseForm {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton activityButton;
     private javax.swing.JPanel activityList;
     private javax.swing.JLabel activityListLabel;
     private javax.swing.JPanel activitySummary;

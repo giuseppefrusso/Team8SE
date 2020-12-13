@@ -12,7 +12,6 @@ import it.unisa.team8se.models.Maintainer;
 import it.unisa.team8se.models.Planner;
 import it.unisa.team8se.models.base.User;
 import it.unisa.team8se.models.SystemAdmin;
-import java.sql.Connection;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -168,9 +167,6 @@ public class SystemAdminForm extends UserBaseForm {
         tableUsers.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 tableUsersFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                tableUsersFocusLost(evt);
             }
         });
         jScrollPane2.setViewportView(tableUsers);
@@ -445,7 +441,8 @@ public class SystemAdminForm extends UserBaseForm {
         }
 
         insertUser(surname, name, username, password, role);
-
+        modifyButton.setEnabled(false);
+        removeButton.setEnabled(false);
     }//GEN-LAST:event_insertButtonActionPerformed
 
     private void surnameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_surnameFieldMouseClicked
@@ -557,6 +554,7 @@ public class SystemAdminForm extends UserBaseForm {
             }
         }
         refreshUsers();
+        
         return true;
     }
 
@@ -603,6 +601,8 @@ public class SystemAdminForm extends UserBaseForm {
         }
 
         modifyUser(newValue, selectedRow, selectedColumn);
+        modifyButton.setEnabled(false);
+        removeButton.setEnabled(false);
     }//GEN-LAST:event_modifyButtonActionPerformed
 
     protected void removeUser(String selectedUsername, int selectedRow) {
@@ -637,6 +637,8 @@ public class SystemAdminForm extends UserBaseForm {
         if (reply == JOptionPane.YES_OPTION) {
             removeUser(selectedUsername, selectedRow);
         }
+        modifyButton.setEnabled(false);
+        removeButton.setEnabled(false);
     }//GEN-LAST:event_removeButtonActionPerformed
 
     private void plannerRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plannerRadioButtonActionPerformed
@@ -696,11 +698,6 @@ public class SystemAdminForm extends UserBaseForm {
         modifyButton.setEnabled(true);
         removeButton.setEnabled(true);
     }//GEN-LAST:event_tableUsersFocusGained
-
-    private void tableUsersFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tableUsersFocusLost
-        modifyButton.setEnabled(false);
-        removeButton.setEnabled(false);
-    }//GEN-LAST:event_tableUsersFocusLost
 
     private void materialButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_materialButtonActionPerformed
         ToolsView view = new ToolsView();

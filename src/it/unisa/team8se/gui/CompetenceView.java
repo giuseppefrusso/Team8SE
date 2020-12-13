@@ -136,9 +136,6 @@ public class CompetenceView extends javax.swing.JFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 listCompetenceFocusGained(evt);
             }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                listCompetenceFocusLost(evt);
-            }
         });
         jScrollPane2.setViewportView(listCompetence);
 
@@ -305,6 +302,7 @@ public class CompetenceView extends javax.swing.JFrame {
             return;
         }
         assign(selectedMaintainer, competence);
+        removeButton.setEnabled(false);
     }//GEN-LAST:event_assignButtonActionPerformed
 
     protected boolean remove(String username, String competence) {
@@ -333,15 +331,12 @@ public class CompetenceView extends javax.swing.JFrame {
         if (reply == JOptionPane.YES_OPTION) {
             remove(selectedUsername, selectedCompetence);
         }
+        removeButton.setEnabled(false);
     }//GEN-LAST:event_removeButtonActionPerformed
 
     private void listCompetenceFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_listCompetenceFocusGained
         removeButton.setEnabled(true);
     }//GEN-LAST:event_listCompetenceFocusGained
-
-    private void listCompetenceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_listCompetenceFocusLost
-        removeButton.setEnabled(false);
-    }//GEN-LAST:event_listCompetenceFocusLost
 
     /**
      * @param args the command line arguments
