@@ -5,17 +5,77 @@
  */
 package it.unisa.team8se.gui;
 
+import it.unisa.team8se.DatabaseContext;
+import it.unisa.team8se.DocumentImportWindow;
+import it.unisa.team8se.Message;
+import it.unisa.team8se.SizeStringGenerator;
+import it.unisa.team8se.models.SMP;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.util.Pair;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author cptso
  */
 public class SMPView extends javax.swing.JFrame {
 
+    private LinkedList<SMP> smpInstances;
+    private DefaultTableModel tableModel;
+    private SMP addedSMP;
+    private SMP selectedSMP;
+
     /**
      * Creates new form SMPView
      */
     public SMPView() {
         initComponents();
+
+        if (!DatabaseContext.isConnected()) {
+            DatabaseContext.connectDatabase();
+        }
+        tableModel = new DefaultTableModel(new String[]{"Identifier", "Size"}, 0);
+        smpInstances = new LinkedList<>();
+
+        smpList.setModel(tableModel);
+
+        refreshSMPList();
+    }
+
+    private void refreshSMPList() {
+        tableModel.setRowCount(0);
+        smpInstances.clear();
+
+        SMP[] allsmp = SMP.getAllDatabaseInstancesInfoOnly();
+        if (allsmp != null && allsmp.length > 0) {
+            for (SMP s : allsmp) {
+                tableModel.addRow(new String[]{s.getNome(),
+                    SizeStringGenerator.generate(s.getDocumentSize())});
+                smpInstances.add(s);
+            }
+        }
+    }
+
+    private Pair checkSMPIdentifier(String id) {
+        
+        if(id == null || id.isEmpty()){
+            return new Pair<>(false, "Identifier not specified.");
+        }
+        
+        if (smpInstances.size() > 0) {
+            
+            if(smpInstances.stream().anyMatch(s -> s.getNome().equals(id)))
+                return new Pair<>(false,"Identifier already exists.");
+            else
+                return new Pair<>(true,"");
+        }
+        return new Pair<>(true,"");
     }
 
     /**
@@ -27,6 +87,7 @@ public class SMPView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         smpList = new javax.swing.JTable();
         smpNameInputField = new javax.swing.JTextField();
@@ -36,10 +97,10 @@ public class SMPView extends javax.swing.JFrame {
         modifySMPButton = new javax.swing.JButton();
         openDocumentButton = new javax.swing.JButton();
         searchBar = new javax.swing.JTextField();
-        search = new javax.swing.JButton();
+        searchButton = new javax.swing.JButton();
         sep0 = new javax.swing.JSeparator();
         addSMPButton = new javax.swing.JButton();
-        fileNameLabel = new javax.swing.JLabel();
+        documentNameLabel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         documentPathLabel = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -49,8 +110,22 @@ public class SMPView extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        cancelFilterButton = new javax.swing.JButton();
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         smpList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -63,11 +138,18 @@ public class SMPView extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        smpList.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        smpList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        smpList.setShowHorizontalLines(false);
+        smpList.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(smpList);
 
-        smpNameInputField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                smpNameInputFieldActionPerformed(evt);
+        smpNameInputField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                smpNameInputFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                smpNameInputFieldFocusLost(evt);
             }
         });
 
@@ -75,34 +157,61 @@ public class SMPView extends javax.swing.JFrame {
         jLabel1.setText("SMP Identifier");
 
         importDocumentButton.setText("Import Document");
-
-        removeSMPButton.setText("Remove");
-
-        modifySMPButton.setText("Modify");
-
-        openDocumentButton.setText("Open");
-
-        searchBar.addActionListener(new java.awt.event.ActionListener() {
+        importDocumentButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchBarActionPerformed(evt);
+                importDocumentButtonActionPerformed(evt);
             }
         });
 
-        search.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/search_small.png"))); // NOI18N
-        search.setPreferredSize(new java.awt.Dimension(25, 25));
+        removeSMPButton.setText("Remove");
+        removeSMPButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeSMPButtonActionPerformed(evt);
+            }
+        });
+
+        modifySMPButton.setText("Modify");
+        modifySMPButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modifySMPButtonActionPerformed(evt);
+            }
+        });
+
+        openDocumentButton.setText("Open");
+        openDocumentButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openDocumentButtonActionPerformed(evt);
+            }
+        });
+
+        searchButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/search_small.png"))); // NOI18N
+        searchButton.setPreferredSize(new java.awt.Dimension(25, 25));
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
 
         sep0.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         addSMPButton.setText("Add");
+        addSMPButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addSMPButtonActionPerformed(evt);
+            }
+        });
 
-        fileNameLabel.setText("No file selected");
+        documentNameLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        documentNameLabel.setText("No file selected");
 
         jLabel2.setText("Local path:");
 
+        documentPathLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         documentPathLabel.setText("None");
 
         jLabel3.setText("Size:");
 
+        documentSizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         documentSizeLabel.setText("0");
         documentSizeLabel.setToolTipText("");
 
@@ -113,7 +222,17 @@ public class SMPView extends javax.swing.JFrame {
         jLabel5.setText("SMP LIST");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel6.setText("DOCUMENT PROPERTIES");
+        jLabel6.setText("IMPORTED DOCUMENT PROPERTIES");
+
+        jLabel8.setText("File:");
+
+        cancelFilterButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/cancel_small.png"))); // NOI18N
+        cancelFilterButton.setPreferredSize(new java.awt.Dimension(25, 25));
+        cancelFilterButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelFilterButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -138,20 +257,21 @@ public class SMPView extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
                                     .addComponent(importDocumentButton)
-                                    .addComponent(fileNameLabel)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(documentPathLabel))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(documentSizeLabel))
                                     .addComponent(jLabel4)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(smpNameInputField, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel7)))
+                                        .addComponent(jLabel7))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel8))
+                                        .addGap(28, 28, 28)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(documentPathLabel)
+                                            .addComponent(documentNameLabel)
+                                            .addComponent(documentSizeLabel))))
                                 .addGap(0, 39, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sep0, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -159,14 +279,14 @@ public class SMPView extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2)
+                                .addComponent(cancelFilterButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(1, 1, 1)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -176,18 +296,6 @@ public class SMPView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(21, 21, 21)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(searchBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(search, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(26, 26, 26)))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(5, 5, 5)
                                 .addComponent(jLabel4)
@@ -206,15 +314,26 @@ public class SMPView extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(fileNameLabel)
-                                .addGap(7, 7, 7)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(documentNameLabel)
+                                    .addComponent(jLabel8))
+                                .addGap(7, 7, 7)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
-                                    .addComponent(documentPathLabel))
+                                    .addComponent(documentPathLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel3)
-                                    .addComponent(documentSizeLabel))))
+                                    .addComponent(documentSizeLabel)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel5)
+                                        .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cancelFilterButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(removeSMPButton)
@@ -227,13 +346,135 @@ public class SMPView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void searchBarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchBarActionPerformed
+    private void openDocumentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openDocumentButtonActionPerformed
+        int index = smpList.getSelectedRow();
+        if (index < 0) {
+            Message.raiseInfo(this, "Please select a SMP first.");
+            return;
+        }
 
-    private void smpNameInputFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smpNameInputFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_smpNameInputFieldActionPerformed
+        SMP smp = smpInstances.get(index);
+        if (!smp.isDocumentValid()) {
+            smp.getDocumentFromDatabase();
+        }
+
+        smp.openDocument();
+    }//GEN-LAST:event_openDocumentButtonActionPerformed
+
+    private void modifySMPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifySMPButtonActionPerformed
+        int index = smpList.getSelectedRow();
+
+        if (index < 0) {
+            Message.raiseInfo(this, "Please select a SMP first.");
+            return;
+        }
+        SMP smp = smpInstances.get(index);
+
+        String newValue = (String) JOptionPane.showInputDialog(this, "Modify SMP Name", "Modify",
+                JOptionPane.INFORMATION_MESSAGE, null, null, smp.getNome());
+        if (newValue != null && !newValue.isEmpty()) {
+            try {
+                smp.updateNameInDatabase(newValue);
+                tableModel.setValueAt(newValue, index, 0);
+            } catch (SQLException ex) {
+                Message.raiseError(this, "Error thrown during smp modification.");
+                Logger.getLogger(SMPView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        smpList.clearSelection();
+    }//GEN-LAST:event_modifySMPButtonActionPerformed
+
+    private void removeSMPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeSMPButtonActionPerformed
+        int index = smpList.getSelectedRow();
+
+        if (index < 0) {
+            Message.raiseInfo(this, "Please select a SMP first.");
+            return;
+        }
+        
+        SMP smp = smpInstances.get(index);
+        try {
+            smp.removeFromDatabase();
+            refreshSMPList();
+        } catch (SQLException ex) {
+            Logger.getLogger(SMPView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        smpList.clearSelection();
+    }//GEN-LAST:event_removeSMPButtonActionPerformed
+
+    private void addSMPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSMPButtonActionPerformed
+        if (addedSMP == null) {
+            Message.raiseError(this, "No document selected.");
+            return;
+        }
+
+        try {
+            String name = addedSMP.getNome();
+            Pair result = checkSMPIdentifier(name);
+            if (!(boolean)result.getKey()) {
+                Message.raiseError(this, "Specified SMP name is not valid. Reason: " + (String)result.getValue());
+                addSMPButton.setEnabled(false);
+                return;
+            }
+            addedSMP.saveToDatabase();
+            refreshSMPList();
+        } catch (SQLException ex) {
+            Logger.getLogger(SMPView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        addedSMP = null;
+
+        smpNameInputField.setText("");
+
+        documentPathLabel.setText("None");
+        documentSizeLabel.setText("0");
+        documentNameLabel.setText("No file selected");
+    }//GEN-LAST:event_addSMPButtonActionPerformed
+
+    private void importDocumentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importDocumentButtonActionPerformed
+        File doc = DocumentImportWindow.importDocument(this);
+        if (doc != null) {
+            String name = smpNameInputField.getText();
+            String filename = doc.getName().substring(0, doc.getName().length() - 4);
+            if (name == null || name.isEmpty()) {
+                smpNameInputField.setText(filename);
+                name = filename;
+            }
+
+            addedSMP = new SMP();
+            addedSMP.setNome(name);
+            try {
+                addedSMP.importDocument(doc.getAbsolutePath());
+                documentPathLabel.setText(doc.getAbsolutePath());
+                documentSizeLabel.setText(SizeStringGenerator.generate(addedSMP.getDocumentSize()));
+                documentNameLabel.setText(filename);
+            } catch (IOException ex) {
+                Message.raiseError(this, "Error while importing pdf document.");
+                Logger.getLogger(SMPView.class.getName()).log(Level.SEVERE, null, ex);
+                return;
+            }
+        }
+    }//GEN-LAST:event_importDocumentButtonActionPerformed
+
+    private void smpNameInputFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_smpNameInputFieldFocusLost
+        if (addedSMP != null)
+            addedSMP.setNome(smpNameInputField.getText());
+    }//GEN-LAST:event_smpNameInputFieldFocusLost
+
+    private void smpNameInputFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_smpNameInputFieldFocusGained
+        addSMPButton.setEnabled(true);
+    }//GEN-LAST:event_smpNameInputFieldFocusGained
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        String searchQuery = searchBar.getText();
+        if(searchQuery == null || searchQuery.isEmpty() || smpList.getModel().getRowCount() <= 0){
+            return;
+        }
+    }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void cancelFilterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelFilterButtonActionPerformed
+        
+    }//GEN-LAST:event_cancelFilterButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -272,9 +513,10 @@ public class SMPView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addSMPButton;
+    private javax.swing.JButton cancelFilterButton;
+    private javax.swing.JLabel documentNameLabel;
     private javax.swing.JLabel documentPathLabel;
     private javax.swing.JLabel documentSizeLabel;
-    private javax.swing.JLabel fileNameLabel;
     private javax.swing.JButton importDocumentButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -283,13 +525,15 @@ public class SMPView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton modifySMPButton;
     private javax.swing.JButton openDocumentButton;
     private javax.swing.JButton removeSMPButton;
-    private javax.swing.JButton search;
     private javax.swing.JTextField searchBar;
+    private javax.swing.JButton searchButton;
     private javax.swing.JSeparator sep0;
     private javax.swing.JTable smpList;
     private javax.swing.JTextField smpNameInputField;

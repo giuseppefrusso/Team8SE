@@ -28,12 +28,11 @@ import java.util.logging.Logger;
 public class SMP extends DatabaseModel {
 
     private String nome;
-    //private String documentoPDF;
+    private long documentSize;
     private byte[] document;
     private boolean tempVersionStored;
 
     public SMP() {
-
     }
 
     public SMP(String nome) {
@@ -48,6 +47,35 @@ public class SMP extends DatabaseModel {
         this.nome = nome;
     }
 
+    public long getDocumentSize() {
+        return documentSize;
+    }
+
+    public void setDocumentSize(long documentSize) {
+        this.documentSize = documentSize;
+    }
+
+    public boolean isDocumentValid(){
+        return (document != null && document.length > 0) || tempVersionStored;
+    }
+    
+    public void getDocumentFromDatabase(){
+        try {
+            String sql = "select documento_pdf as doc from smp where nome = ?";
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            ps.setString(1, getNome());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                document = rs.getBytes("doc");
+                documentSize = document.length;
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SMP.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public static boolean cleanTempDocumentFolder() {
         Path path = Paths.get(".\\temp\\");
         boolean all = true;
@@ -63,9 +91,10 @@ public class SMP extends DatabaseModel {
         }
         return true;
     }
-
+    
     public void importDocument(String fullPath) throws IOException {
         document = Files.readAllBytes(Paths.get(fullPath));
+        documentSize = document.length;
     }
 
     public void importDocument(String filePath, String fileName) throws IOException {
@@ -103,7 +132,29 @@ public class SMP extends DatabaseModel {
         }
         return false;
     }
-
+    
+    public static SMP[] getAllDatabaseInstancesInfoOnly(){
+        try {
+            String sql = "select nome,length(documento_pdf) as size from smp";
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            LinkedList<SMP> list = new LinkedList<SMP>();
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                SMP s = new SMP();
+                s.setNome(rs.getString("nome"));
+                s.setDocumentSize(rs.getLong("size"));
+                list.add(s);
+            }
+            rs.close();
+            ps.close();
+            return Arrays.copyOf(list.toArray(), list.size(), SMP[].class);
+        } catch (SQLException ex) {
+            Logger.getLogger(SMP.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    
     public static SMP[] getAllDatabaseInstances() {
         try {
             String sql = "select * from smp";
@@ -133,10 +184,30 @@ public class SMP extends DatabaseModel {
         return null;
     }
 
+    
+    public void updateNameInDatabase(String newName) throws SQLException{
+        String sql = "update smp set nome = ? where nome = ?";
+        try(PreparedStatement ps = DatabaseContext.getPreparedStatement(sql)){
+            ps.setString(1, newName);
+            ps.setString(2, getNome());
+            ps.executeUpdate();
+            setNome(newName);
+        }
+    }
+    
+    public void removeFromDatabase() throws SQLException{
+        String sql = "delete from smp where nome = ?";
+        try(PreparedStatement ps = DatabaseContext.getPreparedStatement(sql)){
+            ps.setString(1, getNome());
+            ps.executeUpdate();
+        }
+    }
+    
     @Override
     public void getFromResultSet(ResultSet rs) throws SQLException {
         setNome(rs.getString("nome"));
         document = rs.getBytes("documento_pdf");
+        documentSize = document.length;
     }
 
     @Override

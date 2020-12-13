@@ -79,12 +79,8 @@ public class SMPTest extends TestCase {
         stm.executeUpdate(query);
     }
     
-<<<<<<< HEAD
      private void addActivityDatabase(SMP sm) {
-=======
-    private void addActivityDatabase(Statement stm, SMP sm) {
->>>>>>> 320da5a535d6b3554b3d576278d2b9791f113532
-        String query = "Insert into smp values (" + sm.getNome()+ ",'documento')";
+
     }
     
     @Test

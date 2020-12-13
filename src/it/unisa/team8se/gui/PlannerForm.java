@@ -7,7 +7,7 @@ package it.unisa.team8se.gui;
 
 import it.unisa.team8se.Message;
 import it.unisa.team8se.DatabaseContext;
-import it.unisa.team8se.MultiPanelManager;
+import it.unisa.team8se.DocumentImportWindow;
 import it.unisa.team8se.UserSession;
 import it.unisa.team8se.gui.datamodels.ActivityTableDataModel;
 import it.unisa.team8se.gui.datamodels.MaintainerAvailabilityDataModel;
@@ -24,7 +24,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -925,21 +924,9 @@ public class PlannerForm extends UserBaseForm {
     }//GEN-LAST:event_manageButtonActionPerformed
 
     private void uploadSMPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadSMPButtonActionPerformed
-        JFileChooser fc = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Document (*.pdf)", "pdf");
-        fc.setFileFilter(filter);
-
-        int res = fc.showDialog(this, "Load");
-        if (res == JFileChooser.APPROVE_OPTION) {
-            File f = fc.getSelectedFile();
-            String absPath = f.getAbsolutePath();
-            String fileExtension = absPath.substring(absPath.length() - 4, absPath.length());
-
-            if (absPath == null || !fileExtension.equals(".pdf")) {
-                Message.raiseError(this, "Per favore seleziona un file di tipo PDF.");
-                return;
-            }
-
+        File f = DocumentImportWindow.importDocument(this);
+        String absPath = f.getAbsolutePath();
+        if (f != null) {
             try {
                 String fileName = f.getName().substring(0, f.getName().length() - 4);
                 System.out.println(fileName);
