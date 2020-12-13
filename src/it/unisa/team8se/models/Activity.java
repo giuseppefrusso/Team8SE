@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,6 +46,16 @@ public class Activity extends DatabaseModel {
         this.ID = ID;
         this.requiredCompetences = new LinkedList<>();
         this.usedMaterials = new LinkedList<>();
+    }
+
+    public Activity(int ID, Area Area, String tipology, int weekNumber, Timestamp datetime, int eit, boolean interruptible) {
+        this.ID = ID;
+        this.Area = Area;
+        this.tipology = tipology;
+        this.eit = eit;
+        this.weekNumber = weekNumber;
+        this.interruptible = interruptible;
+        this.datetime = datetime;
     }
 
     public Activity(int ID, Area Area, String Tipology, int EIT, int WeekNumber, String WorkspaceNotes, String InterventionDescription, boolean Interruptible, Timestamp datetime) {
@@ -164,7 +175,7 @@ public class Activity extends DatabaseModel {
 
     public static Activity[] getAllDatabaseInstances() {
         try {
-            String sql = "select * from attivita_pianificata";
+            String sql = "select * from attivita_pianificata order by ID";
             LinkedList<Activity> list = DatabaseContext.fetchAllModels(Activity.class, DatabaseContext.getPreparedStatement(sql));
             return Arrays.copyOf(list.toArray(), list.size(), Activity[].class);
         } catch (SQLException ex) {
@@ -271,28 +282,25 @@ public class Activity extends DatabaseModel {
     }
 
     @Override
-    public void saveToDatabase() {
+    public void saveToDatabase() throws SQLException {
 
         String sql = "insert into attivita_pianificata "
                 + "(id, area, luogo_geografico, ambito, week_number, interrompibile, workspace_notes, eta, data_e_ora, smp)"
                 + "values(?,?,?,?,?,?,?,?,?,?)";
 
-        try (PreparedStatement ps = DatabaseContext.getPreparedStatement(sql)) {
-            ps.setInt(1, getID());
-            ps.setString(2, getArea().getSector());
-            ps.setString(3, getArea().getLocation());
-            ps.setString(4, getTipology());
-            ps.setInt(5, getWeekNumber());
-            ps.setBoolean(6, isInterruptible());
-            ps.setString(7, getWorkspaceNotes());
-            ps.setInt(8, getEIT());
-            ps.setTimestamp(9, getDatetime());
-            ps.setString(10, getSmpIdentifier());
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setInt(1, getID());
+        ps.setString(2, getArea().getSector());
+        ps.setString(3, getArea().getLocation());
+        ps.setString(4, getTipology());
+        ps.setInt(5, getWeekNumber());
+        ps.setBoolean(6, isInterruptible());
+        ps.setString(7, getWorkspaceNotes());
+        ps.setInt(8, getEIT());
+        ps.setTimestamp(9, getDatetime());
+        ps.setString(10, getSmpIdentifier());
 
-            int res = ps.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        int res = ps.executeUpdate();
     }
 
     @Override
@@ -404,6 +412,19 @@ public class Activity extends DatabaseModel {
             return false;
         }
         return true;
+    }
+
+    public String[] toArray() {
+        String i;
+        if (interruptible) {
+            i = "Sì";
+        } else {
+            i = "No";
+        }
+
+        String[] array = {Integer.toString(ID), Area.getLocation(), Area.getSector(), tipology, datetime.toString(),
+            Integer.toString(eit), i};
+        return array;
     }
 }
 

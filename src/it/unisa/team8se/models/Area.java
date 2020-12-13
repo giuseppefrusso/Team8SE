@@ -11,18 +11,17 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 /**
  * @author cptso
  * @version 1.0
  * @created 22-nov-2020 11:33:34
  */
-public class Area extends DatabaseModel{
+public class Area extends DatabaseModel {
 
     private String sector;
     private String location;
 
-    public Area(){
+    public Area() {
 
     }
 
@@ -67,7 +66,7 @@ public class Area extends DatabaseModel{
     public void setLocation(String location) {
         this.location = location;
     }
-    
+
     public String getSector() {
         return sector;
     }
@@ -78,16 +77,23 @@ public class Area extends DatabaseModel{
 
     @Override
     public String toString() {
-        return sector + " - "+ location;
+        return sector + " - " + location;
     }
-    
+
+    public static Area[] getAllDatabaseInstances() throws SQLException {
+        String sql = "select * from area order by luogo_geografico";
+        LinkedList<Area> list = DatabaseContext.fetchAllModels(Area.class, DatabaseContext.getPreparedStatement(sql));
+        return Arrays.copyOf(list.toArray(), list.size(), Area[].class);
+
+    }
+
     public static LinkedList<String> getAllLocations() {
         String sql = "select distinct luogo_geografico from area order by luogo_geografico";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ResultSet rs = ps.executeQuery();
             LinkedList<String> instances = new LinkedList<>();
-            while(rs.next()) {
+            while (rs.next()) {
                 instances.add(rs.getString(1));
             }
             return instances;
@@ -109,7 +115,7 @@ public class Area extends DatabaseModel{
             return null;
         }
     }
-    
+
     public static Area getInstanceWithPK(String sector, String location) {
         String sql = "select * from area where nome = ? and luogo_geografico = ? order by luogo_geografico, nome";
         try {
@@ -117,10 +123,9 @@ public class Area extends DatabaseModel{
             ps.setString(1, sector);
             ps.setString(2, location);
             LinkedList<Area> instances = DatabaseContext.fetchAllModels(Area.class, ps);
-            if(instances.size() > 0){
+            if (instances.size() > 0) {
                 return instances.get(0);
-            }
-            else{
+            } else {
                 return null;
             }
         } catch (SQLException ex) {
@@ -130,23 +135,25 @@ public class Area extends DatabaseModel{
     }
 
     @Override
-    public void saveToDatabase() throws SQLException{
+    public void saveToDatabase() throws SQLException {
         String sql = "insert into area(nome, luogo_geografico) "
                 + "values(?, ?)";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
         ps.setString(1, sector);
         ps.setString(2, location);
-        if(ps.executeUpdate()<1)
+        if (ps.executeUpdate() < 1) {
             throw new SQLException();
+        }
         ps.close();
     }
-    
+
     public void removeFromDatabaseWithLocation() throws SQLException {
         String sql = "delete from area where luogo_geografico=?";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
         ps.setString(1, location);
-        if(ps.executeUpdate()<1)
+        if (ps.executeUpdate() < 1) {
             throw new SQLException();
+        }
         ps.close();
     }
 
@@ -155,11 +162,12 @@ public class Area extends DatabaseModel{
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
         ps.setString(1, sector);
         ps.setString(2, location);
-        if(ps.executeUpdate()<1)
+        if (ps.executeUpdate() < 1) {
             throw new SQLException();
+        }
         ps.close();
     }
-    
+
     @Override
     public void getFromResultSet(ResultSet rs) throws SQLException {
         sector = rs.getString("nome");
