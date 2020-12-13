@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.util.LinkedList;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -116,15 +117,18 @@ public class MaintainerTest {
      * Test of getAllDatabaseInstances method, of class Maintainer.
      */
     @Test
-    public void testGetAllDatabaseInstances() throws Exception {
+    public void testGetAllDatabaseInstances() {
+        try{
         System.out.println("getAllDatabaseInstances");
-        deleteAllDatabaseInstances();
+        Maintainer m2 = Maintainer.getInstanceWithPK("Smaug");
         Maintainer m=instance;
-        Maintainer[] expResult = {m};
+        Maintainer[] expResult = {m2,m};
         addActivityDatabase(m);
         Maintainer[] result = Maintainer.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
-        con.rollback();
+        } catch (SQLException ex){
+        Assert.fail();
+        }
     }
 
     /**
@@ -133,12 +137,11 @@ public class MaintainerTest {
     @Test
     public void testGetInstanceWithPK() throws Exception {
         System.out.println("getInstanceWithPK");
-        deleteAllDatabaseInstances();
-        String username = "";
+        String username = "Smaug";
         Maintainer expResult = instance;
+        addActivityDatabase(instance);
         Maintainer result = Maintainer.getInstanceWithPK(username);
         assertEquals(expResult, result);
-        con.rollback();
     }
 
     /**

@@ -95,14 +95,12 @@ public class AreaTest {
      @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        deleteAllDatabaseInstances();
-        String sector = "";
-        String location = "";
+        String sector = "carpentry";
+        String location = "Nocera";
         Area expResult =instance;
         addActivityDatabase(instance);
         Area result = Area.getInstanceWithPK(sector, location);
         assertEquals(expResult, result);
-        con.rollback();
     }
      
     @Test

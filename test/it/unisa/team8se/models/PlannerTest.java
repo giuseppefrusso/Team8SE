@@ -10,6 +10,7 @@ import java.sql.*;
 import java.sql.ResultSet;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -67,15 +68,18 @@ public class PlannerTest {
      * Test of getAllDatabaseInstances method, of class Planner.
      */
     @Test
-    public void testGetAllDatabaseInstances() throws SQLException {
+    public void testGetAllDatabaseInstances() {
+        try{
         System.out.println("getAllDatabaseInstances");
-        deleteAllDatabaseInstances();
+        Planner p2 = Planner.getInstanceWithPK("Flaco");
         Planner p=instance;
-        Planner[] expResult = {p};
+        Planner[] expResult = {p2,p};
         addActivityDatabase(p);
         Planner[] result = Planner.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
-        con.rollback();
+        } catch (SQLException ex){
+        Assert.fail();
+        }
     }
 
     /**
@@ -84,13 +88,11 @@ public class PlannerTest {
     @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        deleteAllDatabaseInstances();
-        String username = "";
+        String username = "Flaco";
         Planner expResult = instance;
         addActivityDatabase(instance);
         Planner result = Planner.getInstanceWithPK(username);
         assertEquals(expResult, result);
-        con.rollback();
     }
 
     /**

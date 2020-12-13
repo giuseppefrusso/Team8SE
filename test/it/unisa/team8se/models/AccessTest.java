@@ -9,6 +9,7 @@ import it.unisa.team8se.DatabaseContext;
 import java.sql.*;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -175,15 +176,19 @@ public class AccessTest {
      * Test of getAllDatabaseInstances method, of class Access.
      */
     @Test
-    public void testGetAllDatabaseInstances() throws Exception {
+    public void testGetAllDatabaseInstances() {
+        try{
         System.out.println("getAllDatabaseInstances");
-        deleteAllDatabaseInstances();
-        Access a = instance;
-        Access[] expResult = {a};
-        addActivityToDatabase(instance);
+        Access a2 = Access.getInstanceWithPK(1);
+        Access a =instance;
+        Access[] expResult = {a2,a};
+        addForeignKey();
+        addActivityToDatabase(a);
         Access[] result = Access.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
-        con.rollback();
+        } catch(SQLException ex){
+        Assert.fail();
+        }
     }
 
     /**
@@ -192,13 +197,12 @@ public class AccessTest {
     @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        deleteAllDatabaseInstances();
-        int ID = 1;
+        int ID = 0;
         Access expResult = instance;
+        addForeignKey();
         addActivityToDatabase(instance);
         Access result = Access.getInstanceWithPK(ID);
         assertEquals(expResult, result);
-        con.rollback();
     }
 
     /**

@@ -10,6 +10,7 @@ import java.sql.*;
 import java.sql.ResultSet;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -114,15 +115,18 @@ public class MaterialTest {
      * Test of getAllDatabaseInstances method, of class Material.
      */
     @Test
-    public void testGetAllDatabaseInstances() throws SQLException {
+    public void testGetAllDatabaseInstances()  {
+        try{
         System.out.println("getAllDatabaseInstances");
-        deleteAllDatabaseInstances();
+        Material m2= Material.getInstanceWithPK("");
         Material m=instance;
-        Material[] expResult = {m};
+        Material[] expResult = {m2,m};
         addActivityDatabase(m);
         Material[] result = Material.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
-        con.rollback();
+        } catch(SQLException ex){
+        Assert.fail();
+        }
     }
 
     /**
@@ -131,13 +135,11 @@ public class MaterialTest {
     @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        deleteAllDatabaseInstances();
         String name = "";
         Material expResult = instance;
         addActivityDatabase(instance);
         Material result = Material.getInstanceWithPK(name);
         assertEquals(expResult, result);
-        con.rollback();
     }
 
     /**

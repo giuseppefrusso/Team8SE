@@ -10,6 +10,7 @@ import java.sql.*;
 import java.sql.ResultSet;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -121,15 +122,18 @@ public class CompetenceTest {
      * Test of getAllDatabaseInstances method, of class Competence.
      */
     @Test
-    public void testGetAllDatabaseInstances() throws SQLException {
+    public void testGetAllDatabaseInstances() {
+        try{
         System.out.println("getAllDatabaseInstances");
-        deleteAllDatabaseInstances();
+        Competence c2= Competence.getInstanceWithPK(1);
         Competence c=instance;
-        Competence[] expResult = {c};
+        Competence[] expResult = {c2,c};
         addActivityDatabase(c);
         Competence[] result = Competence.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
-        con.rollback();
+        } catch(SQLException ex){
+        Assert.fail();
+        }
     }
 
     /**
@@ -138,13 +142,11 @@ public class CompetenceTest {
     @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        deleteAllDatabaseInstances();
-        int id = 0;
+        int id = 1;
         Competence expResult = instance;
         addActivityDatabase(instance);
         Competence result = Competence.getInstanceWithPK(id);
         assertEquals(expResult, result);
-        con.rollback();
     }
 
     /**

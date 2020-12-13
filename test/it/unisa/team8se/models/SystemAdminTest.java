@@ -10,6 +10,7 @@ import java.sql.*;
 import java.sql.ResultSet;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -66,15 +67,18 @@ public class SystemAdminTest {
      * Test of getAllDatabaseInstances method, of class SystemAdmin.
      */
     @Test
-    public void testGetAllDatabaseInstances() throws SQLException {
+    public void testGetAllDatabaseInstances() {
+        try{
         System.out.println("getAllDatabaseInstances");
-        deleteAllDatabaseInstances();
+        SystemAdmin sa2= SystemAdmin.getInstanceWithPK("Paco");
         SystemAdmin sa= instance;
-        SystemAdmin[] expResult = {sa};
+        SystemAdmin[] expResult = {sa2,sa};
         addActivityDatabase(sa);
         SystemAdmin[] result = SystemAdmin.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
-        con.rollback();
+        } catch (SQLException ex){
+        Assert.fail();
+        }
     }
 
     /**
@@ -83,13 +87,11 @@ public class SystemAdminTest {
     @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-            deleteAllDatabaseInstances();
-        String username = "";
+        String username = "Paco";
         SystemAdmin expResult = instance;
         addActivityDatabase(instance);
         SystemAdmin result = SystemAdmin.getInstanceWithPK(username);
         assertEquals(expResult, result);
-        con.rollback();
     }
 
     /**
