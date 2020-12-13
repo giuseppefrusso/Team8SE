@@ -14,8 +14,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -53,9 +51,9 @@ public class ActivityManager extends javax.swing.JFrame {
         model.addColumn("Filiale");
         model.addColumn("Settore");
         model.addColumn("Ambito");
-        model.addColumn("Week n.");
+        model.addColumn("Week number");
         model.addColumn("Data e ora");
-        model.addColumn("EIT");
+        model.addColumn("EIT (min)");
         model.addColumn("Interrompibile");
     }
     
@@ -90,6 +88,7 @@ public class ActivityManager extends javax.swing.JFrame {
         addButton = new javax.swing.JButton();
         modifyButton = new javax.swing.JButton();
         removeButton = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Activity Manager");
@@ -106,11 +105,6 @@ public class ActivityManager extends javax.swing.JFrame {
         activityTable.setModel(model);
         activityTable.setRowSelectionAllowed(false);
         activityTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        activityTable.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                activityTableFocusLost(evt);
-            }
-        });
         activityTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 activityTableMouseClicked(evt);
@@ -141,6 +135,13 @@ public class ActivityManager extends javax.swing.JFrame {
             }
         });
 
+        backButton.setText("Indietro");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -148,13 +149,15 @@ public class ActivityManager extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 770, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 949, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(addButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(modifyButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(removeButton)))
+                        .addComponent(removeButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(backButton)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -166,7 +169,8 @@ public class ActivityManager extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addButton)
                     .addComponent(modifyButton)
-                    .addComponent(removeButton))
+                    .addComponent(removeButton)
+                    .addComponent(backButton))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -196,11 +200,6 @@ public class ActivityManager extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowClosing
 
-    private void activityTableFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_activityTableFocusLost
-        modifyButton.setEnabled(false);
-        removeButton.setEnabled(false);
-    }//GEN-LAST:event_activityTableFocusLost
-
     private void activityTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_activityTableMouseClicked
         modifyButton.setEnabled(true);
         removeButton.setEnabled(true);
@@ -220,7 +219,7 @@ public class ActivityManager extends javax.swing.JFrame {
         try{
             int id = Integer.parseInt(JOptionPane.showInputDialog(this, "Inserisci ID", 
                     "Aggiunta", JOptionPane.PLAIN_MESSAGE));
-            if(Activity.getInstanceWithPK(id).existsInDatabase()){
+            if(Activity.getInstanceWithPK(id)!=null){
                 Message.raiseError(this,"Attività già presente!");
                 return;
             }
@@ -234,15 +233,15 @@ public class ActivityManager extends javax.swing.JFrame {
                     "Aggiunta", JOptionPane.PLAIN_MESSAGE));
             Timestamp datetime = Timestamp.valueOf(JOptionPane.showInputDialog(this, 
                     "Inserisci data e ora nel seguente formato: yyyy-mm-dd hh:mm", "Aggiunta", JOptionPane.PLAIN_MESSAGE)+":00");
-            int eit = Integer.parseInt(JOptionPane.showInputDialog(this, "Inserisci tempo stimato d'intervento", 
+            int eit = Integer.parseInt(JOptionPane.showInputDialog(this, "Inserisci tempo stimato d'intervento in minuti", 
                     "Aggiunta", JOptionPane.PLAIN_MESSAGE));
             int reply = JOptionPane.showConfirmDialog(this, "L'attività "+id+" è interrompibile?",
-                    "Aggiunta", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+                    "Aggiunta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             boolean interruptible;
             switch(reply) {
                 case JOptionPane.YES_OPTION:
-                   interruptible = true;
-                   break;
+                    interruptible = true;
+                    break;
                 case JOptionPane.NO_OPTION:
                     interruptible = false;
                     break;
@@ -258,25 +257,108 @@ public class ActivityManager extends javax.swing.JFrame {
             Message.raiseError(this, "Inserimento fallito!");
             return;
         }
-        
+        modifyButton.setEnabled(false);
+        removeButton.setEnabled(false);
         refreshActivities();
     }//GEN-LAST:event_addButtonActionPerformed
 
     protected boolean modifyActivity(int idActivity, Object newValue, String field) {
-        return true;
+        try{
+            Activity a = Activity.getInstanceWithPK(idActivity);
+            if(field.equalsIgnoreCase("EIT (min)")) {
+                a.updateInDatabase(newValue, "ETA");
+            }else if(field.equalsIgnoreCase("Filiale")) {
+                a.updateInDatabase(newValue, "LUOGO_GEOGRAFICO");
+            }else if(field.equalsIgnoreCase("Settore")) {
+                a.updateInDatabase(newValue, "AREA");
+            }else if(field.equalsIgnoreCase("Data e ora")) {
+                a.updateInDatabase(newValue, "DATA_E_ORA");
+            }else if(field.equalsIgnoreCase("Week number")) {
+                a.updateInDatabase(newValue, "WEEK_NUMBER");
+            }else {
+                a.updateInDatabase(newValue, field);
+            }          
+            return true;
+        }catch(SQLException ex) {
+            Message.raiseError(this, "Modifica fallita!");
+            return false;
+        }
     }
     
     private void modifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyButtonActionPerformed
         int selectedRow = activityTable.getSelectedRow();
+        int selectedId = Integer.parseInt((String) model.getValueAt(selectedRow, 0));
+        String selectedField = activityTable.getColumnName(activityTable.getSelectedColumn());
+        Object newValue;
+        try{
+        if(selectedField.equalsIgnoreCase("ID") || selectedField.equalsIgnoreCase("Week number") || selectedField.equalsIgnoreCase("EIT")) {
+            newValue = Integer.parseInt(JOptionPane.showInputDialog(this, 
+                    "Modifica "+selectedField+" dell'attività "+selectedId,"Modifica", JOptionPane.PLAIN_MESSAGE));
+        }else if(selectedField.equalsIgnoreCase("Interrompibile")) {
+            int reply = JOptionPane.showConfirmDialog(this, "L'attività "+selectedId+" è interrompibile?",
+                    "Modifica", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            switch(reply) {
+                case JOptionPane.YES_OPTION:
+                    newValue = true;
+                    break;
+                case JOptionPane.NO_OPTION:
+                    newValue = false;
+                    break;
+                default:
+                    return;
+            }     
+        } else if(selectedField.equalsIgnoreCase("Data e ora")) {
+           newValue = Timestamp.valueOf(JOptionPane.showInputDialog(this, 
+                    "Modifica data e ora dell'attività "+selectedId+
+                            "nel seguente formato: yyyy-mm-dd hh:mm", "Modifica", JOptionPane.PLAIN_MESSAGE)+":00");
+        }else{
+            newValue = JOptionPane.showInputDialog(this, "Modifica "+selectedField,"Modifica",JOptionPane.PLAIN_MESSAGE);
+        }}catch(IllegalArgumentException ex) {
+            return;
+        }
+        if(newValue == null || newValue == "") {
+            return;
+        }
+        modifyActivity(selectedId,newValue,selectedField);
+        modifyButton.setEnabled(false);
+        removeButton.setEnabled(false);
+        refreshActivities();
     }//GEN-LAST:event_modifyButtonActionPerformed
 
     protected boolean removeActivity(int idActivity) {
-        return true;
+        try {
+            Activity.getInstanceWithPK(idActivity).removeFromDatabase();
+            return true;
+        } catch (SQLException ex) {
+            Message.raiseError(this, "Rimozione fallita!");
+            return false;
+        }
     }
     
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-        
+        int selectedRow = activityTable.getSelectedRow();
+
+        if (selectedRow == -1) {
+            Message.raiseError(this, "Selezionare una riga!");
+            return;
+        }
+
+        int selectedId = Integer.parseInt((String) model.getValueAt(selectedRow, 0));
+
+        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di rimuovere l'attività " + selectedId + "?", "Rimozione", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (reply == JOptionPane.YES_OPTION) {
+            removeActivity(selectedId);
+        }
+        modifyButton.setEnabled(false);
+        removeButton.setEnabled(false);
+        refreshActivities();
     }//GEN-LAST:event_removeButtonActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        PlannerForm form = new PlannerForm(-1);
+        form.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_backButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -316,6 +398,7 @@ public class ActivityManager extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable activityTable;
     private javax.swing.JButton addButton;
+    private javax.swing.JButton backButton;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton modifyButton;

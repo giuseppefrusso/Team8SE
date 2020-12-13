@@ -323,6 +323,14 @@ public class Activity extends DatabaseModel {
         return Activity.getInstanceWithPK(getID()) != null;
     }
 
+    public void removeFromDatabase() throws SQLException {
+        String sql = "delete from attivita_pianificata where id = ?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setInt(1, ID);
+        ps.executeUpdate();
+        ps.close();
+    }
+
     //UPDATE FUNCTIONS 
     public void updateInterventionDescInDatabase() {
         String sql = "update attivita_pianificata set descrizione_intervento = ? where id = ?";
@@ -346,6 +354,23 @@ public class Activity extends DatabaseModel {
         }
     }
 
+    public void updateInDatabase(Object newValue, String field) throws SQLException {
+        String sql = "update attivita_pianificata set "+field+" = ? where id = ?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        if(newValue instanceof Integer) {
+            ps.setInt(1, (int) newValue);
+        }else if(newValue instanceof String) {
+            ps.setString(1, (String) newValue);
+        }else if(newValue instanceof Timestamp) {
+            ps.setTimestamp(1, (Timestamp) newValue);
+        }else {
+            ps.setBoolean(1, (boolean) newValue);
+        }
+        ps.setInt(2, ID);
+        ps.executeUpdate();
+        ps.close();
+    }
+    
     public boolean updateSMPInDatabase() throws SQLException {
         if (!smp.existsInDatabase()) {
             return false;
@@ -422,8 +447,8 @@ public class Activity extends DatabaseModel {
             i = "No";
         }
 
-        String[] array = {Integer.toString(ID), Area.getLocation(), Area.getSector(), tipology, datetime.toString(),
-            Integer.toString(eit), i};
+        String[] array = {Integer.toString(ID), Area.getLocation(), Area.getSector(), tipology, 
+            Integer.toString(weekNumber), datetime.toString(), Integer.toString(eit), i};
         return array;
     }
 }

@@ -310,7 +310,7 @@ public class PlannerForm extends UserBaseForm {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         activityList.add(jPanel2, gridBagConstraints);
 
-        activityButton.setText("Manage other activities");
+        activityButton.setText("Manage activities");
         activityButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 activityButtonActionPerformed(evt);

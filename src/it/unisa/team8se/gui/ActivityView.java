@@ -97,7 +97,6 @@ public class ActivityView extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nel caricamento delle competenze!");
-            return;
         }
     }
 
@@ -173,9 +172,6 @@ public class ActivityView extends javax.swing.JFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 materialListFocusGained(evt);
             }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                materialListFocusLost(evt);
-            }
         });
         jScrollPane1.setViewportView(materialList);
 
@@ -219,9 +215,6 @@ public class ActivityView extends javax.swing.JFrame {
         competenceList.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 competenceListFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                competenceListFocusLost(evt);
             }
         });
         jScrollPane2.setViewportView(competenceList);
@@ -364,7 +357,6 @@ public class ActivityView extends javax.swing.JFrame {
         UserBaseForm form;
         if (role.equalsIgnoreCase("planner")) {
             form = new PlannerForm(this.defaultId);
-            //per tornare esattamente alla schermata di quell'attività, mettere un parametro in questo costruttore
             form.setVisible(true);
             this.setVisible(false);
         } else {
@@ -450,6 +442,9 @@ public class ActivityView extends javax.swing.JFrame {
         }
         assignCompetence(selectedActivity, competence);
         refreshCompetences(selectedActivity);
+        removeCompetenceButton.setEnabled(false);
+        removeMaterialButton.setEnabled(false);
+        refreshCompetencesAndMaterials(defaultId);
     }//GEN-LAST:event_assignCompetenceButtonActionPerformed
 
     protected boolean removeCompetence(Activity activity, String description) {
@@ -475,6 +470,9 @@ public class ActivityView extends javax.swing.JFrame {
             removeCompetence(selectedActivity, competence);
             refreshCompetences(selectedActivity);
         }
+        removeCompetenceButton.setEnabled(false);
+        removeMaterialButton.setEnabled(false);
+        refreshCompetencesAndMaterials(defaultId);
     }//GEN-LAST:event_removeCompetenceButtonActionPerformed
 
     protected boolean assignMaterial(Activity activity, String nome) {
@@ -515,6 +513,9 @@ public class ActivityView extends javax.swing.JFrame {
         }*/
         assignMaterial(selectedActivity, material.getName());
         refreshMaterials(selectedActivity);
+        removeCompetenceButton.setEnabled(false);
+        removeMaterialButton.setEnabled(false);
+        refreshCompetencesAndMaterials(defaultId);
     }//GEN-LAST:event_assignMaterialButtonActionPerformed
 
     protected boolean removeMaterial(Activity activity, String nome) {
@@ -544,6 +545,9 @@ public class ActivityView extends javax.swing.JFrame {
             removeMaterial(selectedActivity, material);
             refreshMaterials(selectedActivity);
         }
+        removeCompetenceButton.setEnabled(false);
+        removeMaterialButton.setEnabled(false);
+        refreshCompetencesAndMaterials(defaultId);
     }//GEN-LAST:event_removeMaterialButtonActionPerformed
 
     private void competenceListFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_competenceListFocusGained
@@ -551,20 +555,10 @@ public class ActivityView extends javax.swing.JFrame {
         refreshMaterials(getSelectedActivity());
     }//GEN-LAST:event_competenceListFocusGained
 
-    private void competenceListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_competenceListFocusLost
-        removeCompetenceButton.setEnabled(false);
-        refreshCompetences(getSelectedActivity());
-    }//GEN-LAST:event_competenceListFocusLost
-
     private void materialListFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_materialListFocusGained
         removeMaterialButton.setEnabled(true);
         refreshCompetences(getSelectedActivity());
     }//GEN-LAST:event_materialListFocusGained
-
-    private void materialListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_materialListFocusLost
-        removeMaterialButton.setEnabled(false);
-        refreshMaterials(getSelectedActivity());
-    }//GEN-LAST:event_materialListFocusLost
 
     /**
      * @param args the command line arguments

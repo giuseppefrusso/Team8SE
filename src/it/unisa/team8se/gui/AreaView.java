@@ -112,9 +112,6 @@ public class AreaView extends javax.swing.JFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 sectorListFocusGained(evt);
             }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                sectorListFocusLost(evt);
-            }
         });
         jScrollPane1.setViewportView(sectorList);
 
@@ -254,6 +251,7 @@ public class AreaView extends javax.swing.JFrame {
     private void locationBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationBoxActionPerformed
         String selectedLocation = (String) comboBoxModel.getSelectedItem();
         refreshSectors(selectedLocation);
+        removeSectorButton.setEnabled(false);
     }//GEN-LAST:event_locationBoxActionPerformed
 
     protected boolean addArea(String location, String sector) {
@@ -286,6 +284,7 @@ public class AreaView extends javax.swing.JFrame {
         }
         addArea(newLocation, newSector);
         refreshLocations();
+        removeSectorButton.setEnabled(false);
     }//GEN-LAST:event_addAreaButtonActionPerformed
 
     protected boolean removeLocation(String location) {
@@ -315,6 +314,7 @@ public class AreaView extends javax.swing.JFrame {
             removeLocation(selectedLocation);
         }
         refreshLocations();
+        removeSectorButton.setEnabled(false);
     }//GEN-LAST:event_removeLocationButtonActionPerformed
     
     private void addSectorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSectorButtonActionPerformed
@@ -331,6 +331,7 @@ public class AreaView extends javax.swing.JFrame {
         }
         addArea(selectedLocation, newSector);
         refreshLocations();
+        removeSectorButton.setEnabled(false);
     }//GEN-LAST:event_addSectorButtonActionPerformed
 
     protected boolean removeSector(String location, String sector) {
@@ -365,15 +366,12 @@ public class AreaView extends javax.swing.JFrame {
             removeSector(selectedLocation, selectedSector);
         }
         refreshLocations();
+        removeSectorButton.setEnabled(false);
     }//GEN-LAST:event_removeSectorButtonActionPerformed
 
     private void sectorListFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sectorListFocusGained
         removeSectorButton.setEnabled(true);
     }//GEN-LAST:event_sectorListFocusGained
-
-    private void sectorListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sectorListFocusLost
-        removeSectorButton.setEnabled(false);
-    }//GEN-LAST:event_sectorListFocusLost
 
     /**
      * @param args the command line arguments

@@ -196,7 +196,7 @@
             </Container>
             <Component class="javax.swing.JButton" name="activityButton">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Manage other activities"/>
+                <Property name="text" type="java.lang.String" value="Manage activities"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="activityButtonActionPerformed"/>
