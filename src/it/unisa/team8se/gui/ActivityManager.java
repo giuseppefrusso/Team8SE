@@ -182,9 +182,7 @@ public class ActivityManager extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -217,12 +215,13 @@ public class ActivityManager extends javax.swing.JFrame {
     
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         try{
-            int id = Integer.parseInt(JOptionPane.showInputDialog(this, "Inserisci ID", 
+            /*int id = Integer.parseInt(JOptionPane.showInputDialog(this, "Inserisci ID", 
                     "Aggiunta", JOptionPane.PLAIN_MESSAGE));
             if(Activity.getInstanceWithPK(id)!=null){
                 Message.raiseError(this,"Attività già presente!");
                 return;
-            }
+            }*/
+            int id = Activity.getMaxId() + 1;
             Area[] options = Area.getAllDatabaseInstances();
             int indexArea = JOptionPane.showOptionDialog(this, "Scegli area", "Aggiunta", 
                     JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
@@ -252,7 +251,7 @@ public class ActivityManager extends javax.swing.JFrame {
                 Activity a = new Activity(id, area, ambito, weekNumber, datetime, eit, interruptible);
                 addActivity(a);
                    
-        }catch(SQLException | IllegalArgumentException ex) {
+        }catch(SQLException | IllegalArgumentException | ArrayIndexOutOfBoundsException ex) {
             System.out.println(ex.getMessage());
             Message.raiseError(this, "Inserimento fallito!");
             return;
