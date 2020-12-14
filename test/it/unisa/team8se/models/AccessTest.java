@@ -8,6 +8,8 @@ package it.unisa.team8se.models;
 import it.unisa.team8se.DatabaseContext;
 import java.sql.*;
 import org.junit.After;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,7 +42,8 @@ public class AccessTest {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        con.setAutoCommit(true);
         DatabaseContext.closeConnection();
     }
     
@@ -51,7 +54,12 @@ public class AccessTest {
     
     @After
     public void tearDown() {
+        try{
+            con.rollback();
         instance = null;
+        } catch(SQLException ex){
+        Logger.getLogger(AccessTest.class.getName()).log(Level.SEVERE,null,ex);
+        }
     }
 
     /**
@@ -244,9 +252,8 @@ public class AccessTest {
      * Test of existsInDatabase method, of class Access.
      */
     @Test
-    public void testExistsInDatabase() throws Exception {
+    public void testExistsInDatabase() throws SQLException {
         System.out.println("existsInDatabase");
-        Access instance = new Access();
         boolean expResult = false;
         boolean result = instance.existsInDatabase();
         assertEquals(expResult, result);

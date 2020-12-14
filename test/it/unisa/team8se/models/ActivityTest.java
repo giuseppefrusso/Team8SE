@@ -440,7 +440,6 @@ public class ActivityTest {
     @Test
     public void testExistsInDatabase() {
         System.out.println("existsInDatabase");
-        Activity instance = new Activity();
         boolean expResult = false;
         boolean result = instance.existsInDatabase();
         assertEquals(expResult, result);

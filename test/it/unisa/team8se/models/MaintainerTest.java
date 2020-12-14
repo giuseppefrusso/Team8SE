@@ -9,6 +9,8 @@ import it.unisa.team8se.DatabaseContext;
 import java.sql.*;
 import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.sql.ResultSet;
 import java.util.LinkedList;
 import org.junit.After;
@@ -43,7 +45,8 @@ public class MaintainerTest {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        con.setAutoCommit(true);
         DatabaseContext.closeConnection();
     }
     
@@ -54,7 +57,12 @@ public class MaintainerTest {
     
     @After
     public void tearDown() {
+        try{
+            con.rollback();
         instance =null;
+        } catch(SQLException ex){
+        Logger.getLogger(MaintainerTest.class.getName()).log(Level.SEVERE,null,ex);
+        }
     }
 
     /**

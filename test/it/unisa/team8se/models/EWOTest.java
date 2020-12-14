@@ -6,10 +6,13 @@
 package it.unisa.team8se.models;
 
 import it.unisa.team8se.DatabaseContext;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.sql.*;
 import java.sql.ResultSet;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,7 +43,8 @@ public class EWOTest {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        con.setAutoCommit(true);
         DatabaseContext.closeConnection();
     }
     
@@ -51,7 +55,13 @@ public class EWOTest {
     
     @After
     public void tearDown() {
+        try{
+            con.rollback();
         instance = null;
+        } catch (SQLException ex){
+            Logger.getLogger(EWOTest.class.getName()).log(Level.SEVERE,null,ex);
+        }
+        
     }
 
     /**
@@ -70,9 +80,9 @@ public class EWOTest {
         stm.executeUpdate(query);
     }
     
-      private void addActivityDatabase (EWO e){
-    //String query= "Insert into ewo values("+ e.getID()+", 'doc','Fisciano','Carpentry','Ale','Manu'"+ e.getTipology()+","+ e.getDatetime()+","+ e.getWeekNumber()+","+ e.getEIT()+","+ e.getWorkspaceNotes()+","+ e.getInterventionDescription()+","+;
-    //stm.executeUpdate(string);
+      private void addActivityDatabase (EWO e) throws SQLException{
+          String query = "Insert into ewo values(" + e.getID() + ", 'doc','Fisciano','Carpentry','Ale','Manu'" + e.getTipology() + "," + e.getDatetime() + "," + e.getWeekNumber() + "," + e.getEIT() + "," + e.getWorkspaceNotes() + "," + e.getInterventionDescription() + "','non avviato','in corso','chiuso','inviato per primo','ricevuto','letto','inviato','ricevuto','non inviato') ";
+          stm.executeUpdate(query);
       }
       
        private static void addForeignKey() throws SQLException{
@@ -103,14 +113,20 @@ public class EWOTest {
      */
     @Test
     public void testGetAllDatabaseInstances() throws SQLException {
+        try{
         System.out.println("getAllDatabaseInstances");
-        deleteAllDatabaseInstances();
+        EWO e2=EWO.getInstanceWithPK(1);
         EWO e=instance;
-        EWO[] expResult = {e};
+        EWO[] expResult = {e2,e};
+        addForeignKey();
         addActivityDatabase(e);
         EWO[] result = EWO.getAllDatabaseInstances();
         assertArrayEquals(expResult, result);
-        con.rollback();
+        } catch (SQLException ex)
+        {
+        Assert.fail();
+        }
+        
     }
 
     /**
@@ -119,13 +135,12 @@ public class EWOTest {
     @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        deleteAllDatabaseInstances();
         int id = 1;
         EWO expResult = instance;
+        addForeignKey();
         addActivityDatabase(instance);
         EWO result = EWO.getInstanceWithPK(id);
         assertEquals(expResult, result);
-        con.rollback();
     }
 
     /**

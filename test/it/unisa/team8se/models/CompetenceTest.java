@@ -7,6 +7,8 @@ package it.unisa.team8se.models;
 
 import it.unisa.team8se.DatabaseContext;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.sql.ResultSet;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -40,7 +42,8 @@ public class CompetenceTest {
     }
 
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        con.setAutoCommit(true);
         DatabaseContext.closeConnection();
     }
 
@@ -51,7 +54,12 @@ public class CompetenceTest {
 
     @After
     public void tearDown() {
+        try{
+            con.rollback();
         instance = null;
+        } catch(SQLException ex){
+        Logger.getLogger(CompetenceTest.class.getName()).log(Level.SEVERE,null,ex);
+        }
     }
 
     /**
