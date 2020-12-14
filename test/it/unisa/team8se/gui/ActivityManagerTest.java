@@ -112,9 +112,24 @@ public class ActivityManagerTest {
     @Test
     public void testModifyActivity() {
         System.out.println("modifyActivity");
-        int idActivity = 0;
-        Object newValue = null;
-        String field = "";
+        int idActivity = 1;
+        Object newValue = "Nocera";
+        String field = "Filiale";
+        boolean expResult = true;
+        boolean result = am.modifyActivity(idActivity, newValue, field);
+        assertEquals(expResult, result);
+
+    }
+
+    /**
+     * Wrong Test of modifyActivity method, of class ActivityManager.
+     */
+    @Test
+    public void testModifyActivity1() {
+        System.out.println("modifyActivity1");
+        int idActivity = 1;
+        Object newValue = "Cava";
+        String field = "Filiale";
         boolean expResult = false;
         boolean result = am.modifyActivity(idActivity, newValue, field);
         assertEquals(expResult, result);
@@ -127,13 +142,24 @@ public class ActivityManagerTest {
     @Test
     public void testRemoveActivity() {
         System.out.println("removeActivity");
-        int idActivity = 0;
-        boolean expResult = false;
+        am.addActivity(instance);
+        int idActivity = 3;
+        boolean expResult = true;
         boolean result = am.removeActivity(idActivity);
         assertEquals(expResult, result);
 
     }
 
+    /**
+     * Wrong test of removeActivity method, of class ActivityManager.
+     */
+    @Test
+    public void testRemoveActivity1() {
+        System.out.println("removeActivity1");
+        boolean expResult = false;
+        boolean result = am.removeActivity(1);
+        assertEquals(expResult, result);
 
+    }
 
 }
