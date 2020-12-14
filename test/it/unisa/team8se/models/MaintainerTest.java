@@ -181,8 +181,12 @@ public class MaintainerTest {
     @Test
     public void testSaveToDatabase() throws Exception {
         System.out.println("saveToDatabase");
-        Maintainer instance = new Maintainer();
+         try{
         instance.saveToDatabase();
+        } catch(SQLException ex){
+        System.out.println(ex.getMessage());
+        Assert.fail();
+        }
     }
 
     /**

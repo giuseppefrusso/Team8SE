@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.LinkedList;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -77,9 +78,9 @@ public class AreaTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        Area instance = new Area();
-        String result = instance.toString();
-        assertTrue(result instanceof String);
+        String expresult = "Area{" + "SECTOR=" + instance.getSector() + ",LOCATION=" + instance.getLocation() + '}';
+        String result =instance.toString();
+        assertEquals(expresult, result);
 
     }
     
@@ -112,5 +113,16 @@ public class AreaTest {
         LinkedList<String> result = Area.getAllLocations();
         assertEquals(expResult, result);
         con.rollback();
+    }
+    
+     @Test
+    public void testSaveToDatabase() throws Exception {
+        System.out.println("saveToDatabase");
+        try{
+        instance.saveToDatabase();
+        } catch(SQLException ex){
+        System.out.println(ex.getMessage());
+        Assert.fail();
+        }
     }
 }

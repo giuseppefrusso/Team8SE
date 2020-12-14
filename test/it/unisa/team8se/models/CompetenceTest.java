@@ -21,36 +21,37 @@ import static org.junit.Assert.*;
  * @author prgne
  */
 public class CompetenceTest {
+
     Competence instance;
     private static Connection con;
     private static Statement stm;
-    
+
     public CompetenceTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() throws SQLException {
-                  if (!DatabaseContext.isConnected()) {
+        if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
             con = DatabaseContext.getConnection();
             con.setAutoCommit(false);
-          }
-                  stm = con.createStatement();
+        }
+        stm = con.createStatement();
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
         DatabaseContext.closeConnection();
     }
-    
+
     @Before
     public void setUp() {
-        instance = new Competence(1,"Testing");
+        instance = new Competence(1, "Testing");
     }
-    
+
     @After
     public void tearDown() {
-        instance= null;
+        instance = null;
     }
 
     /**
@@ -81,7 +82,7 @@ public class CompetenceTest {
         System.out.println("setID");
         int ID = 0;
         instance.setID(ID);
-        assertEquals(ID,instance.getID());
+        assertEquals(ID, instance.getID());
     }
 
     /**
@@ -92,7 +93,7 @@ public class CompetenceTest {
         System.out.println("setDescrizione");
         String Descrizione = "";
         instance.setDescrizione(Descrizione);
-        assertEquals(true,instance.getDescrizione().equals(Descrizione));
+        assertEquals(true, instance.getDescrizione().equals(Descrizione));
     }
 
     /**
@@ -106,33 +107,32 @@ public class CompetenceTest {
         Competence[] result = Competence.getAllCompetencesOfMaintainer(username);
         assertArrayEquals(expResult, result);
     }
-    
-    private void deleteAllDatabaseInstances () throws SQLException{
-        String query="Delete from competenza";
+
+    private void deleteAllDatabaseInstances() throws SQLException {
+        String query = "Delete from competenza";
         stm.executeUpdate(query);
     }
-    
-    private void addActivityDatabase (Competence c) throws SQLException{
-    String query= "Insert into competenza values("+c.getID()+",'" +c.getDescrizione()+"')";
-    stm.executeUpdate(query);
+
+    private void addActivityDatabase(Competence c) throws SQLException {
+        String query = "Insert into competenza values(" + c.getID() + ",'" + c.getDescrizione() + "')";
+        stm.executeUpdate(query);
     }
-    
 
     /**
      * Test of getAllDatabaseInstances method, of class Competence.
      */
     @Test
     public void testGetAllDatabaseInstances() {
-        try{
-        System.out.println("getAllDatabaseInstances");
-        Competence c2= Competence.getInstanceWithPK(1);
-        Competence c=instance;
-        Competence[] expResult = {c2,c};
-        addActivityDatabase(c);
-        Competence[] result = Competence.getAllDatabaseInstances();
-        assertArrayEquals(expResult, result);
-        } catch(SQLException ex){
-        Assert.fail();
+        try {
+            System.out.println("getAllDatabaseInstances");
+            Competence c2 = Competence.getInstanceWithPK(1);
+            Competence c = instance;
+            Competence[] expResult = {c2, c};
+            addActivityDatabase(c);
+            Competence[] result = Competence.getAllDatabaseInstances();
+            assertArrayEquals(expResult, result);
+        } catch (SQLException ex) {
+            Assert.fail();
         }
     }
 
@@ -170,8 +170,7 @@ public class CompetenceTest {
     @Test
     public void testSaveToDatabase() {
         System.out.println("saveToDatabase");
-        Competence instance = new Competence();
-        instance.saveToDatabase();
+        
     }
 
     /**
@@ -196,5 +195,5 @@ public class CompetenceTest {
         boolean result = instance.existsInDatabase();
         assertEquals(expResult, result);
     }
-    
+
 }

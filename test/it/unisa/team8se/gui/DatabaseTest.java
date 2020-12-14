@@ -27,12 +27,12 @@ public class DatabaseTest {
     private Activity activity;
     
     
-    public DatabaseTest(){
+    public DatabaseTest() throws SQLException{
         setup();
     }
     
     
-    public void setup(){
+    public void setup() throws SQLException{
         try {
             con = DriverManager.getConnection(url, user, pwd);
         } catch (SQLException ex) {
@@ -57,7 +57,7 @@ public class DatabaseTest {
         assertEquals(liste[0],activity);
     }
     @Test
-    public void testGetInstancesWithWeekNumber(){
+    public void testGetInstancesWithWeekNumber() throws SQLException{
         activity.saveToDatabase();
         Activity[] liste = Activity.getInstancesWithWeekNumber(2);
         assertEquals(liste[0],activity);
