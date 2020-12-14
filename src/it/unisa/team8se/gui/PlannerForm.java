@@ -263,7 +263,7 @@ public class PlannerForm extends UserBaseForm {
         activityListLabel.setAlignmentX(0.02F);
         acivityListHeader.add(activityListLabel);
 
-        activityButton.setText("Manage activities");
+        activityButton.setText("Plan");
         activityButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 activityButtonActionPerformed(evt);
@@ -522,20 +522,17 @@ public class PlannerForm extends UserBaseForm {
                                         .addComponent(workspaceNotesEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(workspaceNotesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGroup(activitySummaryLayout.createSequentialGroup()
-                            .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(activitySummaryLayout.createSequentialGroup()
-                                    .addComponent(jLabel6)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(weekNumberLabel)
-                                    .addGap(471, 471, 471)
-                                    .addComponent(manageButton))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, activitySummaryLayout.createSequentialGroup()
-                                    .addComponent(jLabel7)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(areaLabel)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(maintainerListButton)))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                            .addComponent(jLabel6)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(weekNumberLabel)
+                            .addGap(471, 471, 471)
+                            .addComponent(manageButton))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, activitySummaryLayout.createSequentialGroup()
+                            .addComponent(jLabel7)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(areaLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(maintainerListButton)))
                     .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 776, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(activitySummaryLayout.createSequentialGroup()
                         .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
