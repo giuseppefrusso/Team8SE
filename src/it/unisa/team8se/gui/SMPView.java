@@ -45,17 +45,23 @@ public class SMPView extends javax.swing.JFrame {
         if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
         }
-        tableModel = new DefaultTableModel(new String[]{"Identifier", "Size"}, 0);
-        tableSorter = new TableRowSorter<TableModel>(tableModel);
-
         smpInstances = new LinkedList<>();
-
-        smpList.setModel(tableModel);
-        smpList.setRowSorter(tableSorter);
-
+        setupSMPList();
         refreshSMPList();
     }
 
+    private void setupSMPList(){
+        tableModel = new DefaultTableModel(new String[]{"Identifier", "Size"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }  
+        };
+        tableSorter = new TableRowSorter<TableModel>(tableModel);
+        smpList.setModel(tableModel);
+        smpList.setRowSorter(tableSorter);
+    }
+    
     private void refreshSMPList() {
         tableModel.setRowCount(0);
         smpInstances.clear();
@@ -492,6 +498,7 @@ public class SMPView extends javax.swing.JFrame {
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void cancelFilterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelFilterButtonActionPerformed
+        searchBar.setText(null);
         tableSorter.setRowFilter(null);
     }//GEN-LAST:event_cancelFilterButtonActionPerformed
 

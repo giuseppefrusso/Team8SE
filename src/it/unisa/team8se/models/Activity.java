@@ -173,6 +173,20 @@ public class Activity extends DatabaseModel {
         this.smp = smp;
     }
 
+    public static int getMaxId() throws SQLException {
+        int maxId;
+        String sql = "select max(id) from attivita_pianificata";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next()) {
+            maxId = rs.getInt(1);
+        }else
+            maxId = 0;
+        rs.close();
+        ps.close();
+        return maxId;
+    }
+    
     public static Activity[] getAllDatabaseInstances() {
         try {
             String sql = "select * from attivita_pianificata order by ID";
