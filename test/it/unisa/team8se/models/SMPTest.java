@@ -36,15 +36,18 @@ public class SMPTest extends TestCase {
     }
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws SQLException {
                   if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
             con = DatabaseContext.getConnection();
+            con.setAutoCommit(false);
           }
+                  stm=con.createStatement();
     }
 
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        con.setAutoCommit(true);
         DatabaseContext.closeConnection();
     }
 
@@ -112,17 +115,6 @@ public class SMPTest extends TestCase {
         assertTrue(status);   
     }
     
-     @Test
-    public void testGetAllDatabaseInstances() throws SQLException {
-        System.out.println("getAllDatabaseInstances");
-        deleteAllDatabaseInstances();
-        SMP sm=instance;
-        SMP[] expResult = {sm};
-        addActivityDatabase(sm);
-        SMP[] result = SMP.getAllDatabaseInstances();
-        assertArrayEquals(expResult, result);
-        con.rollback();
-    }
     
      @Test
     public void testGetInstanceWithPK() throws SQLException {

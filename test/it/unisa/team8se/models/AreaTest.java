@@ -9,6 +9,8 @@ import it.unisa.team8se.DatabaseContext;
 import java.sql.*;
 import java.util.LinkedList;
 import org.junit.After;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,7 +40,8 @@ public class AreaTest {
               stm= con.createStatement();
     }
     @AfterClass
-    public static void tearDownClass(){
+    public static void tearDownClass() throws SQLException{
+        con.setAutoCommit(true);
     DatabaseContext.closeConnection();
     }
 
@@ -49,7 +52,12 @@ public class AreaTest {
 
     @After
     public void tearDown() {
+        try{
+        con.rollback();
         instance = null;
+        } catch (SQLException ex){
+        Logger.getLogger(AreaTest.class.getName()).log(Level.SEVERE,null,ex);
+        }
     }
 
     /**
@@ -78,7 +86,7 @@ public class AreaTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        String expresult = "Area{" + "SECTOR=" + instance.getSector() + ",LOCATION=" + instance.getLocation() + '}';
+        String expresult = instance.getSector() +" - " +instance.getLocation();
         String result =instance.toString();
         assertEquals(expresult, result);
 
@@ -103,17 +111,7 @@ public class AreaTest {
         Area result = Area.getInstanceWithPK(sector, location);
         assertEquals(expResult, result);
     }
-     
-    @Test
-    public void testGetAllLocations() throws SQLException {
-        System.out.println("getAllLocations");
-        deleteAllDatabaseInstances();
-        LinkedList<String> expResult =null;
-        addActivityDatabase(instance);
-        LinkedList<String> result = Area.getAllLocations();
-        assertEquals(expResult, result);
-        con.rollback();
-    }
+    
     
      @Test
     public void testSaveToDatabase() throws Exception {
@@ -124,5 +122,20 @@ public class AreaTest {
         System.out.println(ex.getMessage());
         Assert.fail();
         }
+    }
+    @Test
+    public void testExistsInDatabase(){
+    System.out.println("existsInDatabase");
+    boolean expResult=false;
+    boolean result = instance.existsInDatabase();
+    assertEquals(expResult,result);
+    }
+    
+    @Test (expected= NullPointerException.class)
+    public void testGetFromResultSet() throws Exception {
+        System.out.println("getFromResultSet");
+        ResultSet rs = null;
+        Area instance = new Area();
+        instance.getFromResultSet(rs);
     }
 }

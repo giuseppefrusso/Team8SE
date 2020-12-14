@@ -10,6 +10,8 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -43,6 +45,7 @@ public class AccessTest {
 
     @AfterClass
     public static void tearDownClass() throws SQLException {
+
         conn.setAutoCommit(true);
         DatabaseContext.closeConnection();
     }
@@ -54,12 +57,20 @@ public class AccessTest {
 
     @After
     public void tearDown() {
+        try{
+            conn.rollback();
+        instance = null;
+        } catch(SQLException ex){
+        Logger.getLogger(AccessTest.class.getName()).log(Level.SEVERE,null,ex);
+        }
+
         try {
             instance = null;
             conn.rollback();
         } catch (SQLException ex) {
             Logger.getLogger(AccessTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+
 
     }
 
@@ -200,7 +211,7 @@ public class AccessTest {
     /**
      * Test of getFromResultSet method, of class Access.
      */
-    @Test
+    @Test (expected= NullPointerException.class)
     public void testGetFromResultSet() throws Exception {
         System.out.println("getFromResultSet");
         ResultSet rs = null;
@@ -223,9 +234,8 @@ public class AccessTest {
      * Test of existsInDatabase method, of class Access.
      */
     @Test
-    public void testExistsInDatabase() throws Exception {
+    public void testExistsInDatabase() throws SQLException {
         System.out.println("existsInDatabase");
-        Access instance = new Access();
         boolean expResult = false;
         boolean result = instance.existsInDatabase();
         assertEquals(expResult, result);

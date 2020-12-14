@@ -7,6 +7,8 @@ package it.unisa.team8se.models;
 
 import it.unisa.team8se.DatabaseContext;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.sql.ResultSet;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -40,7 +42,8 @@ public class CompetenceTest {
     }
 
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        con.setAutoCommit(true);
         DatabaseContext.closeConnection();
     }
 
@@ -51,7 +54,12 @@ public class CompetenceTest {
 
     @After
     public void tearDown() {
+        try{
+            con.rollback();
         instance = null;
+        } catch(SQLException ex){
+        Logger.getLogger(CompetenceTest.class.getName()).log(Level.SEVERE,null,ex);
+        }
     }
 
     /**
@@ -118,24 +126,7 @@ public class CompetenceTest {
         stm.executeUpdate(query);
     }
 
-    /**
-     * Test of getAllDatabaseInstances method, of class Competence.
-     */
-    @Test
-    public void testGetAllDatabaseInstances() {
-        try {
-            System.out.println("getAllDatabaseInstances");
-            Competence c2 = Competence.getInstanceWithPK(1);
-            Competence c = instance;
-            Competence[] expResult = {c2, c};
-            addActivityDatabase(c);
-            Competence[] result = Competence.getAllDatabaseInstances();
-            assertArrayEquals(expResult, result);
-        } catch (SQLException ex) {
-            Assert.fail();
-        }
-    }
-
+ 
     /**
      * Test of getInstanceWithPK method, of class Competence.
      */
@@ -164,19 +155,11 @@ public class CompetenceTest {
         con.rollback();
     }
 
-    /**
-     * Test of saveToDatabase method, of class Competence.
-     */
-    @Test
-    public void testSaveToDatabase() {
-        System.out.println("saveToDatabase");
-        
-    }
 
     /**
      * Test of getFromResultSet method, of class Competence.
      */
-    @Test
+    @Test(expected= NullPointerException.class)
     public void testGetFromResultSet() throws Exception {
         System.out.println("getFromResultSet");
         ResultSet rs = null;
