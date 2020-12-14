@@ -18,7 +18,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Pair;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -28,6 +31,8 @@ public class SMPView extends javax.swing.JFrame {
 
     private LinkedList<SMP> smpInstances;
     private DefaultTableModel tableModel;
+    private TableRowSorter tableSorter;
+
     private SMP addedSMP;
     private SMP selectedSMP;
 
@@ -41,9 +46,12 @@ public class SMPView extends javax.swing.JFrame {
             DatabaseContext.connectDatabase();
         }
         tableModel = new DefaultTableModel(new String[]{"Identifier", "Size"}, 0);
+        tableSorter = new TableRowSorter<TableModel>(tableModel);
+
         smpInstances = new LinkedList<>();
 
         smpList.setModel(tableModel);
+        smpList.setRowSorter(tableSorter);
 
         refreshSMPList();
     }
@@ -63,19 +71,20 @@ public class SMPView extends javax.swing.JFrame {
     }
 
     private Pair checkSMPIdentifier(String id) {
-        
-        if(id == null || id.isEmpty()){
+
+        if (id == null || id.isEmpty()) {
             return new Pair<>(false, "Identifier not specified.");
         }
-        
+
         if (smpInstances.size() > 0) {
-            
-            if(smpInstances.stream().anyMatch(s -> s.getNome().equals(id)))
-                return new Pair<>(false,"Identifier already exists.");
-            else
-                return new Pair<>(true,"");
+
+            if (smpInstances.stream().anyMatch(s -> s.getNome().equals(id))) {
+                return new Pair<>(false, "Identifier already exists.");
+            } else {
+                return new Pair<>(true, "");
+            }
         }
-        return new Pair<>(true,"");
+        return new Pair<>(true, "");
     }
 
     /**
@@ -181,6 +190,12 @@ public class SMPView extends javax.swing.JFrame {
         openDocumentButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openDocumentButtonActionPerformed(evt);
+            }
+        });
+
+        searchBar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBarActionPerformed(evt);
             }
         });
 
@@ -381,7 +396,7 @@ public class SMPView extends javax.swing.JFrame {
                 Logger.getLogger(SMPView.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         smpList.clearSelection();
     }//GEN-LAST:event_modifySMPButtonActionPerformed
 
@@ -392,7 +407,7 @@ public class SMPView extends javax.swing.JFrame {
             Message.raiseInfo(this, "Please select a SMP first.");
             return;
         }
-        
+
         SMP smp = smpInstances.get(index);
         try {
             smp.removeFromDatabase();
@@ -412,8 +427,8 @@ public class SMPView extends javax.swing.JFrame {
         try {
             String name = addedSMP.getNome();
             Pair result = checkSMPIdentifier(name);
-            if (!(boolean)result.getKey()) {
-                Message.raiseError(this, "Specified SMP name is not valid. Reason: " + (String)result.getValue());
+            if (!(boolean) result.getKey()) {
+                Message.raiseError(this, "Specified SMP name is not valid. Reason: " + (String) result.getValue());
                 addSMPButton.setEnabled(false);
                 return;
             }
@@ -467,14 +482,29 @@ public class SMPView extends javax.swing.JFrame {
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         String searchQuery = searchBar.getText();
-        if(searchQuery == null || searchQuery.isEmpty() || smpList.getModel().getRowCount() <= 0){
+        if (searchQuery == null || smpList.getModel().getRowCount() <= 0) {
             return;
         }
+        if (searchQuery.isEmpty()) {
+            tableSorter.setRowFilter(null);
+        }
+        tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchQuery));
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void cancelFilterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelFilterButtonActionPerformed
-        
+        tableSorter.setRowFilter(null);
     }//GEN-LAST:event_cancelFilterButtonActionPerformed
+
+    private void searchBarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBarActionPerformed
+        String searchQuery = searchBar.getText();
+        if (searchQuery == null || smpList.getModel().getRowCount() <= 0) {
+            return;
+        }
+        if (searchQuery.isEmpty()) {
+            tableSorter.setRowFilter(null);
+        }
+        tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchQuery));
+    }//GEN-LAST:event_searchBarActionPerformed
 
     /**
      * @param args the command line arguments
