@@ -9,6 +9,7 @@ import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.DocumentImportWindow;
 import it.unisa.team8se.Message;
 import it.unisa.team8se.SizeStringGenerator;
+import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.SMP;
 import java.io.File;
 import java.io.IOException;
@@ -133,8 +134,15 @@ public class SMPView extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("SMP View");
+        setIconImage(Message.getImageIcon());
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         smpList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -505,6 +513,14 @@ public class SMPView extends javax.swing.JFrame {
         }
         tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchQuery));
     }//GEN-LAST:event_searchBarActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            UserSession.close();
+        } catch (SQLException ex) {
+            Message.raiseError(this, "Errore nella chiusura!");
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
