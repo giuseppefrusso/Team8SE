@@ -47,7 +47,7 @@ public class Competence extends DatabaseModel {
 
     @Override
     public String toString() {
-        return id + " - " + descrizione;
+        return descrizione;
     }
 
     public static Competence[] getAllCompetencesOfMaintainer(String username) {
@@ -65,7 +65,7 @@ public class Competence extends DatabaseModel {
     }
 
     public static Competence[] getAllDatabaseInstances() {
-        String sql = "select * from competenza order by id";
+        String sql = "select * from competenza order by descrizione";
         try {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             LinkedList<Competence> instances = DatabaseContext.fetchAllModels(Competence.class, ps);

@@ -371,12 +371,15 @@ public class ActivityManager extends javax.swing.JFrame {
             
             
             Area[] options = Area.getAllDatabaseInstances();
-            int indexArea = JOptionPane.showOptionDialog(this, "Scegli area", "Aggiunta",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
-            Area area = options[indexArea];
-            String ambito = JOptionPane.showInputDialog(this, "Inserisci ambito",
+            Area area = (Area) JOptionPane.showInputDialog(this, "Seleziona area", "Aggiunta", 
+                    JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            if(area == null)
+                return;
+            String ambito = JOptionPane.showInputDialog(this, "Inserisci ambito", 
                     "Aggiunta", JOptionPane.PLAIN_MESSAGE);
-            int weekNumber = Integer.parseInt(JOptionPane.showInputDialog(this, "Inserisci numero della settimana",
+            if(ambito == null)
+                return;
+            int weekNumber = Integer.parseInt(JOptionPane.showInputDialog(this, "Inserisci numero della settimana", 
                     "Aggiunta", JOptionPane.PLAIN_MESSAGE));
             Timestamp datetime = Timestamp.valueOf(JOptionPane.showInputDialog(this,
                     "Inserisci data e ora nel seguente formato: yyyy-mm-dd hh:mm", "Aggiunta", JOptionPane.PLAIN_MESSAGE) + ":00");

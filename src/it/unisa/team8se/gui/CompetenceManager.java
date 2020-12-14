@@ -305,7 +305,9 @@ public class CompetenceManager extends javax.swing.JFrame {
     }//GEN-LAST:event_competenceTableFocusGained
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        SystemAdminForm form = 
+        CompetenceView form = new CompetenceView();
+        form.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_backButtonActionPerformed
 
     /**

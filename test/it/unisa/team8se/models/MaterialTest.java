@@ -8,6 +8,8 @@ package it.unisa.team8se.models;
 import it.unisa.team8se.DatabaseContext;
 import java.sql.*;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -41,7 +43,8 @@ public class MaterialTest {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        con.setAutoCommit(true);
         DatabaseContext.closeConnection();
     }
     
@@ -52,7 +55,12 @@ public class MaterialTest {
     
     @After
     public void tearDown() {
+        try{
+            con.rollback();
         instance = null;
+        } catch (SQLException ex){
+        Logger.getLogger(MaterialTest.class.getName()).log(Level.SEVERE,null,ex);
+        }
     }
 
     /**
@@ -111,23 +119,6 @@ public class MaterialTest {
       stm.executeUpdate(query);
     }
 
-    /**
-     * Test of getAllDatabaseInstances method, of class Material.
-     */
-    @Test
-    public void testGetAllDatabaseInstances()  {
-        try{
-        System.out.println("getAllDatabaseInstances");
-        Material m2= Material.getInstanceWithPK("");
-        Material m=instance;
-        Material[] expResult = {m2,m};
-        addActivityDatabase(m);
-        Material[] result = Material.getAllDatabaseInstances();
-        assertArrayEquals(expResult, result);
-        } catch(SQLException ex){
-        Assert.fail();
-        }
-    }
 
     /**
      * Test of getInstanceWithPK method, of class Material.

@@ -9,6 +9,8 @@ import it.unisa.team8se.DatabaseContext;
 import java.sql.*;
 import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.sql.ResultSet;
 import java.util.LinkedList;
 import org.junit.After;
@@ -43,7 +45,8 @@ public class MaintainerTest {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        con.setAutoCommit(true);
         DatabaseContext.closeConnection();
     }
     
@@ -54,7 +57,12 @@ public class MaintainerTest {
     
     @After
     public void tearDown() {
+        try{
+            con.rollback();
         instance =null;
+        } catch(SQLException ex){
+        Logger.getLogger(MaintainerTest.class.getName()).log(Level.SEVERE,null,ex);
+        }
     }
 
     /**
@@ -113,23 +121,6 @@ public class MaintainerTest {
       stm.executeUpdate(query);
     }
 
-    /**
-     * Test of getAllDatabaseInstances method, of class Maintainer.
-     */
-    @Test
-    public void testGetAllDatabaseInstances() {
-        try{
-        System.out.println("getAllDatabaseInstances");
-        Maintainer m2 = Maintainer.getInstanceWithPK("Smaug");
-        Maintainer m=instance;
-        Maintainer[] expResult = {m2,m};
-        addActivityDatabase(m);
-        Maintainer[] result = Maintainer.getAllDatabaseInstances();
-        assertArrayEquals(expResult, result);
-        } catch (SQLException ex){
-        Assert.fail();
-        }
-    }
 
     /**
      * Test of getInstanceWithPK method, of class Maintainer.

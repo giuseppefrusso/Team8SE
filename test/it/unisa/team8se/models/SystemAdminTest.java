@@ -8,6 +8,8 @@ package it.unisa.team8se.models;
 import it.unisa.team8se.DatabaseContext;
 import java.sql.*;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -40,7 +42,8 @@ public class SystemAdminTest {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        con.setAutoCommit(true);
         DatabaseContext.closeConnection();
     }
     
@@ -51,7 +54,12 @@ public class SystemAdminTest {
     
     @After
     public void tearDown() {
+        try{
+            con.rollback();
         instance = null;
+        } catch( SQLException ex){
+        Logger.getLogger(SystemAdminTest.class.getName()).log(Level.SEVERE,null,ex);
+          }
     }
     
      private void deleteAllDatabaseInstances () throws SQLException{
@@ -61,24 +69,6 @@ public class SystemAdminTest {
     private void addActivityDatabase( SystemAdmin sa) throws SQLException {
         String query = "Insert into system_administrator values ('" + sa.getUsername() + "','" + sa.getPassword() + "','" + sa.getSurname() + "','" + sa.getName() + "')";
         stm.executeUpdate(query);
-    }
-
-    /**
-     * Test of getAllDatabaseInstances method, of class SystemAdmin.
-     */
-    @Test
-    public void testGetAllDatabaseInstances() {
-        try{
-        System.out.println("getAllDatabaseInstances");
-        SystemAdmin sa2= SystemAdmin.getInstanceWithPK("Paco");
-        SystemAdmin sa= instance;
-        SystemAdmin[] expResult = {sa2,sa};
-        addActivityDatabase(sa);
-        SystemAdmin[] result = SystemAdmin.getAllDatabaseInstances();
-        assertArrayEquals(expResult, result);
-        } catch (SQLException ex){
-        Assert.fail();
-        }
     }
 
     /**

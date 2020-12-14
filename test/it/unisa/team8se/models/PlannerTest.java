@@ -8,6 +8,8 @@ package it.unisa.team8se.models;
 import it.unisa.team8se.DatabaseContext;
 import java.sql.*;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -40,7 +42,8 @@ public class PlannerTest {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        con.setAutoCommit(true);
         DatabaseContext.closeConnection();
     }
     
@@ -51,7 +54,12 @@ public class PlannerTest {
     
     @After
     public void tearDown() {
+        try{
+            con.rollback();
         instance = null;
+        } catch(SQLException ex){
+        Logger.getLogger(PlannerTest.class.getName()).log(Level.SEVERE,null,ex);
+        }
     }
     
     private void deleteAllDatabaseInstances () throws SQLException{
@@ -64,23 +72,6 @@ public class PlannerTest {
       stm.executeUpdate(query);
     }
 
-    /**
-     * Test of getAllDatabaseInstances method, of class Planner.
-     */
-    @Test
-    public void testGetAllDatabaseInstances() {
-        try{
-        System.out.println("getAllDatabaseInstances");
-        Planner p2 = Planner.getInstanceWithPK("Flaco");
-        Planner p=instance;
-        Planner[] expResult = {p2,p};
-        addActivityDatabase(p);
-        Planner[] result = Planner.getAllDatabaseInstances();
-        assertArrayEquals(expResult, result);
-        } catch (SQLException ex){
-        Assert.fail();
-        }
-    }
 
     /**
      * Test of getInstanceWithPK method, of class Planner.

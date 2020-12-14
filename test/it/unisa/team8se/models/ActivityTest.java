@@ -316,24 +316,6 @@ public class ActivityTest {
         stm.executeUpdate(query4);
     }
 
-    /**
-     * Test of getAllDatabaseInstances method, of class Activity.
-     */
-    @Test
-    public void testGetAllDatabaseInstances() {
-        try {
-            System.out.println("getAllDatabaseInstances");
-            Activity a2 = Activity.getInstanceWithPK(1);
-            Activity a = instance;
-            Activity[] expResult = {a2, a};
-            addForeignKey();
-            addActivityToDatabase(a);
-            Activity[] result = Activity.getAllDatabaseInstances();
-            assertArrayEquals(expResult, result);
-        } catch (SQLException ex) {
-            Assert.fail();
-        }
-    }
 
     /**
      * Test of getInstanceWithPK method, of class Activity.
@@ -409,19 +391,6 @@ public class ActivityTest {
         assertEquals(expResult, result);
     }
 
-    /**
-     * Test of saveToDatabase method, of class Activity.
-     */
-    @Test
-    public void testSaveToDatabase() {
-        System.out.println("saveToDatabase");
-        try {
-            instance.saveToDatabase();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            Assert.fail();
-        }
-    }
 
     /**
      * Test of getFromResultSet method, of class Activity.
@@ -440,7 +409,6 @@ public class ActivityTest {
     @Test
     public void testExistsInDatabase() {
         System.out.println("existsInDatabase");
-        Activity instance = new Activity();
         boolean expResult = false;
         boolean result = instance.existsInDatabase();
         assertEquals(expResult, result);

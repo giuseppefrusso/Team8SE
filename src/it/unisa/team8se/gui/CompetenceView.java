@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,8 +27,6 @@ public class CompetenceView extends javax.swing.JFrame {
     protected DefaultListModel<String> listModel;
 
     private LinkedList<Maintainer> maintainers;
-            
-    
 
     /**
      * Creates new form CompetenceView
@@ -36,9 +35,9 @@ public class CompetenceView extends javax.swing.JFrame {
         if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
         }
-        
+
         maintainers = new LinkedList<>();
-        
+
         initComboBoxModel();
         initListModel();
         initComponents();
@@ -67,10 +66,10 @@ public class CompetenceView extends javax.swing.JFrame {
                     comboBoxModel.addElement(m.getUsername());
                     maintainers.add(m);
                 }
-                
-            }          
+
+            }
         } catch (SQLException ex) {
-            Message.raiseError(this,"Errore nel caricamento!");
+            Message.raiseError(this, "Errore nel caricamento!");
             return false;
         }
         return true;
@@ -79,7 +78,7 @@ public class CompetenceView extends javax.swing.JFrame {
     protected boolean refreshCompetences(String username) {
         listModel.clear();
         Competence[] competences = Competence.getAllCompetencesOfMaintainer(username);
-        if (competences.length!=0) {
+        if (competences.length != 0) {
             for (Competence c : competences) {
                 listModel.addElement(c.getDescrizione());
             }
@@ -164,6 +163,11 @@ public class CompetenceView extends javax.swing.JFrame {
         });
 
         manageButton.setText("Gestisci competenze");
+        manageButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                manageButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -247,48 +251,48 @@ public class CompetenceView extends javax.swing.JFrame {
             DatabaseContext.closeConnection();
             System.exit(0);
         } catch (SQLException ex) {
-            Message.raiseError(this,"Errore nella chiusura!");
+            Message.raiseError(this, "Errore nella chiusura!");
         }
     }//GEN-LAST:event_formWindowClosing
 
     private Maintainer getSelectedMantainer() {
         if (comboBoxModel.getSize() == 0) {
-            Message.raiseError(this,"Non c'è alcun manutentore!");
+            Message.raiseError(this, "Non c'è alcun manutentore!");
             return null;
         }
         int index = comboBox.getSelectedIndex();
-        
-        if(index < 0 || index > maintainers.size()){
+
+        if (index < 0 || index > maintainers.size()) {
             return maintainers.get(0);
-        }
-        else{
+        } else {
             return maintainers.get(index);
         }
     }
 
     private String getSelectedCompetence() {
         if (listModel.getSize() == 0) {
-            Message.raiseError(this,"Non c'è alcuna competenza!");
+            Message.raiseError(this, "Non c'è alcuna competenza!");
             return null;
         }
         String selectedCompetence = listCompetence.getSelectedValue();
         if (selectedCompetence == null) {
-            Message.raiseError(this,"Non è stata selezionata alcuna competenza!");
+            Message.raiseError(this, "Non è stata selezionata alcuna competenza!");
             return null;
         }
         return selectedCompetence;
     }
 
-    protected boolean assign(Maintainer maintainer, String competenceDesc) {
-        if(maintainer == null || competenceDesc.equals(""))
+    protected boolean assign(Maintainer maintainer, Competence competence) {
+        if (maintainer == null)  {
             return false;
-        
+        }
+
         String username = maintainer.getUsername();
-        try {            
-            Competence competence = Competence.saveToDatabaseWithDescription(competenceDesc);
-            competence.saveIntoPossesso(username);            
+        try {
+            //Competence competence = Competence.saveToDatabaseWithDescription(competenceDesc);
+            competence.saveIntoPossesso(username);
         } catch (SQLException ex) {
-            Message.raiseError(this,"Errore nell'assegnamento");
+            Message.raiseError(this, "Errore nell'assegnamento");
             return false;
         }
         refreshCompetences(username);
@@ -301,9 +305,18 @@ public class CompetenceView extends javax.swing.JFrame {
             return;
         }
         String selectedUsername = selectedMaintainer.getUsername();
-        String competence = JOptionPane.showInputDialog(this, "Assegna una competenza a '" + selectedUsername + "'",
-                "Assegnazione", JOptionPane.PLAIN_MESSAGE);
-        if(competence == null || competence.equals("")) {
+        /*String competence = JOptionPane.showInputDialog(this, "Assegna una competenza a '" + selectedUsername + "'",
+                "Assegnazione", JOptionPane.PLAIN_MESSAGE);*/
+        Competence[] cs = Competence.getAllDatabaseInstances();
+        if(cs == null || cs.length <=0) {
+            Message.raiseError(this, "Non ci sono competenze!");
+            return;
+        }
+        //JComboBox jcb = new JComboBox(cs);
+        Competence competence = (Competence) JOptionPane.showInputDialog(this, "Seleziona una competenza", "Aggiunta", 
+                JOptionPane.QUESTION_MESSAGE, null, cs, cs[0]);
+        //Competence competence = (Competence) jcb.getSelectedItem();
+        if (competence == null) {
             return;
         }
         assign(selectedMaintainer, competence);
@@ -314,7 +327,7 @@ public class CompetenceView extends javax.swing.JFrame {
         try {
             Competence.removeFromPossessoWithDescription(competence, username);
         } catch (SQLException ex) {
-            Message.raiseError(this,"Errore nella rimozione");
+            Message.raiseError(this, "Errore nella rimozione");
             return false;
         }
         refreshCompetences(username);
@@ -331,7 +344,7 @@ public class CompetenceView extends javax.swing.JFrame {
         }
 
         String selectedUsername = selectedMaintainer.getUsername();
-        
+
         int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la competenza '" + selectedCompetence + "' di '" + selectedUsername + "' ?", "Rimozione", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             remove(selectedUsername, selectedCompetence);
@@ -342,6 +355,12 @@ public class CompetenceView extends javax.swing.JFrame {
     private void listCompetenceFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_listCompetenceFocusGained
         removeButton.setEnabled(true);
     }//GEN-LAST:event_listCompetenceFocusGained
+
+    private void manageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageButtonActionPerformed
+        CompetenceManager view = new CompetenceManager();
+        view.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_manageButtonActionPerformed
 
     /**
      * @param args the command line arguments
