@@ -115,17 +115,6 @@ public class SMPTest extends TestCase {
         assertTrue(status);   
     }
     
-     @Test
-    public void testGetAllDatabaseInstances() throws SQLException {
-        System.out.println("getAllDatabaseInstances");
-        deleteAllDatabaseInstances();
-        SMP sm=instance;
-        SMP[] expResult = {sm};
-        addActivityDatabase(sm);
-        SMP[] result = SMP.getAllDatabaseInstances();
-        assertArrayEquals(expResult, result);
-        con.rollback();
-    }
     
      @Test
     public void testGetInstanceWithPK() throws SQLException {

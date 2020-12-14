@@ -119,23 +119,6 @@ public class MaterialTest {
       stm.executeUpdate(query);
     }
 
-    /**
-     * Test of getAllDatabaseInstances method, of class Material.
-     */
-    @Test
-    public void testGetAllDatabaseInstances()  {
-        try{
-        System.out.println("getAllDatabaseInstances");
-        Material m2= Material.getInstanceWithPK("");
-        Material m=instance;
-        Material[] expResult = {m2,m};
-        addActivityDatabase(m);
-        Material[] result = Material.getAllDatabaseInstances();
-        assertArrayEquals(expResult, result);
-        } catch(SQLException ex){
-        Assert.fail();
-        }
-    }
 
     /**
      * Test of getInstanceWithPK method, of class Material.

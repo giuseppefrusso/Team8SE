@@ -72,24 +72,6 @@ public class SystemAdminTest {
     }
 
     /**
-     * Test of getAllDatabaseInstances method, of class SystemAdmin.
-     */
-    @Test
-    public void testGetAllDatabaseInstances() {
-        try{
-        System.out.println("getAllDatabaseInstances");
-        SystemAdmin sa2= SystemAdmin.getInstanceWithPK("Paco");
-        SystemAdmin sa= instance;
-        SystemAdmin[] expResult = {sa2,sa};
-        addActivityDatabase(sa);
-        SystemAdmin[] result = SystemAdmin.getAllDatabaseInstances();
-        assertArrayEquals(expResult, result);
-        } catch (SQLException ex){
-        Assert.fail();
-        }
-    }
-
-    /**
      * Test of getInstanceWithPK method, of class SystemAdmin.
      */
     @Test

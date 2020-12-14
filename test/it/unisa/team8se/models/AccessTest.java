@@ -45,11 +45,8 @@ public class AccessTest {
 
     @AfterClass
     public static void tearDownClass() throws SQLException {
-<<<<<<< HEAD
-        con.setAutoCommit(true);
-=======
+
         conn.setAutoCommit(true);
->>>>>>> 045f57925b89d4ab5f4bc6252bb7f1581c834fda
         DatabaseContext.closeConnection();
     }
 
@@ -60,14 +57,13 @@ public class AccessTest {
 
     @After
     public void tearDown() {
-<<<<<<< HEAD
         try{
-            con.rollback();
+            conn.rollback();
         instance = null;
         } catch(SQLException ex){
         Logger.getLogger(AccessTest.class.getName()).log(Level.SEVERE,null,ex);
         }
-=======
+
         try {
             instance = null;
             conn.rollback();
@@ -75,7 +71,7 @@ public class AccessTest {
             Logger.getLogger(AccessTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
->>>>>>> 045f57925b89d4ab5f4bc6252bb7f1581c834fda
+
     }
 
     /**

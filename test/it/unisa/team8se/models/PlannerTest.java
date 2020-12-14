@@ -72,23 +72,6 @@ public class PlannerTest {
       stm.executeUpdate(query);
     }
 
-    /**
-     * Test of getAllDatabaseInstances method, of class Planner.
-     */
-    @Test
-    public void testGetAllDatabaseInstances() {
-        try{
-        System.out.println("getAllDatabaseInstances");
-        Planner p2 = Planner.getInstanceWithPK("Flaco");
-        Planner p=instance;
-        Planner[] expResult = {p2,p};
-        addActivityDatabase(p);
-        Planner[] result = Planner.getAllDatabaseInstances();
-        assertArrayEquals(expResult, result);
-        } catch (SQLException ex){
-        Assert.fail();
-        }
-    }
 
     /**
      * Test of getInstanceWithPK method, of class Planner.

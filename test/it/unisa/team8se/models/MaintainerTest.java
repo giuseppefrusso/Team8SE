@@ -121,23 +121,6 @@ public class MaintainerTest {
       stm.executeUpdate(query);
     }
 
-    /**
-     * Test of getAllDatabaseInstances method, of class Maintainer.
-     */
-    @Test
-    public void testGetAllDatabaseInstances() {
-        try{
-        System.out.println("getAllDatabaseInstances");
-        Maintainer m2 = Maintainer.getInstanceWithPK("Smaug");
-        Maintainer m=instance;
-        Maintainer[] expResult = {m2,m};
-        addActivityDatabase(m);
-        Maintainer[] result = Maintainer.getAllDatabaseInstances();
-        assertArrayEquals(expResult, result);
-        } catch (SQLException ex){
-        Assert.fail();
-        }
-    }
 
     /**
      * Test of getInstanceWithPK method, of class Maintainer.

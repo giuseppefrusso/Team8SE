@@ -126,24 +126,7 @@ public class CompetenceTest {
         stm.executeUpdate(query);
     }
 
-    /**
-     * Test of getAllDatabaseInstances method, of class Competence.
-     */
-    @Test
-    public void testGetAllDatabaseInstances() {
-        try {
-            System.out.println("getAllDatabaseInstances");
-            Competence c2 = Competence.getInstanceWithPK(1);
-            Competence c = instance;
-            Competence[] expResult = {c2, c};
-            addActivityDatabase(c);
-            Competence[] result = Competence.getAllDatabaseInstances();
-            assertArrayEquals(expResult, result);
-        } catch (SQLException ex) {
-            Assert.fail();
-        }
-    }
-
+ 
     /**
      * Test of getInstanceWithPK method, of class Competence.
      */
@@ -172,14 +155,6 @@ public class CompetenceTest {
         con.rollback();
     }
 
-    /**
-     * Test of saveToDatabase method, of class Competence.
-     */
-    @Test
-    public void testSaveToDatabase() {
-        System.out.println("saveToDatabase");
-        
-    }
 
     /**
      * Test of getFromResultSet method, of class Competence.

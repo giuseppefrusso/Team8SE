@@ -108,26 +108,6 @@ public class EWOTest {
     stm.executeUpdate(query4);
     }
 
-    /**
-     * Test of getAllDatabaseInstances method, of class EWO.
-     */
-    @Test
-    public void testGetAllDatabaseInstances() throws SQLException {
-        try{
-        System.out.println("getAllDatabaseInstances");
-        EWO e2=EWO.getInstanceWithPK(1);
-        EWO e=instance;
-        EWO[] expResult = {e2,e};
-        addForeignKey();
-        addActivityDatabase(e);
-        EWO[] result = EWO.getAllDatabaseInstances();
-        assertArrayEquals(expResult, result);
-        } catch (SQLException ex)
-        {
-        Assert.fail();
-        }
-        
-    }
 
     /**
      * Test of getInstanceWithPK method, of class EWO.
@@ -159,15 +139,6 @@ public class EWOTest {
         con.rollback();
     }
 
-    /**
-     * Test of saveToDatabase method, of class EWO.
-     */
-    @Test
-    public void testSaveToDatabase() {
-        System.out.println("saveToDatabase");
-        EWO instance = new EWO();
-        instance.saveToDatabase();
-    }
 
     /**
      * Test of getFromResultSet method, of class EWO.

@@ -111,17 +111,7 @@ public class AreaTest {
         Area result = Area.getInstanceWithPK(sector, location);
         assertEquals(expResult, result);
     }
-     
-    @Test
-    public void testGetAllLocations() throws SQLException {
-        System.out.println("getAllLocations");
-        deleteAllDatabaseInstances();
-        LinkedList<String> expResult =null;
-        addActivityDatabase(instance);
-        LinkedList<String> result = Area.getAllLocations();
-        assertEquals(expResult, result);
-        con.rollback();
-    }
+    
     
      @Test
     public void testSaveToDatabase() throws Exception {
