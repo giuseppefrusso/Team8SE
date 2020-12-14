@@ -7,6 +7,8 @@ package it.unisa.team8se.models;
 
 import it.unisa.team8se.DatabaseContext;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,44 +24,58 @@ import static org.junit.Assert.*;
  * @author prgne
  */
 public class AccessTest {
-    
+
     private static Statement stm;
-    private static Connection con;
-    Access instance;
-    
+    private static Connection conn;
+    private static Access instance;
+
     public AccessTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() throws SQLException {
-          if (!DatabaseContext.isConnected()) {
+        if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
-            con = DatabaseContext.getConnection();
-            con.setAutoCommit(false);
-          }
-          stm = con.createStatement();
-          addForeignKey();
+            conn = DatabaseContext.getConnection();
+            conn.setAutoCommit(false);
+        }
+        stm = conn.createStatement();
+        addForeignKey();
     }
-    
+
     @AfterClass
     public static void tearDownClass() throws SQLException {
+<<<<<<< HEAD
         con.setAutoCommit(true);
+=======
+        conn.setAutoCommit(true);
+>>>>>>> 045f57925b89d4ab5f4bc6252bb7f1581c834fda
         DatabaseContext.closeConnection();
     }
-    
+
     @Before
     public void setUp() {
         instance = new Access();
     }
-    
+
     @After
     public void tearDown() {
+<<<<<<< HEAD
         try{
             con.rollback();
         instance = null;
         } catch(SQLException ex){
         Logger.getLogger(AccessTest.class.getName()).log(Level.SEVERE,null,ex);
         }
+=======
+        try {
+            instance = null;
+            conn.rollback();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccessTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+>>>>>>> 045f57925b89d4ab5f4bc6252bb7f1581c834fda
     }
 
     /**
@@ -82,7 +98,7 @@ public class AccessTest {
         System.out.println("setID");
         int ID = 0;
         instance.setID(ID);
-        assertEquals(ID,instance.getID());
+        assertEquals(ID, instance.getID());
     }
 
     /**
@@ -105,7 +121,7 @@ public class AccessTest {
         System.out.println("setUsername");
         String username = "";
         instance.setUsername(username);
-        assertEquals(username,instance.getUsername());
+        assertEquals(username, instance.getUsername());
     }
 
     /**
@@ -127,7 +143,7 @@ public class AccessTest {
         System.out.println("setDataOraLogin");
         Timestamp dataOraLogin = null;
         instance.setDataOraLogin(dataOraLogin);
-        assertEquals(dataOraLogin,instance.getDataOraLogin());
+        assertEquals(dataOraLogin, instance.getDataOraLogin());
     }
 
     /**
@@ -149,55 +165,38 @@ public class AccessTest {
         System.out.println("setDataOraLogoff");
         Timestamp dataOraLogoff = null;
         instance.setDataOraLogoff(dataOraLogoff);
-        assertEquals(dataOraLogoff,instance.getDataOraLogoff());
+        assertEquals(dataOraLogoff, instance.getDataOraLogoff());
     }
-    
-    private void deleteAllDatabaseInstances () throws SQLException{
+
+    private void deleteAllDatabaseInstances() throws SQLException {
         String query = "Delete from accesso";
         stm.executeUpdate(query);
     }
-    
-    private void addActivityToDatabase(Access a) throws SQLException{
-        String query = "Insert into accesso values("+ a.getID()+",'"+ a.getDataOraLogin()+"','"+ a.getDataOraLogoff()+"','Marco','Manu','Ale')";
+
+    private void addActivityToDatabase(Access a) throws SQLException {
+        String query = "Insert into accesso values(" + a.getID() + ",'" + a.getDataOraLogin() + "','" + a.getDataOraLogoff() + "','Marco','Manu','Ale')";
         stm.executeUpdate(query);
     }
-    private static void addForeignKey() throws SQLException{
-        String query1="Insert into maintainer values('Ale','cit','ro','nel')";
-        String query2="Insert into planner values ('Manu','cos','nick','ola')";
-        String query3="Insert into system_administrator values ('Marco','sin','orn','dries')";
+
+    private static void addForeignKey() throws SQLException {
+        String query1 = "Insert into maintainer values('Ale','cit','ro','nel')";
+        String query2 = "Insert into planner values ('Manu','cos','nick','ola')";
+        String query3 = "Insert into system_administrator values ('Marco','sin','orn','dries')";
         stm.executeUpdate(query1);
         stm.executeUpdate(query2);
         stm.executeUpdate(query3);
     }
-    
-     
-    private static void removeForeignKey() throws SQLException{
-    String query1="Delete from maintainer where username=('Ale')";
-    String query2="Delete from planner where username='Manu'";
-    String query3="Delete from system_administrator where username='Marco'";
-    stm.executeUpdate(query1);
-    stm.executeUpdate(query2);
-    stm.executeUpdate(query3);
+
+    private static void removeForeignKey() throws SQLException {
+        String query1 = "Delete from maintainer where username=('Ale')";
+        String query2 = "Delete from planner where username='Manu'";
+        String query3 = "Delete from system_administrator where username='Marco'";
+        stm.executeUpdate(query1);
+        stm.executeUpdate(query2);
+        stm.executeUpdate(query3);
     }
 
-    /**
-     * Test of getAllDatabaseInstances method, of class Access.
-     */
-    @Test
-    public void testGetAllDatabaseInstances() {
-        try{
-        System.out.println("getAllDatabaseInstances");
-        Access a2 = Access.getInstanceWithPK(1);
-        Access a =instance;
-        Access[] expResult = {a2,a};
-        addForeignKey();
-        addActivityToDatabase(a);
-        Access[] result = Access.getAllDatabaseInstances();
-        assertArrayEquals(expResult, result);
-        } catch(SQLException ex){
-        Assert.fail();
-        }
-    }
+
 
     /**
      * Test of getInstanceWithPK method, of class Access.
@@ -224,19 +223,6 @@ public class AccessTest {
         instance.getFromResultSet(rs);
     }
 
-    /**
-     * Test of saveToDatabase method, of class Access.
-     */
-    @Test
-    public void testSaveToDatabase() {
-        System.out.println("saveToDatabase");
-        try{
-        instance.saveToDatabase();
-        } catch(SQLException ex){
-        System.out.println(ex.getMessage());
-        Assert.fail();
-        }
-    }
 
     /**
      * Test of logoff method, of class Access.
@@ -265,10 +251,10 @@ public class AccessTest {
     @Test
     public void testToPastArray() {
         System.out.println("toPastArray");
-        Object[] expResult = {1,"Stringa",new Timestamp (192188), new Timestamp(301814)};
+        Object[] expResult = {1, "Stringa", new Timestamp(192188), new Timestamp(301814)};
         instance.setID(1);
         instance.setUsername("Stringa");
-        instance.setDataOraLogin(new Timestamp (192188));
+        instance.setDataOraLogin(new Timestamp(192188));
         instance.setDataOraLogoff(new Timestamp(301814));
         Object[] result = instance.toPastArray();
         assertArrayEquals(expResult, result);
@@ -280,12 +266,12 @@ public class AccessTest {
     @Test
     public void testToCurrentArray() {
         System.out.println("toCurrentArray");
-        Object[] expResult = {1,"Stringa",new Timestamp (192188)};
+        Object[] expResult = {1, "Stringa", new Timestamp(192188)};
         instance.setID(1);
         instance.setUsername("Stringa");
-        instance.setDataOraLogin(new Timestamp (192188));
+        instance.setDataOraLogin(new Timestamp(192188));
         Object[] result = instance.toCurrentArray();
         assertArrayEquals(expResult, result);
     }
-    
+
 }

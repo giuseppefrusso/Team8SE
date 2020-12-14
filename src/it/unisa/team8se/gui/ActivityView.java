@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -413,13 +414,9 @@ public class ActivityView extends javax.swing.JFrame {
         return selectedMaterial;
     }
 
-    protected boolean assignCompetence(Activity activity, String competenceDesc) {
-        if (activity == null || competenceDesc.equals("")) {
-            return false;
-        }
-
+    protected boolean assignCompetence(Activity activity, Competence competence) {
         try {
-            Competence competence = Competence.saveToDatabaseWithDescription(competenceDesc);
+            //Competence competence = Competence.saveToDatabaseWithDescription(competenceDesc);
             competence.saveIntoRequisite(activity.getID());
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nell'assegnamento");
@@ -435,9 +432,12 @@ public class ActivityView extends javax.swing.JFrame {
             return;
         }
 
-        String competence = JOptionPane.showInputDialog(this, "Assegna una competenza all'attività "
-                + String.valueOf(selectedActivity.getID()), "Assegnazione", JOptionPane.PLAIN_MESSAGE);
-        if (competence == null || competence.equals("")) {
+        /*String competence = JOptionPane.showInputDialog(this, "Assegna una competenza all'attività "
+                + String.valueOf(selectedActivity.getID()), "Assegnazione", JOptionPane.PLAIN_MESSAGE);*/
+        Competence[] cs =Competence.getAllDatabaseInstances();
+        Competence competence = (Competence) JOptionPane.showInputDialog(this,"Seleziona una competenza","Aggiunta", 
+                JOptionPane.QUESTION_MESSAGE, null, cs, cs[0]);
+        if (competence == null) {
             return;
         }
         assignCompetence(selectedActivity, competence);
@@ -475,17 +475,13 @@ public class ActivityView extends javax.swing.JFrame {
         competenceList.clearSelection();
     }//GEN-LAST:event_removeCompetenceButtonActionPerformed
 
-    protected boolean assignMaterial(Activity activity, String nome) {
-        if (activity == null || nome.equals("")) {
-            return false;
-        }
-
+    protected boolean assignMaterial(Activity activity, Material material) {
         try {
-            Material material = Material.getInstanceWithPK(nome);
-            if (material == null) {
+            //Material material = Material.getInstanceWithPK(nome);
+            /*if (material == null) {
                 material = new Material(nome, null);
                 material.saveToDatabase();
-            }
+            }*/
             material.saveIntoUse(activity.getID());
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nell'assegnamento");
@@ -499,19 +495,22 @@ public class ActivityView extends javax.swing.JFrame {
         if (selectedActivity == null) {
             return;
         }
-        Material[] options = Material.getAllDatabaseInstances();
+        //Material[] options = Material.getAllDatabaseInstances();
         /*String material = JOptionPane.showInputDialog(this, "Assegna un materiale all'attività "
                 + String.valueOf(selectedActivity.getID()), "Assegnazione", JOptionPane.PLAIN_MESSAGE);*/
-        int index = JOptionPane.showOptionDialog(this, "Scegli il materiale da assegnare all'attività "+
+        /*int index = JOptionPane.showOptionDialog(this, "Scegli il materiale da assegnare all'attività "+
                 String.valueOf(selectedActivity.getID()), "Assegnazione", JOptionPane.DEFAULT_OPTION, 
                 JOptionPane.PLAIN_MESSAGE, null, options, null);
         if(index==-1)
             return;
-        Material material = options[index];
-        /*if (material == null || material.equals("")) {
+        Material material = options[index];*/
+        Material[] ms = Material.getAllDatabaseInstances();
+        Material material = (Material) JOptionPane.showInputDialog(this,"Seleziona un materiale","Aggiunta", 
+                JOptionPane.QUESTION_MESSAGE, null, ms, ms[0]);
+        if (material == null) {
             return;
-        }*/
-        assignMaterial(selectedActivity, material.getName());
+        }
+        assignMaterial(selectedActivity, material);
         refreshMaterials(selectedActivity);
         removeCompetenceButton.setEnabled(false);
         removeMaterialButton.setEnabled(false);

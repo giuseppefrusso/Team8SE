@@ -45,6 +45,11 @@ public class Competence extends DatabaseModel {
         this.descrizione = Descrizione;
     }
 
+    @Override
+    public String toString() {
+        return descrizione;
+    }
+
     public static Competence[] getAllCompetencesOfMaintainer(String username) {
         String sql = "select C.id as id, C.descrizione as descrizione from competenza C "
                 + "join possesso P on C.id = P.id where P.maintainer=? order by descrizione";
@@ -88,6 +93,24 @@ public class Competence extends DatabaseModel {
         return null;
     }
 
+    public void updateDescription(String newDescription) throws SQLException {
+        String sql = "update competenza set descrizione=? where id=?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setInt(2, id);
+        this.descrizione = newDescription;
+        ps.setString(1, newDescription);
+        ps.executeUpdate();
+        ps.close();
+    }
+    
+    public void removeFromDatabase() throws SQLException {
+        String sql = "delete from competenza where id=?";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+        ps.setInt(1, id);
+        ps.executeUpdate();
+        ps.close();
+    }
+    
     public static Competence getInstanceWithDescription(String desc) {
         String sql = "select * from competenza where lower(descrizione) = lower(?)";
         try {
@@ -148,7 +171,7 @@ public class Competence extends DatabaseModel {
         ps.close();
     }
 
-    public static void removeFromRequisiteWithDescription(String competence, int idActivity) throws SQLException{
+    public static void removeFromRequisiteWithDescription(String competence, int idActivity) throws SQLException {
         String query = "select C.id as id_competenza from competenza C where C.descrizione=? "
                 + "intersect "
                 + "select P.competenza as id_competenza from requisito_planned P where P.attivita_pianificata=?";
@@ -168,7 +191,7 @@ public class Competence extends DatabaseModel {
         rs.close();
         ps.close();
     }
-    
+
     public static Competence saveToDatabaseWithDescription(String competenceDesc) throws SQLException {
         Competence competence = Competence.getInstanceWithDescription(competenceDesc);
         if (competence == null) {
@@ -187,19 +210,15 @@ public class Competence extends DatabaseModel {
     }
 
     @Override
-    public void saveToDatabase() {
-        try {
-            String sql = "insert into competenza (descrizione, id) values (?, ?)";
-            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+    public void saveToDatabase() throws SQLException {
+        String sql = "insert into competenza (descrizione, id) values (?, ?)";
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
 
-            ps.setInt(2, getID());
-            ps.setString(1, getDescrizione());
+        ps.setInt(2, getID());
+        ps.setString(1, getDescrizione());
 
-            ps.executeUpdate();
-            ps.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Competence.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ps.executeUpdate();
+        ps.close();
     }
 
     @Override
@@ -211,5 +230,10 @@ public class Competence extends DatabaseModel {
     @Override
     public boolean existsInDatabase() {
         return Competence.getInstanceWithPK(getID()) != null || Competence.getInstanceWithDescription(getDescrizione()) != null;
+    }
+    
+    public Object[] toArray() {
+        Object[] array = {id,descrizione};
+        return array;
     }
 }//end Competence
