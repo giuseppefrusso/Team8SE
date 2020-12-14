@@ -130,7 +130,7 @@ public class PlannerTest {
     /**
      * Test of getFromResultSet method, of class Planner.
      */
-    @Test
+    @Test(expected= NullPointerException.class)
     public void testGetFromResultSet() throws Exception {
         System.out.println("getFromResultSet");
         ResultSet rs = null;
