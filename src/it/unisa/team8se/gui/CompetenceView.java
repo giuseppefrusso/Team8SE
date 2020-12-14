@@ -10,9 +10,6 @@ import it.unisa.team8se.Message;
 import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import javax.swing.DefaultComboBoxModel;
@@ -109,6 +106,7 @@ public class CompetenceView extends javax.swing.JFrame {
         removeButton = new javax.swing.JButton();
         assignButton = new javax.swing.JButton();
         backButton = new javax.swing.JButton();
+        manageButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Competence View");
@@ -165,6 +163,8 @@ public class CompetenceView extends javax.swing.JFrame {
             }
         });
 
+        manageButton.setText("Gestisci competenze");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -187,7 +187,10 @@ public class CompetenceView extends javax.swing.JFrame {
                                 .addComponent(jLabel2))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(195, 195, 195)
-                        .addComponent(backButton)))
+                        .addComponent(backButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(manageButton)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -206,7 +209,9 @@ public class CompetenceView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(removeButton))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(manageButton)
+                .addGap(11, 11, 11)
                 .addComponent(backButton)
                 .addContainerGap(42, Short.MAX_VALUE))
         );
@@ -382,6 +387,7 @@ public class CompetenceView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<String> listCompetence;
+    private javax.swing.JButton manageButton;
     private javax.swing.JButton removeButton;
     // End of variables declaration//GEN-END:variables
 }

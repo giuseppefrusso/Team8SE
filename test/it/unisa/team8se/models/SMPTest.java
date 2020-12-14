@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import static org.junit.Assert.assertArrayEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -133,5 +134,16 @@ public class SMPTest extends TestCase {
         SMP result = SMP.getInstanceWithPK(name);
         assertEquals(expResult, result);
         con.rollback();
+    }
+    
+     @Test
+    public void testSaveToDatabase() throws Exception {
+        System.out.println("saveToDatabase");
+         try{
+        instance.saveToDatabase();
+        } catch(SQLException ex){
+        System.out.println(ex.getMessage());
+        Assert.fail();
+        }
     }
 }

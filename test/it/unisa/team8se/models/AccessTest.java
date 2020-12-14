@@ -220,10 +220,14 @@ public class AccessTest {
      * Test of saveToDatabase method, of class Access.
      */
     @Test
-    public void testSaveToDatabase() throws Exception {
+    public void testSaveToDatabase() {
         System.out.println("saveToDatabase");
-        Access instance = new Access();
+        try{
         instance.saveToDatabase();
+        } catch(SQLException ex){
+        System.out.println(ex.getMessage());
+        Assert.fail();
+        }
     }
 
     /**

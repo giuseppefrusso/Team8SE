@@ -12,7 +12,6 @@ import it.unisa.team8se.models.Material;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -48,7 +47,7 @@ public class ToolsView extends javax.swing.JFrame {
 
         Material[] m = Material.getAllDatabaseInstances();
 
-        if (m != null) {
+        if (m != null || m.length > 0) {
             Collections.addAll(materials, m);
             for (Material mat : m) {
                 if (mat.getDescription() != null) {
@@ -277,8 +276,6 @@ public class ToolsView extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             UserSession.close();
-            DatabaseContext.closeConnection();
-            System.exit(0);
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nella chiusura!");
         }

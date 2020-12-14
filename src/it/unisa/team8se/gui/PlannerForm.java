@@ -81,14 +81,6 @@ public class PlannerForm extends UserBaseForm {
         }
     }
 
-    protected Connection getConnection() {
-        return DatabaseContext.getConnection();
-    }
-
-    protected void closeConnection() {
-        DatabaseContext.closeConnection();
-    }
-
     private void setupCompetenceList() {
         competenceListModel = new DefaultListModel();
         requiredCompetencesList.setModel(competenceListModel);
@@ -817,9 +809,6 @@ public class PlannerForm extends UserBaseForm {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             UserSession.close();
-            closeConnection();
-            SMP.cleanTempDocumentFolder();
-            System.exit(0);
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nella chiusura!");
         }

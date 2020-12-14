@@ -5,7 +5,6 @@
  */
 package it.unisa.team8se;
 
-import it.unisa.team8se.gui.PlannerForm;
 import java.awt.Component;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -36,4 +35,5 @@ public class Message {
         ImageIcon icon = new ImageIcon("\\Users\\icon.png");
         return icon.getImage();
     }
+   
 }

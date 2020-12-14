@@ -194,8 +194,6 @@ public class ActivityManager extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             UserSession.close();
-            DatabaseContext.closeConnection();
-            System.exit(0);
         } catch (SQLException ex) {
             Message.raiseError(this,"Errore nella chiusura!");
         }
