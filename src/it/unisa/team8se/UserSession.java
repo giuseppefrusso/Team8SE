@@ -7,6 +7,7 @@ package it.unisa.team8se;
 
 import it.unisa.team8se.models.Maintainer;
 import it.unisa.team8se.models.Planner;
+import it.unisa.team8se.models.SMP;
 import it.unisa.team8se.models.SystemAdmin;
 import it.unisa.team8se.models.base.User;
 import java.sql.PreparedStatement;
@@ -25,19 +26,18 @@ public class UserSession {
     private static User loggedUser;
     private static int id;
 
-    
     public static User getLoggedUser() {
         return loggedUser;
     }
-    
+
     public static int getId() {
         return id;
     }
-    
+
     private static Timestamp getCurrentTimestamp() {
         return Timestamp.from(Instant.now().truncatedTo(ChronoUnit.SECONDS));
     }
-    
+
     public static boolean authenticateAsMaintainer(String username, String password) throws SQLException {
         Maintainer m = Maintainer.authenticate(username, password);
 
@@ -73,13 +73,14 @@ public class UserSession {
         String sql = "select max(id_accesso) from accesso";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
         ResultSet rs = ps.executeQuery();
-        if(rs.next()) {
-            id = rs.getInt(1)+1;
-        } else
+        if (rs.next()) {
+            id = rs.getInt(1) + 1;
+        } else {
             id = 1;
+        }
         rs.close();
-        
-        sql = "insert into accesso(id_accesso,"+typeOfUser+", data_e_ora_login) values(?, ?, ?)";
+
+        sql = "insert into accesso(id_accesso," + typeOfUser + ", data_e_ora_login) values(?, ?, ?)";
         ps = DatabaseContext.getPreparedStatement(sql);
         ps.setInt(1, id);
         ps.setString(2, loggedUser.getUsername());
@@ -89,12 +90,16 @@ public class UserSession {
     }
 
     public static void close() throws SQLException {
-        String sql = "update accesso set data_e_ora_logoff = ? " 
+        String sql = "update accesso set data_e_ora_logoff = ? "
                 + "where id_accesso = ?";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
         ps.setTimestamp(1, getCurrentTimestamp());
         ps.setInt(2, id);
         ps.executeUpdate();
         ps.close();
+        
+        DatabaseContext.closeConnection();
+        SMP.cleanTempDocumentFolder();
+        System.exit(0);
     }
 }

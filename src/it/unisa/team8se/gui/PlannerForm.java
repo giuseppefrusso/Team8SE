@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
@@ -46,10 +47,13 @@ public class PlannerForm extends UserBaseForm {
 
     private LinkedList<Activity> activities;
     private LinkedList<Maintainer> maintainers;
+    
     private Activity selectedActivity;
     private Maintainer selectedMaintainer;
+    
     private DefaultListModel competenceListModel;
     private DefaultListModel materialListModel;
+    private DefaultComboBoxModel<String> weekSelectorModel;
     
     
     public PlannerForm(int defaultId) {
@@ -62,7 +66,10 @@ public class PlannerForm extends UserBaseForm {
         setupTextBoxes();
         setupCompetenceList();
         setupMaterialList();
-
+        
+        weekSelectorModel = new DefaultComboBoxModel<>();
+        weekSelector.setModel(weekSelectorModel);
+        
         if (defaultId != -1) {
             refreshActivities();
             selectedActivity = Activity.getInstanceWithPK(defaultId);
@@ -72,14 +79,6 @@ public class PlannerForm extends UserBaseForm {
 
             switchToActivityList();
         }
-    }
-
-    protected Connection getConnection() {
-        return DatabaseContext.getConnection();
-    }
-
-    protected void closeConnection() {
-        DatabaseContext.closeConnection();
     }
 
     private void setupCompetenceList() {
@@ -161,17 +160,19 @@ public class PlannerForm extends UserBaseForm {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         tabbedPane = new javax.swing.JTabbedPane();
         activityList = new javax.swing.JPanel();
-        activityListLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         activityTable = new javax.swing.JTable();
         weeklabel = new javax.swing.JLabel();
-        weekNumberLabel = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        acivityListHeader = new javax.swing.JPanel();
+        activityListLabel = new javax.swing.JLabel();
         activityButton = new javax.swing.JButton();
+        weekSelector = new javax.swing.JComboBox<>();
+        jTextField1 = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         activitySummary = new javax.swing.JPanel();
         interventionDescScrollPane = new javax.swing.JScrollPane();
         interventionDescText = new javax.swing.JTextPane();
@@ -181,8 +182,7 @@ public class PlannerForm extends UserBaseForm {
         workspaceNotesText = new javax.swing.JTextPane();
         workspaceNotesEditButton = new javax.swing.JButton();
         interventionDescriptionEditButton = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        weekNumberLabel = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         smpButton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
@@ -193,27 +193,30 @@ public class PlannerForm extends UserBaseForm {
         uploadSMPButton = new javax.swing.JButton();
         viewExplorerButton = new javax.swing.JButton();
         manageButton = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        requiredCompetencesList = new javax.swing.JList<>();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        requiredMaterialsList = new javax.swing.JList<>();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         header = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
+        requirementsContainer = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        requiredCompetencesList = new javax.swing.JList<>();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        requiredMaterialsList = new javax.swing.JList<>();
         maintainerList = new javax.swing.JPanel();
         maintainerScrollPane = new javax.swing.JScrollPane();
         maintainerTable = new javax.swing.JTable();
-        headerLabel = new javax.swing.JLabel();
         selectedActivityLabel = new javax.swing.JLabel();
         selectedActivityNameLabel = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        maintainerListHeader = new javax.swing.JPanel();
+        maintainerListLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Planner View");
         setIconImage(Message.getImageIcon());
+        setPreferredSize(new java.awt.Dimension(800, 800));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -221,7 +224,7 @@ public class PlannerForm extends UserBaseForm {
             }
         });
 
-        tabbedPane.setPreferredSize(new java.awt.Dimension(800, 600));
+        tabbedPane.setPreferredSize(new java.awt.Dimension(800, 700));
         tabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 tabbedPaneStateChanged(evt);
@@ -229,21 +232,7 @@ public class PlannerForm extends UserBaseForm {
         });
 
         activityList.setBackground(new java.awt.Color(255, 204, 153));
-        activityList.setPreferredSize(new java.awt.Dimension(800, 600));
-        java.awt.GridBagLayout activityListLayout = new java.awt.GridBagLayout();
-        activityListLayout.columnWidths = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
-        activityListLayout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
-        activityList.setLayout(activityListLayout);
-
-        activityListLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        activityListLabel.setForeground(new java.awt.Color(255, 255, 255));
-        activityListLabel.setText("PLANNED ACTIVITY LIST");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        activityList.add(activityListLabel, gridBagConstraints);
+        activityList.setPreferredSize(new java.awt.Dimension(600, 600));
 
         activityTable.setAutoCreateRowSorter(true);
         activityTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -262,71 +251,85 @@ public class PlannerForm extends UserBaseForm {
         jScrollPane1.setViewportView(activityTable);
         activityTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 9;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 757;
-        gridBagConstraints.ipady = 400;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        activityList.add(jScrollPane1, gridBagConstraints);
-
-        weeklabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        weeklabel.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         weeklabel.setText("Week n#");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        activityList.add(weeklabel, gridBagConstraints);
 
-        weekNumberLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        weekNumberLabel.setText("10");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        activityList.add(weekNumberLabel, gridBagConstraints);
+        acivityListHeader.setBackground(new java.awt.Color(51, 51, 51));
+        acivityListHeader.setLayout(new javax.swing.OverlayLayout(acivityListHeader));
 
-        jPanel2.setBackground(new java.awt.Color(51, 51, 51));
+        activityListLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        activityListLabel.setForeground(new java.awt.Color(255, 255, 255));
+        activityListLabel.setText("ACTIVITY LIST");
+        activityListLabel.setAlignmentX(0.02F);
+        acivityListHeader.add(activityListLabel);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 13;
-        gridBagConstraints.gridheight = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        activityList.add(jPanel2, gridBagConstraints);
-
-        activityButton.setText("Manage activities");
+        activityButton.setText("Plan");
         activityButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 activityButtonActionPerformed(evt);
             }
         });
-        activityList.add(activityButton, new java.awt.GridBagConstraints());
+
+        weekSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/cancel_small.png"))); // NOI18N
+        jButton2.setPreferredSize(new java.awt.Dimension(28, 28));
+
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/search_small.png"))); // NOI18N
+        jButton3.setPreferredSize(new java.awt.Dimension(28, 28));
+
+        javax.swing.GroupLayout activityListLayout = new javax.swing.GroupLayout(activityList);
+        activityList.setLayout(activityListLayout);
+        activityListLayout.setHorizontalGroup(
+            activityListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(acivityListHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(activityListLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(activityListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(activityListLayout.createSequentialGroup()
+                        .addGroup(activityListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 777, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(activityListLayout.createSequentialGroup()
+                                .addComponent(weeklabel)
+                                .addGap(6, 6, 6)
+                                .addComponent(weekSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(activityListLayout.createSequentialGroup()
+                        .addComponent(activityButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21))))
+        );
+        activityListLayout.setVerticalGroup(
+            activityListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(activityListLayout.createSequentialGroup()
+                .addComponent(acivityListHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(activityListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(activityListLayout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(weeklabel))
+                    .addComponent(weekSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(activityListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(activityListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(activityButton)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10))
+        );
 
         tabbedPane.addTab("ActivityList", activityList);
 
         activitySummary.setBackground(new java.awt.Color(255, 204, 153));
-        activitySummary.setPreferredSize(new java.awt.Dimension(498, 800));
-        java.awt.GridBagLayout activitySummaryLayout = new java.awt.GridBagLayout();
-        activitySummaryLayout.columnWidths = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
-        activitySummaryLayout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
-        activitySummary.setLayout(activitySummaryLayout);
+        activitySummary.setPreferredSize(new java.awt.Dimension(800, 800));
 
         interventionDescText.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -335,36 +338,12 @@ public class PlannerForm extends UserBaseForm {
         });
         interventionDescScrollPane.setViewportView(interventionDescText);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 200;
-        gridBagConstraints.ipady = 100;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        activitySummary.add(interventionDescScrollPane, gridBagConstraints);
-
         interventionDescLabel.setBackground(new java.awt.Color(255, 255, 255));
         interventionDescLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         interventionDescLabel.setText("Intervention Description");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        activitySummary.add(interventionDescLabel, gridBagConstraints);
 
         workspaceNotesLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         workspaceNotesLabel.setText("WorkSpace Notes");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        activitySummary.add(workspaceNotesLabel, gridBagConstraints);
 
         workspaceNotesText.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -372,18 +351,6 @@ public class PlannerForm extends UserBaseForm {
             }
         });
         workspaceNotesScrollPane.setViewportView(workspaceNotesText);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 200;
-        gridBagConstraints.ipady = 100;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        activitySummary.add(workspaceNotesScrollPane, gridBagConstraints);
 
         workspaceNotesEditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/edit.png"))); // NOI18N
         workspaceNotesEditButton.setBorder(null);
@@ -394,11 +361,6 @@ public class PlannerForm extends UserBaseForm {
                 workspaceNotesEditButtonActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        activitySummary.add(workspaceNotesEditButton, gridBagConstraints);
 
         interventionDescriptionEditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/edit.png"))); // NOI18N
         interventionDescriptionEditButton.setBorder(null);
@@ -409,40 +371,13 @@ public class PlannerForm extends UserBaseForm {
                 interventionDescriptionEditButtonActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.ipadx = 3;
-        gridBagConstraints.ipady = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        activitySummary.add(interventionDescriptionEditButton, gridBagConstraints);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel4.setText("ACTIVITY SUMMARY");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        activitySummary.add(jLabel4, gridBagConstraints);
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel5.setText("10");
-        jLabel5.setToolTipText("");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
-        activitySummary.add(jLabel5, gridBagConstraints);
+        weekNumberLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        weekNumberLabel.setText("10");
+        weekNumberLabel.setToolTipText("");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("Week n#");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        activitySummary.add(jLabel6, gridBagConstraints);
 
         smpButton.setBackground(new java.awt.Color(255, 255, 255));
         smpButton.setForeground(new java.awt.Color(255, 255, 255));
@@ -454,29 +389,13 @@ public class PlannerForm extends UserBaseForm {
                 smpButtonActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 30;
-        activitySummary.add(smpButton, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel7.setText("Activity to assign");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        activitySummary.add(jLabel7, gridBagConstraints);
+        jLabel7.setText("Activity to assign:");
 
         areaLabel.setBackground(new java.awt.Color(204, 204, 204));
-        areaLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        areaLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         areaLabel.setText("Carpentry - Fisciano");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        activitySummary.add(areaLabel, gridBagConstraints);
 
         maintainerListButton.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         maintainerListButton.setText("Select Maintainer");
@@ -485,11 +404,6 @@ public class PlannerForm extends UserBaseForm {
                 maintainerListButtonActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        activitySummary.add(maintainerListButton, gridBagConstraints);
 
         workspaceNotesDoneButton.setText("Done");
         workspaceNotesDoneButton.setEnabled(false);
@@ -498,11 +412,6 @@ public class PlannerForm extends UserBaseForm {
                 workspaceNotesDoneButtonActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
-        gridBagConstraints.gridy = 16;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        activitySummary.add(workspaceNotesDoneButton, gridBagConstraints);
 
         interventionDescDoneButton.setText("Done");
         interventionDescDoneButton.setEnabled(false);
@@ -511,11 +420,6 @@ public class PlannerForm extends UserBaseForm {
                 interventionDescDoneButtonActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 16;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        activitySummary.add(interventionDescDoneButton, gridBagConstraints);
 
         uploadSMPButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/upload.png"))); // NOI18N
         uploadSMPButton.setPreferredSize(new java.awt.Dimension(35, 35));
@@ -524,11 +428,6 @@ public class PlannerForm extends UserBaseForm {
                 uploadSMPButtonActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 30;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
-        activitySummary.add(uploadSMPButton, gridBagConstraints);
 
         viewExplorerButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/it/unisa/team8se/assets/icons/folder.png"))); // NOI18N
         viewExplorerButton.setPreferredSize(new java.awt.Dimension(35, 35));
@@ -537,25 +436,40 @@ public class PlannerForm extends UserBaseForm {
                 viewExplorerButtonActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 30;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
-        activitySummary.add(viewExplorerButton, gridBagConstraints);
 
         manageButton.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        manageButton.setText("Assegna competenze e materiali");
+        manageButton.setText("Manage Competencies and Materials");
         manageButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 manageButtonActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        activitySummary.add(manageButton, gridBagConstraints);
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel8.setText("Required Competences");
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel9.setText("Required Materials");
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel10.setText("Standard Mainteinance Procedure");
+
+        header.setBackground(new java.awt.Color(51, 51, 51));
+        header.setLayout(new javax.swing.OverlayLayout(header));
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel4.setText("ACTIVITY SUMMARY");
+        jLabel4.setAlignmentX(0.02F);
+        header.add(jLabel4);
+
+        requirementsContainer.setBackground(new java.awt.Color(255, 204, 153));
+        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 5);
+        flowLayout1.setAlignOnBaseline(true);
+        requirementsContainer.setLayout(flowLayout1);
+
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(200, 280));
 
         requiredCompetencesList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "1", "2", "3", "4", "5" };
@@ -564,16 +478,9 @@ public class PlannerForm extends UserBaseForm {
         });
         jScrollPane3.setViewportView(requiredCompetencesList);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 22;
-        gridBagConstraints.gridwidth = 7;
-        gridBagConstraints.gridheight = 5;
-        gridBagConstraints.ipadx = 200;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        activitySummary.add(jScrollPane3, gridBagConstraints);
+        requirementsContainer.add(jScrollPane3);
+
+        jScrollPane4.setPreferredSize(new java.awt.Dimension(200, 280));
 
         requiredMaterialsList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "1", "2", "3", "4", "5" };
@@ -583,81 +490,125 @@ public class PlannerForm extends UserBaseForm {
         requiredMaterialsList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane4.setViewportView(requiredMaterialsList);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
-        gridBagConstraints.gridy = 22;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 5;
-        gridBagConstraints.ipadx = 200;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        activitySummary.add(jScrollPane4, gridBagConstraints);
+        requirementsContainer.add(jScrollPane4);
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel8.setText("Required Competences");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        activitySummary.add(jLabel8, gridBagConstraints);
-
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel9.setText("Required Materials");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
-        gridBagConstraints.gridy = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        activitySummary.add(jLabel9, gridBagConstraints);
-
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel10.setText("Standard Mainteinance Procedure");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 28;
-        gridBagConstraints.gridwidth = 3;
-        activitySummary.add(jLabel10, gridBagConstraints);
-
-        header.setBackground(new java.awt.Color(51, 51, 51));
-
-        javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
-        header.setLayout(headerLayout);
-        headerLayout.setHorizontalGroup(
-            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        javax.swing.GroupLayout activitySummaryLayout = new javax.swing.GroupLayout(activitySummary);
+        activitySummary.setLayout(activitySummaryLayout);
+        activitySummaryLayout.setHorizontalGroup(
+            activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(activitySummaryLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(activitySummaryLayout.createSequentialGroup()
+                                .addGap(340, 340, 340)
+                                .addComponent(interventionDescDoneButton)
+                                .addGap(322, 322, 322)
+                                .addComponent(workspaceNotesDoneButton))
+                            .addGroup(activitySummaryLayout.createSequentialGroup()
+                                .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(interventionDescScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(activitySummaryLayout.createSequentialGroup()
+                                        .addComponent(interventionDescLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(interventionDescriptionEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(12, 12, 12)
+                                .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(activitySummaryLayout.createSequentialGroup()
+                                        .addComponent(workspaceNotesLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(workspaceNotesEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(workspaceNotesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(activitySummaryLayout.createSequentialGroup()
+                            .addComponent(jLabel6)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(weekNumberLabel)
+                            .addGap(471, 471, 471)
+                            .addComponent(manageButton))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, activitySummaryLayout.createSequentialGroup()
+                            .addComponent(jLabel7)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(areaLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(maintainerListButton)))
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 776, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(activitySummaryLayout.createSequentialGroup()
+                        .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(activitySummaryLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel8)
+                                .addGap(51, 51, 51)
+                                .addComponent(jLabel9))
+                            .addComponent(requirementsContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(activitySummaryLayout.createSequentialGroup()
+                                .addComponent(smpButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(uploadSMPButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(viewExplorerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel10)))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 776, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
-        headerLayout.setVerticalGroup(
-            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        activitySummaryLayout.setVerticalGroup(
+            activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(activitySummaryLayout.createSequentialGroup()
+                .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(weekNumberLabel)
+                    .addComponent(manageButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(maintainerListButton)
+                    .addComponent(areaLabel)
+                    .addComponent(jLabel7))
+                .addGap(10, 10, 10)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(interventionDescLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(interventionDescriptionEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(workspaceNotesLabel)
+                    .addComponent(workspaceNotesEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(interventionDescScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(workspaceNotesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(interventionDescDoneButton)
+                    .addComponent(workspaceNotesDoneButton))
+                .addGap(29, 29, 29)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(activitySummaryLayout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(smpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(activitySummaryLayout.createSequentialGroup()
+                                .addComponent(uploadSMPButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(viewExplorerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(activitySummaryLayout.createSequentialGroup()
+                        .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(requirementsContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(73, 73, 73))
         );
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 19;
-        gridBagConstraints.gridheight = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        activitySummary.add(header, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 13;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        activitySummary.add(jSeparator1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 18;
-        gridBagConstraints.gridwidth = 13;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        activitySummary.add(jSeparator2, gridBagConstraints);
 
         tabbedPane.addTab("ActivitySummary", activitySummary);
 
         maintainerList.setBackground(new java.awt.Color(255, 204, 153));
-        java.awt.GridBagLayout maintainerListLayout = new java.awt.GridBagLayout();
-        maintainerListLayout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
-        maintainerListLayout.rowHeights = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0};
-        maintainerList.setLayout(maintainerListLayout);
 
         maintainerTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -672,66 +623,53 @@ public class PlannerForm extends UserBaseForm {
         ));
         maintainerScrollPane.setViewportView(maintainerTable);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 752;
-        gridBagConstraints.ipady = 474;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        maintainerList.add(maintainerScrollPane, gridBagConstraints);
-
-        headerLabel.setBackground(new java.awt.Color(255, 255, 255));
-        headerLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        headerLabel.setForeground(new java.awt.Color(255, 255, 255));
-        headerLabel.setText("MANTAINER LIST");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        maintainerList.add(headerLabel, gridBagConstraints);
-
-        selectedActivityLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        selectedActivityLabel.setText("Selected Activity");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.ipady = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        maintainerList.add(selectedActivityLabel, gridBagConstraints);
+        selectedActivityLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        selectedActivityLabel.setText("Selected Activity: ");
 
         selectedActivityNameLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         selectedActivityNameLabel.setText("xxxxxxx - xxxxxxx");
         selectedActivityNameLabel.setToolTipText("");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 6;
-        maintainerList.add(selectedActivityNameLabel, gridBagConstraints);
 
-        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
+        maintainerListHeader.setBackground(new java.awt.Color(51, 51, 51));
+        maintainerListHeader.setLayout(new javax.swing.OverlayLayout(maintainerListHeader));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        maintainerListLabel.setBackground(new java.awt.Color(255, 255, 255));
+        maintainerListLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        maintainerListLabel.setForeground(new java.awt.Color(255, 255, 255));
+        maintainerListLabel.setText("MANTAINER LIST");
+        maintainerListLabel.setAlignmentX(0.02F);
+        maintainerListHeader.add(maintainerListLabel);
+
+        javax.swing.GroupLayout maintainerListLayout = new javax.swing.GroupLayout(maintainerList);
+        maintainerList.setLayout(maintainerListLayout);
+        maintainerListLayout.setHorizontalGroup(
+            maintainerListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(maintainerListLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(maintainerListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(maintainerListLayout.createSequentialGroup()
+                        .addComponent(maintainerScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 781, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(maintainerListLayout.createSequentialGroup()
+                        .addComponent(selectedActivityLabel)
+                        .addGap(5, 5, 5)
+                        .addComponent(selectedActivityNameLabel))))
+            .addComponent(maintainerListHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        maintainerListLayout.setVerticalGroup(
+            maintainerListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(maintainerListLayout.createSequentialGroup()
+                .addComponent(maintainerListHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(maintainerListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(selectedActivityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(maintainerListLayout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(selectedActivityNameLabel)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(maintainerScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 572, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 11;
-        gridBagConstraints.gridheight = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        maintainerList.add(jPanel1, gridBagConstraints);
 
         tabbedPane.addTab("MaintainerList", maintainerList);
 
@@ -739,11 +677,11 @@ public class PlannerForm extends UserBaseForm {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 826, Short.MAX_VALUE)
         );
 
         pack();
@@ -785,6 +723,8 @@ public class PlannerForm extends UserBaseForm {
 
     private void switchToMaintainerList() {
         refreshMaintainers();
+        
+        selectedActivityNameLabel.setText(selectedActivity.getArea().toString());
     }
     
     private void refreshRequiredMaterials() {
@@ -825,31 +765,25 @@ public class PlannerForm extends UserBaseForm {
     }
 
     private void refreshActivities() {
-        Activity[] a = Activity.getAllDatabaseInstances();
-        if (a != null) {
-            Collections.addAll(activities, a);
+        activities.clear();
+        weekSelectorModel.removeAllElements();
+        weekSelectorModel.addElement("All");
+        
+        LinkedList<String> weekNumbers = new LinkedList<>();
+        Activity[] acts = Activity.getAllDatabaseInstances();
+        String currentWeekNumber;
+        
+        if (acts != null) {
+            for(Activity a : acts){
+                activities.add(a);
+                currentWeekNumber = Integer.toString(a.getWeekNumber());
+                if(!weekNumbers.contains(currentWeekNumber)){
+                    weekNumbers.add(currentWeekNumber);
+                    weekSelectorModel.addElement(currentWeekNumber);
+                }
+            }
         }
     }
-
-    private void interventionDescriptionEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interventionDescriptionEditButtonActionPerformed
-
-        int textLength = interventionDescText.getText().length();
-        interventionDescText.setCaretPosition(textLength);
-        interventionDescText.setEditable(true);
-        interventionDescText.requestFocus();
-
-        interventionDescDoneButton.setEnabled(true);
-    }//GEN-LAST:event_interventionDescriptionEditButtonActionPerformed
-
-    private void workspaceNotesEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workspaceNotesEditButtonActionPerformed
-
-        int textLength = workspaceNotesText.getText().length();
-        workspaceNotesText.setCaretPosition(textLength);
-        workspaceNotesText.setEditable(true);
-        workspaceNotesText.requestFocus();
-
-        workspaceNotesDoneButton.setEnabled(true);
-    }//GEN-LAST:event_workspaceNotesEditButtonActionPerformed
 
     private void tabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedPaneStateChanged
         // TODO add your handling code here:
@@ -869,60 +803,19 @@ public class PlannerForm extends UserBaseForm {
         }
     }//GEN-LAST:event_tabbedPaneStateChanged
 
-    private void maintainerListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maintainerListButtonActionPerformed
-        tabbedPane.setSelectedIndex(2);
-    }//GEN-LAST:event_maintainerListButtonActionPerformed
-
-    private void interventionDescTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_interventionDescTextFocusLost
-        if (selectedActivity == null) {
-            return;
-        }
-
-        interventionDescText.setEditable(false);
-        interventionDescDoneButton.setEnabled(false);
-        selectedActivity.setInterventionDescription(interventionDescText.getText());
-        selectedActivity.updateInterventionDescInDatabase();
-    }//GEN-LAST:event_interventionDescTextFocusLost
-
-    private void workspaceNotesTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_workspaceNotesTextFocusLost
-        if (selectedActivity == null) {
-            return;
-        }
-
-        workspaceNotesText.setEditable(false);
-        workspaceNotesDoneButton.setEnabled(false);
-        selectedActivity.setWorkspaceNotes(workspaceNotesText.getText());
-        selectedActivity.updateWorkspaceNotesInDatabase();
-    }//GEN-LAST:event_workspaceNotesTextFocusLost
-
-    private void interventionDescDoneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interventionDescDoneButtonActionPerformed
-        this.requestFocus();
-    }//GEN-LAST:event_interventionDescDoneButtonActionPerformed
-
-    private void workspaceNotesDoneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workspaceNotesDoneButtonActionPerformed
-        this.requestFocus();
-    }//GEN-LAST:event_workspaceNotesDoneButtonActionPerformed
-
-    private void smpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smpButtonActionPerformed
-
-        SMP smp = selectedActivity.getSmp();
-        if (smp != null) {
-            smp.openDocument();
-        } else {
-            Message.raiseInfo(this, "Nessun SMP specificato.");
-        }
-    }//GEN-LAST:event_smpButtonActionPerformed
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             UserSession.close();
-            closeConnection();
-            SMP.cleanTempDocumentFolder();
-            System.exit(0);
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nella chiusura!");
         }
     }//GEN-LAST:event_formWindowClosing
+
+    private void activityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activityButtonActionPerformed
+        ActivityManager view = new ActivityManager();
+        view.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_activityButtonActionPerformed
 
     private void manageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageButtonActionPerformed
         int selectedId = selectedActivity.getID();
@@ -930,6 +823,16 @@ public class PlannerForm extends UserBaseForm {
         view.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_manageButtonActionPerformed
+
+    private void viewExplorerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewExplorerButtonActionPerformed
+        Path p = Paths.get(".\\temp");
+        try {
+            File directory = new File(p.toUri());
+            Desktop.getDesktop().open(directory);
+        } catch (IOException ex) {
+            Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_viewExplorerButtonActionPerformed
 
     private void uploadSMPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadSMPButtonActionPerformed
         File f = DocumentImportWindow.importDocument(this);
@@ -956,21 +859,69 @@ public class PlannerForm extends UserBaseForm {
         }
     }//GEN-LAST:event_uploadSMPButtonActionPerformed
 
-    private void viewExplorerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewExplorerButtonActionPerformed
-        Path p = Paths.get(".\\temp");
-        try {
-            File directory = new File(p.toUri());
-            Desktop.getDesktop().open(directory);
-        } catch (IOException ex) {
-            Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_viewExplorerButtonActionPerformed
+    private void interventionDescDoneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interventionDescDoneButtonActionPerformed
+        this.requestFocus();
+    }//GEN-LAST:event_interventionDescDoneButtonActionPerformed
 
-    private void activityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activityButtonActionPerformed
-        ActivityManager view = new ActivityManager();
-        view.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_activityButtonActionPerformed
+    private void workspaceNotesDoneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workspaceNotesDoneButtonActionPerformed
+        this.requestFocus();
+    }//GEN-LAST:event_workspaceNotesDoneButtonActionPerformed
+
+    private void maintainerListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maintainerListButtonActionPerformed
+        tabbedPane.setSelectedIndex(2);
+    }//GEN-LAST:event_maintainerListButtonActionPerformed
+
+    private void smpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smpButtonActionPerformed
+
+        SMP smp = selectedActivity.getSmp();
+        if (smp != null) {
+            smp.openDocument();
+        } else {
+            Message.raiseInfo(this, "Nessun SMP specificato.");
+        }
+    }//GEN-LAST:event_smpButtonActionPerformed
+
+    private void interventionDescriptionEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interventionDescriptionEditButtonActionPerformed
+
+        int textLength = interventionDescText.getText().length();
+        interventionDescText.setCaretPosition(textLength);
+        interventionDescText.setEditable(true);
+        interventionDescText.requestFocus();
+
+        interventionDescDoneButton.setEnabled(true);
+    }//GEN-LAST:event_interventionDescriptionEditButtonActionPerformed
+
+    private void workspaceNotesEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_workspaceNotesEditButtonActionPerformed
+
+        int textLength = workspaceNotesText.getText().length();
+        workspaceNotesText.setCaretPosition(textLength);
+        workspaceNotesText.setEditable(true);
+        workspaceNotesText.requestFocus();
+
+        workspaceNotesDoneButton.setEnabled(true);
+    }//GEN-LAST:event_workspaceNotesEditButtonActionPerformed
+
+    private void workspaceNotesTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_workspaceNotesTextFocusLost
+        if (selectedActivity == null) {
+            return;
+        }
+
+        workspaceNotesText.setEditable(false);
+        workspaceNotesDoneButton.setEnabled(false);
+        selectedActivity.setWorkspaceNotes(workspaceNotesText.getText());
+        selectedActivity.updateWorkspaceNotesInDatabase();
+    }//GEN-LAST:event_workspaceNotesTextFocusLost
+
+    private void interventionDescTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_interventionDescTextFocusLost
+        if (selectedActivity == null) {
+            return;
+        }
+
+        interventionDescText.setEditable(false);
+        interventionDescDoneButton.setEnabled(false);
+        selectedActivity.setInterventionDescription(interventionDescText.getText());
+        selectedActivity.updateInterventionDescInDatabase();
+    }//GEN-LAST:event_interventionDescTextFocusLost
 
     /**
      * @param args the command line arguments
@@ -1009,6 +960,7 @@ public class PlannerForm extends UserBaseForm {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel acivityListHeader;
     private javax.swing.JButton activityButton;
     private javax.swing.JPanel activityList;
     private javax.swing.JLabel activityListLabel;
@@ -1016,33 +968,35 @@ public class PlannerForm extends UserBaseForm {
     private javax.swing.JTable activityTable;
     private javax.swing.JLabel areaLabel;
     private javax.swing.JPanel header;
-    private javax.swing.JLabel headerLabel;
     private javax.swing.JButton interventionDescDoneButton;
     private javax.swing.JLabel interventionDescLabel;
     private javax.swing.JScrollPane interventionDescScrollPane;
     private javax.swing.JTextPane interventionDescText;
     private javax.swing.JButton interventionDescriptionEditButton;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel maintainerList;
     private javax.swing.JButton maintainerListButton;
+    private javax.swing.JPanel maintainerListHeader;
+    private javax.swing.JLabel maintainerListLabel;
     private javax.swing.JScrollPane maintainerScrollPane;
     private javax.swing.JTable maintainerTable;
     private javax.swing.JButton manageButton;
     private javax.swing.JList<String> requiredCompetencesList;
     private javax.swing.JList<String> requiredMaterialsList;
+    private javax.swing.JPanel requirementsContainer;
     private javax.swing.JLabel selectedActivityLabel;
     private javax.swing.JLabel selectedActivityNameLabel;
     private javax.swing.JButton smpButton;
@@ -1050,6 +1004,7 @@ public class PlannerForm extends UserBaseForm {
     private javax.swing.JButton uploadSMPButton;
     private javax.swing.JButton viewExplorerButton;
     private javax.swing.JLabel weekNumberLabel;
+    private javax.swing.JComboBox<String> weekSelector;
     private javax.swing.JLabel weeklabel;
     private javax.swing.JButton workspaceNotesDoneButton;
     private javax.swing.JButton workspaceNotesEditButton;
