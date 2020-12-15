@@ -157,7 +157,6 @@ public class PlannerForm extends UserBaseForm {
                 return;
             }
             int selectedRow = activityTable.convertRowIndexToModel(selectedViewRow);
-            System.out.println(selectedRow);
             activityTableRowSelected(selectedRow);
             activityTable.clearSelection();
         });
@@ -175,8 +174,7 @@ public class PlannerForm extends UserBaseForm {
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         selectionModel.setValueIsAdjusting(true);
         selectionModel.addListSelectionListener((ListSelectionEvent e) -> {
-            int selectedRow = activityTable.getSelectedRow();
-            System.out.println(selectedRow);
+            int selectedRow = maintainerTable.getSelectedRow();
             if (selectedRow >= 0) {
                 try {
                     maintainerTableRowSelected(selectedRow);
