@@ -38,8 +38,8 @@ public class AccessView extends javax.swing.JFrame {
     protected boolean refreshPastAccesses() {
         try {
             pastAccessesModel.setRowCount(0);
-            Access[] pastAccesses = Access.getAllDatabaseInstances();
-            for (Access a : pastAccesses) {
+            Access[] accesses = Access.getAllDatabaseInstances();
+            for (Access a : accesses) {
                 if(a.getDataOraLogoff()!= null)
                     pastAccessesModel.addRow(a.toPastArray());
             }
@@ -53,8 +53,8 @@ public class AccessView extends javax.swing.JFrame {
     protected boolean refreshCurrentAccesses() {
         try {
             currentAccessesModel.setRowCount(0);
-            Access[] currentAccesses = Access.getAllDatabaseInstances();
-            for (Access a : currentAccesses) {
+            Access[] accesses = Access.getAllDatabaseInstances();
+            for (Access a : accesses) {
                 if (a.getDataOraLogoff()==null)
                     currentAccessesModel.addRow(a.toCurrentArray());
             }
