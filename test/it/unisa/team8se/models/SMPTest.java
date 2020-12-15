@@ -28,7 +28,7 @@ public class SMPTest extends TestCase {
 
     protected SMP instance;
     private static Connection con;
-     private static Statement stm;
+    private static Statement stm;
 
     public SMPTest(String testName) {
         super(testName);
@@ -37,12 +37,12 @@ public class SMPTest extends TestCase {
 
     @BeforeClass
     public static void setUpClass() throws SQLException {
-                  if (!DatabaseContext.isConnected()) {
+        if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
             con = DatabaseContext.getConnection();
             con.setAutoCommit(false);
-          }
-                  stm=con.createStatement();
+        }
+        stm = con.createStatement();
     }
 
     @AfterClass
@@ -52,15 +52,18 @@ public class SMPTest extends TestCase {
     }
 
     @Before
-    public void setUp() throws Exception {
-        super.setUp();
+    public void setUp(){
         instance = new SMP("nome");
     }
 
     @After
-    public void tearDown() throws Exception {
-        super.tearDown();
-        instance = null;
+    public void tearDown() {
+        try {
+            con.rollback();
+            instance = null;
+        } catch (SQLException ex) {
+            Logger.getLogger(ActivityTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Test
@@ -77,16 +80,16 @@ public class SMPTest extends TestCase {
         instance.setNome(Nome);
         assertEquals(Nome, instance.getNome());
     }
-    
-    private void deleteAllDatabaseInstances () throws SQLException{
-        String query="Delete from smp";
+
+    private void deleteAllDatabaseInstances() throws SQLException {
+        String query = "Delete from smp";
         stm.executeUpdate(query);
     }
-    
-     private void addActivityDatabase(SMP sm) {
+
+    private void addActivityDatabase(SMP sm) {
 
     }
-    
+
     @Test
     public void testImportDocument() {
         try {
@@ -98,25 +101,27 @@ public class SMPTest extends TestCase {
             Logger.getLogger(SMPTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Test
     public void testExportDocument() {
         instance = SMP.getInstanceWithPK("nome");
         instance.exportDocument("C:\\Users\\cptso\\Desktop\\", "doc1");
-    }    
+    }
+
     @Test
-    public void testOpenDocument(){
+    public void testOpenDocument() {
         instance = SMP.getInstanceWithPK("nome");
-        assertTrue(instance.openDocument());   
+        assertTrue(instance.openDocument());
     }
+
     @Test
-    public void testCleanTemp(){
+    public void testCleanTempDocumentFolder() {
+        System.out.println("cleanTempDocumentFolder");
         boolean status = SMP.cleanTempDocumentFolder();
-        assertTrue(status);   
+        assertTrue(status);
     }
-    
-    
-     @Test
+
+    @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
         deleteAllDatabaseInstances();
@@ -127,15 +132,15 @@ public class SMPTest extends TestCase {
         assertEquals(expResult, result);
         con.rollback();
     }
-    
-     @Test
+
+    @Test
     public void testSaveToDatabase() throws Exception {
         System.out.println("saveToDatabase");
-         try{
-        instance.saveToDatabase();
-        } catch(SQLException ex){
-        System.out.println(ex.getMessage());
-        Assert.fail();
+        try {
+            instance.saveToDatabase();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            Assert.fail();
         }
     }
 }

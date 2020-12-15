@@ -127,14 +127,15 @@ public class EWOTest {
     @Test
     public void testGetInstancesWithWeekNumber() throws SQLException {
         System.out.println("getInstancesWithWeekNumber");
-        deleteAllDatabaseInstances();
-        int weekNumber = 3;
-        EWO e = instance;
-        EWO[] expResult = {e};
+        //deleteAllDatabaseInstances();
+        int weekNumber = 20;
+        //EWO e = instance;
+        //EWO[] expResult = {e};
+        EWO e = EWO.getInstanceWithPK(1);
         addActivityDatabase(e);
+        EWO[] expResult = {e};
         EWO[] result = EWO.getInstancesWithWeekNumber(weekNumber);
         assertArrayEquals(expResult, result);
-        con.rollback();
     }
 
     /**
