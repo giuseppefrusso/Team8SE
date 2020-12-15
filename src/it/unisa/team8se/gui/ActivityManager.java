@@ -10,6 +10,7 @@ import it.unisa.team8se.Message;
 import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Area;
+import it.unisa.team8se.models.SMP;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -32,6 +33,7 @@ public class ActivityManager extends javax.swing.JFrame {
 
     private DefaultTableModel activityTableModel;
     private DefaultComboBoxModel areaSelectorModel;
+    private DefaultComboBoxModel smpSelectorModel;
 
     private LinkedList<Activity> activities;
     private LinkedList<Area> areas;
@@ -47,7 +49,10 @@ public class ActivityManager extends javax.swing.JFrame {
         areas = new LinkedList<>();
 
         areaSelectorModel = new DefaultComboBoxModel();
+        smpSelectorModel = new DefaultComboBoxModel();
+        
         areaSelector.setModel(areaSelectorModel);
+        smpSelector.setModel(smpSelectorModel);
 
         weekSlider.addChangeListener(new ChangeListener() {
             @Override
@@ -60,6 +65,7 @@ public class ActivityManager extends javax.swing.JFrame {
         initTableModel();
         refreshActivities();
         refreshAreas();
+        refreshSMPList();
     }
 
     private void initTableModel() {
@@ -98,6 +104,16 @@ public class ActivityManager extends javax.swing.JFrame {
         return true;
     }
 
+    protected void refreshSMPList(){
+        smpSelectorModel.removeAllElements();
+        SMP[] smps = SMP.getAllDatabaseInstancesInfoOnly();
+        if(smps != null){
+            for(SMP s : smps){
+                smpSelectorModel.addElement(s.getNome());
+            }
+        }
+    }
+    
     protected void refreshAreas() {
         areas.clear();
         areaSelectorModel.removeAllElements();
@@ -179,6 +195,8 @@ public class ActivityManager extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         eitInputField = new javax.swing.JTextField();
         interruptibleRadioButton = new javax.swing.JRadioButton();
+        jLabel2 = new javax.swing.JLabel();
+        smpSelector = new javax.swing.JComboBox<>();
         addButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -296,6 +314,16 @@ public class ActivityManager extends javax.swing.JFrame {
         interruptibleRadioButton.setSelected(true);
         interruptibleRadioButton.setText("Interruptible");
         activityCreationForm.add(interruptibleRadioButton);
+
+        jLabel2.setBackground(new java.awt.Color(51, 51, 51));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Standard Maintenance Procedure (SMP)");
+        jLabel2.setOpaque(true);
+        activityCreationForm.add(jLabel2);
+
+        smpSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        activityCreationForm.add(smpSelector);
 
         addButton.setText("Add");
         addButton.addActionListener(new java.awt.event.ActionListener() {
@@ -516,6 +544,7 @@ public class ActivityManager extends javax.swing.JFrame {
     private javax.swing.JTextField eitInputField;
     private javax.swing.JRadioButton interruptibleRadioButton;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -523,6 +552,7 @@ public class ActivityManager extends javax.swing.JFrame {
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton modifyButton;
     private javax.swing.JButton removeButton;
+    private javax.swing.JComboBox<String> smpSelector;
     private javax.swing.JTextField typologyInputField;
     private javax.swing.JSlider weekSlider;
     private javax.swing.JLabel weekSliderValue;

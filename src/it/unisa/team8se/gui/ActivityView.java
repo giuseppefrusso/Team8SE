@@ -142,7 +142,7 @@ public class ActivityView extends javax.swing.JFrame {
         assignMaterialButton = new javax.swing.JButton();
         removeMaterialButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Activity View");
         setIconImage(Message.getImageIcon());
         setResizable(false);
@@ -344,13 +344,12 @@ public class ActivityView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        /*
         try {
             UserSession.close();
             DatabaseContext.closeConnection();
-            System.exit(0);
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella chiusura!");
-        }
+        }*/
     }//GEN-LAST:event_formWindowClosing
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed

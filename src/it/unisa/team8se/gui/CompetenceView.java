@@ -107,15 +107,10 @@ public class CompetenceView extends javax.swing.JFrame {
         backButton = new javax.swing.JButton();
         manageButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Competence View");
         setIconImage(Message.getImageIcon());
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
 
         jPanel1.setBackground(new java.awt.Color(255, 102, 51));
         jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 51, 0)));
@@ -244,16 +239,6 @@ public class CompetenceView extends javax.swing.JFrame {
         form.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_backButtonActionPerformed
-
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        try {
-            UserSession.close();
-            DatabaseContext.closeConnection();
-            System.exit(0);
-        } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella chiusura!");
-        }
-    }//GEN-LAST:event_formWindowClosing
 
     private Maintainer getSelectedMantainer() {
         if (comboBoxModel.getSize() == 0) {

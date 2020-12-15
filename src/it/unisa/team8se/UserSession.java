@@ -100,6 +100,6 @@ public class UserSession {
         
         DatabaseContext.closeConnection();
         SMP.cleanTempDocumentFolder();
-        System.exit(0);
+        //System.exit(0);
     }
 }
