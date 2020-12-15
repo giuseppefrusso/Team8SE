@@ -79,11 +79,11 @@ public class PlannerTest {
     @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        String username = "Flaco";
-        Planner expResult = instance;
-        addActivityDatabase(instance);
+        String username = "mio";
+        Planner p = new Planner("pol","mott","mio","baul");
+        addActivityDatabase(p);
         Planner result = Planner.getInstanceWithPK(username);
-        assertEquals(expResult, result);
+        assertEquals(p, result);
     }
 
     /**
