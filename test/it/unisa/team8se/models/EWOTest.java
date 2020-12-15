@@ -10,6 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.*;
 import java.sql.ResultSet;
+import java.time.Instant;
+import java.util.Random;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -80,9 +82,49 @@ public class EWOTest {
         stm.executeUpdate(query);
     }
 
-    private void addActivityDatabase(EWO e) throws SQLException {
-        String query = "Insert into ewo values(" + e.getID() + ", 'doc','Fisciano','Carpentry','Ale','Manu'" + e.getTipology() + "," + e.getDatetime() + "," + e.getWeekNumber() + "," + e.getEIT() + "," + e.getWorkspaceNotes() + "," + e.getInterventionDescription() + "','non avviato','in corso','chiuso','inviato per primo','ricevuto','letto','inviato','ricevuto','non inviato') ";
-        stm.executeUpdate(query);
+    private void addActivityToDatabase(Activity a) throws SQLException{
+         String query = "Insert into attivita_pianificata values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
+
+        ps.setInt(1, a.getID());
+        ps.setString(2, null);
+        ps.setString(3, a.getArea().getSector());
+        ps.setString(4, a.getArea().getLocation());
+        ps.setString(5, null);
+        ps.setString(6, null);
+        ps.setString(7, a.getTipology());
+        ps.setTimestamp(8, a.getDatetime());
+        ps.setInt(9, a.getWeekNumber());
+        ps.setInt(10, a.getEIT());
+        ps.setString(11, a.getWorkspaceNotes());
+        ps.setBoolean(12, a.isInterruptible());
+        ps.setString(13, a.getInterventionDescription());
+        
+        ps.executeUpdate();
+    }
+    
+    private void addEWOToDatabase(EWO e) throws SQLException {
+        String query = "Insert into ewo values(?,?,?,?,?,?,?,?,?,?,?,?,?,"
+                + "'ricevuto','letto','in corso')";
+
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
+
+        ps.setInt(1, e.getID());
+        ps.setString(2, null);
+        ps.setString(3, e.getArea().getSector());
+        ps.setString(4, e.getArea().getLocation());
+        ps.setString(5, null);
+        ps.setString(6, null);
+        ps.setString(7, e.getTipology());
+        ps.setTimestamp(8, e.getDatetime());
+        ps.setInt(9, e.getWeekNumber());
+        ps.setInt(10, e.getEIT());
+        ps.setString(11, e.getWorkspaceNotes());
+        ps.setBoolean(12, e.isInterruptible());
+        ps.setString(13, e.getInterventionDescription());
+        
+        ps.executeUpdate();
     }
 
     private static void addForeignKey() throws SQLException {
@@ -114,9 +156,15 @@ public class EWOTest {
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
         int id = 1;
-        EWO expResult = instance;
+        EWO expResult = new EWO();
+        expResult.setID(new Random().nextInt());
+        expResult.setArea(new Area("Fisciano","Carpentry"));
+        expResult.setTipology("carpentry");
+        expResult.setDatetime(Timestamp.from(Instant.now()));
+        expResult.setWeekNumber(30);
+        
         addForeignKey();
-        addActivityDatabase(instance);
+        addEWOToDatabase(expResult);
         EWO result = EWO.getInstanceWithPK(id);
         assertEquals(expResult, result);
     }
@@ -128,11 +176,11 @@ public class EWOTest {
     public void testGetInstancesWithWeekNumber() throws SQLException {
         System.out.println("getInstancesWithWeekNumber");
         //deleteAllDatabaseInstances();
-        int weekNumber = 20;
-        //EWO e = instance;
-        //EWO[] expResult = {e};
+        int weekNumber = 25;
         EWO e = EWO.getInstanceWithPK(1);
-        addActivityDatabase(e);
+        e.setID(new Random().nextInt());
+        e.setWeekNumber(weekNumber);
+        addEWOToDatabase(e);
         EWO[] expResult = {e};
         EWO[] result = EWO.getInstancesWithWeekNumber(weekNumber);
         assertArrayEquals(expResult, result);

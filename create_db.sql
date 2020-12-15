@@ -306,9 +306,9 @@ create table EWO (
    WORKSPACE_NOTES      VARCHAR(100)         null,
    INTERROMPIBILE       BOOL                 not null,
    descrizione_intervento varchar(50)        null,
-   STATO_DEL_TICKET     VARCHAR(12)          not null check (STATO_DEL_TICKET = 'non avviato' or STATO_DEL_TICKET = 'in corso' or STATO_DEL_TICKET = 'chiuso'),
-   STATO_DEL_MAINTAINER VARCHAR(12)          not null check (STATO_DEL_MAINTAINER ='inviato' or STATO_DEL_MAINTAINER ='ricevuto' or STATO_DEL_MAINTAINER ='letto'),
-   STATO_DEL_DIPARTIMENTO VARCHAR(15)        not null check (STATO_DEL_DIPARTIMENTO='inviato' or STATO_DEL_DIPARTIMENTO ='ricevuto' or STATO_DEL_DIPARTIMENTO ='non inviato'),
+   STATO_DEL_TICKET     VARCHAR(12)          not null check (STATO_DEL_TICKET <> 'non avviato' or STATO_DEL_TICKET <> 'in corso' or STATO_DEL_TICKET <> 'chiuso'),
+   STATO_DEL_MAINTAINER VARCHAR(12)          not null check (STATO_DEL_MAINTAINER <>'inviato' or STATO_DEL_MAINTAINER <>'ricevuto' or STATO_DEL_MAINTAINER <> 'letto'),
+   STATO_DEL_DIPARTIMENTO VARCHAR(15)        not null check (STATO_DEL_DIPARTIMENTO <>'inviato' or STATO_DEL_DIPARTIMENTO <>'ricevuto' or STATO_DEL_DIPARTIMENTO <>'non inviato'),
    constraint PK_EWO primary key (ID)
 );
 
