@@ -77,11 +77,11 @@ public class SystemAdminTest {
     @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        String username = "Paco";
-        SystemAdmin expResult = instance;
-        addActivityDatabase(instance);
+        String username = "mio";
+        SystemAdmin sa = new SystemAdmin("pol","mott","mio","baul");
+        addActivityDatabase(sa);
         SystemAdmin result = SystemAdmin.getInstanceWithPK(username);
-        assertEquals(expResult, result);
+        assertEquals(sa, result);
     }
 
     /**

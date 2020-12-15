@@ -28,6 +28,7 @@ public class ActivityTest {
     private Activity instance;
     private static Connection con;
     private static Statement stm;
+
     public ActivityTest() {
     }
 
@@ -51,7 +52,6 @@ public class ActivityTest {
 
     @Before
     public void setUp() {
-
         instance = new Activity(3, new Area("carpentry", "Fisciano"), "Electrical", 2, 3, "Notes", "Revisionare", false, new Timestamp(201367896));
     }
 
@@ -316,7 +316,6 @@ public class ActivityTest {
         stm.executeUpdate(query4);
     }
 
-
     /**
      * Test of getInstanceWithPK method, of class Activity.
      */
@@ -390,7 +389,6 @@ public class ActivityTest {
         String result = instance.toString();
         assertEquals(expResult, result);
     }
-
 
     /**
      * Test of getFromResultSet method, of class Activity.
@@ -469,17 +467,18 @@ public class ActivityTest {
      * Test of assignActivityToMaintainer method, of class Activity.
      */
     @Test
-    public void testAssignActivityToMaintainer() {
+    public void testAssignActivityToMaintainer() throws SQLException {
+        System.out.println("assignActivityToMaintainer");
+        boolean expResult = true;
+        Maintainer m = Maintainer.getInstanceWithPK("Spadino");
+        addForeignKey();
         try {
-            System.out.println("assignActivityToMaintainer");
-            Maintainer m = Maintainer.getInstanceWithPK("Spadino");
-            addForeignKey();
             addActivityToDatabase(instance);
-            instance.assignActivityToMaintainer(m);
-            assertEquals(m, instance.getMaintainer());
         } catch (SQLException ex) {
-            Assert.fail();
+            Logger.getLogger(ActivityTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+        boolean result = instance.assignActivityToMaintainer(m);
+        assertEquals(expResult, result);
     }
 
     /**

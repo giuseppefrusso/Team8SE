@@ -26,42 +26,42 @@ import static org.junit.Assert.*;
  * @author prgne
  */
 public class MaintainerTest {
-    
+
     Maintainer instance;
     private static Connection con;
     private static Statement stm;
-    
+
     public MaintainerTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() throws SQLException {
-                  if (!DatabaseContext.isConnected()) {
+        if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
             con = DatabaseContext.getConnection();
             con.setAutoCommit(false);
-          }
-                  stm= con.createStatement();
+        }
+        stm = con.createStatement();
     }
-    
+
     @AfterClass
     public static void tearDownClass() throws SQLException {
         con.setAutoCommit(true);
         DatabaseContext.closeConnection();
     }
-    
+
     @Before
     public void setUp() {
-        instance= new Maintainer("Smaug", "gandalf","Lucio","Tito");
+        instance = new Maintainer("Smaug", "gandalf", "Lucio", "Tito");
     }
-    
+
     @After
     public void tearDown() {
-        try{
+        try {
             con.rollback();
-        instance =null;
-        } catch(SQLException ex){
-        Logger.getLogger(MaintainerTest.class.getName()).log(Level.SEVERE,null,ex);
+            instance = null;
+        } catch (SQLException ex) {
+            Logger.getLogger(MaintainerTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -71,7 +71,7 @@ public class MaintainerTest {
     @Test
     public void testGetCompetencies() {
         System.out.println("getCompetencies");
-        LinkedList<Competence> expResult= new LinkedList<>();
+        LinkedList<Competence> expResult = new LinkedList<>();
         LinkedList<Competence> result = instance.getCompetencies();
         assertEquals(expResult, result);
     }
@@ -84,7 +84,7 @@ public class MaintainerTest {
         System.out.println("setCompetencies");
         LinkedList<Competence> competencies = null;
         instance.setCompetencies(competencies);
-        assertEquals(competencies,instance.getCompetencies());
+        assertEquals(competencies, instance.getCompetencies());
     }
 
     /**
@@ -93,11 +93,11 @@ public class MaintainerTest {
     @Test
     public void testAddCompetence() {
         System.out.println("addCompetence");
-        Competence c = new Competence (1,"Testing");
+        Competence c = new Competence(1, "Testing");
         instance.addCompetence(c);
-        LinkedList<Competence> expResult= new LinkedList <>();
+        LinkedList<Competence> expResult = new LinkedList<>();
         expResult.add(c);
-        assertEquals(true,instance.getCompetencies().equals(expResult));
+        assertEquals(true, instance.getCompetencies().equals(expResult));
     }
 
     /**
@@ -110,17 +110,16 @@ public class MaintainerTest {
         Maintainer instance = new Maintainer();
         instance.removeCompetence(ID);
     }
-    
-    private void deleteAllDatabaseInstances () throws SQLException{
-        String query="Delete from maintainer";
+
+    private void deleteAllDatabaseInstances() throws SQLException {
+        String query = "Delete from maintainer";
         stm.executeUpdate(query);
     }
-    
-    private void addActivityDatabase (Maintainer m) throws SQLException{
-      String query= "Insert into maintainer values('"+ m.getUsername()+"','"+ m.getPassword()+"','"+ m.getSurname()+"','"+ m.getName()+"')";
-      stm.executeUpdate(query);
-    }
 
+    private void addActivityDatabase(Maintainer m) throws SQLException {
+        String query = "Insert into maintainer values('" + m.getUsername() + "','" + m.getPassword() + "','" + m.getSurname() + "','" + m.getName() + "')";
+        stm.executeUpdate(query);
+    }
 
     /**
      * Test of getInstanceWithPK method, of class Maintainer.
@@ -128,11 +127,12 @@ public class MaintainerTest {
     @Test
     public void testGetInstanceWithPK() throws Exception {
         System.out.println("getInstanceWithPK");
-        String username = "Smaug";
-        Maintainer expResult = instance;
-        addActivityDatabase(instance);
+        String username = "mio";
+        Maintainer m = new Maintainer("pol","mott","mio","baul");
+        //Maintainer expResult = instance;
+        addActivityDatabase(m);
         Maintainer result = Maintainer.getInstanceWithPK(username);
-        assertEquals(expResult, result);
+        assertEquals(m, result);
     }
 
     /**
@@ -172,18 +172,18 @@ public class MaintainerTest {
     @Test
     public void testSaveToDatabase() throws Exception {
         System.out.println("saveToDatabase");
-         try{
-        instance.saveToDatabase();
-        } catch(SQLException ex){
-        System.out.println(ex.getMessage());
-        Assert.fail();
+        try {
+            instance.saveToDatabase();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            Assert.fail();
         }
     }
 
     /**
      * Test of getFromResultSet method, of class Maintainer.
      */
-    @Test(expected= NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testGetFromResultSet() throws Exception {
         System.out.println("getFromResultSet");
         ResultSet rs = null;
@@ -215,5 +215,5 @@ public class MaintainerTest {
         Maintainer result = Maintainer.authenticate(username, password);
         assertEquals(expResult, result);
     }
-    
+
 }

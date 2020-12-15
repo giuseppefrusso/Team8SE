@@ -6,6 +6,7 @@
 package it.unisa.team8se.models;
 
 import it.unisa.team8se.DatabaseContext;
+import static it.unisa.team8se.models.Material.getInstanceWithPK;
 import java.sql.*;
 import java.sql.ResultSet;
 import java.util.logging.Level;
@@ -23,43 +24,43 @@ import static org.junit.Assert.*;
  * @author prgne
  */
 public class MaterialTest {
-    
+
     Material instance;
     private static Connection con;
     private static Statement stm;
-    
+
     public MaterialTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() throws SQLException {
-                  if (!DatabaseContext.isConnected()) {
+        if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
             con = DatabaseContext.getConnection();
             con.setAutoCommit(false);
-          }
-                  stm= con.createStatement();
-                  
+        }
+        stm = con.createStatement();
+
     }
-    
+
     @AfterClass
     public static void tearDownClass() throws SQLException {
         con.setAutoCommit(true);
         DatabaseContext.closeConnection();
     }
-    
+
     @Before
     public void setUp() {
-        instance = new Material ();
+        instance = new Material("martello", null);
     }
-    
+
     @After
     public void tearDown() {
-        try{
+        try {
             con.rollback();
-        instance = null;
-        } catch (SQLException ex){
-        Logger.getLogger(MaterialTest.class.getName()).log(Level.SEVERE,null,ex);
+            instance = null;
+        } catch (SQLException ex) {
+            Logger.getLogger(MaterialTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -95,7 +96,7 @@ public class MaterialTest {
         System.out.println("setName");
         String name = "";
         instance.setName(name);
-        assertEquals(name,instance.getName());
+        assertEquals(name, instance.getName());
     }
 
     /**
@@ -106,19 +107,18 @@ public class MaterialTest {
         System.out.println("setDescription");
         String description = "";
         instance.setDescription(description);
-        assertEquals(description,instance.getDescription());
-    }
-    
-    private void deleteAllDatabaseInstances () throws SQLException{
-        String query="Delete from materiale";
-        stm.executeUpdate(query);
-    }
-    
-    private void addActivityDatabase (Material m) throws SQLException{
-      String query= "Insert into materiale values('"+ m.getName()+"','"+ m.getDescription()+"')";
-      stm.executeUpdate(query);
+        assertEquals(description, instance.getDescription());
     }
 
+    private void deleteAllDatabaseInstances() throws SQLException {
+        String query = "Delete from materiale";
+        stm.executeUpdate(query);
+    }
+
+    private void addActivityDatabase(Material m) throws SQLException {
+        String query = "Insert into materiale values('" + m.getName() + "','" + m.getDescription() + "')";
+        stm.executeUpdate(query);
+    }
 
     /**
      * Test of getInstanceWithPK method, of class Material.
@@ -126,11 +126,11 @@ public class MaterialTest {
     @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        String name = "";
-        Material expResult = instance;
+        String name = "martello";
+        //Material m = new Material("martello", null);
         addActivityDatabase(instance);
         Material result = Material.getInstanceWithPK(name);
-        assertEquals(expResult, result);
+        assertEquals(instance, result);
     }
 
     /**
@@ -139,14 +139,15 @@ public class MaterialTest {
     @Test
     public void testSaveToDatabase() {
         System.out.println("saveToDatabase");
-        Material instance = new Material();
         instance.saveToDatabase();
+        String name = "martello";
+        assertEquals(instance,getInstanceWithPK(name));
     }
 
     /**
      * Test of getFromResultSet method, of class Material.
      */
-    @Test(expected= NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testGetFromResultSet() throws Exception {
         System.out.println("getFromResultSet");
         ResultSet rs = null;
@@ -196,5 +197,5 @@ public class MaterialTest {
         Material instance = new Material();
         instance.updateToDatabaseWithName(newName);
     }
-    
+
 }
