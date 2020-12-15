@@ -178,15 +178,16 @@ public class Activity extends DatabaseModel {
         String sql = "select max(id) from attivita_pianificata";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
         ResultSet rs = ps.executeQuery();
-        if(rs.next()) {
+        if (rs.next()) {
             maxId = rs.getInt(1);
-        }else
+        } else {
             maxId = 0;
+        }
         rs.close();
         ps.close();
         return maxId;
     }
-    
+
     public static Activity[] getAllDatabaseInstances() {
         try {
             String sql = "select * from attivita_pianificata order by ID";
@@ -369,22 +370,22 @@ public class Activity extends DatabaseModel {
     }
 
     public void updateInDatabase(Object newValue, String field) throws SQLException {
-        String sql = "update attivita_pianificata set "+field+" = ? where id = ?";
+        String sql = "update attivita_pianificata set " + field + " = ? where id = ?";
         PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-        if(newValue instanceof Integer) {
+        if (newValue instanceof Integer) {
             ps.setInt(1, (int) newValue);
-        }else if(newValue instanceof String) {
+        } else if (newValue instanceof String) {
             ps.setString(1, (String) newValue);
-        }else if(newValue instanceof Timestamp) {
+        } else if (newValue instanceof Timestamp) {
             ps.setTimestamp(1, (Timestamp) newValue);
-        }else {
+        } else {
             ps.setBoolean(1, (boolean) newValue);
         }
         ps.setInt(2, ID);
         ps.executeUpdate();
         ps.close();
     }
-    
+
     public boolean updateSMPInDatabase() throws SQLException {
         if (!smp.existsInDatabase()) {
             return false;
@@ -419,13 +420,20 @@ public class Activity extends DatabaseModel {
         return true;
     }
 
-    public void assignActivityToMaintainer(Maintainer m) throws SQLException {
-        String sql = "update attivita_pianificata set maintainer = ? where id = ?";
-        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-        ps.setString(1, m.getUsername());
-        ps.setInt(2, ID);
-        ps.executeUpdate();
-        ps.close();
+    public boolean assignActivityToMaintainer(Maintainer m) throws SQLException {
+        try {
+            String sql = "update attivita_pianificata set maintainer = ? where id = ?";
+            PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
+            ps.setString(1, m.getUsername());
+            ps.setInt(2, ID);
+            ps.executeUpdate();
+            ps.close();
+            return true;
+        }catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            return false;
+        }
+
     }
 
     @Override
@@ -461,7 +469,7 @@ public class Activity extends DatabaseModel {
             i = "No";
         }
 
-        String[] array = {Integer.toString(ID), Area.getLocation(), Area.getSector(), tipology, 
+        String[] array = {Integer.toString(ID), Area.getLocation(), Area.getSector(), tipology,
             Integer.toString(weekNumber), datetime.toString(), Integer.toString(eit), i};
         return array;
     }

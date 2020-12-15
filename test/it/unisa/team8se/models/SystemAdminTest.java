@@ -77,17 +77,17 @@ public class SystemAdminTest {
     @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        String username = "Paco";
-        SystemAdmin expResult = instance;
-        addActivityDatabase(instance);
+        String username = "mio";
+        SystemAdmin sa = new SystemAdmin("pol","mott","mio","baul");
+        addActivityDatabase(sa);
         SystemAdmin result = SystemAdmin.getInstanceWithPK(username);
-        assertEquals(expResult, result);
+        assertEquals(sa, result);
     }
 
     /**
      * Test of getFromResultSet method, of class SystemAdmin.
      */
-    @Test
+    @Test(expected= NullPointerException.class)
     public void testGetFromResultSet() throws Exception {
         System.out.println("getFromResultSet");
         ResultSet rs = null;

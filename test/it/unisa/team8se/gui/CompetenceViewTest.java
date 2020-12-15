@@ -7,6 +7,7 @@ package it.unisa.team8se.gui;
  */
 
 import it.unisa.team8se.DatabaseContext;
+import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -113,9 +114,9 @@ public class CompetenceViewTest {
     public void testAssign1() {
         System.out.println("assign1");
         Maintainer maintainer = new Maintainer("Adami", "Aureliano", "Aug", "procopio12");
-        String competenceDesc = "Problem solving";
+        Competence competence = new Competence(1,"Problem solving");
         boolean expResult = false;
-        boolean result = form.assign(maintainer, competenceDesc);
+        boolean result = form.assign(maintainer, competence);
         assertEquals(expResult, result);
     }
     
@@ -126,9 +127,9 @@ public class CompetenceViewTest {
     public void testAssign2() {
         System.out.println("assign2");
         Maintainer maintainer = new Maintainer("Anacleti", "Alberto", "Spadino", "sinti90");
-        String competenceDesc = "Lateral thinking";
+        Competence competence = new Competence(1, "Lateral thinking");
         boolean expResult = true;
-        boolean result = form.assign(maintainer, competenceDesc);
+        boolean result = form.assign(maintainer, competence);
         assertEquals(expResult, result);
     }
 

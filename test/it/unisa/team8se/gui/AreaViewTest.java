@@ -128,6 +128,7 @@ public class AreaViewTest {
     @Test
     public void testRemoveLocation2() {
         System.out.println("removeLocation2");
+        area.addArea("Pagani", "hydraulic");
         String location = "Pagani";
         boolean expResult = true;
         boolean result = area.removeLocation(location);
@@ -153,6 +154,7 @@ public class AreaViewTest {
     @Test
     public void testRemoveSector2() {
         System.out.println("removeSector2");
+        area.addArea("Pagani", "hydraulic");
         String location = "Pagani";
         String sector = "hydraulic";
         boolean expResult = true;

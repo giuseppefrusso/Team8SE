@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.ResultSet;
+import java.util.Arrays;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -49,16 +50,16 @@ public class CompetenceTest {
 
     @Before
     public void setUp() {
-        instance = new Competence(1, "Testing");
+        instance = new Competence(5, "Testing");
     }
 
     @After
     public void tearDown() {
-        try{
+        try {
             con.rollback();
-        instance = null;
-        } catch(SQLException ex){
-        Logger.getLogger(CompetenceTest.class.getName()).log(Level.SEVERE,null,ex);
+            instance = null;
+        } catch (SQLException ex) {
+            Logger.getLogger(CompetenceTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -69,7 +70,7 @@ public class CompetenceTest {
     public void testGetID() {
         System.out.println("getID");
         int result = instance.getID();
-        assertEquals(1, result);
+        assertEquals(5, result);
     }
 
     /**
@@ -107,14 +108,15 @@ public class CompetenceTest {
     /**
      * Test of getAllCompetenceOfMaintainer method, of class Competence.
      */
-    @Test
+    /*@Test
     public void testGetAllCompetenceOfMaintainer() {
         System.out.println("getAllCompetenceOfMaintainer");
-        String username = "";
-        Competence[] expResult = null;
+        String username = "Spadino";
+        Competence[] expResult = new Competence[1];
         Competence[] result = Competence.getAllCompetencesOfMaintainer(username);
-        assertArrayEquals(expResult, result);
-    }
+        //System.out.println("result: "+Arrays.toString(result));
+        assertEquals();
+    }*/
 
     private void deleteAllDatabaseInstances() throws SQLException {
         String query = "Delete from competenza";
@@ -126,14 +128,13 @@ public class CompetenceTest {
         stm.executeUpdate(query);
     }
 
- 
     /**
      * Test of getInstanceWithPK method, of class Competence.
      */
     @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        int id = 1;
+        int id = 5;
         Competence expResult = instance;
         addActivityDatabase(instance);
         Competence result = Competence.getInstanceWithPK(id);
@@ -146,20 +147,17 @@ public class CompetenceTest {
     @Test
     public void testGetInstanceWithDescription() throws SQLException {
         System.out.println("getInstanceWithDescription");
-        deleteAllDatabaseInstances();
-        String desc = "";
+        String desc = "Testing";
         Competence expResult = instance;
         addActivityDatabase(instance);
         Competence result = Competence.getInstanceWithDescription(desc);
         assertEquals(expResult, result);
-        con.rollback();
     }
-
 
     /**
      * Test of getFromResultSet method, of class Competence.
      */
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testGetFromResultSet() throws Exception {
         System.out.println("getFromResultSet");
         ResultSet rs = null;
