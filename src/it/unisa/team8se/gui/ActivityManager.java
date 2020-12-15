@@ -12,6 +12,8 @@ import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Area;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -30,7 +32,7 @@ public class ActivityManager extends javax.swing.JFrame {
 
     private DefaultTableModel activityTableModel;
     private DefaultComboBoxModel areaSelectorModel;
-    
+
     private LinkedList<Activity> activities;
     private LinkedList<Area> areas;
 
@@ -43,18 +45,18 @@ public class ActivityManager extends javax.swing.JFrame {
 
         activities = new LinkedList<>();
         areas = new LinkedList<>();
-        
+
         areaSelectorModel = new DefaultComboBoxModel();
         areaSelector.setModel(areaSelectorModel);
-        
-        weekSlider.addChangeListener(new ChangeListener(){
+
+        weekSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 int value = weekSlider.getValue();
                 weekSliderValue.setText(Integer.toString(value));
             }
         });
-        
+
         initTableModel();
         refreshActivities();
         refreshAreas();
@@ -95,19 +97,19 @@ public class ActivityManager extends javax.swing.JFrame {
         }
         return true;
     }
-    
-    protected void refreshAreas(){
+
+    protected void refreshAreas() {
         areas.clear();
         areaSelectorModel.removeAllElements();
-        
+
         try {
             Area[] as = Area.getAllDatabaseInstances();
-            if(as != null){
-                for(Area a : as){
+            if (as != null) {
+                for (Area a : as) {
                     areas.add(a);
                     areaSelectorModel.addElement(a.toString());
                 }
-            }   
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ActivityManager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -176,7 +178,7 @@ public class ActivityManager extends javax.swing.JFrame {
         weekSlider = new javax.swing.JSlider();
         jLabel3 = new javax.swing.JLabel();
         eitInputField = new javax.swing.JTextField();
-        jRadioButton1 = new javax.swing.JRadioButton();
+        interruptibleRadioButton = new javax.swing.JRadioButton();
         addButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -236,7 +238,7 @@ public class ActivityManager extends javax.swing.JFrame {
         });
 
         activityCreationForm.setBackground(new java.awt.Color(255, 204, 153));
-        activityCreationForm.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "CREATE ACTIVITY", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+        activityCreationForm.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CREATE ACTIVITY", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         activityCreationForm.setLayout(new java.awt.GridLayout(14, 1, 5, 5));
 
         jLabel1.setBackground(new java.awt.Color(51, 51, 51));
@@ -288,12 +290,12 @@ public class ActivityManager extends javax.swing.JFrame {
         activityCreationForm.add(jLabel3);
         activityCreationForm.add(eitInputField);
 
-        jRadioButton1.setBackground(new java.awt.Color(51, 51, 51));
-        jRadioButton1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jRadioButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("Interruptible");
-        activityCreationForm.add(jRadioButton1);
+        interruptibleRadioButton.setBackground(new java.awt.Color(51, 51, 51));
+        interruptibleRadioButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        interruptibleRadioButton.setForeground(new java.awt.Color(255, 255, 255));
+        interruptibleRadioButton.setSelected(true);
+        interruptibleRadioButton.setText("Interruptible");
+        activityCreationForm.add(interruptibleRadioButton);
 
         addButton.setText("Add");
         addButton.addActionListener(new java.awt.event.ActionListener() {
@@ -366,47 +368,39 @@ public class ActivityManager extends javax.swing.JFrame {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         try {
-            int id = Activity.getMaxId() + 1;
-            
-            
-            
-            Area[] options = Area.getAllDatabaseInstances();
-            Area area = (Area) JOptionPane.showInputDialog(this, "Seleziona area", "Aggiunta", 
-                    JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-            if(area == null)
+            if (areaSelector.getSelectedIndex() < 0) {
                 return;
-            String ambito = JOptionPane.showInputDialog(this, "Inserisci ambito", 
-                    "Aggiunta", JOptionPane.PLAIN_MESSAGE);
-            if(ambito == null)
-                return;
-            int weekNumber = Integer.parseInt(JOptionPane.showInputDialog(this, "Inserisci numero della settimana", 
-                    "Aggiunta", JOptionPane.PLAIN_MESSAGE));
-            Timestamp datetime = Timestamp.valueOf(JOptionPane.showInputDialog(this,
-                    "Inserisci data e ora nel seguente formato: yyyy-mm-dd hh:mm", "Aggiunta", JOptionPane.PLAIN_MESSAGE) + ":00");
-            int eit = Integer.parseInt(JOptionPane.showInputDialog(this, "Inserisci tempo stimato d'intervento in minuti",
-                    "Aggiunta", JOptionPane.PLAIN_MESSAGE));
-            int reply = JOptionPane.showConfirmDialog(this, "L'attività " + id + " è interrompibile?",
-                    "Aggiunta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            boolean interruptible;
-            switch (reply) {
-                case JOptionPane.YES_OPTION:
-                    interruptible = true;
-                    break;
-                case JOptionPane.NO_OPTION:
-                    interruptible = false;
-                    break;
-                default:
-                    Message.raiseError(this, "Inserimento non completato!");
-                    return;
             }
-            Activity a = new Activity(id, area, ambito, weekNumber, datetime, eit, interruptible);
-            addActivity(a);
 
-        } catch (SQLException | IllegalArgumentException | ArrayIndexOutOfBoundsException ex) {
+            int id = Activity.getMaxId() + 1;
+            int weekNumber = weekSlider.getValue();
+            boolean interruptible = interruptibleRadioButton.isSelected();
+
+            Integer eit = Integer.parseInt(eitInputField.getText());
+            Area area = areas.get(areaSelector.getSelectedIndex());
+            String typology = typologyInputField.getText();
+            Timestamp dateTime = Timestamp.from(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+
+            if (typology == null || typology.isEmpty()) {
+                return;
+            }
+            if(eit <= 0){
+                Message.raiseError(this, "Activity creation failed: Please insert a positive integer into EIT field.");
+                return;
+            }
+
+            Activity a = new Activity(id, area, typology, weekNumber, dateTime, eit, interruptible);
+            addActivity(a);
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             Message.raiseError(this, "Inserimento fallito!");
             return;
+        }catch (NumberFormatException ex){
+            System.out.println(ex.getMessage());
+            Message.raiseError(this, "Activity creation failed: Please insert a positive integer into EIT field.");
+            return;
         }
+        
         modifyButton.setEnabled(false);
         removeButton.setEnabled(false);
         refreshActivities();
@@ -520,11 +514,11 @@ public class ActivityManager extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> areaSelector;
     private javax.swing.JButton backButton;
     private javax.swing.JTextField eitInputField;
+    private javax.swing.JRadioButton interruptibleRadioButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton modifyButton;
@@ -534,3 +528,38 @@ public class ActivityManager extends javax.swing.JFrame {
     private javax.swing.JLabel weekSliderValue;
     // End of variables declaration//GEN-END:variables
 }
+
+
+/*
+            Area[] options = Area.getAllDatabaseInstances();
+            Area area = (Area) JOptionPane.showInputDialog(this, "Seleziona area", "Aggiunta",
+                    JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            if (area == null) {
+                return;
+            }
+            String ambito = JOptionPane.showInputDialog(this, "Inserisci ambito",
+                    "Aggiunta", JOptionPane.PLAIN_MESSAGE);
+            if (ambito == null) {
+                return;
+            }
+            int weekNumber = Integer.parseInt(JOptionPane.showInputDialog(this, "Inserisci numero della settimana",
+                    "Aggiunta", JOptionPane.PLAIN_MESSAGE));
+            Timestamp datetime = Timestamp.valueOf(JOptionPane.showInputDialog(this,
+                    "Inserisci data e ora nel seguente formato: yyyy-mm-dd hh:mm", "Aggiunta", JOptionPane.PLAIN_MESSAGE) + ":00");
+            int eit = Integer.parseInt(JOptionPane.showInputDialog(this, "Inserisci tempo stimato d'intervento in minuti",
+                    "Aggiunta", JOptionPane.PLAIN_MESSAGE));
+            int reply = JOptionPane.showConfirmDialog(this, "L'attività " + id + " è interrompibile?",
+                    "Aggiunta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            boolean interruptible;
+            switch (reply) {
+                case JOptionPane.YES_OPTION:
+                    interruptible = true;
+                    break;
+                case JOptionPane.NO_OPTION:
+                    interruptible = false;
+                    break;
+                default:
+                    Message.raiseError(this, "Inserimento non completato!");
+                    return;
+            }
+             */

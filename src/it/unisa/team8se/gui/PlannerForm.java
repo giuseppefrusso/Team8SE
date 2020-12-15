@@ -18,11 +18,12 @@ import it.unisa.team8se.models.Material;
 import it.unisa.team8se.models.SMP;
 import java.awt.Desktop;
 import java.awt.Toolkit;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -32,12 +33,12 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -53,6 +54,7 @@ public class PlannerForm extends UserBaseForm {
     
     private DefaultListModel competenceListModel;
     private DefaultListModel materialListModel;
+    private TableRowSorter activityRowSorter;
     private DefaultComboBoxModel<String> weekSelectorModel;
     
     
@@ -69,6 +71,29 @@ public class PlannerForm extends UserBaseForm {
         
         weekSelectorModel = new DefaultComboBoxModel<>();
         weekSelector.setModel(weekSelectorModel);
+        
+        weekSelector.addItemListener(new ItemListener(){
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                final String weekNumberString = (String)weekSelector.getSelectedItem();
+                
+                if (weekNumberString.equalsIgnoreCase("all")){
+                    activityRowSorter.setRowFilter(null);
+                    return;
+                }
+        
+                activityRowSorter.setRowFilter(new RowFilter(){
+                    @Override
+                    public boolean include(RowFilter.Entry entry) {
+                        int index = (int)entry.getIdentifier();
+                        int weekNumber = Integer.parseInt(weekNumberString);
+                        System.out.println(index);
+                        return activities.get(index).getWeekNumber() == weekNumber;
+                    }
+                });
+            }
+        });
+        
         
         if (defaultId != -1) {
             refreshActivities();
@@ -115,7 +140,11 @@ public class PlannerForm extends UserBaseForm {
 
     private void setupActivityTable() {
         activities = new LinkedList<>();
+    
         activityTable.setModel(new ActivityTableDataModel(activities));
+        
+        activityRowSorter = new TableRowSorter(activityTable.getModel());
+        activityTable.setRowSorter(activityRowSorter);
         ListSelectionModel selectionModel = activityTable.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         selectionModel.setValueIsAdjusting(true);
@@ -779,8 +808,13 @@ public class PlannerForm extends UserBaseForm {
                 currentWeekNumber = Integer.toString(a.getWeekNumber());
                 if(!weekNumbers.contains(currentWeekNumber)){
                     weekNumbers.add(currentWeekNumber);
-                    weekSelectorModel.addElement(currentWeekNumber);
                 }
+            }
+            
+            weekNumbers.sort((a,b) -> {return  a.compareTo(b);});
+            
+            for(String w : weekNumbers){
+                weekSelectorModel.addElement(w);
             }
         }
     }
