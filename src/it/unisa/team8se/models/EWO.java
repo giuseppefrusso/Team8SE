@@ -88,4 +88,9 @@ public class EWO extends Activity {
     public boolean existsInDatabase() {
         return EWO.getInstanceWithPK(getID()) != null; //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj); //To change body of generated methods, choose Tools | Templates.
+    }
 }
