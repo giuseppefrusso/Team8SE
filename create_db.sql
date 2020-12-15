@@ -172,7 +172,7 @@ create table ATTIVITA_EXTRA (
    SMP                  VARCHAR(16)          null,
    MAINTAINER           VARCHAR(20)          null,
    AMBITO               VARCHAR(16)          not null,
-   DATA_E_ORA           TIMESTAMP                 not null,
+   DATA_E_ORA           TIMESTAMP            not null,
    WEEK_NUMBER          INT                  not null check(WEEK_NUMBER >= 1 and WEEK_NUMBER<= 52),
    ETA                  INT                  not null,
    WORKSPACE_NOTES      VARCHAR(100)         null,
@@ -269,7 +269,7 @@ LUOGO_GEOGRAFICO
 /*==============================================================*/
 /* Index: REGOLAMENTAZIONE_PLANNED_FK                           */
 /*==============================================================*/
-create  index REGOLAMENTAZIONE_PLANNED_FK on ATTIVITA_PIANIFICATA (
+create index REGOLAMENTAZIONE_PLANNED_FK on ATTIVITA_PIANIFICATA (
 SMP
 );
 
@@ -669,82 +669,82 @@ alter table ACCESSO
 alter table ATTIVITA_EXTRA
    add constraint FK_ATTIVITA_APPARTENE_AREA foreign key (AREA, LUOGO_GEOGRAFICO)
       references AREA (NOME, LUOGO_GEOGRAFICO)
-      on delete restrict on update restrict;
+      on delete restrict on update cascade;
 
 alter table ATTIVITA_EXTRA
    add constraint FK_ATTIVITA_ASSEGNAZI_PLANNER foreign key (PLANNER)
       references PLANNER (USERNAME)
-      on delete restrict on update restrict;
+      on delete set null on update cascade;
 
 alter table ATTIVITA_EXTRA
    add constraint FK_ATTIVITA_REGOLAMEN_SMP foreign key (SMP)
       references SMP (NOME)
-      on delete restrict on update restrict;
+      on delete set null on update cascade;
 
 alter table ATTIVITA_EXTRA
    add constraint FK_ATTIVITA_SVOLGIMEN_MAINTAIN foreign key (MAINTAINER)
       references MAINTAINER (USERNAME)
-      on delete restrict on update restrict;
+      on delete set null on update cascade;
 
 alter table ATTIVITA_PIANIFICATA
    add constraint FK_ATTIVITA_APPARTENE_AREA foreign key (AREA, LUOGO_GEOGRAFICO)
       references AREA (NOME, LUOGO_GEOGRAFICO)
-      on delete restrict on update restrict;
+      on delete restrict on update cascade;
 
 alter table ATTIVITA_PIANIFICATA
    add constraint FK_ATTIVITA_ASSEGNAZI_PLANNER foreign key (PLANNER)
       references PLANNER (USERNAME)
-      on delete restrict on update restrict;
+      on delete set null on update cascade;
 
 alter table ATTIVITA_PIANIFICATA
    add constraint FK_ATTIVITA_REGOLAMEN_SMP foreign key (SMP)
       references SMP (NOME)
-      on delete restrict on update restrict;
+      on delete set null on update cascade;
 
 alter table ATTIVITA_PIANIFICATA
    add constraint FK_ATTIVITA_SVOLGIMEN_MAINTAIN foreign key (MAINTAINER)
       references MAINTAINER (USERNAME)
-      on delete restrict on update restrict;
+      on delete set null on update cascade;
 
 alter table EWO
    add constraint FK_EWO_APPARTENE_AREA foreign key (AREA, LUOGO_GEOGRAFICO)
       references AREA (NOME, LUOGO_GEOGRAFICO)
-      on delete restrict on update restrict;
+      on delete restrict on update cascade;
 
 alter table EWO
    add constraint FK_EWO_ASSEGNAZI_PLANNER foreign key (PLANNER)
       references PLANNER (USERNAME)
-      on delete restrict on update restrict;
+      on delete set null on update cascade;
 
 alter table EWO
    add constraint FK_EWO_REGOLAMEN_SMP foreign key (SMP)
       references SMP (NOME)
-      on delete restrict on update restrict;
+      on delete set null on update cascade;
 
 alter table EWO
    add constraint FK_EWO_SVOLGIMEN_MAINTAIN foreign key (MAINTAINER)
       references MAINTAINER (USERNAME)
-      on delete restrict on update restrict;
+      on delete set null on update cascade;
 
 alter table POSSESSO
    add constraint FK_POSSESSO_POSSESSO_COMPETEN foreign key (ID)
       references COMPETENZA (ID)
-      on delete restrict on update restrict;
+      on delete cascade on update restrict;
 
 alter table POSSESSO
    add constraint FK_POSSESSO_POSSESSO2_MAINTAIN foreign key (MAINTAINER)
       references MAINTAINER (USERNAME)
-      on delete restrict on update restrict;
+      on delete cascade on update cascade;
 
 alter table REQUISITO_EWO
    add constraint FK_REQUISIT_REQUISITO_EWO foreign key (EWO)
       references EWO (ID)
-      on delete restrict on update restrict;
+      on delete cascade on update restrict;
 
 alter table REQUISITO_EWO
    add constraint FK_REQUISIT_REQUISITO_COMPETEN foreign key (COMPETENZA)
       references COMPETENZA (ID)
-      on delete restrict on update restrict;
+      on delete cascade on update restrict;
 
 alter table REQUISITO_EXTRA
    add constraint FK_REQUISIT_REQUISITO_COMPETEN foreign key (COMPETENZA)
