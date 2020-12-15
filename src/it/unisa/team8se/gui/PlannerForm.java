@@ -47,15 +47,14 @@ public class PlannerForm extends UserBaseForm {
 
     private LinkedList<Activity> activities;
     private LinkedList<Maintainer> maintainers;
-    
+
     private Activity selectedActivity;
     private Maintainer selectedMaintainer;
-    
+
     private DefaultListModel competenceListModel;
     private DefaultListModel materialListModel;
     private DefaultComboBoxModel<String> weekSelectorModel;
-    
-    
+
     public PlannerForm(int defaultId) {
         if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
@@ -66,10 +65,10 @@ public class PlannerForm extends UserBaseForm {
         setupTextBoxes();
         setupCompetenceList();
         setupMaterialList();
-        
+
         weekSelectorModel = new DefaultComboBoxModel<>();
         weekSelector.setModel(weekSelectorModel);
-        
+
         if (defaultId != -1) {
             refreshActivities();
             selectedActivity = Activity.getInstanceWithPK(defaultId);
@@ -711,27 +710,27 @@ public class PlannerForm extends UserBaseForm {
     private void switchToActivitySummary() {
         refreshRequiredMaterials();
         refreshRequiredCompetences();
-        
+
         weekNumberLabel.setText(Integer.toString(selectedActivity.getWeekNumber()));
         areaLabel.setText(selectedActivity.getArea().toString());
         interventionDescText.setText(selectedActivity.getInterventionDescription());
         workspaceNotesText.setText(selectedActivity.getWorkspaceNotes());
-        
+
         tabbedPane.setEnabledAt(1, true);
         tabbedPane.setEnabledAt(2, true);
     }
 
     private void switchToMaintainerList() {
         refreshMaintainers();
-        
+
         selectedActivityNameLabel.setText(selectedActivity.getArea().toString());
     }
-    
+
     private void refreshRequiredMaterials() {
-        if(selectedActivity != null){
+        if (selectedActivity != null) {
             try {
                 materialListModel.clear();
-                for(Material m : selectedActivity.getUsedMaterialsFromDatabase()){
+                for (Material m : selectedActivity.getUsedMaterialsFromDatabase()) {
                     materialListModel.addElement(m.getName());
                 }
             } catch (SQLException ex) {
@@ -739,12 +738,12 @@ public class PlannerForm extends UserBaseForm {
             }
         }
     }
-    
-    private void refreshRequiredCompetences(){
-        if(selectedActivity != null){
+
+    private void refreshRequiredCompetences() {
+        if (selectedActivity != null) {
             try {
                 competenceListModel.clear();
-                for(Competence c : selectedActivity.getRequiredCompetencesFromDatabase()){
+                for (Competence c : selectedActivity.getRequiredCompetencesFromDatabase()) {
                     competenceListModel.addElement(c.getDescrizione());
                 }
             } catch (SQLException ex) {
@@ -752,7 +751,7 @@ public class PlannerForm extends UserBaseForm {
             }
         }
     }
-    
+
     private void refreshMaintainers() {
         try {
             Maintainer[] m = Maintainer.getAllDatabaseInstances();
@@ -768,16 +767,16 @@ public class PlannerForm extends UserBaseForm {
         activities.clear();
         weekSelectorModel.removeAllElements();
         weekSelectorModel.addElement("All");
-        
+
         LinkedList<String> weekNumbers = new LinkedList<>();
         Activity[] acts = Activity.getAllDatabaseInstances();
         String currentWeekNumber;
-        
+
         if (acts != null) {
-            for(Activity a : acts){
+            for (Activity a : acts) {
                 activities.add(a);
                 currentWeekNumber = Integer.toString(a.getWeekNumber());
-                if(!weekNumbers.contains(currentWeekNumber)){
+                if (!weekNumbers.contains(currentWeekNumber)) {
                     weekNumbers.add(currentWeekNumber);
                     weekSelectorModel.addElement(currentWeekNumber);
                 }
@@ -836,9 +835,10 @@ public class PlannerForm extends UserBaseForm {
 
     private void uploadSMPButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadSMPButtonActionPerformed
         File f = DocumentImportWindow.importDocument(this);
-        String absPath = f.getAbsolutePath();
+
         if (f != null) {
             try {
+                String absPath = f.getAbsolutePath();
                 String fileName = f.getName().substring(0, f.getName().length() - 4);
                 System.out.println(fileName);
                 SMP smp = new SMP();

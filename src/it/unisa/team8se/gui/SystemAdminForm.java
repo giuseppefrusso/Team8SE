@@ -52,7 +52,7 @@ public class SystemAdminForm extends UserBaseForm {
         buttonGroup.add(maintainerRadioButton);
         buttonGroup.add(adminRadioButton);
     }
-    
+
     /**
      * Creates new form SystemAdminForm
      */
@@ -69,7 +69,7 @@ public class SystemAdminForm extends UserBaseForm {
         initComponents();
 
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -437,10 +437,14 @@ public class SystemAdminForm extends UserBaseForm {
             role = "system admin";
         } else {
             Message.raiseError(this, "Inserire un ruolo!");
+            tableUsers.clearSelection();
+            modifyButton.setEnabled(false);
+            removeButton.setEnabled(false);
             return;
         }
 
         insertUser(surname, name, username, password, role);
+        tableUsers.clearSelection();
         modifyButton.setEnabled(false);
         removeButton.setEnabled(false);
     }//GEN-LAST:event_insertButtonActionPerformed
@@ -554,7 +558,7 @@ public class SystemAdminForm extends UserBaseForm {
             }
         }
         refreshUsers();
-        
+
         return true;
     }
 
@@ -592,15 +596,22 @@ public class SystemAdminForm extends UserBaseForm {
         } else {
             newValue = JOptionPane.showInputDialog(this, "Modifica " + field, "Modifica", JOptionPane.INFORMATION_MESSAGE);
             if (newValue == null || newValue.equals("")) {
+                tableUsers.clearSelection();
+                modifyButton.setEnabled(false);
+                removeButton.setEnabled(false);
                 return;
             }
         }
 
         if (newValue.equalsIgnoreCase(oldValue)) {
+            tableUsers.clearSelection();
+            modifyButton.setEnabled(false);
+            removeButton.setEnabled(false);
             return;
         }
 
         modifyUser(newValue, selectedRow, selectedColumn);
+        tableUsers.clearSelection();
         modifyButton.setEnabled(false);
         removeButton.setEnabled(false);
     }//GEN-LAST:event_modifyButtonActionPerformed
@@ -637,6 +648,7 @@ public class SystemAdminForm extends UserBaseForm {
         if (reply == JOptionPane.YES_OPTION) {
             removeUser(selectedUsername, selectedRow);
         }
+        tableUsers.clearSelection();
         modifyButton.setEnabled(false);
         removeButton.setEnabled(false);
     }//GEN-LAST:event_removeButtonActionPerformed
