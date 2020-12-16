@@ -244,7 +244,7 @@ public class PlannerForm extends UserBaseForm {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Planner View");
         setIconImage(Message.getImageIcon());
-        setPreferredSize(new java.awt.Dimension(800, 800));
+        setPreferredSize(new java.awt.Dimension(800, 700));
         setResizable(false);
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
@@ -267,7 +267,7 @@ public class PlannerForm extends UserBaseForm {
         });
 
         activityList.setBackground(new java.awt.Color(255, 204, 153));
-        activityList.setPreferredSize(new java.awt.Dimension(600, 600));
+        activityList.setPreferredSize(new java.awt.Dimension(800, 700));
 
         activityTable.setAutoCreateRowSorter(true);
         activityTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -357,14 +357,14 @@ public class PlannerForm extends UserBaseForm {
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         tabbedPane.addTab("ActivityList", activityList);
 
         activitySummary.setBackground(new java.awt.Color(255, 204, 153));
-        activitySummary.setPreferredSize(new java.awt.Dimension(800, 800));
+        activitySummary.setPreferredSize(new java.awt.Dimension(800, 700));
 
         interventionDescText.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -504,7 +504,7 @@ public class PlannerForm extends UserBaseForm {
         flowLayout1.setAlignOnBaseline(true);
         requirementsContainer.setLayout(flowLayout1);
 
-        jScrollPane3.setPreferredSize(new java.awt.Dimension(200, 280));
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(200, 180));
 
         requiredCompetencesList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "1", "2", "3", "4", "5" };
@@ -515,7 +515,7 @@ public class PlannerForm extends UserBaseForm {
 
         requirementsContainer.add(jScrollPane3);
 
-        jScrollPane4.setPreferredSize(new java.awt.Dimension(200, 280));
+        jScrollPane4.setPreferredSize(new java.awt.Dimension(200, 180));
 
         requiredMaterialsList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "1", "2", "3", "4", "5" };
@@ -544,12 +544,14 @@ public class PlannerForm extends UserBaseForm {
                                 .addComponent(workspaceNotesDoneButton))
                             .addGroup(activitySummaryLayout.createSequentialGroup()
                                 .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(interventionDescScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(activitySummaryLayout.createSequentialGroup()
                                         .addComponent(interventionDescLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(interventionDescriptionEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(12, 12, 12)
+                                        .addComponent(interventionDescriptionEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(169, 169, 169))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, activitySummaryLayout.createSequentialGroup()
+                                        .addComponent(interventionDescScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)))
                                 .addGroup(activitySummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(activitySummaryLayout.createSequentialGroup()
                                         .addComponent(workspaceNotesLabel)
@@ -637,13 +639,14 @@ public class PlannerForm extends UserBaseForm {
                             .addComponent(jLabel8)
                             .addComponent(jLabel9))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(requirementsContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(73, 73, 73))
+                        .addComponent(requirementsContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(173, 173, 173))
         );
 
         tabbedPane.addTab("ActivitySummary", activitySummary);
 
         maintainerList.setBackground(new java.awt.Color(255, 204, 153));
+        maintainerList.setPreferredSize(new java.awt.Dimension(800, 700));
 
         maintainerTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -683,7 +686,7 @@ public class PlannerForm extends UserBaseForm {
                 .addGap(5, 5, 5)
                 .addGroup(maintainerListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(maintainerListLayout.createSequentialGroup()
-                        .addComponent(maintainerScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 781, Short.MAX_VALUE)
+                        .addComponent(maintainerScrollPane)
                         .addContainerGap())
                     .addGroup(maintainerListLayout.createSequentialGroup()
                         .addComponent(selectedActivityLabel)
@@ -702,7 +705,7 @@ public class PlannerForm extends UserBaseForm {
                         .addGap(4, 4, 4)
                         .addComponent(selectedActivityNameLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(maintainerScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 572, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(maintainerScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -856,16 +859,10 @@ public class PlannerForm extends UserBaseForm {
         }
     }//GEN-LAST:event_formWindowClosing
 
-    private void activityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activityButtonActionPerformed
-        ActivityManager view = new ActivityManager();
-        view.setVisible(true);
-    }//GEN-LAST:event_activityButtonActionPerformed
-
     private void manageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageButtonActionPerformed
         int selectedId = selectedActivity.getID();
         ActivityView view = new ActivityView(selectedId);
         view.setVisible(true);
-        //this.setVisible(false);
     }//GEN-LAST:event_manageButtonActionPerformed
 
     private void viewExplorerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewExplorerButtonActionPerformed
@@ -978,6 +975,11 @@ public class PlannerForm extends UserBaseForm {
                 break;
         }
     }//GEN-LAST:event_formWindowGainedFocus
+
+    private void activityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activityButtonActionPerformed
+        ActivityManager view = new ActivityManager();
+        view.setVisible(true);
+    }//GEN-LAST:event_activityButtonActionPerformed
 
     public static void main(String args[]) {
 
