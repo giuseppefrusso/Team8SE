@@ -325,7 +325,7 @@ public class CompetenceView extends javax.swing.JFrame {
 
         String selectedUsername = selectedMaintainer.getUsername();
 
-        int reply = JOptionPane.showConfirmDialog(this, "Are you sure to remove '" + selectedCompetence + "' competence of '" + selectedUsername + "' ?", "Remove", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure you want to remove '" + selectedCompetence + "' competence of '" + selectedUsername + "' ?", "Remove", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             remove(selectedUsername, selectedCompetence);
         }

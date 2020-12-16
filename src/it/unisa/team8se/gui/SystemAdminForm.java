@@ -613,7 +613,7 @@ public class SystemAdminForm extends UserBaseForm {
 
         String selectedUsername = (String) tableModel.getValueAt(selectedRow, 2);
 
-        int reply = JOptionPane.showConfirmDialog(this, "Are you sure to remove '" + selectedUsername + "' ?", "Remove", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure you want to remove '" + selectedUsername + "' ?", "Remove", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (reply == JOptionPane.YES_OPTION) {
             removeUser(selectedUsername, selectedRow);
         }
