@@ -545,7 +545,7 @@ public class SystemAdminForm extends UserBaseForm {
 
         String field = tableModel.getColumnName(selectedColumn);
         String newValue = new String();
-        if (field.equals("Ruolo")) {
+        if (field.equals("Role")) {
             String[] options = {"Planner", "Maintainer", "System Admin"};
             int choice = JOptionPane.showOptionDialog(this, "Modify " + field, "Modify", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
             System.out.println(choice);
