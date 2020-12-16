@@ -6,7 +6,6 @@
 package it.unisa.team8se.models;
 
 import it.unisa.team8se.DatabaseContext;
-import it.unisa.team8se.gui.ActivityManager;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.logging.Level;

@@ -10,6 +10,7 @@ import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.ActivityTest;
 import it.unisa.team8se.models.Area;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -40,15 +41,18 @@ public class ActivityManagerTest {
     public static void setUpClass() throws SQLException {
         if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
-            con = DatabaseContext.getConnection();
-            con.setAutoCommit(false);
         }
+        con = DatabaseContext.getConnection();
+        con.setAutoCommit(false);
         stm = con.createStatement();
+        
+        removeForeignKey();
         addForeignKey();
     }
 
     @AfterClass
     public static void tearDownClass() throws SQLException {
+        //con.rollback();
         con.setAutoCommit(true);
         DatabaseContext.closeConnection();
 
@@ -72,19 +76,32 @@ public class ActivityManagerTest {
     }
 
     private static void addForeignKey() throws SQLException {
-        String query1 = "Insert into area values('Fisciano','Carpentry')";
-        String query2 = "Insert into planner values ('Manu','cos','nick','ola')";
-        String query3 = "Insert into smp values ('doc','pdf')";
+        String query1 = "Insert into area values ('luogo_prova','settore_prova')";
+        String query2 = "Insert into planner values ('user_prova','cos','nick','ola')";
+        String query3 = "Insert into smp values (?, ?)";
         String query4 = "Insert into maintainer values ('Ale','cit','ro','nell')";
+        stm.executeUpdate(query1);
+        stm.executeUpdate(query2);
+
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query3);
+        ps.setString(1, "documento_prova");
+        ps.setBytes(2, new byte[]{10, 10, 10, 10, 10}); // documento dummy
+        ps.executeUpdate();
+
+        stm.executeUpdate(query4);
+    }
+
+    private static void removeForeignKey() throws SQLException {
+        String query1 = "Delete from area where (nome,luogo_geografico)=('luogo_prova','settore_prova')";
+        String query2 = "Delete from planner where username='user_prova'";
+        String query3 = "Delete from smp where nome='documento_prova'";
+        String query4 = "Delete from maintainer where username='Ale'";
         stm.executeUpdate(query1);
         stm.executeUpdate(query2);
         stm.executeUpdate(query3);
         stm.executeUpdate(query4);
     }
 
-    /**
-     * Test of refreshActivities method, of class ActivityManager.
-     */
     @Test
     public void testRefreshActivities() {
         System.out.println("refreshActivities");
@@ -94,16 +111,13 @@ public class ActivityManagerTest {
 
     }
 
-    /**
-     * Test of addActivity method, of class ActivityManager.
-     */
     @Test
     public void testAddActivity() {
         System.out.println("addActivity");
+        instance.setID(1000000);
         boolean expResult = true;
         boolean result = am.addActivity(instance);
         assertEquals(expResult, result);
-
     }
 
     /**
@@ -142,8 +156,9 @@ public class ActivityManagerTest {
     @Test
     public void testRemoveActivity() {
         System.out.println("removeActivity");
+        instance.setID(1000000);
         am.addActivity(instance);
-        int idActivity = 3;
+        int idActivity = instance.getID();
         boolean expResult = true;
         boolean result = am.removeActivity(idActivity);
         assertEquals(expResult, result);
