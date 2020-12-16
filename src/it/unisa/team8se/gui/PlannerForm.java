@@ -40,10 +40,7 @@ import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableRowSorter;
 
-/**
- *
- * @author cptso
- */
+
 public class PlannerForm extends UserBaseForm {
 
     private LinkedList<Activity> activities;
@@ -67,7 +64,21 @@ public class PlannerForm extends UserBaseForm {
         setupTextBoxes();
         setupCompetenceList();
         setupMaterialList();
+        setupWeekSelector();
+        
 
+        if (defaultId != -1) {
+            refreshActivities();
+            selectedActivity = Activity.getInstanceWithPK(defaultId);
+            switchToActivitySummary();
+            tabbedPane.setSelectedIndex(1);
+        } else {
+            switchToActivityList();
+        }
+    }
+
+    
+    private void setupWeekSelector(){
         weekSelectorModel = new DefaultComboBoxModel<>();
         weekSelector.setModel(weekSelectorModel);
 
@@ -95,17 +106,8 @@ public class PlannerForm extends UserBaseForm {
                 });
             }
         });
-
-        if (defaultId != -1) {
-            refreshActivities();
-            selectedActivity = Activity.getInstanceWithPK(defaultId);
-            switchToActivitySummary();
-            tabbedPane.setSelectedIndex(1);
-        } else {
-            switchToActivityList();
-        }
     }
-
+    
     private void setupCompetenceList() {
         competenceListModel = new DefaultListModel();
         requiredCompetencesList.setModel(competenceListModel);
@@ -976,11 +978,8 @@ public class PlannerForm extends UserBaseForm {
         }
     }//GEN-LAST:event_formWindowGainedFocus
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+    
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -1004,7 +1003,6 @@ public class PlannerForm extends UserBaseForm {
         //</editor-fold>
         //</editor-fold>
         PlannerForm pf = new PlannerForm(-1);
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 pf.setVisible(true);

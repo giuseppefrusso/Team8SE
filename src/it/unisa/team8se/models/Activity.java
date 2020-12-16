@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -346,7 +345,6 @@ public class Activity extends DatabaseModel {
         ps.close();
     }
 
-    //UPDATE FUNCTIONS 
     public void updateInterventionDescInDatabase() {
         String sql = "update attivita_pianificata set descrizione_intervento = ? where id = ?";
         try (PreparedStatement ps = DatabaseContext.getPreparedStatement(sql)) {
@@ -354,7 +352,6 @@ public class Activity extends DatabaseModel {
             ps.setInt(2, getID());
             int res = ps.executeUpdate();
         } catch (SQLException ex) {
-
         }
     }
 
