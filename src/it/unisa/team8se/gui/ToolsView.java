@@ -272,9 +272,7 @@ public class ToolsView extends javax.swing.JFrame {
     }//GEN-LAST:event_toolListFocusGained
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        SystemAdminForm view = new SystemAdminForm();
-        view.setVisible(true);
-        this.setVisible(false);
+        dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
     /**

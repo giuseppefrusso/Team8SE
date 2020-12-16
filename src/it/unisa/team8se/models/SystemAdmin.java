@@ -125,7 +125,7 @@ public class SystemAdmin extends User {
 
     @Override
     public boolean existsInDatabase() {
-        return SystemAdmin.getInstanceWithPK(getUsername()) != null; //To change body of generated methods, choose Tools | Templates.
+        return SystemAdmin.getInstanceWithPK(getUsername()) != null;
     }
     
     public static SystemAdmin authenticate(String username, String password) {

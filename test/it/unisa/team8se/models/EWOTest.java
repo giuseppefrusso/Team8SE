@@ -14,7 +14,6 @@ import java.time.Instant;
 import java.util.Random;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,15 +36,18 @@ public class EWOTest {
     public static void setUpClass() throws SQLException {
         if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
-            con = DatabaseContext.getConnection();
-            con.setAutoCommit(false);
         }
+        con = DatabaseContext.getConnection();
+        con.setAutoCommit(false);
+
         stm = con.createStatement();
+        removeForeignKey();
         addForeignKey();
     }
 
     @AfterClass
     public static void tearDownClass() throws SQLException {
+        con.rollback();
         con.setAutoCommit(true);
         DatabaseContext.closeConnection();
     }
@@ -66,9 +68,6 @@ public class EWOTest {
 
     }
 
-    /**
-     * Test of getTicket method, of class EWO.
-     */
     @Test
     public void testGetTicket() {
         System.out.println("getTicket");
@@ -77,33 +76,12 @@ public class EWOTest {
         assertEquals(expResult, result);
     }
 
+    /*
     private void deleteAllDatabaseInstances() throws SQLException {
         String query = "Delete from ewo";
         stm.executeUpdate(query);
-    }
+    }*/
 
-    private void addActivityToDatabase(Activity a) throws SQLException{
-         String query = "Insert into attivita_pianificata values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
-
-        ps.setInt(1, a.getID());
-        ps.setString(2, null);
-        ps.setString(3, a.getArea().getSector());
-        ps.setString(4, a.getArea().getLocation());
-        ps.setString(5, null);
-        ps.setString(6, null);
-        ps.setString(7, a.getTipology());
-        ps.setTimestamp(8, a.getDatetime());
-        ps.setInt(9, a.getWeekNumber());
-        ps.setInt(10, a.getEIT());
-        ps.setString(11, a.getWorkspaceNotes());
-        ps.setBoolean(12, a.isInterruptible());
-        ps.setString(13, a.getInterventionDescription());
-        
-        ps.executeUpdate();
-    }
-    
     private void addEWOToDatabase(EWO e) throws SQLException {
         String query = "Insert into ewo values(?,?,?,?,?,?,?,?,?,?,?,?,?,"
                 + "'ricevuto','letto','in corso')";
@@ -123,25 +101,30 @@ public class EWOTest {
         ps.setString(11, e.getWorkspaceNotes());
         ps.setBoolean(12, e.isInterruptible());
         ps.setString(13, e.getInterventionDescription());
-        
+
         ps.executeUpdate();
     }
 
     private static void addForeignKey() throws SQLException {
-        String query1 = "Insert into area values ('Fisciano','Carpentry')";
-        String query2 = "Insert into planner values ('Manu','cos','nick','ola')";
-        String query3 = "Insert into smp values ('doc','pdf')";
+        String query1 = "Insert into area values ('luogo_prova','settore_prova')";
+        String query2 = "Insert into planner values ('user_prova','cos','nick','ola')";
+        String query3 = "Insert into smp values (?, ?)";
         String query4 = "Insert into maintainer values ('Ale','cit','ro','nell')";
         stm.executeUpdate(query1);
         stm.executeUpdate(query2);
-        stm.executeUpdate(query3);
+
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query3);
+        ps.setString(1, "documento_prova");
+        ps.setBytes(2, new byte[]{10, 10, 10, 10, 10}); // documento dummy
+        ps.executeUpdate();
+
         stm.executeUpdate(query4);
     }
 
     private static void removeForeignKey() throws SQLException {
-        String query1 = "Delete from area where (nome,luogo_geografico)=('Fisciano','Carpentry')";
-        String query2 = "Delete from planner where username='Manu'";
-        String query3 = "Delete from smp where nome='doc'";
+        String query1 = "Delete from area where (nome,luogo_geografico)=('luogo_prova','settore_prova')";
+        String query2 = "Delete from planner where username='user_prova'";
+        String query3 = "Delete from smp where nome='documento_prova'";
         String query4 = "Delete from maintainer where username='Ale'";
         stm.executeUpdate(query1);
         stm.executeUpdate(query2);
@@ -155,15 +138,15 @@ public class EWOTest {
     @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        int id = 1;
+        int id = new Random().nextInt();
+
         EWO expResult = new EWO();
-        expResult.setID(new Random().nextInt());
-        expResult.setArea(new Area("Fisciano","Carpentry"));
+        expResult.setID(id);
+        expResult.setArea(new Area("carpentry", "Fisciano"));
         expResult.setTipology("carpentry");
         expResult.setDatetime(Timestamp.from(Instant.now()));
         expResult.setWeekNumber(30);
-        
-        addForeignKey();
+
         addEWOToDatabase(expResult);
         EWO result = EWO.getInstanceWithPK(id);
         assertEquals(expResult, result);
@@ -175,14 +158,16 @@ public class EWOTest {
     @Test
     public void testGetInstancesWithWeekNumber() throws SQLException {
         System.out.println("getInstancesWithWeekNumber");
-        //deleteAllDatabaseInstances();
         int weekNumber = 25;
         EWO e = EWO.getInstanceWithPK(1);
         e.setID(new Random().nextInt());
         e.setWeekNumber(weekNumber);
+
         addEWOToDatabase(e);
+
         EWO[] expResult = {e};
         EWO[] result = EWO.getInstancesWithWeekNumber(weekNumber);
+
         assertArrayEquals(expResult, result);
     }
 

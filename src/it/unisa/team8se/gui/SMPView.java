@@ -9,7 +9,6 @@ import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.DocumentImportWindow;
 import it.unisa.team8se.Message;
 import it.unisa.team8se.SizeStringGenerator;
-import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.SMP;
 import java.io.File;
 import java.io.IOException;
@@ -142,6 +141,7 @@ public class SMPView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("SMP View");
+        setBackground(new java.awt.Color(255, 204, 153));
         setIconImage(Message.getImageIcon());
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {

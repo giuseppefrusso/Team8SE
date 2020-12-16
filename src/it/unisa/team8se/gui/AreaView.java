@@ -106,7 +106,7 @@ public class AreaView extends javax.swing.JFrame {
         });
 
         jPanel2.setBackground(new java.awt.Color(255, 204, 153));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sector", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Branch", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         locationBox.setModel(comboBoxModel);
         locationBox.addActionListener(new java.awt.event.ActionListener() {
@@ -154,7 +154,7 @@ public class AreaView extends javax.swing.JFrame {
         );
 
         jPanel1.setBackground(new java.awt.Color(255, 204, 153));
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Branches", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sectors", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         sectorList.setModel(listModel);
         sectorList.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -233,6 +233,9 @@ public class AreaView extends javax.swing.JFrame {
                 .addComponent(backButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel2.getAccessibleContext().setAccessibleName("Branch");
+        jPanel1.getAccessibleContext().setAccessibleName("Sectors");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

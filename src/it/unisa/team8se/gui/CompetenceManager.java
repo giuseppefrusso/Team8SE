@@ -88,13 +88,8 @@ public class CompetenceManager extends javax.swing.JFrame {
         setTitle("Competence Manager");
         setIconImage(Message.getImageIcon());
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
 
-        jPanel1.setBackground(new java.awt.Color(255, 153, 0));
+        jPanel1.setBackground(new java.awt.Color(255, 204, 153));
 
         descField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -119,7 +114,7 @@ public class CompetenceManager extends javax.swing.JFrame {
             }
         });
 
-        removeButton.setText("Removal");
+        removeButton.setText("Remove");
         removeButton.setEnabled(false);
         removeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -157,10 +152,10 @@ public class CompetenceManager extends javax.swing.JFrame {
                     .addComponent(jSeparator1)
                     .addComponent(jLabel1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(removeButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(removeButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
                             .addComponent(backButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(modifyButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
@@ -216,14 +211,6 @@ public class CompetenceManager extends javax.swing.JFrame {
         }
         return selectedCompetence;
     }
-
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        try {
-            UserSession.close();
-        } catch (SQLException ex) {
-            Message.raiseError(this, "Error in closing!");
-        }
-    }//GEN-LAST:event_formWindowClosing
 
     protected boolean add(String desc) {
         try {
@@ -303,9 +290,7 @@ public class CompetenceManager extends javax.swing.JFrame {
     }//GEN-LAST:event_competenceTableFocusGained
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        CompetenceView form = new CompetenceView();
-        form.setVisible(true);
-        this.setVisible(false);
+        dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
     /**
