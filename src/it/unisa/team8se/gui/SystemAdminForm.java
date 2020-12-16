@@ -39,11 +39,11 @@ public class SystemAdminForm extends UserBaseForm {
                 return false;
             }
         };
-        tableModel.addColumn("Cognome");
-        tableModel.addColumn("Nome");
+        tableModel.addColumn("Last name");
+        tableModel.addColumn("Name");
         tableModel.addColumn("Username");
         tableModel.addColumn("Password");
-        tableModel.addColumn("Ruolo");
+        tableModel.addColumn("Role");
     }
 
     private void initButtonGroup() {
@@ -341,7 +341,7 @@ public class SystemAdminForm extends UserBaseForm {
                 tableModel.addRow(u.toArray());
             }
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nel caricamento");
+            Message.raiseError(this, "Loading error");
             return false;
         }
         return true;
@@ -360,11 +360,11 @@ public class SystemAdminForm extends UserBaseForm {
 
     protected boolean insertUser(String surname, String name, String username, String password, String role) {
         if (containsUsername(username)) {
-            Message.raiseError(this, "Username già presente!");
+            Message.raiseError(this, "Username already present!");
             return false;
         }
         if (surname.equals("") || name.equals("") || username.equals("") || password.equals("")) {
-            Message.raiseError(this, "Inserire tutti i campi!");
+            Message.raiseError(this, "There are some empty fields!");
             return false;
         }
 
@@ -405,7 +405,7 @@ public class SystemAdminForm extends UserBaseForm {
         } else if (adminRadioButton.isSelected()) {
             role = "system admin";
         } else {
-            Message.raiseError(this, "Inserire un ruolo!");
+            Message.raiseError(this, "No role selected!");
             tableUsers.clearSelection();
             modifyButton.setEnabled(false);
             removeButton.setEnabled(false);
@@ -440,7 +440,7 @@ public class SystemAdminForm extends UserBaseForm {
         String field = tableModel.getColumnName(selectedColumn);
 
         if (selectedColumn == 2 && containsUsername(newValue)) {
-            Message.raiseError(this, "Username già presente!");
+            Message.raiseError(this, "Username already present!");
             return false;
         }
 
@@ -479,7 +479,7 @@ public class SystemAdminForm extends UserBaseForm {
                     sa.saveToDatabase();
                 }
             } catch (SQLException e) {
-                Message.raiseError(this, "Errore nella modifica del ruolo.");
+                Message.raiseError(this, "Modifying role error!");
                 return false;
             }
         } else if (field.equalsIgnoreCase("username")) {
@@ -495,7 +495,7 @@ public class SystemAdminForm extends UserBaseForm {
                     sa.updateToDatabase(newValue);
                 }
             } catch (SQLException e) {
-                Message.raiseError(this, "ERRORE" + e.getMessage());
+                Message.raiseError(this, "Modifying username error");
                 return false;
             }
         } else {
@@ -522,7 +522,7 @@ public class SystemAdminForm extends UserBaseForm {
                     sa.updateToDatabase();
                 }
             } catch (SQLException e) {
-                Message.raiseError(this, "ERRORE" + e.getMessage());
+                Message.raiseError(this, "Modifiying error");
                 return false;
             }
         }
@@ -537,7 +537,7 @@ public class SystemAdminForm extends UserBaseForm {
         int selectedColumn = tableUsers.getSelectedColumn();
 
         if (selectedRow == -1 || selectedColumn == -1) {
-            Message.raiseError(this, "Selezionare una cella");
+            Message.raiseError(this, "Select a cell!");
             return;
         }
 
@@ -547,7 +547,7 @@ public class SystemAdminForm extends UserBaseForm {
         String newValue = new String();
         if (field.equals("Ruolo")) {
             String[] options = {"Planner", "Maintainer", "System Admin"};
-            int choice = JOptionPane.showOptionDialog(this, "Modifica " + field, "Modifica", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+            int choice = JOptionPane.showOptionDialog(this, "Modify " + field, "Modify", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
             System.out.println(choice);
             switch (choice) {
                 case -1:
@@ -563,7 +563,7 @@ public class SystemAdminForm extends UserBaseForm {
                     break;
             }
         } else {
-            newValue = JOptionPane.showInputDialog(this, "Modifica " + field, "Modifica", JOptionPane.INFORMATION_MESSAGE);
+            newValue = JOptionPane.showInputDialog(this, "Modify " + field, "Modify", JOptionPane.INFORMATION_MESSAGE);
             if (newValue == null || newValue.equals("")) {
                 tableUsers.clearSelection();
                 modifyButton.setEnabled(false);
@@ -598,7 +598,7 @@ public class SystemAdminForm extends UserBaseForm {
                 SystemAdmin.removeFromDatabase(selectedUsername);
             }
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella rimozione!");
+            Message.raiseError(this, "Removing error!");
         }
         refreshUsers();
     }
@@ -607,13 +607,13 @@ public class SystemAdminForm extends UserBaseForm {
         int selectedRow = tableUsers.getSelectedRow();
 
         if (selectedRow == -1) {
-            Message.raiseError(this, "Selezionare una riga!");
+            Message.raiseError(this, "Select a row!");
             return;
         }
 
         String selectedUsername = (String) tableModel.getValueAt(selectedRow, 2);
 
-        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di rimuovere l'utente con username '" + selectedUsername + "' ?", "Rimozione", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure to remove '" + selectedUsername + "' ?", "Remove", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (reply == JOptionPane.YES_OPTION) {
             removeUser(selectedUsername, selectedRow);
         }

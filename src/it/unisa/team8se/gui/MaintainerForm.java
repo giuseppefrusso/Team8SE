@@ -81,7 +81,7 @@ public class MaintainerForm extends UserBaseForm {
         try {
             selectedActivity.getRequiredCompetencesFromDatabase();
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nel caricamento delle competenze!");
+            Message.raiseError(this, "Loading competences error!");
         }
         
         weekNumberLabel.setText(Integer.toString(selectedActivity.getWeekNumber()));
@@ -437,11 +437,11 @@ public class MaintainerForm extends UserBaseForm {
     private void smpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smpButtonActionPerformed
          try {
             if (!selectedActivity.openSMPFromDatabase())
-                Message.raiseError(this,"SMP non definito!");
+                Message.raiseError(this,"No SMP specified!");
         } catch (SQLException ex) {
-            Message.raiseError(this,"Errore nel caricamento dal database!");
+            Message.raiseError(this,"Loading from database error!");
         } catch (IOException | IllegalArgumentException ex) {
-            Message.raiseError(this,"File non trovato!");
+            Message.raiseError(this,"File not found!");
         }
     }//GEN-LAST:event_smpButtonActionPerformed
 

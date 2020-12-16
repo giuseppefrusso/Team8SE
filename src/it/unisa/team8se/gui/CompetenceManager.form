@@ -111,12 +111,12 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Competenza"/>
+            <Property name="text" type="java.lang.String" value="Competence"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="addButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Aggiungi"/>
+            <Property name="text" type="java.lang.String" value="Add"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addButtonActionPerformed"/>
@@ -126,7 +126,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="modifyButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Modifica"/>
+            <Property name="text" type="java.lang.String" value="Modify"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
@@ -135,7 +135,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="removeButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Rimuovi"/>
+            <Property name="text" type="java.lang.String" value="Removal"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
@@ -144,7 +144,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="backButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Indietro"/>
+            <Property name="text" type="java.lang.String" value="Back"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="backButtonActionPerformed"/>

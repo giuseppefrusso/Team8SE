@@ -284,7 +284,6 @@ public class ToolsView extends javax.swing.JFrame {
     }//GEN-LAST:event_toolListFocusGained
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-
     }//GEN-LAST:event_formWindowClosing
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
