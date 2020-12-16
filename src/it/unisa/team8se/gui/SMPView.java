@@ -144,11 +144,6 @@ public class SMPView extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 204, 153));
         setIconImage(Message.getImageIcon());
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
 
         smpList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -520,10 +515,6 @@ public class SMPView extends javax.swing.JFrame {
         }
         tableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchQuery));
     }//GEN-LAST:event_searchBarActionPerformed
-
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-
-    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

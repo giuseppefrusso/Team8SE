@@ -310,7 +310,7 @@ public class ActivityManager extends javax.swing.JFrame {
 
         interruptibleRadioButton.setBackground(new java.awt.Color(51, 51, 51));
         interruptibleRadioButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        interruptibleRadioButton.setForeground(new java.awt.Color(255, 255, 255));
+        interruptibleRadioButton.setForeground(new java.awt.Color(51, 51, 51));
         interruptibleRadioButton.setSelected(true);
         interruptibleRadioButton.setText("Interruptible");
         activityCreationForm.add(interruptibleRadioButton);
