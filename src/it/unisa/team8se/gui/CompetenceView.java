@@ -131,11 +131,11 @@ public class CompetenceView extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(listCompetence);
 
-        jLabel1.setText("Utente");
+        jLabel1.setText("User");
 
-        jLabel2.setText("Competenze");
+        jLabel2.setText("Competences");
 
-        removeButton.setText("Rimuovi");
+        removeButton.setText("Remove");
         removeButton.setEnabled(false);
         removeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -143,21 +143,21 @@ public class CompetenceView extends javax.swing.JFrame {
             }
         });
 
-        assignButton.setText("Assegna");
+        assignButton.setText("Assign");
         assignButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 assignButtonActionPerformed(evt);
             }
         });
 
-        backButton.setText("Utenti");
+        backButton.setText("Users");
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backButtonActionPerformed(evt);
             }
         });
 
-        manageButton.setText("Gestisci competenze");
+        manageButton.setText("Manage");
         manageButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 manageButtonActionPerformed(evt);
@@ -175,9 +175,8 @@ public class CompetenceView extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(assignButton)
-                                .addComponent(removeButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(assignButton)
+                            .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)

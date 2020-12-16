@@ -232,7 +232,7 @@ public class ActivityManager extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(activityTable);
 
-        modifyButton.setText("Modifica");
+        modifyButton.setText("Modify");
         modifyButton.setEnabled(false);
         modifyButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -240,7 +240,7 @@ public class ActivityManager extends javax.swing.JFrame {
             }
         });
 
-        removeButton.setText("Rimuovi");
+        removeButton.setText("Remove");
         removeButton.setEnabled(false);
         removeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -248,7 +248,7 @@ public class ActivityManager extends javax.swing.JFrame {
             }
         });
 
-        backButton.setText("Indietro");
+        backButton.setText("Back");
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backButtonActionPerformed(evt);

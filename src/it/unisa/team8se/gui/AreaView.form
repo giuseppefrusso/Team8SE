@@ -63,7 +63,7 @@
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="locationBox" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" attributes="0">
-                                  <EmptySpace min="0" pref="79" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="81" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                       <Component id="addAreaButton" max="32767" attributes="0"/>
                                       <Component id="jLabel1" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -158,17 +158,17 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Filiale"/>
+            <Property name="text" type="java.lang.String" value="Branch"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Settore"/>
+            <Property name="text" type="java.lang.String" value="Sector"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="backButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Utenti"/>
+            <Property name="text" type="java.lang.String" value="Users"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="backButtonActionPerformed"/>
@@ -176,7 +176,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="addSectorButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Aggiungi"/>
+            <Property name="text" type="java.lang.String" value="Add"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addSectorButtonActionPerformed"/>
@@ -184,7 +184,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="removeSectorButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Rimuovi"/>
+            <Property name="text" type="java.lang.String" value="Remove"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
@@ -193,7 +193,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="addAreaButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Aggiungi"/>
+            <Property name="text" type="java.lang.String" value="Add"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addAreaButtonActionPerformed"/>
@@ -201,7 +201,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="removeLocationButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Rimuovi"/>
+            <Property name="text" type="java.lang.String" value="Remove"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeLocationButtonActionPerformed"/>

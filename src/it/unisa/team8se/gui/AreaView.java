@@ -122,25 +122,25 @@ public class AreaView extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Filiale");
+        jLabel1.setText("Branch");
 
-        jLabel2.setText("Settore");
+        jLabel2.setText("Sector");
 
-        backButton.setText("Utenti");
+        backButton.setText("Users");
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backButtonActionPerformed(evt);
             }
         });
 
-        addSectorButton.setText("Aggiungi");
+        addSectorButton.setText("Add");
         addSectorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addSectorButtonActionPerformed(evt);
             }
         });
 
-        removeSectorButton.setText("Rimuovi");
+        removeSectorButton.setText("Remove");
         removeSectorButton.setEnabled(false);
         removeSectorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,14 +148,14 @@ public class AreaView extends javax.swing.JFrame {
             }
         });
 
-        addAreaButton.setText("Aggiungi");
+        addAreaButton.setText("Add");
         addAreaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addAreaButtonActionPerformed(evt);
             }
         });
 
-        removeLocationButton.setText("Rimuovi");
+        removeLocationButton.setText("Remove");
         removeLocationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeLocationButtonActionPerformed(evt);
@@ -177,7 +177,7 @@ public class AreaView extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(locationBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 79, Short.MAX_VALUE)
+                                .addGap(0, 81, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(addAreaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel1)

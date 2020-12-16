@@ -84,7 +84,7 @@ public class LoginForm extends javax.swing.JFrame {
 
         utenteLabel.setFont(new java.awt.Font("Trebuchet MS", 0, 16)); // NOI18N
         utenteLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        utenteLabel.setText("UTENTE");
+        utenteLabel.setText("USER");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
@@ -146,7 +146,7 @@ public class LoginForm extends javax.swing.JFrame {
 
         ruoloLabel.setFont(new java.awt.Font("Trebuchet MS", 0, 16)); // NOI18N
         ruoloLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        ruoloLabel.setText("RUOLO");
+        ruoloLabel.setText("ROLE");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 16;
