@@ -253,10 +253,10 @@ public class LoginForm extends javax.swing.JFrame {
                 }
             }
 
-            raiseError("USER O PASSWORD ERRATI");
+            raiseError("INCORRECT USER OR PASSWORD");
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
-            raiseError("ERRORE DI LOGIN");
+            raiseError("ERROR OF LOGIN");
         }
     }
 
