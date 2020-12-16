@@ -864,7 +864,7 @@ public class PlannerForm extends UserBaseForm {
         int selectedId = selectedActivity.getID();
         ActivityView view = new ActivityView(selectedId);
         view.setVisible(true);
-        this.setVisible(false);
+        //this.setVisible(false);
     }//GEN-LAST:event_manageButtonActionPerformed
 
     private void viewExplorerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewExplorerButtonActionPerformed
@@ -972,8 +972,9 @@ public class PlannerForm extends UserBaseForm {
             case 0:
                 refreshActivities();
                 break;
-            case 2:
-                refreshMaintainers();
+            case 1:
+                refreshRequiredCompetences();
+                refreshRequiredMaterials();
                 break;
         }
     }//GEN-LAST:event_formWindowGainedFocus
