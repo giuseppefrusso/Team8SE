@@ -18,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -177,7 +178,7 @@ public class SMP extends DatabaseModel {
             PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
             ps.setString(1, name);
             LinkedList<SMP> list = DatabaseContext.fetchAllModels(SMP.class, ps);
-            if (list != null) {
+            if (list != null && list.size() > 0) {
                 return list.get(0);
             } else {
                 return null;
@@ -236,4 +237,35 @@ public class SMP extends DatabaseModel {
             return false;
         }
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + Objects.hashCode(this.nome);
+        hash = 83 * hash + (int) (this.documentSize ^ (this.documentSize >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SMP other = (SMP) obj;
+        if (this.documentSize != other.documentSize) {
+            return false;
+        }
+        if (!Objects.equals(this.nome, other.nome)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }

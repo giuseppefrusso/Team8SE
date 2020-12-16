@@ -5,7 +5,10 @@
  */
 package it.unisa.team8se.gui.datamodels;
 
+import it.unisa.team8se.models.Activity;
+import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Maintainer;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import javax.swing.table.AbstractTableModel;
 
@@ -16,9 +19,11 @@ import javax.swing.table.AbstractTableModel;
 public class MaintainerAvailabilityDataModel extends AbstractTableModel {
 
     private LinkedList<Maintainer> maintainers;
+    private LinkedList<Competence> requiredCompetences;
 
-    public MaintainerAvailabilityDataModel(LinkedList<Maintainer> maintainers) {
+    public MaintainerAvailabilityDataModel(LinkedList<Maintainer> maintainers, Activity a) throws SQLException {
         this.maintainers = maintainers;
+        this.requiredCompetences = a.getRequiredCompetencesFromDatabase();
     }
 
     @Override
@@ -40,7 +45,7 @@ public class MaintainerAvailabilityDataModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -49,7 +54,7 @@ public class MaintainerAvailabilityDataModel extends AbstractTableModel {
             case 0:
                 return maintainers.get(rowIndex).getUsername();
             case 1:
-                return "3/5"; //TODO: Implementare contatore delle skill in base all'attività;
+                return maintainers.get(rowIndex).getCorrespondingCompetences(requiredCompetences)+"/"+requiredCompetences.size();
             default:
                 return null;
         }
