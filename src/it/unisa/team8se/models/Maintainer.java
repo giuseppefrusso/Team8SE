@@ -151,4 +151,14 @@ public class Maintainer extends User {
         }
         return null;
     }
+    
+    public int getCorrespondingCompetences(LinkedList<Competence> cs) {
+        int count = 0;
+        for(Competence c:cs) {
+            if(competencies.contains(c)) {
+                count++;
+            }
+        }
+        return count;
+    }
 }

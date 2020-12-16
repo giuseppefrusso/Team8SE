@@ -59,7 +59,6 @@ public class PlannerForm extends UserBaseForm {
         }
         initComponents();
         setupActivityTable();
-        setupMaintainerTable();
         setupTextBoxes();
         setupCompetenceList();
         setupMaterialList();
@@ -163,9 +162,13 @@ public class PlannerForm extends UserBaseForm {
         try {
             Collections.addAll(maintainers, Maintainer.getAllDatabaseInstances());
         } catch (SQLException ex) {
-            Message.raiseError(this, "Viewing maintainers error!");
+            Message.raiseError(this, "Loading maintainers error!");
         }
-        maintainerTable.setModel(new MaintainerAvailabilityDataModel(maintainers));
+        try {
+            maintainerTable.setModel(new MaintainerAvailabilityDataModel(maintainers,selectedActivity));
+        } catch (SQLException ex) {
+            Message.raiseError(this, "Loading maintainers error!");
+        }
         ListSelectionModel selectionModel = maintainerTable.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         selectionModel.setValueIsAdjusting(true);
@@ -723,6 +726,7 @@ public class PlannerForm extends UserBaseForm {
     private void activityTableRowSelected(int index) {
         selectedActivity = activities.get(index);
         tabbedPane.setSelectedIndex(1);
+        setupMaintainerTable();
     }
 
     private void maintainerTableRowSelected(int index) throws SQLException {
