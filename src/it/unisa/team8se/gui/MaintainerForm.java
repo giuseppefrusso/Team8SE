@@ -197,7 +197,7 @@ public class MaintainerForm extends UserBaseForm {
         activityListPanel.setLayout(activityListPanelLayout);
         activityListPanelLayout.setHorizontalGroup(
             activityListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 795, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 815, Short.MAX_VALUE)
             .addGroup(activityListPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(activityListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -381,21 +381,15 @@ public class MaintainerForm extends UserBaseForm {
         activitySummaryPanel.setLayout(activitySummaryPanelLayout);
         activitySummaryPanelLayout.setHorizontalGroup(
             activitySummaryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 795, Short.MAX_VALUE)
+            .addGap(0, 815, Short.MAX_VALUE)
             .addGroup(activitySummaryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(activitySummaryPanelLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(activitySummary, javax.swing.GroupLayout.PREFERRED_SIZE, 795, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(activitySummary, javax.swing.GroupLayout.DEFAULT_SIZE, 815, Short.MAX_VALUE))
         );
         activitySummaryPanelLayout.setVerticalGroup(
             activitySummaryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 601, Short.MAX_VALUE)
             .addGroup(activitySummaryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(activitySummaryPanelLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(activitySummary, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(activitySummary, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab("Activity Summary", activitySummaryPanel);
