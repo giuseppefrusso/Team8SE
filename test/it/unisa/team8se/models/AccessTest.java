@@ -7,13 +7,10 @@ package it.unisa.team8se.models;
 
 import it.unisa.team8se.DatabaseContext;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.After;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

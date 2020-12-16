@@ -142,6 +142,7 @@ public class SMPView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("SMP View");
+        setBackground(new java.awt.Color(255, 204, 153));
         setIconImage(Message.getImageIcon());
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {

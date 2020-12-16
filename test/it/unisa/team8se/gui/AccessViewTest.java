@@ -10,10 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author giuse
- */
+
 public class AccessViewTest {
     private AccessView access;
     
@@ -30,9 +27,6 @@ public class AccessViewTest {
         access = null;
     }
 
-    /**
-     * Test of refreshPastAccesses method, of class AccessView.
-     */
     @Test
     public void testRefreshPastAccesses() {
         System.out.println("refreshPastAccesses");
@@ -41,9 +35,6 @@ public class AccessViewTest {
         assertEquals(expResult, result);
     }
 
-    /**
-     * Test of refreshCurrentAccesses method, of class AccessView.
-     */
     @Test
     public void testRefreshCurrentAccesses() {
         System.out.println("refreshCurrentAccesses");
