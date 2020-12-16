@@ -24,15 +24,15 @@ public class AccessView extends javax.swing.JFrame {
         pastAccessesModel = new DefaultTableModel();
         pastAccessesModel.addColumn("ID");
         pastAccessesModel.addColumn("Username");
-        pastAccessesModel.addColumn("Data e ora login");
-        pastAccessesModel.addColumn("Data e ora logoff");
+        pastAccessesModel.addColumn("Datetime login");
+        pastAccessesModel.addColumn("Datetime logoff");
     }
     
     private void initCurrentAccessesModel() {
         currentAccessesModel = new DefaultTableModel();
         currentAccessesModel.addColumn("ID");
         currentAccessesModel.addColumn("Username");
-        currentAccessesModel.addColumn("Data e ora login");
+        currentAccessesModel.addColumn("Datetime login");
     }
     
     protected boolean refreshPastAccesses() {
@@ -44,7 +44,7 @@ public class AccessView extends javax.swing.JFrame {
                     pastAccessesModel.addRow(a.toPastArray());
             }
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nel caricamento degli accessi passati!");
+            Message.raiseError(this, "Past accesses loading fails!");
             return false;
         }
         return true;
@@ -59,7 +59,7 @@ public class AccessView extends javax.swing.JFrame {
                     currentAccessesModel.addRow(a.toCurrentArray());
             }
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nel caricamento degli accessi correnti!");
+            Message.raiseError(this, "Current accesses loading fails!");
             return false;
         }
         return true;
@@ -203,7 +203,7 @@ public class AccessView extends javax.swing.JFrame {
         try {
             UserSession.close();
         } catch (SQLException ex) {
-            Message.raiseError(this,"Errore nella chiusura!");
+            Message.raiseError(this,"Closing fails!");
         }
     }//GEN-LAST:event_formWindowClosing
 
@@ -215,7 +215,7 @@ public class AccessView extends javax.swing.JFrame {
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
         if (!refreshAccesses())
-            Message.raiseError(this, "Non ci sono accessi da visualizzare!");
+            Message.raiseError(this, "No accesses to view!");
     }//GEN-LAST:event_refreshButtonActionPerformed
 
     /**
