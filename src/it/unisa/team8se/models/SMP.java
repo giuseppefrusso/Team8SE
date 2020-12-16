@@ -128,6 +128,9 @@ public class SMP extends DatabaseModel {
                     Files.write(path, document);
                     tempVersionStored = true;
                 }
+                else{
+                    path = Paths.get(".\\temp\\" + getNome() + "_temp.pdf");
+                }
                 Desktop.getDesktop().open(new File(path.toUri()));
             } catch (IOException ex) {
                 Logger.getLogger(SMP.class.getName()).log(Level.SEVERE, null, ex);

@@ -397,6 +397,7 @@ public class Activity extends DatabaseModel {
         return true;
     }
 
+    /*
     public boolean openSMPFromDatabase() throws SQLException, IOException, IllegalArgumentException {
         String sql = "select S.documento_pdf "
                 + "from attivita_pianificata A join smp S "
@@ -415,7 +416,7 @@ public class Activity extends DatabaseModel {
         rs.close();
         ps.close();
         return true;
-    }
+    }*/
 
     public boolean assignActivityToMaintainer(Maintainer m) throws SQLException {
         try {
