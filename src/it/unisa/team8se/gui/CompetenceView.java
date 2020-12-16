@@ -69,7 +69,7 @@ public class CompetenceView extends javax.swing.JFrame {
 
             }
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nel caricamento!");
+            Message.raiseError(this, "Loading view!");
             return false;
         }
         return true;
@@ -175,8 +175,9 @@ public class CompetenceView extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
-                            .addComponent(assignButton)
-                            .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(removeButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+                                .addComponent(assignButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
@@ -241,7 +242,7 @@ public class CompetenceView extends javax.swing.JFrame {
 
     private Maintainer getSelectedMantainer() {
         if (comboBoxModel.getSize() == 0) {
-            Message.raiseError(this, "Non c'è alcun manutentore!");
+            Message.raiseError(this, "No maintainers!");
             return null;
         }
         int index = comboBox.getSelectedIndex();
@@ -255,12 +256,12 @@ public class CompetenceView extends javax.swing.JFrame {
 
     private String getSelectedCompetence() {
         if (listModel.getSize() == 0) {
-            Message.raiseError(this, "Non c'è alcuna competenza!");
+            Message.raiseError(this, "No competences!");
             return null;
         }
         String selectedCompetence = listCompetence.getSelectedValue();
         if (selectedCompetence == null) {
-            Message.raiseError(this, "Non è stata selezionata alcuna competenza!");
+            Message.raiseError(this, "No selected competence!");
             return null;
         }
         return selectedCompetence;
@@ -276,7 +277,7 @@ public class CompetenceView extends javax.swing.JFrame {
             //Competence competence = Competence.saveToDatabaseWithDescription(competenceDesc);
             competence.saveIntoPossesso(username);
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nell'assegnamento");
+            Message.raiseError(this, "Assignment error");
             return false;
         }
         refreshCompetences(username);
@@ -293,11 +294,11 @@ public class CompetenceView extends javax.swing.JFrame {
                 "Assegnazione", JOptionPane.PLAIN_MESSAGE);*/
         Competence[] cs = Competence.getAllDatabaseInstances();
         if(cs == null || cs.length <=0) {
-            Message.raiseError(this, "Non ci sono competenze!");
+            Message.raiseError(this, "No competences!");
             return;
         }
         //JComboBox jcb = new JComboBox(cs);
-        Competence competence = (Competence) JOptionPane.showInputDialog(this, "Seleziona una competenza", "Aggiunta", 
+        Competence competence = (Competence) JOptionPane.showInputDialog(this, "Select a competence", "Add", 
                 JOptionPane.QUESTION_MESSAGE, null, cs, cs[0]);
         //Competence competence = (Competence) jcb.getSelectedItem();
         if (competence == null) {
@@ -311,7 +312,7 @@ public class CompetenceView extends javax.swing.JFrame {
         try {
             Competence.removeFromPossessoWithDescription(competence, username);
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella rimozione");
+            Message.raiseError(this, "Removing error");
             return false;
         }
         refreshCompetences(username);
@@ -323,13 +324,13 @@ public class CompetenceView extends javax.swing.JFrame {
         Maintainer selectedMaintainer = getSelectedMantainer();
         String selectedCompetence = getSelectedCompetence();
         if (selectedMaintainer == null || selectedCompetence == null) {
-            Message.raiseError(this, "Non è stata selezionata alcuna competenza!");
+            Message.raiseError(this, "No selected competence!");
             return;
         }
 
         String selectedUsername = selectedMaintainer.getUsername();
 
-        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la competenza '" + selectedCompetence + "' di '" + selectedUsername + "' ?", "Rimozione", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure to remove '" + selectedCompetence + "' competence of '" + selectedUsername + "' ?", "Remove", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             remove(selectedUsername, selectedCompetence);
         }
