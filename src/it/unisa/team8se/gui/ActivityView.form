@@ -67,7 +67,7 @@
                                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace pref="17" max="32767" attributes="0"/>
+                          <EmptySpace pref="18" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -93,10 +93,10 @@
                           </Group>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="assignCompetenceButton" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Component id="removeCompetenceButton" min="-2" pref="73" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jScrollPane2" min="-2" pref="174" max="-2" attributes="0"/>
@@ -153,7 +153,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="assignCompetenceButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="assignCompetenceButton" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="removeCompetenceButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="103" alignment="0" groupAlignment="3" attributes="0">
@@ -171,7 +171,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="backButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Indietro"/>
+            <Property name="text" type="java.lang.String" value="Back"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="backButtonActionPerformed"/>
@@ -214,7 +214,7 @@
         </Container>
         <Component class="javax.swing.JButton" name="assignCompetenceButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Assegna"/>
+            <Property name="text" type="java.lang.String" value="Assign"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="assignCompetenceButtonActionPerformed"/>
@@ -222,7 +222,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="removeCompetenceButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Rimuovi"/>
+            <Property name="text" type="java.lang.String" value="Remove"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
@@ -234,7 +234,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="ID attivit&#xe0;"/>
+            <Property name="text" type="java.lang.String" value="Activity ID"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
@@ -242,7 +242,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Competenze richieste"/>
+            <Property name="text" type="java.lang.String" value="Required competence"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="areaLabel">
@@ -273,7 +273,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Tipologia"/>
+            <Property name="text" type="java.lang.String" value="Tipology"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
@@ -311,12 +311,12 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Materiali da usare"/>
+            <Property name="text" type="java.lang.String" value="Materials to use"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="assignMaterialButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Assegna"/>
+            <Property name="text" type="java.lang.String" value="Assign"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="assignMaterialButtonActionPerformed"/>
@@ -324,7 +324,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="removeMaterialButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Rimuovi"/>
+            <Property name="text" type="java.lang.String" value="Remove"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
