@@ -102,16 +102,16 @@ public class CompetenceManager extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Competenza");
+        jLabel1.setText("Competence");
 
-        addButton.setText("Aggiungi");
+        addButton.setText("Add");
         addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addButtonActionPerformed(evt);
             }
         });
 
-        modifyButton.setText("Modifica");
+        modifyButton.setText("Modify");
         modifyButton.setEnabled(false);
         modifyButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -119,7 +119,7 @@ public class CompetenceManager extends javax.swing.JFrame {
             }
         });
 
-        removeButton.setText("Rimuovi");
+        removeButton.setText("Removal");
         removeButton.setEnabled(false);
         removeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,7 +127,7 @@ public class CompetenceManager extends javax.swing.JFrame {
             }
         });
 
-        backButton.setText("Indietro");
+        backButton.setText("Back");
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backButtonActionPerformed(evt);
