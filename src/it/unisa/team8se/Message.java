@@ -28,7 +28,7 @@ public class Message {
 
     public static void raiseError(Component parentComponent, String message) {
         Toolkit.getDefaultToolkit().beep();
-        JOptionPane.showMessageDialog(parentComponent, message, "Errore", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(parentComponent, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     public static Image getImageIcon() {
