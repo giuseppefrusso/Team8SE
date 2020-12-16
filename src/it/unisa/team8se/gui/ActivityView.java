@@ -314,9 +314,8 @@ public class ActivityView extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(assignCompetenceButton)
-                        .addComponent(removeCompetenceButton))
+                    .addComponent(assignCompetenceButton)
+                    .addComponent(removeCompetenceButton)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(assignMaterialButton)
                         .addComponent(removeMaterialButton)))
@@ -382,7 +381,7 @@ public class ActivityView extends javax.swing.JFrame {
 
     private String getSelectedCompetence() {
         if (competenceModel.getSize() == 0) {
-            Message.raiseError(this, "There aren't any competence!");
+            Message.raiseError(this, "There isn't any competence!");
             return null;
         }
         String selectedCompetence = competenceList.getSelectedValue();
