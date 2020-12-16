@@ -82,7 +82,7 @@ public class ToolsView extends javax.swing.JFrame {
         toolList = new javax.swing.JTable();
         backButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tools View");
         setBackground(new java.awt.Color(255, 204, 153));
         setIconImage(Message.getImageIcon());
@@ -94,7 +94,7 @@ public class ToolsView extends javax.swing.JFrame {
         });
 
         toolsLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        toolsLabel.setText("TOOLS");
+        toolsLabel.setText("MATERIALS");
 
         removeButton.setText("Remove");
         removeButton.setToolTipText("");
@@ -284,11 +284,7 @@ public class ToolsView extends javax.swing.JFrame {
     }//GEN-LAST:event_toolListFocusGained
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        try {
-            UserSession.close();
-        } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella chiusura!");
-        }
+
     }//GEN-LAST:event_formWindowClosing
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed

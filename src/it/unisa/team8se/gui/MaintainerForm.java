@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
@@ -152,7 +150,7 @@ public class MaintainerForm extends UserBaseForm {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Maintainer View");
         setBackground(new java.awt.Color(255, 204, 153));
         setIconImage(Message.getImageIcon());
@@ -430,8 +428,9 @@ public class MaintainerForm extends UserBaseForm {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             UserSession.close();
+            System.out.println("Session closed.");  
         } catch (SQLException ex) {
-            Message.raiseError(this,"Errore nella chiusura!");
+            System.err.println(ex.getMessage());
         }
     }//GEN-LAST:event_formWindowClosing
 

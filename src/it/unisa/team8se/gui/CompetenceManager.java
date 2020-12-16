@@ -84,7 +84,7 @@ public class CompetenceManager extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         competenceTable = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Competence Manager");
         setIconImage(Message.getImageIcon());
         setResizable(false);

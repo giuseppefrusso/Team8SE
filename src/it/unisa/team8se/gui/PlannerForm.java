@@ -38,8 +38,6 @@ import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.TableRowSorter;
 
 /**
@@ -242,7 +240,7 @@ public class PlannerForm extends UserBaseForm {
         maintainerListHeader = new javax.swing.JPanel();
         maintainerListLabel = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Planner View");
         setIconImage(Message.getImageIcon());
         setPreferredSize(new java.awt.Dimension(800, 800));
@@ -909,7 +907,6 @@ public class PlannerForm extends UserBaseForm {
     }//GEN-LAST:event_maintainerListButtonActionPerformed
 
     private void smpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smpButtonActionPerformed
-
         SMP smp = selectedActivity.getSmp();
         if (smp != null) {
             smp.openDocument();

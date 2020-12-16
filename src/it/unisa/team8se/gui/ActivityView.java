@@ -476,11 +476,6 @@ public class ActivityView extends javax.swing.JFrame {
 
     protected boolean assignMaterial(Activity activity, Material material) {
         try {
-            //Material material = Material.getInstanceWithPK(nome);
-            /*if (material == null) {
-                material = new Material(nome, null);
-                material.saveToDatabase();
-            }*/
             material.saveIntoUse(activity.getID());
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nell'assegnamento");
@@ -494,15 +489,6 @@ public class ActivityView extends javax.swing.JFrame {
         if (selectedActivity == null) {
             return;
         }
-        //Material[] options = Material.getAllDatabaseInstances();
-        /*String material = JOptionPane.showInputDialog(this, "Assegna un materiale all'attività "
-                + String.valueOf(selectedActivity.getID()), "Assegnazione", JOptionPane.PLAIN_MESSAGE);*/
-        /*int index = JOptionPane.showOptionDialog(this, "Scegli il materiale da assegnare all'attività "+
-                String.valueOf(selectedActivity.getID()), "Assegnazione", JOptionPane.DEFAULT_OPTION, 
-                JOptionPane.PLAIN_MESSAGE, null, options, null);
-        if(index==-1)
-            return;
-        Material material = options[index];*/
         Material[] ms = Material.getAllDatabaseInstances();
         Material material = (Material) JOptionPane.showInputDialog(this,"Seleziona un materiale","Aggiunta", 
                 JOptionPane.QUESTION_MESSAGE, null, ms, ms[0]);

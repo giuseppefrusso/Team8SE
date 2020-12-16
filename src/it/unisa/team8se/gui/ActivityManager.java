@@ -199,7 +199,7 @@ public class ActivityManager extends javax.swing.JFrame {
         smpSelector = new javax.swing.JComboBox<>();
         addButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Activity Manager");
         setIconImage(Message.getImageIcon());
         setResizable(false);
@@ -382,11 +382,11 @@ public class ActivityManager extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        try {
+        /*try {
             UserSession.close();
         } catch (SQLException ex) {
             Message.raiseError(this, "Errore nella chiusura!");
-        }
+        }*/
     }//GEN-LAST:event_formWindowClosing
 
     private void activityTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_activityTableMouseClicked
