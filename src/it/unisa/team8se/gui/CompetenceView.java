@@ -340,7 +340,6 @@ public class CompetenceView extends javax.swing.JFrame {
     private void manageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageButtonActionPerformed
         CompetenceManager view = new CompetenceManager();
         view.setVisible(true);
-        this.setVisible(false);
     }//GEN-LAST:event_manageButtonActionPerformed
 
     /**
