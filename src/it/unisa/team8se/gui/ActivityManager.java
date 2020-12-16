@@ -7,7 +7,6 @@ package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.Message;
-import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Area;
 import it.unisa.team8se.models.SMP;
@@ -106,6 +105,7 @@ public class ActivityManager extends javax.swing.JFrame {
 
     protected void refreshSMPList(){
         smpSelectorModel.removeAllElements();
+        smpSelectorModel.addElement("None");
         SMP[] smps = SMP.getAllDatabaseInstancesInfoOnly();
         if(smps != null){
             for(SMP s : smps){
@@ -203,11 +203,6 @@ public class ActivityManager extends javax.swing.JFrame {
         setTitle("Activity Manager");
         setIconImage(Message.getImageIcon());
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
 
         mainPanel.setBackground(new java.awt.Color(255, 204, 153));
 
@@ -310,7 +305,7 @@ public class ActivityManager extends javax.swing.JFrame {
 
         interruptibleRadioButton.setBackground(new java.awt.Color(51, 51, 51));
         interruptibleRadioButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        interruptibleRadioButton.setForeground(new java.awt.Color(255, 255, 255));
+        interruptibleRadioButton.setForeground(new java.awt.Color(51, 51, 51));
         interruptibleRadioButton.setSelected(true);
         interruptibleRadioButton.setText("Interruptible");
         activityCreationForm.add(interruptibleRadioButton);
@@ -381,14 +376,6 @@ public class ActivityManager extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        /*try {
-            UserSession.close();
-        } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella chiusura!");
-        }*/
-    }//GEN-LAST:event_formWindowClosing
-
     private void activityTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_activityTableMouseClicked
         modifyButton.setEnabled(true);
         removeButton.setEnabled(true);
@@ -408,7 +395,11 @@ public class ActivityManager extends javax.swing.JFrame {
             Area area = areas.get(areaSelector.getSelectedIndex());
             String typology = typologyInputField.getText();
             Timestamp dateTime = Timestamp.from(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-
+            String smpName = (String) smpSelector.getSelectedItem();
+            SMP smp = new SMP();
+            if(!smpName.equalsIgnoreCase("None")) 
+                smp = SMP.getInstanceWithPK(smpName);             
+            
             if (typology == null || typology.isEmpty()) {
                 return;
             }
@@ -418,6 +409,7 @@ public class ActivityManager extends javax.swing.JFrame {
             }
 
             Activity a = new Activity(id, area, typology, weekNumber, dateTime, eit, interruptible);
+            a.setSmp(smp);
             addActivity(a);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -495,12 +487,7 @@ public class ActivityManager extends javax.swing.JFrame {
     }//GEN-LAST:event_removeButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-       /*
-        PlannerForm form = new PlannerForm(-1);
-        form.setVisible(true);
-        this.setVisible(false);
-        */
-       dispose();
+        dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
     /**

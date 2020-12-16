@@ -40,7 +40,6 @@ import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableRowSorter;
 
-
 public class PlannerForm extends UserBaseForm {
 
     private LinkedList<Activity> activities;
@@ -65,7 +64,6 @@ public class PlannerForm extends UserBaseForm {
         setupCompetenceList();
         setupMaterialList();
         setupWeekSelector();
-        
 
         if (defaultId != -1) {
             refreshActivities();
@@ -77,8 +75,7 @@ public class PlannerForm extends UserBaseForm {
         }
     }
 
-    
-    private void setupWeekSelector(){
+    private void setupWeekSelector() {
         weekSelectorModel = new DefaultComboBoxModel<>();
         weekSelector.setModel(weekSelectorModel);
 
@@ -107,7 +104,7 @@ public class PlannerForm extends UserBaseForm {
             }
         });
     }
-    
+
     private void setupCompetenceList() {
         competenceListModel = new DefaultListModel();
         requiredCompetencesList.setModel(competenceListModel);
@@ -178,13 +175,13 @@ public class PlannerForm extends UserBaseForm {
                 try {
                     maintainerTableRowSelected(selectedRow);
                 } catch (SQLException ex) {
-                    Message.raiseError(this, "Assigning maintainers error!");
+                    Message.raiseError(this, "Assigning maintainer error!");
                 }
                 maintainerTable.clearSelection();
             }
         });
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -967,8 +964,7 @@ public class PlannerForm extends UserBaseForm {
     }//GEN-LAST:event_interventionDescTextFocusLost
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
-
-        switch(tabbedPane.getSelectedIndex()){
+        switch (tabbedPane.getSelectedIndex()) {
             case 0:
                 refreshActivities();
                 break;
@@ -980,7 +976,7 @@ public class PlannerForm extends UserBaseForm {
     }//GEN-LAST:event_formWindowGainedFocus
 
     public static void main(String args[]) {
-    
+
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
