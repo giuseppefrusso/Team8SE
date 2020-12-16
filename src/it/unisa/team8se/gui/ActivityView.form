@@ -242,7 +242,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Required competence"/>
+            <Property name="text" type="java.lang.String" value="Required competences"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="areaLabel">
@@ -311,7 +311,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Materials to use"/>
+            <Property name="text" type="java.lang.String" value="Used materials"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="assignMaterialButton">

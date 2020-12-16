@@ -97,7 +97,7 @@ public class ActivityView extends javax.swing.JFrame {
                 competenceModel.addElement(c.getDescrizione());
             }
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nel caricamento delle competenze!");
+            Message.raiseError(this, "Loading error of competences!");
         }
     }
 
@@ -108,7 +108,7 @@ public class ActivityView extends javax.swing.JFrame {
                 materialModel.addElement(m.getName());
             }
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nel caricamento dei materiali!");
+            Message.raiseError(this, "Loading error of materials!");
         }
     }
 
@@ -154,7 +154,7 @@ public class ActivityView extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 204, 51));
 
-        backButton.setText("Indietro");
+        backButton.setText("Back");
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backButtonActionPerformed(evt);
@@ -176,14 +176,14 @@ public class ActivityView extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(materialList);
 
-        assignCompetenceButton.setText("Assegna");
+        assignCompetenceButton.setText("Assign");
         assignCompetenceButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 assignCompetenceButtonActionPerformed(evt);
             }
         });
 
-        removeCompetenceButton.setText("Rimuovi");
+        removeCompetenceButton.setText("Remove");
         removeCompetenceButton.setEnabled(false);
         removeCompetenceButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -192,10 +192,10 @@ public class ActivityView extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setText("ID attività");
+        jLabel1.setText("Activity ID");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setText("Competenze richieste");
+        jLabel2.setText("Required competences");
 
         areaLabel.setText("###############");
 
@@ -207,7 +207,7 @@ public class ActivityView extends javax.swing.JFrame {
         eitLabel.setText("####");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel6.setText("Tipologia");
+        jLabel6.setText("Tipology");
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel7.setText("EIT");
@@ -221,16 +221,16 @@ public class ActivityView extends javax.swing.JFrame {
         jScrollPane2.setViewportView(competenceList);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel4.setText("Materiali da usare");
+        jLabel4.setText("Used materials");
 
-        assignMaterialButton.setText("Assegna");
+        assignMaterialButton.setText("Assign");
         assignMaterialButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 assignMaterialButtonActionPerformed(evt);
             }
         });
 
-        removeMaterialButton.setText("Rimuovi");
+        removeMaterialButton.setText("Remove");
         removeMaterialButton.setEnabled(false);
         removeMaterialButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -255,7 +255,7 @@ public class ActivityView extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(62, 62, 62)
                                 .addComponent(jLabel3)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,10 +273,10 @@ public class ActivityView extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(backButton))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(assignCompetenceButton)
-                                .addGap(28, 28, 28)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(removeCompetenceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
@@ -375,7 +375,7 @@ public class ActivityView extends javax.swing.JFrame {
 
     private Activity getSelectedActivity() {
         if (comboBoxModel.getSize() == 0) {
-            Message.raiseError(this, "Non c'è alcun'attività!");
+            Message.raiseError(this, "There aren't any activity!");
             return null;
         }
         int index = activityComboBox.getSelectedIndex();
@@ -389,12 +389,12 @@ public class ActivityView extends javax.swing.JFrame {
 
     private String getSelectedCompetence() {
         if (competenceModel.getSize() == 0) {
-            Message.raiseError(this, "Non c'è alcuna competenza!");
+            Message.raiseError(this, "There aren't any competence!");
             return null;
         }
         String selectedCompetence = competenceList.getSelectedValue();
         if (selectedCompetence == null) {
-            Message.raiseError(this, "Non è stata selezionata alcuna competenza!");
+            Message.raiseError(this, "There isn't any selected competence!");
             return null;
         }
         return selectedCompetence;
@@ -402,12 +402,12 @@ public class ActivityView extends javax.swing.JFrame {
 
     private String getSelectedMaterial() {
         if (materialModel.getSize() == 0) {
-            Message.raiseError(this, "Non c'è alcun materiale!");
+            Message.raiseError(this, "There isn't any material!");
             return null;
         }
         String selectedMaterial = materialList.getSelectedValue();
         if (selectedMaterial == null) {
-            Message.raiseError(this, "Non è stato selezionato alcun materiale!");
+            Message.raiseError(this, "There isn't any selected material!");
             return null;
         }
         return selectedMaterial;
@@ -418,7 +418,7 @@ public class ActivityView extends javax.swing.JFrame {
             //Competence competence = Competence.saveToDatabaseWithDescription(competenceDesc);
             competence.saveIntoRequisite(activity.getID());
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nell'assegnamento");
+            Message.raiseError(this, "Assignment error");
             return false;
         }
         refreshCompetences(activity);
@@ -434,7 +434,7 @@ public class ActivityView extends javax.swing.JFrame {
         /*String competence = JOptionPane.showInputDialog(this, "Assegna una competenza all'attività "
                 + String.valueOf(selectedActivity.getID()), "Assegnazione", JOptionPane.PLAIN_MESSAGE);*/
         Competence[] cs =Competence.getAllDatabaseInstances();
-        Competence competence = (Competence) JOptionPane.showInputDialog(this,"Seleziona una competenza","Aggiunta", 
+        Competence competence = (Competence) JOptionPane.showInputDialog(this,"Select a competence","Added", 
                 JOptionPane.QUESTION_MESSAGE, null, cs, cs[0]);
         if (competence == null) {
             return;
@@ -450,7 +450,7 @@ public class ActivityView extends javax.swing.JFrame {
         try {
             Competence.removeFromRequisiteWithDescription(description, activity.getID());
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella rimozione!");
+            Message.raiseError(this, "Removal error!");
             return false;
         }
         return true;
@@ -463,8 +463,8 @@ public class ActivityView extends javax.swing.JFrame {
             return;
         }
 
-        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la competenza '"
-                + competence + "'?", "Rimozione", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete that competence? '"
+                + competence + "'?", "Discharge", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             removeCompetence(selectedActivity, competence);
             refreshCompetences(selectedActivity);
@@ -483,7 +483,7 @@ public class ActivityView extends javax.swing.JFrame {
             }*/
             material.saveIntoUse(activity.getID());
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nell'assegnamento");
+            Message.raiseError(this, "Assignment error!");
             return false;
         }
         return true;
@@ -504,7 +504,7 @@ public class ActivityView extends javax.swing.JFrame {
             return;
         Material material = options[index];*/
         Material[] ms = Material.getAllDatabaseInstances();
-        Material material = (Material) JOptionPane.showInputDialog(this,"Seleziona un materiale","Aggiunta", 
+        Material material = (Material) JOptionPane.showInputDialog(this,"Select a material","Added", 
                 JOptionPane.QUESTION_MESSAGE, null, ms, ms[0]);
         if (material == null) {
             return;
@@ -524,7 +524,7 @@ public class ActivityView extends javax.swing.JFrame {
             }
             material.removeFromUse(activity.getID());
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella rimozione!");
+            Message.raiseError(this, "Removal error!");
             return false;
         }
         return true;
@@ -537,8 +537,8 @@ public class ActivityView extends javax.swing.JFrame {
             return;
         }
 
-        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare il materiale '"
-                + material + "'?", "Rimozione", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete that material '"
+                + material + "'?", "Discharge", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             removeMaterial(selectedActivity, material);
             refreshMaterials(selectedActivity);
