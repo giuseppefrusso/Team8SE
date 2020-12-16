@@ -64,9 +64,11 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="comboBox" alignment="0" min="-2" pref="124" max="-2" attributes="0"/>
-                              <Component id="assignButton" alignment="0" min="-2" pref="73" max="-2" attributes="0"/>
                               <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="removeButton" alignment="0" min="-2" pref="73" max="-2" attributes="0"/>
+                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="assignButton" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="removeButton" alignment="0" pref="90" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">

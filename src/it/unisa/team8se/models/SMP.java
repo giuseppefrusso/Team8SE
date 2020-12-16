@@ -29,7 +29,7 @@ public class SMP extends DatabaseModel {
 
     private String nome;
     private long documentSize;
-    private byte[] document;
+    protected byte[] document;
     private boolean tempVersionStored;
 
     public SMP() {
@@ -102,14 +102,18 @@ public class SMP extends DatabaseModel {
     }
 
     public void exportDocument(String filePath, String fileName) {
+        exportDocument(filePath + fileName + ".pdf");
+    }
+
+    public void exportDocument(String fullPath){
         try {
-            Path path = Paths.get(filePath + fileName + ".pdf");
+            Path path = Paths.get(fullPath);
             Files.write(path, document);
         } catch (IOException ex) {
             Logger.getLogger(SMP.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public boolean openDocument() {
         if (document != null) {
             Path path = Paths.get(".\\temp\\");

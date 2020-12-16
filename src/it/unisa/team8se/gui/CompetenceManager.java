@@ -88,11 +88,6 @@ public class CompetenceManager extends javax.swing.JFrame {
         setTitle("Competence Manager");
         setIconImage(Message.getImageIcon());
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
 
         jPanel1.setBackground(new java.awt.Color(255, 204, 153));
 
@@ -217,14 +212,6 @@ public class CompetenceManager extends javax.swing.JFrame {
         return selectedCompetence;
     }
 
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        try {
-            UserSession.close();
-        } catch (SQLException ex) {
-            Message.raiseError(this, "Error in closing!");
-        }
-    }//GEN-LAST:event_formWindowClosing
-
     protected boolean add(String desc) {
         try {
             Competence.saveToDatabaseWithDescription(desc);
@@ -303,9 +290,7 @@ public class CompetenceManager extends javax.swing.JFrame {
     }//GEN-LAST:event_competenceTableFocusGained
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        CompetenceView form = new CompetenceView();
-        form.setVisible(true);
-        this.setVisible(false);
+        dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
     /**

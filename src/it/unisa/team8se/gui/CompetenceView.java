@@ -170,9 +170,10 @@ public class CompetenceView extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(assignButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
-                            .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(assignButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(removeButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
@@ -325,7 +326,7 @@ public class CompetenceView extends javax.swing.JFrame {
 
         String selectedUsername = selectedMaintainer.getUsername();
 
-        int reply = JOptionPane.showConfirmDialog(this, "Are you sure to remove '" + selectedCompetence + "' competence of '" + selectedUsername + "' ?", "Remove", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure you want to remove '" + selectedCompetence + "' competence of '" + selectedUsername + "' ?", "Remove", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             remove(selectedUsername, selectedCompetence);
         }
@@ -339,7 +340,6 @@ public class CompetenceView extends javax.swing.JFrame {
     private void manageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageButtonActionPerformed
         CompetenceManager view = new CompetenceManager();
         view.setVisible(true);
-        this.setVisible(false);
     }//GEN-LAST:event_manageButtonActionPerformed
 
     /**

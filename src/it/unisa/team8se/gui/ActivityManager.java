@@ -7,7 +7,6 @@ package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.Message;
-import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Area;
 import it.unisa.team8se.models.SMP;
@@ -76,13 +75,13 @@ public class ActivityManager extends javax.swing.JFrame {
             }
         };
         activityTableModel.addColumn("ID");
-        activityTableModel.addColumn("Filiale");
-        activityTableModel.addColumn("Settore");
-        activityTableModel.addColumn("Ambito");
+        activityTableModel.addColumn("Branch");
+        activityTableModel.addColumn("Sector");
+        activityTableModel.addColumn("Typology");
         activityTableModel.addColumn("Week number");
-        activityTableModel.addColumn("Data e ora");
+        activityTableModel.addColumn("Datetime");
         activityTableModel.addColumn("EIT (min)");
-        activityTableModel.addColumn("Interrompibile");
+        activityTableModel.addColumn("Interruptible");
 
         activityTable.setModel(activityTableModel);
     }
@@ -106,6 +105,7 @@ public class ActivityManager extends javax.swing.JFrame {
 
     protected void refreshSMPList(){
         smpSelectorModel.removeAllElements();
+        smpSelectorModel.addElement("None");
         SMP[] smps = SMP.getAllDatabaseInstancesInfoOnly();
         if(smps != null){
             for(SMP s : smps){
@@ -136,7 +136,7 @@ public class ActivityManager extends javax.swing.JFrame {
             a.saveToDatabase();
             return true;
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nell'inserimento!");
+            Message.raiseError(this, "Adding error!");
             return false;
         }
     }
@@ -146,7 +146,7 @@ public class ActivityManager extends javax.swing.JFrame {
             Activity.getInstanceWithPK(idActivity).removeFromDatabase();
             return true;
         } catch (SQLException ex) {
-            Message.raiseError(this, "Rimozione fallita!");
+            Message.raiseError(this, "Removing error!");
             return false;
         }
     }
@@ -156,11 +156,11 @@ public class ActivityManager extends javax.swing.JFrame {
             Activity a = Activity.getInstanceWithPK(idActivity);
             if (field.equalsIgnoreCase("EIT (min)")) {
                 a.updateInDatabase(newValue, "ETA");
-            } else if (field.equalsIgnoreCase("Filiale")) {
+            } else if (field.equalsIgnoreCase("Branch")) {
                 a.updateInDatabase(newValue, "LUOGO_GEOGRAFICO");
-            } else if (field.equalsIgnoreCase("Settore")) {
+            } else if (field.equalsIgnoreCase("Sector")) {
                 a.updateInDatabase(newValue, "AREA");
-            } else if (field.equalsIgnoreCase("Data e ora")) {
+            } else if (field.equalsIgnoreCase("Datetime")) {
                 a.updateInDatabase(newValue, "DATA_E_ORA");
             } else if (field.equalsIgnoreCase("Week number")) {
                 a.updateInDatabase(newValue, "WEEK_NUMBER");
@@ -169,7 +169,7 @@ public class ActivityManager extends javax.swing.JFrame {
             }
             return true;
         } catch (SQLException ex) {
-            Message.raiseError(this, "Modifica fallita!");
+            Message.raiseError(this, "Modifying error!");
             return false;
         }
     }
@@ -203,11 +203,6 @@ public class ActivityManager extends javax.swing.JFrame {
         setTitle("Activity Manager");
         setIconImage(Message.getImageIcon());
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
 
         mainPanel.setBackground(new java.awt.Color(255, 204, 153));
 
@@ -310,7 +305,7 @@ public class ActivityManager extends javax.swing.JFrame {
 
         interruptibleRadioButton.setBackground(new java.awt.Color(51, 51, 51));
         interruptibleRadioButton.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        interruptibleRadioButton.setForeground(new java.awt.Color(255, 255, 255));
+        interruptibleRadioButton.setForeground(new java.awt.Color(51, 51, 51));
         interruptibleRadioButton.setSelected(true);
         interruptibleRadioButton.setText("Interruptible");
         activityCreationForm.add(interruptibleRadioButton);
@@ -381,14 +376,6 @@ public class ActivityManager extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        /*try {
-            UserSession.close();
-        } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella chiusura!");
-        }*/
-    }//GEN-LAST:event_formWindowClosing
-
     private void activityTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_activityTableMouseClicked
         modifyButton.setEnabled(true);
         removeButton.setEnabled(true);
@@ -408,24 +395,29 @@ public class ActivityManager extends javax.swing.JFrame {
             Area area = areas.get(areaSelector.getSelectedIndex());
             String typology = typologyInputField.getText();
             Timestamp dateTime = Timestamp.from(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-
+            String smpName = (String) smpSelector.getSelectedItem();
+            SMP smp = new SMP();
+            if(!smpName.equalsIgnoreCase("None")) 
+                smp = SMP.getInstanceWithPK(smpName);             
+            
             if (typology == null || typology.isEmpty()) {
                 return;
             }
             if(eit <= 0){
-                Message.raiseError(this, "Activity creation failed: Please insert a positive integer into EIT field.");
+                Message.raiseError(this, "Activity creation failed: please insert a positive integer into EIT field.");
                 return;
             }
 
             Activity a = new Activity(id, area, typology, weekNumber, dateTime, eit, interruptible);
+            a.setSmp(smp);
             addActivity(a);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            Message.raiseError(this, "Inserimento fallito!");
+            Message.raiseError(this, "Adding error!");
             return;
         }catch (NumberFormatException ex){
             System.out.println(ex.getMessage());
-            Message.raiseError(this, "Activity creation failed: Please insert a positive integer into EIT field.");
+            Message.raiseError(this, "Activity creation failed: please insert a positive integer into EIT field.");
             return;
         }
         
@@ -442,10 +434,10 @@ public class ActivityManager extends javax.swing.JFrame {
         try {
             if (selectedField.equalsIgnoreCase("ID") || selectedField.equalsIgnoreCase("Week number") || selectedField.equalsIgnoreCase("EIT")) {
                 newValue = Integer.parseInt(JOptionPane.showInputDialog(this,
-                        "Modifica " + selectedField + " dell'attività " + selectedId, "Modifica", JOptionPane.PLAIN_MESSAGE));
+                        "Modify " + selectedField + " of activity " + selectedId, "Modify", JOptionPane.PLAIN_MESSAGE));
             } else if (selectedField.equalsIgnoreCase("Interrompibile")) {
-                int reply = JOptionPane.showConfirmDialog(this, "L'attività " + selectedId + " è interrompibile?",
-                        "Modifica", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int reply = JOptionPane.showConfirmDialog(this, "Is the activity " + selectedId + " interruptible?",
+                        "Modify", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 switch (reply) {
                     case JOptionPane.YES_OPTION:
                         newValue = true;
@@ -458,10 +450,10 @@ public class ActivityManager extends javax.swing.JFrame {
                 }
             } else if (selectedField.equalsIgnoreCase("Data e ora")) {
                 newValue = Timestamp.valueOf(JOptionPane.showInputDialog(this,
-                        "Modifica data e ora dell'attività " + selectedId
-                        + "nel seguente formato: yyyy-mm-dd hh:mm", "Modifica", JOptionPane.PLAIN_MESSAGE) + ":00");
+                        "Modify datetime in activity " + selectedId
+                        + "with the follwing format: yyyy-mm-dd hh:mm", "Modify", JOptionPane.PLAIN_MESSAGE) + ":00");
             } else {
-                newValue = JOptionPane.showInputDialog(this, "Modifica " + selectedField, "Modifica", JOptionPane.PLAIN_MESSAGE);
+                newValue = JOptionPane.showInputDialog(this, "Modify " + selectedField, "Modify", JOptionPane.PLAIN_MESSAGE);
             }
         } catch (IllegalArgumentException ex) {
             return;
@@ -479,13 +471,13 @@ public class ActivityManager extends javax.swing.JFrame {
         int selectedRow = activityTable.getSelectedRow();
 
         if (selectedRow == -1) {
-            Message.raiseError(this, "Selezionare una riga!");
+            Message.raiseError(this, "Select a row!");
             return;
         }
 
         int selectedId = Integer.parseInt((String) activityTableModel.getValueAt(selectedRow, 0));
 
-        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di rimuovere l'attività " + selectedId + "?", "Rimozione", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure you want to remove activity " + selectedId + "?", "Remove", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (reply == JOptionPane.YES_OPTION) {
             removeActivity(selectedId);
         }
@@ -495,12 +487,7 @@ public class ActivityManager extends javax.swing.JFrame {
     }//GEN-LAST:event_removeButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-       /*
-        PlannerForm form = new PlannerForm(-1);
-        form.setVisible(true);
-        this.setVisible(false);
-        */
-       dispose();
+        dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
     /**
