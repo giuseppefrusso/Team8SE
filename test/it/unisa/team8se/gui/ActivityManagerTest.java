@@ -128,7 +128,7 @@ public class ActivityManagerTest {
         System.out.println("modifyActivity");
         int idActivity = 1;
         Object newValue = "Nocera";
-        String field = "Filiale";
+        String field = "Branch";
         boolean expResult = true;
         boolean result = am.modifyActivity(idActivity, newValue, field);
         assertEquals(expResult, result);
@@ -143,7 +143,7 @@ public class ActivityManagerTest {
         System.out.println("modifyActivity1");
         int idActivity = 1;
         Object newValue = "Cava";
-        String field = "Filiale";
+        String field = "Branch";
         boolean expResult = false;
         boolean result = am.modifyActivity(idActivity, newValue, field);
         assertEquals(expResult, result);
