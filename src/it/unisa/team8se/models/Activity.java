@@ -312,7 +312,7 @@ public class Activity extends DatabaseModel {
         ps.setString(7, getWorkspaceNotes());
         ps.setInt(8, getEIT());
         ps.setTimestamp(9, getDatetime());
-        ps.setString(10, getSmpIdentifier());
+        ps.setString(10, getSmp().getNome());
 
         int res = ps.executeUpdate();
     }
