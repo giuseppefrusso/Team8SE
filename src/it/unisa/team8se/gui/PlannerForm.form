@@ -17,6 +17,7 @@
     <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
   </SyntheticProperties>
   <Events>
+    <EventHandler event="windowGainedFocus" listener="java.awt.event.WindowFocusListener" parameters="java.awt.event.WindowEvent" handler="formWindowGainedFocus"/>
     <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
   </Events>
   <AuxValues>
@@ -244,7 +245,7 @@
             </Container>
             <Component class="javax.swing.JButton" name="activityButton">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Plan"/>
+                <Property name="text" type="java.lang.String" value="Manage Activities"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="activityButtonActionPerformed"/>

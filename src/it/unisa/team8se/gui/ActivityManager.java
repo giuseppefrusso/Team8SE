@@ -495,9 +495,12 @@ public class ActivityManager extends javax.swing.JFrame {
     }//GEN-LAST:event_removeButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+       /*
         PlannerForm form = new PlannerForm(-1);
         form.setVisible(true);
         this.setVisible(false);
+        */
+       dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
     /**

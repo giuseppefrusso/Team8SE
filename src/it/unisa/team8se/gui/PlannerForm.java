@@ -102,7 +102,6 @@ public class PlannerForm extends UserBaseForm {
             switchToActivitySummary();
             tabbedPane.setSelectedIndex(1);
         } else {
-
             switchToActivityList();
         }
     }
@@ -245,6 +244,13 @@ public class PlannerForm extends UserBaseForm {
         setIconImage(Message.getImageIcon());
         setPreferredSize(new java.awt.Dimension(800, 800));
         setResizable(false);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -290,7 +296,7 @@ public class PlannerForm extends UserBaseForm {
         activityListLabel.setAlignmentX(0.02F);
         acivityListHeader.add(activityListLabel);
 
-        activityButton.setText("Plan");
+        activityButton.setText("Manage Activities");
         activityButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 activityButtonActionPerformed(evt);
@@ -792,6 +798,8 @@ public class PlannerForm extends UserBaseForm {
     }
 
     private void refreshActivities() {
+        ActivityTableDataModel model = (ActivityTableDataModel) activityTable.getModel();
+        model.fireTableDataChanged();
         activities.clear();
         weekSelectorModel.removeAllElements();
         weekSelectorModel.addElement("All");
@@ -955,6 +963,18 @@ public class PlannerForm extends UserBaseForm {
         selectedActivity.setInterventionDescription(interventionDescText.getText());
         selectedActivity.updateInterventionDescInDatabase();
     }//GEN-LAST:event_interventionDescTextFocusLost
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        System.out.println("Hello");
+        switch(tabbedPane.getSelectedIndex()){
+            case 0:
+                refreshActivities();
+                break;
+            case 2:
+                refreshMaintainers();
+                break;
+        }
+    }//GEN-LAST:event_formWindowGainedFocus
 
     /**
      * @param args the command line arguments
