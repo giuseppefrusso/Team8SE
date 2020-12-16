@@ -9,7 +9,6 @@ import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.DocumentImportWindow;
 import it.unisa.team8se.Message;
 import it.unisa.team8se.SizeStringGenerator;
-import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.SMP;
 import java.io.File;
 import java.io.IOException;
