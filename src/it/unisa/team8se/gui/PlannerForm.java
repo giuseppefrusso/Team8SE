@@ -848,7 +848,6 @@ public class PlannerForm extends UserBaseForm {
     private void activityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activityButtonActionPerformed
         ActivityManager view = new ActivityManager();
         view.setVisible(true);
-        this.setVisible(false);
     }//GEN-LAST:event_activityButtonActionPerformed
 
     private void manageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageButtonActionPerformed

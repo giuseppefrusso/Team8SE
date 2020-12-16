@@ -140,7 +140,7 @@ public class SMPView extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("SMP View");
         setIconImage(Message.getImageIcon());
         setResizable(false);
@@ -522,11 +522,7 @@ public class SMPView extends javax.swing.JFrame {
     }//GEN-LAST:event_searchBarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        try {
-            UserSession.close();
-        } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella chiusura!");
-        }
+
     }//GEN-LAST:event_formWindowClosing
 
     /**
