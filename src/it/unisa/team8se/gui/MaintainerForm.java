@@ -229,6 +229,7 @@ public class MaintainerForm extends UserBaseForm {
         activitySummaryLayout.rowHeights = new int[] {0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0};
         activitySummary.setLayout(activitySummaryLayout);
 
+        interventionDescText.setEditable(false);
         interventionDescScrollPane.setViewportView(interventionDescText);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -258,6 +259,7 @@ public class MaintainerForm extends UserBaseForm {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         activitySummary.add(workspaceNotesLabel, gridBagConstraints);
 
+        workspaceNotesText.setEditable(false);
         workspaceNotesScrollPane.setViewportView(workspaceNotesText);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
