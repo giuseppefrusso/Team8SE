@@ -967,7 +967,7 @@ public class PlannerForm extends UserBaseForm {
     }//GEN-LAST:event_interventionDescTextFocusLost
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
-        System.out.println("Hello");
+
         switch(tabbedPane.getSelectedIndex()){
             case 0:
                 refreshActivities();

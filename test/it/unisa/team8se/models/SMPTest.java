@@ -7,6 +7,9 @@ package it.unisa.team8se.models;
 
 import it.unisa.team8se.DatabaseContext;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -15,7 +18,6 @@ import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import static org.junit.Assert.assertArrayEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,9 +41,10 @@ public class SMPTest extends TestCase {
     public static void setUpClass() throws SQLException {
         if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
-            con = DatabaseContext.getConnection();
-            con.setAutoCommit(false);
         }
+
+        con = DatabaseContext.getConnection();
+        con.setAutoCommit(false);
         stm = con.createStatement();
     }
 
@@ -52,7 +55,7 @@ public class SMPTest extends TestCase {
     }
 
     @Before
-    public void setUp(){
+    public void setUp() {
         instance = new SMP("nome");
     }
 
@@ -61,6 +64,7 @@ public class SMPTest extends TestCase {
         try {
             con.rollback();
             instance = null;
+            SMP.cleanTempDocumentFolder();
         } catch (SQLException ex) {
             Logger.getLogger(ActivityTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -87,25 +91,37 @@ public class SMPTest extends TestCase {
     }
 
     private void addActivityDatabase(SMP sm) {
-
+        
     }
 
     @Test
     public void testImportDocument() {
         try {
-            instance.importDocument("C:\\Users\\cptso\\Desktop\\", "doc");
-            instance.saveToDatabase();
+            byte[] dummyDoc = new byte[]{10,10,10,10,10};
+            Path p = Paths.get(".\\temp\\documento_prova.pdf");
+            Files.write(p, dummyDoc);
+            instance = new SMP("prova");
+            
+            instance.importDocument(p.toUri().toString());
+            assertEquals(dummyDoc, instance.document);
         } catch (IOException ex) {
-            Logger.getLogger(SMPTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
             Logger.getLogger(SMPTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Test
     public void testExportDocument() {
-        instance = SMP.getInstanceWithPK("nome");
-        instance.exportDocument("C:\\Users\\cptso\\Desktop\\", "doc1");
+        try {
+            instance = new SMP("prova");
+            instance.document = new byte[]{10,10,10,10,10};
+            Path p = Paths.get(".\\temp\\documento_prova.pdf");
+            instance.exportDocument(p.toUri().toString());
+            byte[] result = Files.readAllBytes(p);
+            
+            assertEquals(result, instance.document);
+        } catch (IOException ex) {
+            Logger.getLogger(SMPTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Test
@@ -135,7 +151,8 @@ public class SMPTest extends TestCase {
 
     @Test
     public void testSaveToDatabase() throws Exception {
-        System.out.println("saveToDatabase");
+        instance = new SMP();
+        
         try {
             instance.saveToDatabase();
         } catch (SQLException ex) {
