@@ -730,7 +730,7 @@ public class PlannerForm extends UserBaseForm {
 
     private void maintainerTableRowSelected(int index) throws SQLException {
         selectedMaintainer = maintainers.get(index);
-        int reply = JOptionPane.showConfirmDialog(this, "Are you sure to assign activity '" + selectedActivity.getID() + "' to maintainer '" + selectedMaintainer.getUsername() + "'?", "Assignment", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure you want to assign activity '" + selectedActivity.getID() + "' to maintainer '" + selectedMaintainer.getUsername() + "'?", "Assignment", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             selectedActivity.assignActivityToMaintainer(selectedMaintainer);
         }

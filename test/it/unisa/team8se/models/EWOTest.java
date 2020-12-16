@@ -142,7 +142,7 @@ public class EWOTest {
 
         EWO expResult = new EWO();
         expResult.setID(id);
-        expResult.setArea(new Area("Fisciano", "Carpentry"));
+        expResult.setArea(new Area("carpentry", "Fisciano"));
         expResult.setTipology("carpentry");
         expResult.setDatetime(Timestamp.from(Instant.now()));
         expResult.setWeekNumber(30);
