@@ -287,7 +287,7 @@ public class ToolsView extends javax.swing.JFrame {
         try {
             UserSession.close();
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella chiusura!");
+            Message.raiseError(this, "Closing error!");
         }
     }//GEN-LAST:event_formWindowClosing
 

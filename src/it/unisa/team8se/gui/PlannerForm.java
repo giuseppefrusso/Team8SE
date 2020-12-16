@@ -167,7 +167,7 @@ public class PlannerForm extends UserBaseForm {
         try {
             Collections.addAll(maintainers, Maintainer.getAllDatabaseInstances());
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella visualizzazione dei maintainers!");
+            Message.raiseError(this, "Viewing maintainers error!");
         }
         maintainerTable.setModel(new MaintainerAvailabilityDataModel(maintainers));
         ListSelectionModel selectionModel = maintainerTable.getSelectionModel();
@@ -179,7 +179,7 @@ public class PlannerForm extends UserBaseForm {
                 try {
                     maintainerTableRowSelected(selectedRow);
                 } catch (SQLException ex) {
-                    Message.raiseError(this, "Errore nell'assegnazione del maintainer!");
+                    Message.raiseError(this, "Assigning maintainers error!");
                 }
                 maintainerTable.clearSelection();
             }
@@ -724,7 +724,7 @@ public class PlannerForm extends UserBaseForm {
 
     private void maintainerTableRowSelected(int index) throws SQLException {
         selectedMaintainer = maintainers.get(index);
-        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler assegnare l'attività '" + selectedActivity.getID() + "' al maintainer '" + selectedMaintainer.getUsername() + "'?", "Assegnamento", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure to assign activity '" + selectedActivity.getID() + "' to maintainer '" + selectedMaintainer.getUsername() + "'?", "Assignment", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             selectedActivity.assignActivityToMaintainer(selectedMaintainer);
         }
@@ -843,7 +843,7 @@ public class PlannerForm extends UserBaseForm {
         try {
             UserSession.close();
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella chiusura!");
+            Message.raiseError(this, "Closing error!");
         }
     }//GEN-LAST:event_formWindowClosing
 
@@ -891,7 +891,7 @@ public class PlannerForm extends UserBaseForm {
                 Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {
                 Logger.getLogger(PlannerForm.class.getName()).log(Level.SEVERE, null, ex);
-                Message.raiseError(this, "Errore nel salvataggio del file SMP");
+                Message.raiseError(this, "SMP file saving error");
             }
         }
     }//GEN-LAST:event_uploadSMPButtonActionPerformed
@@ -914,7 +914,7 @@ public class PlannerForm extends UserBaseForm {
         if (smp != null) {
             smp.openDocument();
         } else {
-            Message.raiseInfo(this, "Nessun SMP specificato.");
+            Message.raiseInfo(this, "No SMP specified!");
         }
     }//GEN-LAST:event_smpButtonActionPerformed
 
