@@ -14,10 +14,11 @@ import java.sql.*;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,23 +27,19 @@ import org.junit.Test;
  *
  * @author prgne
  */
-public class SMPTest extends TestCase {
+public class SMPTest{
 
     protected SMP instance;
     private static Connection con;
     private static Statement stm;
 
-    public SMPTest(String testName) {
-        super(testName);
-        DatabaseContext.connectDatabase();
-    }
 
     @BeforeClass
     public static void setUpClass() throws SQLException {
         if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
         }
-
+        System.out.println("beforeClass");
         con = DatabaseContext.getConnection();
         con.setAutoCommit(false);
         stm = con.createStatement();
@@ -51,6 +48,7 @@ public class SMPTest extends TestCase {
     @AfterClass
     public static void tearDownClass() throws SQLException {
         con.setAutoCommit(true);
+        SMP.cleanTempDocumentFolder();
         DatabaseContext.closeConnection();
     }
 
@@ -64,7 +62,6 @@ public class SMPTest extends TestCase {
         try {
             con.rollback();
             instance = null;
-            SMP.cleanTempDocumentFolder();
         } catch (SQLException ex) {
             Logger.getLogger(ActivityTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -90,10 +87,6 @@ public class SMPTest extends TestCase {
         stm.executeUpdate(query);
     }
 
-    private void addActivityDatabase(SMP sm) {
-        
-    }
-
     @Test
     public void testImportDocument() {
         try {
@@ -102,8 +95,8 @@ public class SMPTest extends TestCase {
             Files.write(p, dummyDoc);
             instance = new SMP("prova");
             
-            instance.importDocument(p.toUri().toString());
-            assertEquals(dummyDoc, instance.document);
+            instance.importDocument(p.toString());
+            Assert.assertArrayEquals(dummyDoc, instance.document);
         } catch (IOException ex) {
             Logger.getLogger(SMPTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -115,10 +108,10 @@ public class SMPTest extends TestCase {
             instance = new SMP("prova");
             instance.document = new byte[]{10,10,10,10,10};
             Path p = Paths.get(".\\temp\\documento_prova.pdf");
-            instance.exportDocument(p.toUri().toString());
+            instance.exportDocument(p.toString());
             byte[] result = Files.readAllBytes(p);
             
-            assertEquals(result, instance.document);
+            Assert.assertArrayEquals(result, instance.document);
         } catch (IOException ex) {
             Logger.getLogger(SMPTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -140,24 +133,25 @@ public class SMPTest extends TestCase {
     @Test
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
-        deleteAllDatabaseInstances();
-        String name = "";
-        SMP expResult = instance;
-        addActivityDatabase(instance);
+        
+        String name = "nome_smp_prova";
+        instance = new SMP(name);
+        instance.document = new byte[]{10,10,10,10,10}; // dummy document
+        instance.setDocumentSize(instance.document.length);
+        instance.saveToDatabase();
         SMP result = SMP.getInstanceWithPK(name);
-        assertEquals(expResult, result);
-        con.rollback();
+        assertTrue(instance.equals(result));
     }
 
     @Test
     public void testSaveToDatabase() throws Exception {
-        instance = new SMP();
-        
+        instance = new SMP("documento_prova");
+        instance.document = new byte[]{10,10,10,10,10};
         try {
             instance.saveToDatabase();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            Assert.fail();
         }
+        Assert.assertTrue(true);
     }
 }
