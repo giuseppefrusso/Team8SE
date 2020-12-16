@@ -45,7 +45,7 @@ public class CompetenceManager extends javax.swing.JFrame {
             }
         };
         competenceModel.addColumn("ID");
-        competenceModel.addColumn("Descrizione");
+        competenceModel.addColumn("Description");
     }
 
     private void refreshCompetences() {
@@ -204,14 +204,14 @@ public class CompetenceManager extends javax.swing.JFrame {
 
     private Competence getSelectedCompetence(int row) {
         if (competenceModel.getRowCount() == 0) {
-            Message.raiseError(this, "Non c'è alcuna competenza!");
+            Message.raiseError(this, "There is no competence!");
             return null;
         }
         int selectedId = (int) competenceModel.getValueAt(row,0);
         String selectedDescription = (String) competenceModel.getValueAt(row, 1);
         Competence selectedCompetence = new Competence(selectedId, selectedDescription);
         if (selectedCompetence == null) {
-            Message.raiseError(this, "Non è stata selezionata alcuna competenza!");
+            Message.raiseError(this, "No competence was selected!");
             return null;
         }
         return selectedCompetence;
@@ -221,7 +221,7 @@ public class CompetenceManager extends javax.swing.JFrame {
         try {
             UserSession.close();
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella chiusura!");
+            Message.raiseError(this, "Error in closing!");
         }
     }//GEN-LAST:event_formWindowClosing
 
@@ -230,7 +230,7 @@ public class CompetenceManager extends javax.swing.JFrame {
             Competence.saveToDatabaseWithDescription(desc);
             return true;
         } catch (SQLException ex) {
-            Message.raiseError(this, "Competenza già presente");
+            Message.raiseError(this, "Competence already present");
             return false;
         }
     }
@@ -238,7 +238,7 @@ public class CompetenceManager extends javax.swing.JFrame {
     private void addAction() {
         String newDesc = descField.getText();
         if (newDesc == null || newDesc.equals("")) {
-            Message.raiseError(this, "Non è stato inserito nulla!");
+            Message.raiseError(this, "Nothing has been entered!");
             return;
         }
         add(newDesc);
@@ -258,7 +258,7 @@ public class CompetenceManager extends javax.swing.JFrame {
             c.updateDescription(newDesc);
             return true;
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella modifica");
+            Message.raiseError(this, "Error in editing");
             return false;
         }
     }
@@ -266,7 +266,7 @@ public class CompetenceManager extends javax.swing.JFrame {
     private void modifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyButtonActionPerformed
         Competence c = getSelectedCompetence(competenceTable.getSelectedRow());
         
-        String newDesc = JOptionPane.showInputDialog(this, "Scegli una nuova descrizione per la competenza '"+c.toString()+"'", "Modifica", JOptionPane.PLAIN_MESSAGE);
+        String newDesc = JOptionPane.showInputDialog(this, "Choose a new description for competence '"+c.toString()+"'", "Modify", JOptionPane.PLAIN_MESSAGE);
         if(newDesc == null || newDesc.equals("")) {
             return;
         }
@@ -280,7 +280,7 @@ public class CompetenceManager extends javax.swing.JFrame {
             c.removeFromDatabase();
             return true;
         } catch (SQLException ex) {
-            Message.raiseError(this, "Errore nella rimozione");
+            Message.raiseError(this, "Error in removal");
             return false;
         }
     }
@@ -288,8 +288,8 @@ public class CompetenceManager extends javax.swing.JFrame {
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         Competence c = getSelectedCompetence(competenceTable.getSelectedRow());
         
-        int reply = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler cancellare la competenza '"+c.toString()+"'?",
-                "Rimozione", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the competence '"+c.toString()+"'?",
+                "Removal", JOptionPane.YES_NO_OPTION);
         
         if(reply == JOptionPane.YES_OPTION) {
             remove(c);
