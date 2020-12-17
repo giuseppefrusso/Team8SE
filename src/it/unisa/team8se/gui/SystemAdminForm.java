@@ -93,6 +93,7 @@ public class SystemAdminForm extends UserBaseForm {
         areaButton = new javax.swing.JButton();
         activityButton = new javax.swing.JButton();
         materialButton = new javax.swing.JButton();
+        smpButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("System Admistrator - User Management View");
@@ -223,7 +224,7 @@ public class SystemAdminForm extends UserBaseForm {
                         .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(userListLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         userListLayout.setVerticalGroup(
@@ -281,6 +282,14 @@ public class SystemAdminForm extends UserBaseForm {
         });
         viewMenu.add(materialButton);
 
+        smpButton.setText("SMP Management");
+        smpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smpButtonActionPerformed(evt);
+            }
+        });
+        viewMenu.add(smpButton);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -288,13 +297,13 @@ public class SystemAdminForm extends UserBaseForm {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(viewMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(viewMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(createUserPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(userList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(userList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -680,6 +689,11 @@ public class SystemAdminForm extends UserBaseForm {
         view.setVisible(true);
     }//GEN-LAST:event_materialButtonActionPerformed
 
+    private void smpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smpButtonActionPerformed
+        SMPView view = new SMPView();
+        view.setVisible(true);
+    }//GEN-LAST:event_smpButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -733,6 +747,7 @@ public class SystemAdminForm extends UserBaseForm {
     private javax.swing.JLabel passwordLabel;
     private javax.swing.JRadioButton plannerRadioButton;
     private javax.swing.JButton removeButton;
+    private javax.swing.JButton smpButton;
     private javax.swing.JTextField surnameField;
     private javax.swing.JLabel surnameLabel;
     private javax.swing.JTable tableUsers;
