@@ -108,6 +108,7 @@ public class AccessView extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Access View");
         setIconImage(Message.getImageIcon());
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 204, 153));
 
