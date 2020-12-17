@@ -129,7 +129,7 @@ public class AreaViewTest {
         System.out.println("removeLocation2");
         area.addArea("Pagani", "hydraulic");
         String location = "Pagani";
-        boolean expResult = true;
+        boolean expResult = false;
         boolean result = area.removeLocation(location);
         assertEquals(expResult, result);
     }
@@ -153,9 +153,10 @@ public class AreaViewTest {
     @Test
     public void testRemoveSector2() {
         System.out.println("removeSector2");
-        area.addArea("Pagani", "hydraulic");
-        String location = "Pagani";
-        String sector = "hydraulic";
+        String location = "prova_luogo";
+        String sector = "prova_settore";
+        area.addArea(location, sector);
+        
         boolean expResult = true;
         boolean result = area.removeSector(location, sector);
         assertEquals(expResult, result);
