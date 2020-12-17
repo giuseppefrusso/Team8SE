@@ -8,10 +8,13 @@ package it.unisa.team8se.gui;
 import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.Message;
 import it.unisa.team8se.UserSession;
+import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Area;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -347,6 +350,7 @@ public class AreaView extends javax.swing.JFrame {
             area.removeFromDatabase();
             return true;
         } catch (SQLException ex) {
+             Logger.getLogger(Activity.class.getName()).log(Level.SEVERE, null, ex);
             if(ex.getMessage().contains("viola il vincolo di chiave esterna"))
                 Message.raiseError(this, "Non è possibile rimuovere l'area "+area.toString()+
                         "\nperché un'attività è già stata assegnata a quest'area!");

@@ -312,7 +312,11 @@ public class Activity extends DatabaseModel {
         ps.setString(7, getWorkspaceNotes());
         ps.setInt(8, getEIT());
         ps.setTimestamp(9, getDatetime());
-        ps.setString(10, getSmp().getNome());
+        
+        if(smp != null)
+            ps.setString(10, getSmp().getNome());
+        else
+            ps.setString(10, null);
 
         int res = ps.executeUpdate();
     }
@@ -397,26 +401,7 @@ public class Activity extends DatabaseModel {
         return true;
     }
 
-    /*
-    public boolean openSMPFromDatabase() throws SQLException, IOException, IllegalArgumentException {
-        String sql = "select S.documento_pdf "
-                + "from attivita_pianificata A join smp S "
-                + "on A.smp = S.nome "
-                + "where A.id = ?";
-        PreparedStatement ps = DatabaseContext.getPreparedStatement(sql);
-        ps.setInt(1, ID);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            File file = new File(rs.getString(1));
-            Desktop.getDesktop().open(file);
-        } else {
-            return false;
-        }
-
-        rs.close();
-        ps.close();
-        return true;
-    }*/
+  
 
     public boolean assignActivityToMaintainer(Maintainer m) throws SQLException {
         try {
