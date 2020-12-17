@@ -25,6 +25,8 @@ import static org.junit.Assert.*;
 public class ActivityTest {
 
     private Activity instance;
+    private int instanceDefaultID = 10000000;
+    
     private static Connection con;
     private static Statement stm;
 
@@ -35,11 +37,12 @@ public class ActivityTest {
     public static void setUpClass() throws SQLException {
         if (!DatabaseContext.isConnected()) {
             DatabaseContext.connectDatabase();
-            con = DatabaseContext.getConnection();
-            con.setAutoCommit(false);
         }
+
+        con = DatabaseContext.getConnection();
+        con.setAutoCommit(false);
         stm = con.createStatement();
-        addForeignKey();
+        removeForeignKey();
     }
 
     @AfterClass
@@ -51,7 +54,7 @@ public class ActivityTest {
 
     @Before
     public void setUp() {
-        instance = new Activity(3, new Area("carpentry", "Fisciano"), "Electrical", 2, 3, "Notes", "Revisionare", false, new Timestamp(201367896));
+        instance = new Activity(instanceDefaultID, new Area("carpentry", "Fisciano"), "Electrical", 2, 3, "Notes", "Revisionare", false, new Timestamp(201367896));
     }
 
     @After
@@ -71,7 +74,7 @@ public class ActivityTest {
     public void testGetID() {
         System.out.println("getID");
         int result = instance.getID();
-        assertEquals(3, result);
+        assertEquals(instanceDefaultID, result);
     }
 
     /**
@@ -289,26 +292,49 @@ public class ActivityTest {
     }
 
     private void addActivityToDatabase(Activity a) throws SQLException {
-        String query = "Insert into attivita_pianificata values(" + a.getID() + ",'doc','Ale','Fisciano','Carpentry','Manu','" + a.getTipology() + "','" + a.getDatetime() + "'," + a.getWeekNumber() + "," + a.getEIT() + ",'" + a.getWorkspaceNotes() + "','" + a.getInterventionDescription() + "'," + a.isInterruptible() + ")";
-        stm.executeUpdate(query);
+        String query = "Insert into attivita_pianificata (id,smp,area,luogo_geografico,planner,maintainer,ambito,"
+                + "data_e_ora,week_number, eta, workspace_notes, interrompibile, descrizione_intervento) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query);
+
+        ps.setInt(1, a.getID());
+        ps.setString(2, null);
+        ps.setString(3, a.getArea().getSector());
+        ps.setString(4, a.getArea().getLocation());
+        ps.setString(5, null);
+        ps.setString(6, "maintainer_prova");
+        ps.setString(7, a.getTipology());
+        ps.setTimestamp(8, a.getDatetime());
+        ps.setInt(9, a.getWeekNumber());
+        ps.setInt(10, a.getEIT());
+        ps.setString(11, a.getWorkspaceNotes());
+        ps.setBoolean(12, a.isInterruptible());
+        ps.setString(13, a.getInterventionDescription());
+
+        ps.executeUpdate();
     }
 
     private static void addForeignKey() throws SQLException {
-        String query1 = "Insert into area values('Fisciano','Carpentry')";
-        String query2 = "Insert into planner values ('Manu','cos','nick','ola')";
-        String query3 = "Insert into smp values ('doc','pdf')";
-        String query4 = "Insert into maintainer values ('Ale','cit','ro','nell')";
+        String query1 = "Insert into area values ('luogo_prova','settore_prova')";
+        String query2 = "Insert into planner values ('planner_prova','cos','nick','ola')";
+        String query3 = "Insert into smp values (?, ?)";
+        String query4 = "Insert into maintainer values ('maintainer_prova','cit','ro','nell')";
         stm.executeUpdate(query1);
         stm.executeUpdate(query2);
-        stm.executeUpdate(query3);
+
+        PreparedStatement ps = DatabaseContext.getPreparedStatement(query3);
+        ps.setString(1, "documento_prova");
+        ps.setBytes(2, new byte[]{10, 10, 10, 10, 10}); // documento dummy
+        ps.executeUpdate();
+
         stm.executeUpdate(query4);
     }
 
     private static void removeForeignKey() throws SQLException {
-        String query1 = "Delete from area where (nome,luogo_geografico)=('Fisciano','Carpentry')";
-        String query2 = "Delete from planner where username='Manu'";
-        String query3 = "Delete from smp where nome='doc'";
-        String query4 = "Delete from maintainer where username='Ale'";
+        String query1 = "Delete from area where (nome,luogo_geografico)=('luogo_prova','settore_prova')";
+        String query2 = "Delete from planner where username='planner_prova'";
+        String query3 = "Delete from smp where nome='documento_prova'";
+        String query4 = "Delete from maintainer where username='maintainer_prova'";
         stm.executeUpdate(query1);
         stm.executeUpdate(query2);
         stm.executeUpdate(query3);
@@ -322,11 +348,11 @@ public class ActivityTest {
     public void testGetInstanceWithPK() throws SQLException {
         System.out.println("getInstanceWithPK");
 
-        int ID = 3;
-        Activity expResult = instance;
+        Activity expResult = instance;        
+        
         addForeignKey();
         addActivityToDatabase(instance);
-        Activity result = Activity.getInstanceWithPK(ID);
+        Activity result = Activity.getInstanceWithPK(instance.getID());
         assertEquals(expResult, result);
     }
 
@@ -334,16 +360,20 @@ public class ActivityTest {
      * Test of getInstancesAssignedToMaintainer method, of class Activity.
      */
     @Test
-    public void testGetInstancesAssignedToMaintainer() {
+    public void testGetInstancesAssignedToMaintainer() throws SQLException {
         System.out.println("getInstancesAssignedToMaintainer");
         Maintainer m = null;
+
+        addForeignKey();
+        addActivityToDatabase(instance);
+        
         try {
-            m = Maintainer.getInstanceWithPK("Spadino");
+            m = Maintainer.getInstanceWithPK("maintainer_prova");
         } catch (SQLException ex) {
             Logger.getLogger(ActivityTest.class.getName()).log(Level.SEVERE, null, ex);
             Assert.fail();
         }
-        Activity[] expResult = {Activity.getInstanceWithPK(1)};
+        Activity[] expResult = {instance};
         Activity[] result = Activity.getInstancesAssignedToMaintainer(m);
         assertArrayEquals(expResult, result);
     }
@@ -354,12 +384,14 @@ public class ActivityTest {
     @Test
     public void testGetInstancesWithWeekNumber() throws SQLException {
         System.out.println("getInstancesWithWeekNumber");
-        //deleteAllDatabaseInstances();
         int weekNumber = 3;
         Activity a = instance;
-        addForeignKey();
+        
         Activity[] expResult = {a};
+        
+        addForeignKey();
         addActivityToDatabase(a);
+        
         Activity[] result = Activity.getInstancesWithWeekNumber(weekNumber);
         assertArrayEquals(expResult, result);
     }
@@ -428,6 +460,7 @@ public class ActivityTest {
     public void testUpdateWorkspaceNotesInDatabase() throws SQLException {
         System.out.println("updateWorkspaceNotesInDatabase");
         instance.setWorkspaceNotes("notes");
+        
         addForeignKey();
         addActivityToDatabase(instance);
         instance.updateWorkspaceNotesInDatabase();
@@ -451,26 +484,17 @@ public class ActivityTest {
     }
 
     /**
-     * Test of openSMPFromDatabase method, of class Activity.
-     */
-    @Test
-    public void testOpenSMPFromDatabase() throws Exception {
-        System.out.println("openSMPFromDatabase");
-        Activity instance = new Activity();
-        boolean expResult = false;
-        boolean result = instance.openSMPFromDatabase();
-        assertEquals(expResult, result);
-    }
-
-    /**
      * Test of assignActivityToMaintainer method, of class Activity.
      */
     @Test
     public void testAssignActivityToMaintainer() throws SQLException {
         System.out.println("assignActivityToMaintainer");
         boolean expResult = true;
-        Maintainer m = Maintainer.getInstanceWithPK("Spadino");
+        
         addForeignKey();
+        
+        Maintainer m = Maintainer.getInstanceWithPK("maintainer_prova");
+        
         try {
             addActivityToDatabase(instance);
         } catch (SQLException ex) {
@@ -486,7 +510,7 @@ public class ActivityTest {
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
-        Activity instance1 = new Activity(3, new Area("Fisciano", "Carpentry"), "Electrical", 2, 3, "Revisionare", "Notes", false, new Timestamp(201367896));
+        Activity instance1 = new Activity(instanceDefaultID, new Area("Fisciano", "Carpentry"), "Electrical", 2, 3, "Revisionare", "Notes", false, new Timestamp(201367896));
         int result = instance.hashCode();
         assertEquals(instance1.hashCode(), result);
     }
@@ -497,7 +521,7 @@ public class ActivityTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        Activity instance1 = new Activity(3, new Area("Fisciano", "Carpentry"), "Electrical", 2, 3, "Revisionare", "Notes", false, new Timestamp(201367896));
+        Activity instance1 = new Activity(instanceDefaultID, new Area("Fisciano", "Carpentry"), "Electrical", 2, 3, "Revisionare", "Notes", false, new Timestamp(201367896));
         boolean result = instance.equals(instance1);
         assertEquals(true, result);
     }

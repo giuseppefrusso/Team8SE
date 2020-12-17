@@ -12,6 +12,8 @@ import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Material;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -446,6 +448,7 @@ public class ActivityView extends javax.swing.JFrame {
         try {
             material.saveIntoUse(activity.getID());
         } catch (SQLException ex) {
+            Logger.getLogger(Material.class.getName()).log(Level.SEVERE, null, ex);
             Message.raiseError(this, "Assignment error!");
             return false;
         }

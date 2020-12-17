@@ -147,11 +147,11 @@ public class ActivityViewTest {
     @Test
     public void testAssignMaterial1() {
         System.out.println("assignMaterial1");
-        material = new Material("trapano", null);
+        material = new Material("materiale_prova", null);
+        material.saveToDatabase();
         boolean expResult = true;
         boolean result = act.assignMaterial(activity, material);
         assertEquals(expResult, result);
-
     }
 
     /**
@@ -177,7 +177,6 @@ public class ActivityViewTest {
         boolean expResult = false;
         boolean result = act.assignMaterial(activity, material);
         assertEquals(expResult, result);
-
     }
 
     /**
