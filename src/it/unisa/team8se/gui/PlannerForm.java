@@ -165,7 +165,9 @@ public class PlannerForm extends UserBaseForm {
             Message.raiseError(this, "Loading maintainers error!");
         }
         try {
-            maintainerTable.setModel(new MaintainerAvailabilityDataModel(maintainers,selectedActivity));
+            MaintainerAvailabilityDataModel maintainerModel = new MaintainerAvailabilityDataModel(maintainers,selectedActivity);
+            maintainerModel.clear();
+            maintainerTable.setModel(maintainerModel);
         } catch (SQLException ex) {
             Message.raiseError(this, "Loading maintainers error!");
         }
@@ -729,7 +731,7 @@ public class PlannerForm extends UserBaseForm {
     private void activityTableRowSelected(int index) {
         selectedActivity = activities.get(index);
         tabbedPane.setSelectedIndex(1);
-        setupMaintainerTable();
+        
     }
 
     private void maintainerTableRowSelected(int index) throws SQLException {
@@ -761,8 +763,9 @@ public class PlannerForm extends UserBaseForm {
     }
 
     private void switchToMaintainerList() {
+        setupMaintainerTable();
         refreshMaintainers();
-
+        
         selectedActivityNameLabel.setText(selectedActivity.getArea().toString());
     }
 

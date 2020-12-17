@@ -42,6 +42,10 @@ public class MaintainerAvailabilityDataModel extends AbstractTableModel {
     public int getRowCount() {
         return maintainers.size();
     }
+    
+    public void clear() {
+        maintainers.clear();
+    }
 
     @Override
     public int getColumnCount() {

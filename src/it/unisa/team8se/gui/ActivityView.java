@@ -7,7 +7,6 @@ package it.unisa.team8se.gui;
 
 import it.unisa.team8se.DatabaseContext;
 import it.unisa.team8se.Message;
-import it.unisa.team8se.UserSession;
 import it.unisa.team8se.models.Activity;
 import it.unisa.team8se.models.Competence;
 import it.unisa.team8se.models.Material;
@@ -15,7 +14,6 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -27,7 +25,6 @@ public class ActivityView extends javax.swing.JFrame {
     private DefaultComboBoxModel<Integer> comboBoxModel;
     private DefaultListModel<String> competenceModel, materialModel;
     private LinkedList<Activity> activities;
-    private int defaultId;
 
     /**
      * Creates new form TaskView
@@ -43,8 +40,8 @@ public class ActivityView extends javax.swing.JFrame {
         refreshActivities();
         int firstId = initListModels();
         initComponents();
-        this.defaultId = defaultId;
         if (defaultId != -1) {
+            activityComboBox.setSelectedItem(defaultId);
             activityComboBox.setEnabled(false);
         } else {
             defaultId = firstId;
@@ -334,18 +331,6 @@ public class ActivityView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        /*
-        String role = UserSession.getLoggedUser().getRole();
-        UserBaseForm form;
-        if (role.equalsIgnoreCase("planner")) {
-            form = new PlannerForm(this.defaultId);
-            form.setVisible(true);
-            this.setVisible(false);
-        } else {
-            form = new SystemAdminForm();
-        }
-        form.setVisible(true);
-        this.setVisible(false);*/
         dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
